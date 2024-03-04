@@ -1,7 +1,8 @@
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Set;
 
-    private final static String[] characters
+private final static String[] characters
             = {"Xianyun", "Gaming", "Chevreuse", "Navia", "Furina", "Charlotte", "Wriothesley", "Neuvillette",
             "Freminet", "Traveler", "Lyney", "Lynette", "Kirara", "Baizhu", "Kaveh", "Mika", "Dehya", "Alhaitham",
             "Yaoyao", "Wanderer", "Faruzan", "Layla", "Nahida", "Nilou", "Cyno", "Candace", "Dori", "Tighnari",
@@ -35,7 +36,31 @@ import java.util.ArrayList;
             "Momiji-Dyed Court", "Slumbering Court", "The Lost Valley", "Spire of Solitary Enlightenment",
             "City of Gold", "Molten Iron Fortress", "Denouement of Sin", "Waterfall Wen"};
 
+    public static void print_farmed_sets(){
+        boolean check = false;
 
+        if (mapping_characters==null) {
+            System.out.println("Mapping characters has not been initialized");
+            return;
+        }
+
+        for (int i = 0; i < characters.length; i++){
+            ArrayList<String> character_specific = mapping_characters.get(characters[i]);
+            if (!character_specific.isEmpty()) {
+                System.out.println(characters[i]);
+                check = true;
+
+                for (int i2 = 0; i2 < character_specific.size(); i2++) {
+                    System.out.println(character_specific.get(i2));
+                }
+                System.out.println();
+            }
+        }
+
+        if (!check) {
+            System.out.println("No sets are being farmed! >:(");
+        }
+    }
 
     private static HashMap<String, ArrayList<String>> mapping_domains;
     private static HashMap<String, ArrayList<String>> mapping_characters;
@@ -54,6 +79,11 @@ import java.util.ArrayList;
             ArrayList<String> chosen_artifacts = new ArrayList<>();
             mapping_characters.put(character, chosen_artifacts);
         }
+
+        mapping_characters.get("Kamisato Ayaka").add("Blizzard Strayer");
+        mapping_characters.get("Kamisato Ayaka").add("Pale Flame");
+        mapping_characters.get("Razor").add("Pale Flame");
+        print_farmed_sets();
 
     }
 
