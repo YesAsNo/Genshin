@@ -1,6 +1,5 @@
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.Set;
+import java.text.MessageFormat;
+import java.util.*;
 
 private final static String[] characters
             = {"Xianyun", "Gaming", "Chevreuse", "Navia", "Furina", "Charlotte", "Wriothesley", "Neuvillette",
@@ -36,6 +35,12 @@ private final static String[] characters
             "Momiji-Dyed Court", "Slumbering Court", "The Lost Valley", "Spire of Solitary Enlightenment",
             "City of Gold", "Molten Iron Fortress", "Denouement of Sin", "Waterfall Wen"};
 
+    private final static List<String> character_names = Arrays.asList(characters);
+    private final static List<String> set_names = Arrays.asList(artifact_sets);
+
+    private static int character_count = character_names.size();
+    private static int set_count = set_names.size();
+
     public static void print_farmed_sets(){
         boolean check = false;
 
@@ -62,11 +67,34 @@ private final static String[] characters
         }
     }
 
+    public static void print_characters() {
+        for (int i = 0; i < character_names.size(); i++) {
+            System.out.print(MessageFormat.format("{0}.{1} ", i + 1, character_names.get(i)));
+            if (i%7==6) {
+                System.out.println();
+            }
+        }
+        System.out.println();
+    }
+    public static void print_sets() {
+        for (int i = 0; i < set_names.size(); i++) {
+            System.out.print(MessageFormat.format("{0}.{1} ", i + 1, set_names.get(i)));
+            if (i%7==6) {
+                System.out.println();
+            }
+        }
+        System.out.println();
+    }
+
     private static HashMap<String, ArrayList<String>> mapping_domains;
     private static HashMap<String, ArrayList<String>> mapping_characters;
+
     public static void main(String[] args) {
         mapping_domains = new HashMap<>();
         mapping_characters = new HashMap<>();
+        Scanner sc = new Scanner(System.in);
+        Collections.sort(character_names);
+        Collections.sort(set_names);
 
         for (int i = 0; i < artifact_domains.length; i++) {
             ArrayList<String> possible_artifacts = new ArrayList<>();
@@ -80,10 +108,34 @@ private final static String[] characters
             mapping_characters.put(character, chosen_artifacts);
         }
 
-        mapping_characters.get("Kamisato Ayaka").add("Blizzard Strayer");
-        mapping_characters.get("Kamisato Ayaka").add("Pale Flame");
-        mapping_characters.get("Razor").add("Pale Flame");
-        print_farmed_sets();
+        //mapping_characters.get("Kamisato Ayaka").add("Blizzard Strayer");
+        //mapping_characters.get("Kamisato Ayaka").add("Pale Flame");
+        //mapping_characters.get("Razor").add("Pale Flame");
+        System.out.println("------- Characters! -------");
+        print_characters();
+        System.out.println();
+        System.out.println("------- Sets! -------");
+        print_sets();
 
+        int replyCharacterID;
+        int replySetID;
+        while (true) {
+            System.out.println("Type character ID");
+            replyCharacterID = sc.nextInt();
+            if (replyCharacterID > character_count || replyCharacterID < 1) {
+                break;
+            }
+
+            System.out.println("Type set ID");
+            replySetID = sc.nextInt();
+
+            while(replySetID <= set_count && replySetID >= 1) {
+                mapping_characters.get(character_names.get(replyCharacterID-1)).add(set_names.get(replySetID-1));
+                replySetID = sc.nextInt();
+            }
+
+
+        }
+        print_farmed_sets();
     }
 
