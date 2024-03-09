@@ -15,7 +15,7 @@ import java.util.Locale;
 import java.util.Vector;
 
 public class Program extends JFrame implements ActionListener {
-    public Program() throws IOException {
+    public Program() {
         $$$setupUI$$$();
         setContentPane(panel1);
         setTitle("Genshin Domain App!");
@@ -24,21 +24,16 @@ public class Program extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
         setVisible(true);
 
-        try {
-            Vector<String> characterNames = new Vector<>();
-            BufferedImage ImageNahida = ImageIO.read(new File("Nahida.png"));
-            JLabel LabelNahida = new JLabel(new ImageIcon(ImageNahida));
-            BufferedImage ImageXianyun = ImageIO.read(new File("Xianyun.png"));
-            JLabel LabelXianyun = new JLabel(new ImageIcon(ImageXianyun));
-            characterNames.add("Nahida");
-            characterNames.add("Xianyun");
-            DefaultTableModel dm = new DefaultTableModel(characterNames, 1);
-            dm.setValueAt(LabelNahida, 1, 1);
-            dm.setValueAt(LabelXianyun, 1, 2);
-            CharacterTable = new JTable(dm);
-        } catch (IOException e) {
-            System.out.println("Exception!!");
-        }
+        Vector<String> characterNames = new Vector<>();
+
+        JLabel LabelNahida = new JLabel(new ImageIcon("K:\\project\\Paul\\Genshin\\Files\\Images\\Nahida.png"));
+        JLabel LabelXianyun = new JLabel(new ImageIcon("K:\\project\\Paul\\Genshin\\Files\\Images\\Xianyun.png"));
+        characterNames.add("Nahida");
+        characterNames.add("Xianyun");
+        DefaultTableModel dm = new DefaultTableModel(characterNames, 1);
+        dm.setValueAt(LabelNahida, 0, 0);
+        dm.setValueAt(LabelXianyun, 0, 1);
+        CharacterTable = new JTable(dm);
 
     }
 
@@ -149,14 +144,17 @@ public class Program extends JFrame implements ActionListener {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         CharacterTab.add(CheckButton, gbc);
         Result = new JLabel();
+        Font ResultFont = this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 18, Result.getFont());
+        if (ResultFont != null) Result.setFont(ResultFont);
         Result.setText("[Result character]");
         gbc = new GridBagConstraints();
         gbc.gridx = 2;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(0, 10, 0, 0);
         CharacterTab.add(Result, gbc);
         final JPanel panel3 = new JPanel();
-        panel3.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+        panel3.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -165,9 +163,6 @@ public class Program extends JFrame implements ActionListener {
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         CharacterTab.add(panel3, gbc);
-        final JScrollPane scrollPane1 = new JScrollPane();
-        panel3.add(scrollPane1);
-        scrollPane1.setViewportView(CharacterTable);
         ArtifactsTab = new JPanel();
         ArtifactsTab.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         ArtifactsTab.setBackground(new Color(-1));
