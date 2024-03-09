@@ -1,7 +1,10 @@
+package Files;
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.List;
 
-private final static String[] characters
+public class Data {
+    public final static String[] characters
             = {"Xianyun", "Gaming", "Chevreuse", "Navia", "Furina", "Charlotte", "Wriothesley", "Neuvillette",
             "Freminet", "Traveler", "Lyney", "Lynette", "Kirara", "Baizhu", "Kaveh", "Mika", "Dehya", "Alhaitham",
             "Yaoyao", "Wanderer", "Faruzan", "Layla", "Nahida", "Nilou", "Cyno", "Candace", "Dori", "Tighnari",
@@ -35,21 +38,21 @@ private final static String[] characters
             "Momiji-Dyed Court", "Slumbering Court", "The Lost Valley", "Spire of Solitary Enlightenment",
             "City of Gold", "Molten Iron Fortress", "Denouement of Sin", "Waterfall Wen"};
 
-    private final static List<String> character_names = Arrays.asList(characters);
+    public final static List<String> character_names = Arrays.asList(characters);
     private final static List<String> set_names = Arrays.asList(artifact_sets);
 
     private static int character_count = character_names.size();
     private static int set_count = set_names.size();
 
-    public static void print_farmed_sets(){
+    public static void print_farmed_sets() {
         boolean check = false;
 
-        if (mapping_characters==null) {
+        if (mapping_characters == null) {
             System.out.println("Mapping characters has not been initialized");
             return;
         }
 
-        for (int i = 0; i < characters.length; i++){
+        for (int i = 0; i < characters.length; i++) {
             ArrayList<String> character_specific = mapping_characters.get(characters[i]);
             if (!character_specific.isEmpty()) {
                 System.out.println(characters[i]);
@@ -70,16 +73,17 @@ private final static String[] characters
     public static void print_characters() {
         for (int i = 0; i < character_names.size(); i++) {
             System.out.print(MessageFormat.format("{0}.{1} ", i + 1, character_names.get(i)));
-            if (i%7==6) {
+            if (i % 7 == 6) {
                 System.out.println();
             }
         }
         System.out.println();
     }
+
     public static void print_sets() {
         for (int i = 0; i < set_names.size(); i++) {
             System.out.print(MessageFormat.format("{0}.{1} ", i + 1, set_names.get(i)));
-            if (i%7==6) {
+            if (i % 7 == 6) {
                 System.out.println();
             }
         }
@@ -129,8 +133,8 @@ private final static String[] characters
             System.out.println("Type set ID");
             replySetID = sc.nextInt();
 
-            while(replySetID <= set_count && replySetID >= 1) {
-                mapping_characters.get(character_names.get(replyCharacterID-1)).add(set_names.get(replySetID-1));
+            while (replySetID <= set_count && replySetID >= 1) {
+                mapping_characters.get(character_names.get(replyCharacterID - 1)).add(set_names.get(replySetID - 1));
                 replySetID = sc.nextInt();
             }
 
@@ -138,4 +142,4 @@ private final static String[] characters
         }
         print_farmed_sets();
     }
-
+}
