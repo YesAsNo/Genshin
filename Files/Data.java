@@ -1,4 +1,5 @@
 package Files;
+import javax.swing.JTextField;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.List;
@@ -43,6 +44,8 @@ public class Data {
 
     private static int character_count = character_names.size();
     private static int set_count = set_names.size();
+
+    private static Program _program;
 
     public static void print_farmed_sets() {
         boolean check = false;
@@ -94,9 +97,9 @@ public class Data {
     private static HashMap<String, ArrayList<String>> mapping_characters;
 
     public static void main(String[] args) {
+        _program = new Program();
         mapping_domains = new HashMap<>();
         mapping_characters = new HashMap<>();
-        Scanner sc = new Scanner(System.in);
         Collections.sort(character_names);
         Collections.sort(set_names);
 
@@ -123,7 +126,7 @@ public class Data {
 
         int replyCharacterID;
         int replySetID;
-        while (true) {
+        /*while (true) {
             System.out.println("Type character ID");
             replyCharacterID = sc.nextInt();
             if (replyCharacterID > character_count || replyCharacterID < 1) {
@@ -138,8 +141,10 @@ public class Data {
                 replySetID = sc.nextInt();
             }
 
+        }*/
+        while(true){
 
         }
-        print_farmed_sets();
+        //print_farmed_sets();
     }
 }
