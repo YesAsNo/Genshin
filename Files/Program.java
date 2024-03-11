@@ -288,7 +288,7 @@ public class Program extends JFrame implements ActionListener {
         gbc = new GridBagConstraints();
         gbc.gridx = 2;
         gbc.gridy = 0;
-        gbc.gridheight = 3;
+        gbc.gridheight = 4;
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.NORTH;
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -323,11 +323,19 @@ public class Program extends JFrame implements ActionListener {
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 2;
+        gbc.gridheight = 2;
         gbc.weightx = 0.5;
         gbc.weighty = 0.5;
         gbc.anchor = GridBagConstraints.NORTHEAST;
         gbc.insets = new Insets(0, 0, 20, 20);
         panel4.add(label6, gbc);
+        add1ArtifactIconTextPane = new JTextPane();
+        add1ArtifactIconTextPane.setText("Add:\n1) Artifact Icon\n2) Space for Artifact set Description\n3) Save Button\n4) Close Tab Button");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        gbc.fill = GridBagConstraints.BOTH;
+        panel4.add(add1ArtifactIconTextPane, gbc);
     }
 
     /**
