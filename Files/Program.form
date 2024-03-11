@@ -138,7 +138,7 @@
                 <border type="none"/>
                 <children/>
               </grid>
-              <grid id="bc306" binding="PreviewTab" layout-manager="GridBagLayout">
+              <grid id="bc306" layout-manager="GridBagLayout">
                 <constraints>
                   <tabbedpane title="Untitled"/>
                 </constraints>
@@ -151,7 +151,7 @@
                       <gridbag top="20" left="0" bottom="20" right="20" weightx="0.5" weighty="0.5"/>
                     </constraints>
                     <properties>
-                      <icon value="Files/Images/Albedo.png"/>
+                      <icon value="Files/Images/Characters/Albedo.png"/>
                       <text value=""/>
                     </properties>
                   </component>
