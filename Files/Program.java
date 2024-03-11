@@ -223,7 +223,7 @@ public class Program extends JFrame implements ActionListener {
         gbc.gridy = 0;
         gbc.gridheight = 2;
         gbc.anchor = GridBagConstraints.SOUTHEAST;
-        gbc.insets = new Insets(20, 0, 20, 20);
+        gbc.insets = new Insets(20, 0, 5, 20);
         panel4.add(label2, gbc);
         final JPanel panel5 = new JPanel();
         panel5.setLayout(new GridLayoutManager(5, 1, new Insets(5, 5, 5, 5), -1, -1));
@@ -235,7 +235,7 @@ public class Program extends JFrame implements ActionListener {
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.NORTH;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(60, 0, 0, 0);
+        gbc.insets = new Insets(40, 0, 0, 0);
         panel4.add(panel5, gbc);
         panel5.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         emptyNotesFieldTextField = new JTextField();
@@ -283,7 +283,7 @@ public class Program extends JFrame implements ActionListener {
         label4.setText("Amos's Bow");
         panel5.add(label4, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
         final JPanel panel6 = new JPanel();
-        panel6.setLayout(new GridLayoutManager(4, 1, new Insets(3, 3, 3, 3), -1, -1));
+        panel6.setLayout(new GridLayoutManager(4, 1, new Insets(3, 3, 33, 3), -1, -1));
         gbc = new GridBagConstraints();
         gbc.gridx = 2;
         gbc.gridy = 0;
@@ -291,7 +291,7 @@ public class Program extends JFrame implements ActionListener {
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.NORTH;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(90, 0, 0, 100);
+        gbc.insets = new Insets(40, 0, 0, 100);
         panel4.add(panel6, gbc);
         panel6.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         artifactListingCheckBox = new JCheckBox();
@@ -312,7 +312,7 @@ public class Program extends JFrame implements ActionListener {
         final JCheckBox checkBox1 = new JCheckBox();
         Font checkBox1Font = this.$$$getFont$$$("Source Code Pro", -1, 14, checkBox1.getFont());
         if (checkBox1Font != null) checkBox1.setFont(checkBox1Font);
-        checkBox1.setText("Material Listing");
+        checkBox1.setText("Weapon Material Listing");
         panel6.add(checkBox1, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_SOUTHWEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label6 = new JLabel();
         label6.setHorizontalAlignment(4);
