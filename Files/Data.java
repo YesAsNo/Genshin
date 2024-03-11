@@ -42,6 +42,38 @@ public class Data {
             "Momiji-Dyed Court", "Slumbering Court", "The Lost Valley", "Spire of Solitary Enlightenment",
             "City of Gold", "Molten Iron Fortress", "Denouement of Sin", "Waterfall Wen"};
 
+    public final static String[] all_weapons
+            ={"Royal Greatsword", "Royal Grimoire", "Royal Longsword", "Royal Spear", "Rust", "Sacrificial Bow",
+            "Sacrificial Fragments", "Sacrificial Greatsword", "Sacrificial Jade", "Sacrificial Sword",
+            "Sapwood Blade", "Scion of the Blazing Sun", "Serpent Spine", "Skyward Atlas", "Skyward Blade",
+            "Skyward Harp", "Skyward Pride", "Skyward Spine", "Snow-Tombed Starsilver", "Solar Pearl",
+            "Song of Broken Pines", "Song of Stillness", "Splendor of Tranquil Waters", "Staff of Homa",
+            "Staff of the Scarlet Sands", "Summit Shaper", "Sword of Descension", "Sword of Narzissenkreuz",
+            "Talking Stick", "The Alley Flash", "The Bell", "The Black Sword", "The Catch", "The Dockhand's Assistant",
+            "The First Great Magic", "The Flute", "The Stringless", "The Unforged", "The Viridescent Hunt",
+            "The Widsith", "Thundering Pulse", "Tidal Shadow", "Tome of the Eternal Flow", "Toukabou Shigure",
+            "Tulaytullah's Remembrance", "Ultimate Overlord's Mega Magic Sword", "Verdict", "Vortex Vanquisher",
+            "Wandering Evenstar", "Wavebreaker's Fin", "Whiteblind", "Windblume Ode", "Wine and Song", "Wolf-Fang",
+            "Wolf's Gravestone", "Xiphos' Moonlight", "A Thousand Floating Dreams", "Akuoumaru", "Alley Hunter",
+            "Amenoma Kageuchi", "Amos' Bow", "Aqua Simulacra", "Aquila Favonia", "Ballad of the Boundless Blue",
+            "Ballad of the Fjords", "Beacon of the Reed Sea", "Blackcliff Agate", "Blackcliff Longsword",
+            "Blackcliff Pole", "Blackcliff Slasher", "Blackcliff Warbow", "Calamity Queller", "Cashflow Supervision",
+            "Cinnabar Spindle", "Compound Bow", "Crane's Echoing Call", "Crescent Pike", "Deathmatch",
+            "Dodoco Tales", "Dragon's Bane", "Dragonspine Spear", "Elegy for the End", "End of the Line",
+            "Engulfing Lighting", "Everlasting Moonglow", "Eye of Perception", "Fading Twilight", "Favonius Codex",
+            "Favonius Greatsword", "Favonius Lance", "Favonius Sword", "Favonius Warbow", "Festering Desire",
+            "Finale of the Deep", "Fleuve Cendre Ferryman", "Flowing Purity", "Forest Regalia", "Freedom-Sworn",
+            "Frostbearer", "Fruit of Fulfillment", "Hakushin Ring", "Hamayumi", "Haran Geppaku Futsu",
+            "Hunter's Path", "Ibis Piercer", "Iron Sting", "Jadefall's Splendor", "Kagotsurube Isshin",
+            "Kagura's Verity", "Katsuragikiri Nagamasa", "Key of Khaj-Nisut", "King's Squire", "Kitain Cross Spear",
+            "Light of Foliar Incision", "Lion's Roar", "Lithic Blade", "Lithic Spear",
+            "Lost Prayer to the Sacred Winds", "Luxurious Sea-Lord", "Mailed Flower", "Makhaira Aquamarine",
+            "Mappa Mare", "Memory of Dust", "Missive Windspear", "Mistsplitter Reforged", "Mitternachts Waltz",
+            "Moonpiercer", "Mouun's Moon", "Oathsworn Eye", "Polar Star", "Portable Power Saw", "Predator",
+            "Primodial Jade Winged-Spear", "Primordial Jade Cutter", "Prospector's Drill", "Prototype Amber",
+            "Prototype Archaic", "Prototype Crescent", "Prototype Rancour", "Prototype Starglitter", "Rainslasher",
+            "Range Gauge", "Redhorn Stonethresher", "Rightful Reward", "Royal Bow"};
+
     public final static List<String> character_names = Arrays.asList(characters);
     private final static List<String> set_names = Arrays.asList(artifact_sets);
 
