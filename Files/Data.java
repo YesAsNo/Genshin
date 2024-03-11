@@ -1,7 +1,10 @@
 package Files;
-import javax.swing.JTextField;
+
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class Data {
@@ -42,10 +45,8 @@ public class Data {
     public final static List<String> character_names = Arrays.asList(characters);
     private final static List<String> set_names = Arrays.asList(artifact_sets);
 
-    private static int character_count = character_names.size();
-    private static int set_count = set_names.size();
-
-    private static Program _program;
+    private static final int character_count = character_names.size();
+    private static final int set_count = set_names.size();
 
     public static void print_farmed_sets() {
         boolean check = false;
@@ -55,14 +56,14 @@ public class Data {
             return;
         }
 
-        for (int i = 0; i < characters.length; i++) {
-            ArrayList<String> character_specific = mapping_characters.get(characters[i]);
+        for (String character : characters) {
+            ArrayList<String> character_specific = mapping_characters.get(character);
             if (!character_specific.isEmpty()) {
-                System.out.println(characters[i]);
+                System.out.println(character);
                 check = true;
 
-                for (int i2 = 0; i2 < character_specific.size(); i2++) {
-                    System.out.println(character_specific.get(i2));
+                for (String s : character_specific) {
+                    System.out.println(s);
                 }
                 System.out.println();
             }
@@ -97,7 +98,7 @@ public class Data {
     private static HashMap<String, ArrayList<String>> mapping_characters;
 
     public static void main(String[] args) {
-        _program = new Program();
+        Program _program = new Program();
         mapping_domains = new HashMap<>();
         mapping_characters = new HashMap<>();
         Collections.sort(character_names);
@@ -115,36 +116,11 @@ public class Data {
             mapping_characters.put(character, chosen_artifacts);
         }
 
-        //mapping_characters.get("Kamisato Ayaka").add("Blizzard Strayer");
-        //mapping_characters.get("Kamisato Ayaka").add("Pale Flame");
-        //mapping_characters.get("Razor").add("Pale Flame");
         System.out.println("------- Characters! -------");
         print_characters();
         System.out.println();
         System.out.println("------- Sets! -------");
         print_sets();
 
-        int replyCharacterID;
-        int replySetID;
-        /*while (true) {
-            System.out.println("Type character ID");
-            replyCharacterID = sc.nextInt();
-            if (replyCharacterID > character_count || replyCharacterID < 1) {
-                break;
-            }
-
-            System.out.println("Type set ID");
-            replySetID = sc.nextInt();
-
-            while (replySetID <= set_count && replySetID >= 1) {
-                mapping_characters.get(character_names.get(replyCharacterID - 1)).add(set_names.get(replySetID - 1));
-                replySetID = sc.nextInt();
-            }
-
-        }*/
-        while(true){
-
-        }
-        //print_farmed_sets();
     }
 }

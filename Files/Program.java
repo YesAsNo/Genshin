@@ -1,22 +1,42 @@
 package Files;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
+import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.intellij.uiDesigner.core.Spacer;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.plaf.FontUIResource;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.text.StyleContext;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.util.HashSet;
 import java.util.Locale;
-import java.util.Vector;
+import java.util.Objects;
+import java.util.Set;
 
 public class Program extends JFrame implements ActionListener {
     public Program() {
         $$$setupUI$$$();
+        _openTabs.add("Characters");
+        _openTabs.add("Artifacts");
         setContentPane(panel1);
         setTitle("Genshin Domain App!");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -24,7 +44,6 @@ public class Program extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
         setVisible(true);
 
-        Vector<String> characterNames = new Vector<>();
         //search_cycle();
         /*characterNames.add("Nahida");
         characterNames.add("Xianyun");
@@ -45,17 +64,17 @@ public class Program extends JFrame implements ActionListener {
     private JButton CheckButton;
     private JLabel Result;
     private JPanel selectedCharacterPanel;
+    private JTextField textField1;
+    private JButton button1;
+    private Set<String> _openTabs;
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
         panel1 = new JPanel();
+        _openTabs = new HashSet<>();
         CheckButton = new JButton("✓");
         CheckButton.addActionListener(this);
         characterSelectorField = new JTextField();
-    }
-
-    public JTextField getCharacterInputField() {
-        return this.characterSelectorField;
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -78,10 +97,32 @@ public class Program extends JFrame implements ActionListener {
     }
 
     private void generateCharacterLabel(String characterName) {
-        JLabel characterLabel = new JLabel();
         String characterIconPath = "/Files/Images/" + characterName + ".png";
-        characterLabel.setIcon(new ImageIcon(getClass().getResource(characterIconPath)));
-        characterLabel.setText("");
+        JButton characterLabel = new JButton();
+        Icon characterIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource(characterIconPath)));
+        characterLabel.setIcon(characterIcon);
+        characterLabel.setText(characterName);
+        characterLabel.setVerticalTextPosition(SwingConstants.BOTTOM);
+        characterLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+        characterLabel.setOpaque(false);
+        characterLabel.setBorderPainted(false);
+        characterLabel.setContentAreaFilled(false);
+        characterLabel.addActionListener(e -> {
+            if (_openTabs.add(characterName)) {
+                JPanel selectedCharacterTab = new JPanel();
+                selectedCharacterTab.setLayout(new GridLayout(2, 3));
+                selectedCharacterTab.add(new JLabel(characterIcon));
+                selectedCharacterTab.setBackground(new Color(-1));
+                selectedCharacterTab.setEnabled(true);
+                selectedCharacterTab.setFocusCycleRoot(false);
+                selectedCharacterTab.setOpaque(true);
+                selectedCharacterTab.setRequestFocusEnabled(true);
+                tabbedPane1.addTab(characterName, selectedCharacterTab);
+                tabbedPane1.setSelectedComponent(selectedCharacterTab);
+            } else {
+                tabbedPane1.setSelectedIndex(tabbedPane1.indexOfTab(characterName));
+            }
+        });
         selectedCharacterPanel.add(characterLabel);
         selectedCharacterPanel.updateUI();
     }
@@ -95,14 +136,13 @@ public class Program extends JFrame implements ActionListener {
      */
     private void $$$setupUI$$$() {
         createUIComponents();
-        panel1.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), -1, -1));
+        panel1.setLayout(new GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), -1, -1));
         panel1.setBackground(new Color(-2702645));
         panel1.setEnabled(true);
-        final com.intellij.uiDesigner.core.Spacer spacer1 = new com.intellij.uiDesigner.core.Spacer();
-        panel1.add(spacer1, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1,
-                com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
-                com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1,
-                com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        final Spacer spacer1 = new Spacer();
+        panel1.add(spacer1,
+                new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1,
+                        GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         label1 = new JLabel();
         Font label1Font = this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 20, label1.getFont());
         if (label1Font != null) {
@@ -110,35 +150,26 @@ public class Program extends JFrame implements ActionListener {
         }
         label1.setForeground(new Color(-14940151));
         label1.setText("Genshin Domain Application");
-        panel1.add(label1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 2,
-                com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
-                com.intellij.uiDesigner.core.GridConstraints.FILL_NONE,
-                com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED,
-                com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel1.add(label1, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         panel2 = new JPanel();
-        panel2.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        panel2.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         panel2.setBackground(new Color(-3689540));
-        panel1.add(panel2, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1,
-                com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
-                com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH,
-                com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK |
-                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
-                com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK |
-                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        panel1.add(panel2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0,
+                false));
         tabbedPane1 = new JTabbedPane();
         Font tabbedPane1Font = this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 20, tabbedPane1.getFont());
         if (tabbedPane1Font != null) {
             tabbedPane1.setFont(tabbedPane1Font);
         }
         tabbedPane1.setTabPlacement(1);
-        panel2.add(tabbedPane1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1,
-                com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
-                com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH,
-                com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK |
-                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW,
-                com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK |
-                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(200, 200),
-                null, 0, false));
+        panel2.add(tabbedPane1,
+                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null,
+                        new Dimension(200, 200), null, 0, false));
         CharacterTab = new JPanel();
         CharacterTab.setLayout(new GridBagLayout());
         CharacterTab.setBackground(new Color(-1));
@@ -191,7 +222,7 @@ public class Program extends JFrame implements ActionListener {
         gbc.insets = new Insets(0, 10, 0, 0);
         CharacterTab.add(Result, gbc);
         final JPanel panel3 = new JPanel();
-        panel3.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        panel3.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -201,25 +232,18 @@ public class Program extends JFrame implements ActionListener {
         gbc.fill = GridBagConstraints.BOTH;
         CharacterTab.add(panel3, gbc);
         final JScrollPane scrollPane1 = new JScrollPane();
-        panel3.add(scrollPane1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1,
-                com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER,
-                com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH,
-                com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK |
-                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW,
-                com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK |
-                        com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panel3.add(scrollPane1,
+                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null,
+                        0, false));
         selectedCharacterPanel = new JPanel();
         selectedCharacterPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         scrollPane1.setViewportView(selectedCharacterPanel);
         ArtifactsTab = new JPanel();
-        ArtifactsTab.setLayout(
-                new com.intellij.uiDesigner.core.GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        ArtifactsTab.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         ArtifactsTab.setBackground(new Color(-1));
         tabbedPane1.addTab("Artifacts", ArtifactsTab);
-        final JPanel panel4 = new JPanel();
-        panel4.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        panel4.setBackground(new Color(-1));
-        tabbedPane1.addTab("Untitled", panel4);
     }
 
     /** @noinspection ALL */
