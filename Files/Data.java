@@ -18,7 +18,7 @@ public class Data {
             "Zhongli", "Xinyan", "Tartaglia", "Diona", "Klee", "Diluc", "Mona", "Keqing", "Jean", "Venti", "Qiqi",
             "Amber", "Bennett", "Xiangling", "Barbara", "Xingqiu", "Beidou", "Fischl", "Lisa", "Razor", "Sucrose",
             "Chongyun", "Kaeya", "Ningguang", "Noelle"};
-    private final static String[] artifact_sets
+    public final static String[] artifact_sets
             = {"Gladiator's Finale", "Wanderer's Troupe",
             "Noblesse Oblige", "Bloodstained Chivalry",
             "Maiden Beloved", "Viridescent Venerer",
@@ -36,7 +36,7 @@ public class Data {
             "Marechaussee Hunter", "Golden Troupe",
             "Song of Days Past", "Nighttime Whispers in the Echoing Woods"};
 
-    private final static String[] artifact_domains
+    public final static String[] artifact_domains
             = {"Bosses", "Clear Pool and Mountain Cavern", "Valley of Remembrance", "Domain of Guyun",
             "Midsummer Courtyard", "Hidden Palace of Zhou Formula", "Peak of Vindagnyr", "Ridge Watch",
             "Momiji-Dyed Court", "Slumbering Court", "The Lost Valley", "Spire of Solitary Enlightenment",
@@ -44,9 +44,6 @@ public class Data {
 
     public final static List<String> character_names = Arrays.asList(characters);
     private final static List<String> set_names = Arrays.asList(artifact_sets);
-
-    private static final int character_count = character_names.size();
-    private static final int set_count = set_names.size();
 
     public static void print_farmed_sets() {
         boolean check = false;
@@ -74,26 +71,6 @@ public class Data {
         }
     }
 
-    public static void print_characters() {
-        for (int i = 0; i < character_names.size(); i++) {
-            System.out.print(MessageFormat.format("{0}.{1} ", i + 1, character_names.get(i)));
-            if (i % 7 == 6) {
-                System.out.println();
-            }
-        }
-        System.out.println();
-    }
-
-    public static void print_sets() {
-        for (int i = 0; i < set_names.size(); i++) {
-            System.out.print(MessageFormat.format("{0}.{1} ", i + 1, set_names.get(i)));
-            if (i % 7 == 6) {
-                System.out.println();
-            }
-        }
-        System.out.println();
-    }
-
     private static HashMap<String, ArrayList<String>> mapping_domains;
     private static HashMap<String, ArrayList<String>> mapping_characters;
 
@@ -115,12 +92,5 @@ public class Data {
             ArrayList<String> chosen_artifacts = new ArrayList<>();
             mapping_characters.put(character, chosen_artifacts);
         }
-
-        System.out.println("------- Characters! -------");
-        print_characters();
-        System.out.println();
-        System.out.println("------- Sets! -------");
-        print_sets();
-
     }
 }
