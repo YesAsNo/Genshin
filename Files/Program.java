@@ -59,6 +59,7 @@ public class Program extends JFrame implements ActionListener {
     private JComboBox comboBox1;
     private JCheckBox artifactListingCheckBox;
     private JCheckBox talentListingCheckBox;
+    private JTextPane add1ArtifactIconTextPane;
     private Set<String> _openTabs;
 
     private void createUIComponents() {
