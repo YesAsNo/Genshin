@@ -66,6 +66,7 @@ public class Program extends JFrame implements ActionListener {
     private JPanel selectedCharacterPanel;
     private JTextField textField1;
     private JButton button1;
+    private JPanel PreviewTab;
     private Set<String> _openTabs;
 
     private void createUIComponents() {
@@ -244,6 +245,47 @@ public class Program extends JFrame implements ActionListener {
         ArtifactsTab.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         ArtifactsTab.setBackground(new Color(-1));
         tabbedPane1.addTab("Artifacts", ArtifactsTab);
+        final JPanel panel4 = new JPanel();
+        panel4.setLayout(new GridBagLayout());
+        tabbedPane1.addTab("Untitled", panel4);
+        textField1 = new JTextField();
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel4.add(textField1, gbc);
+        final JLabel label2 = new JLabel();
+        label2.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Albedo.png")));
+        label2.setText("Label");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 0.5;
+        gbc.weighty = 0.5;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel4.add(label2, gbc);
+        final JLabel label3 = new JLabel();
+        label3.setHorizontalAlignment(4);
+        label3.setHorizontalTextPosition(4);
+        label3.setText("Label");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 3;
+        gbc.weightx = 0.5;
+        gbc.weighty = 0.5;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel4.add(label3, gbc);
+        button1 = new JButton();
+        button1.setText("Button");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        panel4.add(button1, gbc);
     }
 
     /** @noinspection ALL */

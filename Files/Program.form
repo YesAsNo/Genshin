@@ -138,7 +138,7 @@
                 <border type="none"/>
                 <children/>
               </grid>
-              <grid id="bc306" layout-manager="GridBagLayout">
+              <grid id="bc306" binding="PreviewTab" layout-manager="GridBagLayout">
                 <constraints>
                   <tabbedpane title="Untitled"/>
                 </constraints>
