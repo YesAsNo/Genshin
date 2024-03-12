@@ -68,6 +68,9 @@ public class Program extends JFrame implements ActionListener {
     private JScrollPane scrollPane1;
     private Set<String> _openTabs;
 
+    /**
+     * Creates a few custom UI components by hand.
+     */
     private void createUIComponents() {
         // TODO: place custom component creation code here
         selectedCharacterPanel = new JPanel(new GridBagLayout());
@@ -79,12 +82,16 @@ public class Program extends JFrame implements ActionListener {
         characterSelectorField = new JTextField();
         characterSelectorField.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 characterSelectorField.setText("");
             }
         });
     }
 
+    /**
+     * Listener for the checkButton.
+     * @param e the event to be processed
+     */
     public void actionPerformed(ActionEvent e) {
         boolean matched = false;
         int matchedCount = 0;
@@ -94,13 +101,13 @@ public class Program extends JFrame implements ActionListener {
         for (int i = 0; i < Data.characters.length; i++) {
             if (Data.characters[i].toLowerCase().contains(userFieldInput)) {
                 matched = true;
-                generateCharacterLabel(Data.characters[i], matchedCount);
+                generateCharacterButton(Data.characters[i], matchedCount);
                 matchedCount++;
 
             }
         }
         if (!matched) {
-            generateCharacterLabel(UNKNOWN_CHARACTER_PLACEHOLDER_NAME, matchedCount);
+            generateCharacterButton(UNKNOWN_CHARACTER_PLACEHOLDER_NAME, matchedCount);
         } else {
             scrollPane1.setViewportView(selectedCharacterPanel);
             GridBagConstraints gbc = new GridBagConstraints();
@@ -117,8 +124,12 @@ public class Program extends JFrame implements ActionListener {
 
     }
 
-    private void generateCharacterLabel(String characterName, int number) {
-
+    /**
+     * Generates a character button for the character specified by name and the count of it.
+     * @param characterName the name of the character
+     * @param number which character by count it is
+     */
+    private void generateCharacterButton(String characterName, int number) {
         String characterIconPath = generateCharacterIconPath(characterName);
         Icon characterIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource(characterIconPath)));
         if (Objects.equals(characterName, UNKNOWN_CHARACTER_PLACEHOLDER_NAME)) {
@@ -137,6 +148,10 @@ public class Program extends JFrame implements ActionListener {
 
     }
 
+    /**
+     * Sets the hardcoded font for the specified component.
+     * @param c component whose font is to be changed
+     */
     private void setFont(Component c) {
         Font font = this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 16, tabbedPane1.getFont());
         if (font != null) {
@@ -144,6 +159,12 @@ public class Program extends JFrame implements ActionListener {
         }
     }
 
+    /**
+     * Creates a JButton for the specified character.
+     * @param characterName the name of the character
+     * @param characterIcon the icon of the character
+     * @return JButton for the character.
+     */
     private JButton getjButton(String characterName, Icon characterIcon) {
         JButton characterButton = new JButton();
 
@@ -171,10 +192,20 @@ public class Program extends JFrame implements ActionListener {
         return characterButton;
     }
 
+    /**
+     * Generates a path to the character icon.
+     * @param charName the character name whose icon path is to be given back
+     * @return character icon path
+     */
     private String generateCharacterIconPath(String charName) {
         return "/Files/Images/Characters/" + charName + ".png";
     }
 
+    /**
+     * Adds a character button to the selected character panel (after triggering actionPerformed)
+     * @param charButton the button to add
+     * @param number which character by count to be added
+     */
     private void addCharacterButtonToSelectedCharacterPanel(JButton charButton, int number) {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = number % 6;
@@ -184,15 +215,25 @@ public class Program extends JFrame implements ActionListener {
 
     }
 
+    /**
+     * Removes whitespace from the name of the character, adds line break in its place and centers the name.
+     * @param name the character name to be changed
+     * @return edited string
+     */
     String removeWhitespace(String name) {
         return "<html><center>" + name.replace(" ", "<br>") + "</center></html>";
 
     }
 
+    /**
+     * Generates a character page (in the tabbed pane).
+     * @param charName the character name
+     * @param charIcon the character icon
+     * @return the JPanel that is the character page.
+     */
     private JPanel generateCharacterPage(String charName, Icon charIcon) {
         final JPanel panel4 = new JPanel();
         panel4.setLayout(new GridBagLayout());
-        tabbedPane1.addTab(charName, panel4);
         final JLabel label2 = new JLabel();
         label2.setIcon(charIcon);
         label2.setText("");
