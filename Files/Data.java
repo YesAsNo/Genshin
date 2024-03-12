@@ -1,24 +1,41 @@
 package Files;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class Data {
-    public final static String[] characters
-            = {"Xianyun", "Gaming", "Chevreuse", "Navia", "Furina", "Charlotte", "Wriothesley", "Neuvillette",
-            "Freminet", "Traveler", "Lyney", "Lynette", "Kirara", "Baizhu", "Kaveh", "Mika", "Dehya", "Alhaitham",
-            "Yaoyao", "Wanderer", "Faruzan", "Layla", "Nahida", "Nilou", "Cyno", "Candace", "Dori", "Tighnari",
-            "Collei", "Heizou", "Kuki Shinobu", "Yelan", "Kamisato Ayato", "Yae Miko", "Shenhe", "Yun Jin",
-            "Arataki Itto", "Gorou", "Thoma", "Kokomi", "Raiden Shogun", "Aloy", "Kujou Sara", "Yoimiya", "Sayu",
-            "Kamisato Ayaka", "Kaedehara Kazuha", "Eula", "Yanfei", "Rosaria", "Hu Tao", "Xiao", "Ganyu", "Albedo",
-            "Zhongli", "Xinyan", "Tartaglia", "Diona", "Klee", "Diluc", "Mona", "Keqing", "Jean", "Venti", "Qiqi",
-            "Amber", "Bennett", "Xiangling", "Barbara", "Xingqiu", "Beidou", "Fischl", "Lisa", "Razor", "Sucrose",
-            "Chongyun", "Kaeya", "Ningguang", "Noelle"};
-    private final static String[] artifact_sets
+    public static String[] characters;
+
+    public final static String[] pyro_characters
+            = {"Amber", "Xiangling", "Bennett", "Xinyan", "Yanfei", "Thoma", "Chevreuse", "Gaming", "Diluc", "Klee",
+            "Hu Tao", "Yoimiya", "Dehya", "Lyney"};
+
+    public final static String[] electro_characters
+            = {"Fischl", "Beidou", "Lisa", "Razor", "Kujou Sara", "Kuki Shinobu", "Dori", "Keqing",
+            "Raiden Shogun", "Yae Miko", "Cyno"};
+
+    public final static String[] dendro_characters
+            = {"Collei", "Yaoyao", "Kaveh", "Kirara", "Tighnari", "Nahida", "Alhaitham", "Baizhu"};
+
+    public final static String[] hydro_characters
+            = {"Xingqiu", "Barbara", "Candace", "Tartaglia", "Mona", "Sangonomiya Kokomi", "Kamisato Ayato", "Yelan",
+            "Nilou", "Neuvilette", "Furina"};
+
+    public final static String[] cryo_characters
+            = {"Diona", "Chongyun", "Kaeya", "Rosaria", "Layla", "Mika", "Freminet", "Charlotte", "Qiqi", "Ganyu",
+            "Eula", "Kamisato Ayaka", "Aloy", "Shenhe", "Wriothesley"};
+
+    public final static String[] anemo_characters
+            = {"Sucrose", "Sayu", "Heizou", "Faruzan", "Lynette", "Jean", "Venti", "Xiao", "Kaedehara Kazuha",
+            "Wanderer", "Xianyun"};
+
+    public final static String[] geo_characters
+            = {"Ningguang", "Noelle", "Gorou", "Yunjin", "Zhongli", "Albedo", "Arataki Itto", "Navia", "Chiori"};
+
+    public final static String[] misc_characters
+            = {"Traveler"};
+
+    public final static String[] artifact_sets
             = {"Gladiator's Finale", "Wanderer's Troupe",
             "Noblesse Oblige", "Bloodstained Chivalry",
             "Maiden Beloved", "Viridescent Venerer",
@@ -36,49 +53,68 @@ public class Data {
             "Marechaussee Hunter", "Golden Troupe",
             "Song of Days Past", "Nighttime Whispers in the Echoing Woods"};
 
-    private final static String[] artifact_domains
+    public final static String[] artifact_domains
             = {"Bosses", "Clear Pool and Mountain Cavern", "Valley of Remembrance", "Domain of Guyun",
             "Midsummer Courtyard", "Hidden Palace of Zhou Formula", "Peak of Vindagnyr", "Ridge Watch",
             "Momiji-Dyed Court", "Slumbering Court", "The Lost Valley", "Spire of Solitary Enlightenment",
             "City of Gold", "Molten Iron Fortress", "Denouement of Sin", "Waterfall Wen"};
 
-    public final static String[] all_weapons
-            ={"Royal Greatsword", "Royal Grimoire", "Royal Longsword", "Royal Spear", "Rust", "Sacrificial Bow",
-            "Sacrificial Fragments", "Sacrificial Greatsword", "Sacrificial Jade", "Sacrificial Sword",
-            "Sapwood Blade", "Scion of the Blazing Sun", "Serpent Spine", "Skyward Atlas", "Skyward Blade",
-            "Skyward Harp", "Skyward Pride", "Skyward Spine", "Snow-Tombed Starsilver", "Solar Pearl",
-            "Song of Broken Pines", "Song of Stillness", "Splendor of Tranquil Waters", "Staff of Homa",
-            "Staff of the Scarlet Sands", "Summit Shaper", "Sword of Descension", "Sword of Narzissenkreuz",
-            "Talking Stick", "The Alley Flash", "The Bell", "The Black Sword", "The Catch", "The Dockhand's Assistant",
-            "The First Great Magic", "The Flute", "The Stringless", "The Unforged", "The Viridescent Hunt",
-            "The Widsith", "Thundering Pulse", "Tidal Shadow", "Tome of the Eternal Flow", "Toukabou Shigure",
-            "Tulaytullah's Remembrance", "Ultimate Overlord's Mega Magic Sword", "Verdict", "Vortex Vanquisher",
-            "Wandering Evenstar", "Wavebreaker's Fin", "Whiteblind", "Windblume Ode", "Wine and Song", "Wolf-Fang",
-            "Wolf's Gravestone", "Xiphos' Moonlight", "A Thousand Floating Dreams", "Akuoumaru", "Alley Hunter",
-            "Amenoma Kageuchi", "Amos' Bow", "Aqua Simulacra", "Aquila Favonia", "Ballad of the Boundless Blue",
-            "Ballad of the Fjords", "Beacon of the Reed Sea", "Blackcliff Agate", "Blackcliff Longsword",
-            "Blackcliff Pole", "Blackcliff Slasher", "Blackcliff Warbow", "Calamity Queller", "Cashflow Supervision",
-            "Cinnabar Spindle", "Compound Bow", "Crane's Echoing Call", "Crescent Pike", "Deathmatch",
-            "Dodoco Tales", "Dragon's Bane", "Dragonspine Spear", "Elegy for the End", "End of the Line",
-            "Engulfing Lighting", "Everlasting Moonglow", "Eye of Perception", "Fading Twilight", "Favonius Codex",
-            "Favonius Greatsword", "Favonius Lance", "Favonius Sword", "Favonius Warbow", "Festering Desire",
-            "Finale of the Deep", "Fleuve Cendre Ferryman", "Flowing Purity", "Forest Regalia", "Freedom-Sworn",
-            "Frostbearer", "Fruit of Fulfillment", "Hakushin Ring", "Hamayumi", "Haran Geppaku Futsu",
-            "Hunter's Path", "Ibis Piercer", "Iron Sting", "Jadefall's Splendor", "Kagotsurube Isshin",
-            "Kagura's Verity", "Katsuragikiri Nagamasa", "Key of Khaj-Nisut", "King's Squire", "Kitain Cross Spear",
-            "Light of Foliar Incision", "Lion's Roar", "Lithic Blade", "Lithic Spear",
-            "Lost Prayer to the Sacred Winds", "Luxurious Sea-Lord", "Mailed Flower", "Makhaira Aquamarine",
-            "Mappa Mare", "Memory of Dust", "Missive Windspear", "Mistsplitter Reforged", "Mitternachts Waltz",
-            "Moonpiercer", "Mouun's Moon", "Oathsworn Eye", "Polar Star", "Portable Power Saw", "Predator",
-            "Primodial Jade Winged-Spear", "Primordial Jade Cutter", "Prospector's Drill", "Prototype Amber",
-            "Prototype Archaic", "Prototype Crescent", "Prototype Rancour", "Prototype Starglitter", "Rainslasher",
-            "Range Gauge", "Redhorn Stonethresher", "Rightful Reward", "Royal Bow"};
+    public final static String[] bows_5star
+            = {"Amos' Bow", "Aqua Simulacra", "Elegy for the End", "Hunter's Path", "Polar Star", "Skyward Harp",
+            "The First Great Magic", "Thundering Pulse"};
 
-    public final static List<String> character_names = Arrays.asList(characters);
+    public final static String[] bows_4star
+            = {"Alley Hunter", "Blackcliff Warbow", "Compound Bow", "End of the Line", "Fading Twilight",
+            "Favonius Warbow", "Hamayumi", "Ibis Piercer", "King's Squire", "Mitternachts Waltz", "Mooun's Moon",
+            "Predator", "Prototype Crescent", "Range Gauge", "Royal Bow", "Rust", "Sacrificial Bow",
+            "Scion of the Blazing Sun", "Song of Stillness", "The Stringless", "The Viridescent Hunt", "Windblume Ode"};
+
+    public final static String[] catalysts_5star
+            = {"A Thousand Floating Dreams", "Cashflow Supervision", "Crane's Echoing Call", "Everlasting Moonglow",
+            "Jadefall's Splendor", "Kagura's Verity", "Lost Prayer to the Sacred Winds", "Memory of Dust",
+            "Skyward Atlas", "Tome of the Eternal Flow", "Tulaytullah's Remembrance"};
+
+    public final static String[] catalysts_4star
+            = {"Ballad of the Boundless Blue", "Blackcliff Agate", "Dodoco Tales", "Eye of Perception",
+            "Favonius Codex", "Flowing Purity", "Frostbearer", "Fruit of Fulfillment", "Hakushin Ring", "Mappa Mare",
+            "Oathsworn Eye", "Prototype Amber", "Royal Grimoire", "Sacrificial Fragments", "Sacrificial Jade",
+            "Solar Pearl", "The Widsith", "Wandering Evenstar", "Wine and Song"};
+
+    public final static String[] claymores_5star
+            = {"Beacon of the Reed Sea", "Redhorn Stonethresher", "Skyward Pride", "Song of Broken Pines",
+            "The Unforged", "Verdict", "Wolf's Gravestone"};
+
+    public final static String[] claymores_4star
+            = {"Akuoumaru", "Blackcliff Slasher", "Favonius Greatsword", "Forest Regalia", "Katsuragikiri Nagamasa",
+            "Lithic Blade", "Luxurious Sea-Lord", "Mailed Flower", "Makhaira Aquamarine", "Portable Power Saw",
+            "Prototype Archaic", "Rainslasher", "Royal Greatsword", "Sacrificial Greatsword", "Serpent Spine",
+            "Snow-Tombed Starsilver", "Talking Stick", "The Bell", "Tidal Shadow", "Ultimate Overlord's Mega Magic Sword",
+            "Whiteblind"};
+
+    public final static String[] polearms_5star
+            = {"Calamity Queller", "Engulfing Lightning", "Primodial Jade Winged-Spear", "Skyward Spine",
+            "Staff of Homa", "Staff of the Scarlet Sands", "Vortex Vanquisher"};
+
+    public final static String[] polearms_4star
+            = {"Ballad of the Fjords", "Blackcliff Pole", "Crescent Pike", "Deathmatch", "Dragon's Bane",
+            "Dragonspine Spear", "Favonius Lance", "Kitain Cross Spear", "Lithic Spear", "Missive Windspear",
+            "Moonpiercer", "Prospector's Drill", "Prototype Starglitter", "Rightful Reward", "Royal Spear", "The Catch",
+            "Wavebreaker's Fin"};
+
+    public final static String[] swords_5star
+            = {"Aquila Favonia", "Freedom-Sworn", "Haran Geppaku Futsu", "Key of Khaj-Nisut", "Light of Foliar Incision",
+            "Mistsplitter Reforged", "Primordial Jade Cutter", "Skyward Blade", "Splendor of Tranquil Waters",
+            "Summit Shaper"};
+
+    public final static String[] swords_4star
+            = {"Amenoma Kageuchi", "Blackcliff Longsword", "Cinnabar Spindle", "Favonius Sword", "Festering Desire",
+            "Finale of the Deep", "Fleuve Cendre Ferryman", "Iron Sting", "Kagotsurube Isshin", "Lion's Roar",
+            "Prototype Rancour", "Royal Longsword", "Sacrificial Sword", "Sapwood Blade", "Sword of Descension",
+            "Sword of Narzissenkreuz", "The Alley Flash", "The Black Sword", "The Dockhand's Assistant",
+            "The Flute", "Toukabou Shigure", "Wolf-Fang", "Xiphos' Moonlight"};
+
+    public static List<String> character_names;
     private final static List<String> set_names = Arrays.asList(artifact_sets);
-
-    private static final int character_count = character_names.size();
-    private static final int set_count = set_names.size();
 
     public static void print_farmed_sets() {
         boolean check = false;
@@ -106,30 +142,21 @@ public class Data {
         }
     }
 
-    public static void print_characters() {
-        for (int i = 0; i < character_names.size(); i++) {
-            System.out.print(MessageFormat.format("{0}.{1} ", i + 1, character_names.get(i)));
-            if (i % 7 == 6) {
-                System.out.println();
-            }
-        }
-        System.out.println();
-    }
-
-    public static void print_sets() {
-        for (int i = 0; i < set_names.size(); i++) {
-            System.out.print(MessageFormat.format("{0}.{1} ", i + 1, set_names.get(i)));
-            if (i % 7 == 6) {
-                System.out.println();
-            }
-        }
-        System.out.println();
-    }
-
     private static HashMap<String, ArrayList<String>> mapping_domains;
     private static HashMap<String, ArrayList<String>> mapping_characters;
 
     public static void main(String[] args) {
+        Set<String> characters_set = new HashSet<>(Arrays.asList(pyro_characters));
+        characters_set.addAll(Arrays.asList(electro_characters));
+        characters_set.addAll(Arrays.asList(dendro_characters));
+        characters_set.addAll(Arrays.asList(hydro_characters));
+        characters_set.addAll(Arrays.asList(cryo_characters));
+        characters_set.addAll(Arrays.asList(anemo_characters));
+        characters_set.addAll(Arrays.asList(geo_characters));
+        characters_set.addAll(Arrays.asList(misc_characters));
+        System.out.println(characters_set.size());
+        character_names = new ArrayList<>(characters_set);
+        characters = characters_set.toArray(characters);
         Program _program = new Program();
         mapping_domains = new HashMap<>();
         mapping_characters = new HashMap<>();
@@ -147,12 +174,5 @@ public class Data {
             ArrayList<String> chosen_artifacts = new ArrayList<>();
             mapping_characters.put(character, chosen_artifacts);
         }
-
-        System.out.println("------- Characters! -------");
-        print_characters();
-        System.out.println();
-        System.out.println("------- Sets! -------");
-        print_sets();
-
     }
 }
