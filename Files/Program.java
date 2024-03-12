@@ -1,10 +1,27 @@
 package Files;
 
+import static Files.Data.characters_flattened;
+
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
@@ -75,9 +92,10 @@ public class Program extends JFrame implements ActionListener {
         boolean matched = false;
         selectedCharacterPanel.removeAll();
         String userFieldInput = characterSelectorField.getText().toLowerCase();
-        for (int i = 0; i < Data.characters.length; i++) {
-            if (Data.characters[i].toLowerCase().contains(userFieldInput)) {
-                generateCharacterLabel(Data.characters[i]);
+
+        for (String s : characters_flattened) {
+            if (s.toLowerCase().contains(userFieldInput)) {
+                generateCharacterLabel(s);
                 matched = true;
                 //matchedCharacters = matchedCharacters + Data.characters[i] + ", ";
                 //Result.setText(Data.characters[i]);
