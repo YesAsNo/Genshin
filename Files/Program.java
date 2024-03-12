@@ -24,11 +24,9 @@ import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -68,13 +66,11 @@ public class Program extends JFrame implements ActionListener {
     private JButton CheckButton;
     private JPanel selectedCharacterPanel;
     private JScrollPane scrollPane1;
-    private GridBagLayout selectedCharacterPanelLayoutManager;
     private Set<String> _openTabs;
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
-        selectedCharacterPanelLayoutManager = new GridBagLayout();
-        selectedCharacterPanel = new JPanel(selectedCharacterPanelLayoutManager);
+        selectedCharacterPanel = new JPanel(new GridBagLayout());
         scrollPane1 = new JScrollPane();
         panel1 = new JPanel();
         _openTabs = new HashSet<>();
@@ -242,7 +238,7 @@ public class Program extends JFrame implements ActionListener {
                 new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL,
                         GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null,
                         new Dimension(50, -1), null, 0, false));
-        JComboBox<String> comboBox1 = new JComboBox<String>();
+        JComboBox<String> comboBox1 = new JComboBox<>();
         comboBox1.setAutoscrolls(false);
         comboBox1.setEditable(false);
         Font comboBox1Font = this.$$$getFont$$$("Source Code Pro", Font.BOLD, 14, comboBox1.getFont());
