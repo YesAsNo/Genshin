@@ -134,35 +134,54 @@ public class Program extends JFrame implements ActionListener {
         panel1.setBackground(new Color(-2702645));
         panel1.setEnabled(true);
         final Spacer spacer1 = new Spacer();
-        panel1.add(spacer1, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panel1.add(spacer1,
+                new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1,
+                        GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         label1 = new JLabel();
         Font label1Font = this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 20, label1.getFont());
-        if (label1Font != null) label1.setFont(label1Font);
+        if (label1Font != null) {
+            label1.setFont(label1Font);
+        }
         label1.setForeground(new Color(-14940151));
         label1.setText("Genshin Domain Application");
-        panel1.add(label1, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel1.add(label1, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         panel2 = new JPanel();
         panel2.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         panel2.setBackground(new Color(-3689540));
-        panel1.add(panel2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        panel1.add(panel2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0,
+                false));
         tabbedPane1 = new JTabbedPane();
         Font tabbedPane1Font = this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 20, tabbedPane1.getFont());
-        if (tabbedPane1Font != null) tabbedPane1.setFont(tabbedPane1Font);
+        if (tabbedPane1Font != null) {
+            tabbedPane1.setFont(tabbedPane1Font);
+        }
         tabbedPane1.setTabPlacement(1);
-        panel2.add(tabbedPane1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(200, 200), null, 0, false));
+        panel2.add(tabbedPane1,
+                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null,
+                        new Dimension(200, 200), null, 0, false));
         CharacterTab = new JPanel();
         CharacterTab.setLayout(new GridBagLayout());
         CharacterTab.setBackground(new Color(-1));
         CharacterTab.setEnabled(true);
         CharacterTab.setFocusCycleRoot(false);
         Font CharacterTabFont = this.$$$getFont$$$(null, -1, -1, CharacterTab.getFont());
-        if (CharacterTabFont != null) CharacterTab.setFont(CharacterTabFont);
+        if (CharacterTabFont != null) {
+            CharacterTab.setFont(CharacterTabFont);
+        }
         CharacterTab.setOpaque(true);
         CharacterTab.setRequestFocusEnabled(true);
         tabbedPane1.addTab("Characters", CharacterTab);
         characterSelectorField.setEnabled(true);
-        Font characterSelectorFieldFont = this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 18, characterSelectorField.getFont());
-        if (characterSelectorFieldFont != null) characterSelectorField.setFont(characterSelectorFieldFont);
+        Font characterSelectorFieldFont =
+                this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 18, characterSelectorField.getFont());
+        if (characterSelectorFieldFont != null) {
+            characterSelectorField.setFont(characterSelectorFieldFont);
+        }
         characterSelectorField.setInheritsPopupMenu(false);
         characterSelectorField.setMaximumSize(new Dimension(240, 33));
         characterSelectorField.setMinimumSize(new Dimension(240, 33));
@@ -186,7 +205,9 @@ public class Program extends JFrame implements ActionListener {
         CharacterTab.add(CheckButton, gbc);
         Result = new JLabel();
         Font ResultFont = this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 18, Result.getFont());
-        if (ResultFont != null) Result.setFont(ResultFont);
+        if (ResultFont != null) {
+            Result.setFont(ResultFont);
+        }
         Result.setText("[Result character]");
         gbc = new GridBagConstraints();
         gbc.gridx = 2;
@@ -205,7 +226,11 @@ public class Program extends JFrame implements ActionListener {
         gbc.fill = GridBagConstraints.BOTH;
         CharacterTab.add(panel3, gbc);
         final JScrollPane scrollPane1 = new JScrollPane();
-        panel3.add(scrollPane1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panel3.add(scrollPane1,
+                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null,
+                        0, false));
         selectedCharacterPanel = new JPanel();
         selectedCharacterPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         scrollPane1.setViewportView(selectedCharacterPanel);
@@ -238,51 +263,74 @@ public class Program extends JFrame implements ActionListener {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(40, 0, 0, 0);
         panel4.add(panel5, gbc);
-        panel5.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+        panel5.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         emptyNotesFieldTextField = new JTextField();
-        Font emptyNotesFieldTextFieldFont = this.$$$getFont$$$("Source Code Pro", Font.BOLD, 14, emptyNotesFieldTextField.getFont());
-        if (emptyNotesFieldTextFieldFont != null) emptyNotesFieldTextField.setFont(emptyNotesFieldTextFieldFont);
+        Font emptyNotesFieldTextFieldFont =
+                this.$$$getFont$$$("Source Code Pro", Font.BOLD, 14, emptyNotesFieldTextField.getFont());
+        if (emptyNotesFieldTextFieldFont != null) {
+            emptyNotesFieldTextField.setFont(emptyNotesFieldTextFieldFont);
+        }
         emptyNotesFieldTextField.setHorizontalAlignment(10);
         emptyNotesFieldTextField.setInheritsPopupMenu(false);
         emptyNotesFieldTextField.setOpaque(true);
         emptyNotesFieldTextField.setRequestFocusEnabled(true);
         emptyNotesFieldTextField.setText("[ Empty Notes Field ]");
-        panel5.add(emptyNotesFieldTextField, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, -1), null, 0, false));
+        panel5.add(emptyNotesFieldTextField,
+                new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL,
+                        GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null,
+                        new Dimension(50, -1), null, 0, false));
         comboBox1 = new JComboBox();
         comboBox1.setAutoscrolls(false);
         comboBox1.setEditable(true);
         Font comboBox1Font = this.$$$getFont$$$("Source Code Pro", Font.BOLD, 14, comboBox1.getFont());
-        if (comboBox1Font != null) comboBox1.setFont(comboBox1Font);
+        if (comboBox1Font != null) {
+            comboBox1.setFont(comboBox1Font);
+        }
         comboBox1.setInheritsPopupMenu(false);
         final DefaultComboBoxModel defaultComboBoxModel1 = new DefaultComboBoxModel();
         defaultComboBoxModel1.addElement("[ Empty Artifact Selector ]");
         defaultComboBoxModel1.addElement("Hu Tao");
         comboBox1.setModel(defaultComboBoxModel1);
         comboBox1.setToolTipText("");
-        panel5.add(comboBox1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        panel5.add(comboBox1,
+                new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW,
+                        GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JLabel label3 = new JLabel();
         label3.setAutoscrolls(true);
         Font label3Font = this.$$$getFont$$$("Source Code Pro", Font.BOLD, 18, label3.getFont());
-        if (label3Font != null) label3.setFont(label3Font);
+        if (label3Font != null) {
+            label3.setFont(label3Font);
+        }
         label3.setText("Albedo");
-        panel5.add(label3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel5.add(label3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
+                GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JComboBox comboBox2 = new JComboBox();
         comboBox2.setAutoscrolls(false);
         comboBox2.setEditable(false);
         Font comboBox2Font = this.$$$getFont$$$("Source Code Pro", Font.BOLD, 14, comboBox2.getFont());
-        if (comboBox2Font != null) comboBox2.setFont(comboBox2Font);
+        if (comboBox2Font != null) {
+            comboBox2.setFont(comboBox2Font);
+        }
         comboBox2.setInheritsPopupMenu(false);
         final DefaultComboBoxModel defaultComboBoxModel2 = new DefaultComboBoxModel();
         defaultComboBoxModel2.addElement("[ Amos' Bow Selected ]");
         comboBox2.setModel(defaultComboBoxModel2);
         comboBox2.setToolTipText("");
-        panel5.add(comboBox2, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        panel5.add(comboBox2,
+                new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW,
+                        GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JLabel label4 = new JLabel();
         label4.setAutoscrolls(true);
         Font label4Font = this.$$$getFont$$$("Source Code Pro", Font.BOLD, 18, label4.getFont());
-        if (label4Font != null) label4.setFont(label4Font);
+        if (label4Font != null) {
+            label4.setFont(label4Font);
+        }
         label4.setText("Amos's Bow");
-        panel5.add(label4, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
+        panel5.add(label4, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
+                GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1, false));
         final JPanel panel6 = new JPanel();
         panel6.setLayout(new GridLayoutManager(4, 1, new Insets(3, 3, 33, 3), -1, -1));
         gbc = new GridBagConstraints();
@@ -294,31 +342,51 @@ public class Program extends JFrame implements ActionListener {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(40, 0, 0, 100);
         panel4.add(panel6, gbc);
-        panel6.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+        panel6.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         artifactListingCheckBox = new JCheckBox();
-        Font artifactListingCheckBoxFont = this.$$$getFont$$$("Source Code Pro", -1, 14, artifactListingCheckBox.getFont());
-        if (artifactListingCheckBoxFont != null) artifactListingCheckBox.setFont(artifactListingCheckBoxFont);
+        Font artifactListingCheckBoxFont =
+                this.$$$getFont$$$("Source Code Pro", -1, 14, artifactListingCheckBox.getFont());
+        if (artifactListingCheckBoxFont != null) {
+            artifactListingCheckBox.setFont(artifactListingCheckBoxFont);
+        }
         artifactListingCheckBox.setText("Artifact Listing");
-        panel6.add(artifactListingCheckBox, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_SOUTHWEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel6.add(artifactListingCheckBox,
+                new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_SOUTHWEST, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                        GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         talentListingCheckBox = new JCheckBox();
         Font talentListingCheckBoxFont = this.$$$getFont$$$("Source Code Pro", -1, 14, talentListingCheckBox.getFont());
-        if (talentListingCheckBoxFont != null) talentListingCheckBox.setFont(talentListingCheckBoxFont);
+        if (talentListingCheckBoxFont != null) {
+            talentListingCheckBox.setFont(talentListingCheckBoxFont);
+        }
         talentListingCheckBox.setText("Talent Listing");
-        panel6.add(talentListingCheckBox, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_NORTHWEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel6.add(talentListingCheckBox,
+                new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_NORTHWEST, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                        GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label5 = new JLabel();
         Font label5Font = this.$$$getFont$$$("Source Code Pro", Font.BOLD, 18, label5.getFont());
-        if (label5Font != null) label5.setFont(label5Font);
+        if (label5Font != null) {
+            label5.setFont(label5Font);
+        }
         label5.setText("Domain listings");
-        panel6.add(label5, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel6.add(label5, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
+                GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JCheckBox checkBox1 = new JCheckBox();
         Font checkBox1Font = this.$$$getFont$$$("Source Code Pro", -1, 14, checkBox1.getFont());
-        if (checkBox1Font != null) checkBox1.setFont(checkBox1Font);
+        if (checkBox1Font != null) {
+            checkBox1.setFont(checkBox1Font);
+        }
         checkBox1.setText("Weapon Material Listing");
-        panel6.add(checkBox1, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_SOUTHWEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel6.add(checkBox1,
+                new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_SOUTHWEST, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                        GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label6 = new JLabel();
         label6.setHorizontalAlignment(4);
         label6.setHorizontalTextPosition(4);
-        label6.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Weapons/Amos' Bow.png")));
+        label6.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Weapons/Bow_5star/Elegy for the End.png")));
         label6.setText("");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -330,7 +398,8 @@ public class Program extends JFrame implements ActionListener {
         gbc.insets = new Insets(0, 0, 20, 20);
         panel4.add(label6, gbc);
         add1ArtifactIconTextPane = new JTextPane();
-        add1ArtifactIconTextPane.setText("Add:\n1) Artifact Icon\n2) Space for Artifact set Description\n3) Save Button\n4) Close Tab Button");
+        add1ArtifactIconTextPane.setText(
+                "Add:\n1) Artifact Icon\n2) Space for Artifact set Description\n3) Save Button\n4) Close Tab Button");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 3;
@@ -338,11 +407,11 @@ public class Program extends JFrame implements ActionListener {
         panel4.add(add1ArtifactIconTextPane, gbc);
     }
 
-    /**
-     * @noinspection ALL
-     */
+    /** @noinspection ALL */
     private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
-        if (currentFont == null) return null;
+        if (currentFont == null) {
+            return null;
+        }
         String resultName;
         if (fontName == null) {
             resultName = currentFont.getName();
@@ -354,15 +423,15 @@ public class Program extends JFrame implements ActionListener {
                 resultName = currentFont.getName();
             }
         }
-        Font font = new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
+        Font font = new Font(resultName, style >= 0 ? style : currentFont.getStyle(),
+                size >= 0 ? size : currentFont.getSize());
         boolean isMac = System.getProperty("os.name", "").toLowerCase(Locale.ENGLISH).startsWith("mac");
-        Font fontWithFallback = isMac ? new Font(font.getFamily(), font.getStyle(), font.getSize()) : new StyleContext().getFont(font.getFamily(), font.getStyle(), font.getSize());
+        Font fontWithFallback = isMac ? new Font(font.getFamily(), font.getStyle(), font.getSize()) :
+                new StyleContext().getFont(font.getFamily(), font.getStyle(), font.getSize());
         return fontWithFallback instanceof FontUIResource ? fontWithFallback : new FontUIResource(fontWithFallback);
     }
 
-    /**
-     * @noinspection ALL
-     */
+    /** @noinspection ALL */
     public JComponent $$$getRootComponent$$$() {
         return panel1;
     }

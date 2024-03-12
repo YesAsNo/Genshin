@@ -4,7 +4,7 @@ import java.text.MessageFormat;
 import java.util.*;
 
 public class Data {
-    public static String[] characters;
+    public static String[] characters = new String[1];
 
     public final static String[] pyro_characters
             = {"Amber", "Xiangling", "Bennett", "Xinyan", "Yanfei", "Thoma", "Chevreuse", "Gaming", "Diluc", "Klee",
