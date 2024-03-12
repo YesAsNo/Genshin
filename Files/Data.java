@@ -13,9 +13,7 @@ public class Data {
     private static final String PATH_TO_CHARACTER_JSON = "./characters.json";
     private static final String PATH_TO_WEAPONS_JSON = "./weapons.json";
     private static final String PATH_TO_DOMAIN_MAPPINGS = "./mapping_domains.json";
-
     public static HashMap<String, List<String>> mapping_domains = new HashMap<>();
-
     public static List<String> artifacts_flattened = new ArrayList<>();
     private static void parseCharacters(Gson gson) throws Exception{
 
@@ -38,8 +36,5 @@ public class Data {
         Program _program = new Program();
         parseCharacters(gson);
         parseDomainMapping(gson);
-
-
         }
-
     }
