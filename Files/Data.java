@@ -1,5 +1,15 @@
 package Files;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import java.io.PrintWriter;
 import java.text.MessageFormat;
 import java.util.*;
 
@@ -145,7 +155,7 @@ public class Data {
     private static HashMap<String, ArrayList<String>> mapping_domains;
     private static HashMap<String, ArrayList<String>> mapping_characters;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Set<String> characters_set = new HashSet<>(Arrays.asList(pyro_characters));
         characters_set.addAll(Arrays.asList(electro_characters));
         characters_set.addAll(Arrays.asList(dendro_characters));
@@ -157,22 +167,18 @@ public class Data {
         System.out.println(characters_set.size());
         character_names = new ArrayList<>(characters_set);
         characters = characters_set.toArray(characters);
+
+
         Program _program = new Program();
         mapping_domains = new HashMap<>();
         mapping_characters = new HashMap<>();
         Collections.sort(character_names);
-        Collections.sort(set_names);
+        /*Object obj = new JSONParser().parse(new FileReader("./characters.json"));
+        JSONObject jo = (JSONObject) obj;
+        for (Object o : jo.entrySet().toArray()) {
+            System.out.println(o);
+        }*/
 
-        for (int i = 0; i < artifact_domains.length; i++) {
-            ArrayList<String> possible_artifacts = new ArrayList<>();
-            possible_artifacts.add(artifact_sets[i * 2]);
-            possible_artifacts.add(artifact_sets[i * 2 + 1]);
-            mapping_domains.put(artifact_domains[i], possible_artifacts);
-        }
-
-        for (String character : characters) {
-            ArrayList<String> chosen_artifacts = new ArrayList<>();
-            mapping_characters.put(character, chosen_artifacts);
-        }
     }
+
 }
