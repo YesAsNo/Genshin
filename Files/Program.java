@@ -24,7 +24,9 @@ import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -54,6 +56,9 @@ public class Program extends JFrame implements ActionListener {
     }
 
     private JPanel panel1;
+    public static final String NO_CHARACTERS_MATCH_MESSAGE = "No fighters >:(";
+    public static final String UNKNOWN_CHARACTER_PLACEHOLDER_NAME = "unknown_character";
+    public static final int MAX_CHARACTERS_PER_LINE = 12;
     private JLabel label1;
     private JTabbedPane tabbedPane1;
     private JPanel panel2;
@@ -61,12 +66,16 @@ public class Program extends JFrame implements ActionListener {
     private JPanel ArtifactsTab;
     private JTextField characterSelectorField;
     private JButton CheckButton;
-    private JLabel Result;
     private JPanel selectedCharacterPanel;
+    private JScrollPane scrollPane1;
+    private GridBagLayout selectedCharacterPanelLayoutManager;
     private Set<String> _openTabs;
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
+        selectedCharacterPanelLayoutManager = new GridBagLayout();
+        selectedCharacterPanel = new JPanel(selectedCharacterPanelLayoutManager);
+        scrollPane1 = new JScrollPane();
         panel1 = new JPanel();
         _openTabs = new HashSet<>();
         CheckButton = new JButton("✓");
@@ -82,28 +91,75 @@ public class Program extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         boolean matched = false;
+        int matchedCount = 0;
         selectedCharacterPanel.removeAll();
+
         String userFieldInput = characterSelectorField.getText().toLowerCase();
         for (int i = 0; i < Data.characters.length; i++) {
             if (Data.characters[i].toLowerCase().contains(userFieldInput)) {
-                generateCharacterLabel(Data.characters[i]);
                 matched = true;
+                generateCharacterLabel(Data.characters[i], matchedCount);
+                matchedCount++;
+
             }
         }
         if (!matched) {
-            Result.setText("No fighters >:(");
+            generateCharacterLabel(UNKNOWN_CHARACTER_PLACEHOLDER_NAME, matchedCount);
+        } else {
+            scrollPane1.setViewportView(selectedCharacterPanel);
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.gridx = 0;
+            gbc.gridy = 1;
+            gbc.gridwidth = 3;
+            gbc.weightx = 1.0;
+            gbc.weighty = 1.0;
+            gbc.fill = GridBagConstraints.BOTH;
+            scrollPane1.updateUI();
+            CharacterTab.add(scrollPane1, gbc);
+
         }
 
     }
 
-    private void generateCharacterLabel(String characterName) {
+    private void generateCharacterLabel(String characterName, int number) {
+
         String characterIconPath = generateCharacterIconPath(characterName);
-        JButton characterButton = new JButton();
         Icon characterIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource(characterIconPath)));
+        if (Objects.equals(characterName, UNKNOWN_CHARACTER_PLACEHOLDER_NAME)) {
+            JLabel unknownCharacterLabel = new JLabel(characterIcon);
+            unknownCharacterLabel.setText(NO_CHARACTERS_MATCH_MESSAGE);
+            unknownCharacterLabel.setVerticalTextPosition(SwingConstants.BOTTOM);
+            unknownCharacterLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+            setFont(unknownCharacterLabel);
+            selectedCharacterPanel.add(unknownCharacterLabel);
+            selectedCharacterPanel.updateUI();
+            return;
+        }
+        JButton characterButton = getjButton(characterName, characterIcon);
+
+        addCharacterButtonToSelectedCharacterPanel(characterButton, number);
+
+    }
+
+    private void setFont(Component c) {
+        Font font = this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 16, tabbedPane1.getFont());
+        if (font != null) {
+            c.setFont(font);
+        }
+    }
+
+    private JButton getjButton(String characterName, Icon characterIcon) {
+        JButton characterButton = new JButton();
+
         characterButton.setIcon(characterIcon);
-        characterButton.setText(characterName);
+        if (characterName.length() > MAX_CHARACTERS_PER_LINE) {
+            characterButton.setText(removeWhitespace(characterName));
+        } else {
+            characterButton.setText(characterName);
+        }
         characterButton.setVerticalTextPosition(SwingConstants.BOTTOM);
         characterButton.setHorizontalTextPosition(SwingConstants.CENTER);
+        setFont(characterButton);
         characterButton.setOpaque(false);
         characterButton.setBorderPainted(false);
         characterButton.setContentAreaFilled(false);
@@ -116,12 +172,25 @@ public class Program extends JFrame implements ActionListener {
                 tabbedPane1.setSelectedIndex(tabbedPane1.indexOfTab(characterName));
             }
         });
-        selectedCharacterPanel.add(characterButton);
-        selectedCharacterPanel.updateUI();
+        return characterButton;
     }
 
     private String generateCharacterIconPath(String charName) {
         return "/Files/Images/Characters/" + charName + ".png";
+    }
+
+    private void addCharacterButtonToSelectedCharacterPanel(JButton charButton, int number) {
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = number % 6;
+        gbc.gridy = (number - gbc.gridx) / 6;
+        selectedCharacterPanel.add(charButton, gbc);
+        selectedCharacterPanel.updateUI();
+
+    }
+
+    String removeWhitespace(String name) {
+        return "<html><center>" + name.replace(" ", "<br>") + "</center></html>";
+
     }
 
     private JPanel generateCharacterPage(String charName, Icon charIcon) {
@@ -360,6 +429,24 @@ public class Program extends JFrame implements ActionListener {
         CharacterTab.setOpaque(true);
         CharacterTab.setRequestFocusEnabled(true);
         tabbedPane1.addTab("Characters", CharacterTab);
+        GridBagConstraints gbc;
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 3;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        CharacterTab.add(selectedCharacterPanel, gbc);
+        CheckButton.setMaximumSize(new Dimension(30, 30));
+        CheckButton.setMinimumSize(new Dimension(30, 30));
+        CheckButton.setPreferredSize(new Dimension(50, 30));
+        CheckButton.setText("✓");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        CharacterTab.add(CheckButton, gbc);
         characterSelectorField.setEnabled(true);
         Font characterSelectorFieldFont =
                 this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 18, characterSelectorField.getFont());
@@ -371,53 +458,12 @@ public class Program extends JFrame implements ActionListener {
         characterSelectorField.setMinimumSize(new Dimension(240, 33));
         characterSelectorField.setPreferredSize(new Dimension(240, 33));
         characterSelectorField.setText("Choose your fighter!");
-        GridBagConstraints gbc;
         gbc = new GridBagConstraints();
-        gbc.gridx = 0;
+        gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.insets = new Insets(0, 250, 0, 0);
         CharacterTab.add(characterSelectorField, gbc);
-        CheckButton.setMaximumSize(new Dimension(30, 30));
-        CheckButton.setMinimumSize(new Dimension(30, 30));
-        CheckButton.setPreferredSize(new Dimension(50, 30));
-        CheckButton.setText("✓");
-        gbc = new GridBagConstraints();
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        CharacterTab.add(CheckButton, gbc);
-        Result = new JLabel();
-        Font ResultFont = this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 18, Result.getFont());
-        if (ResultFont != null) {
-            Result.setFont(ResultFont);
-        }
-        Result.setText("[Result character]");
-        gbc = new GridBagConstraints();
-        gbc.gridx = 2;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.insets = new Insets(0, 10, 0, 0);
-        CharacterTab.add(Result, gbc);
-        final JPanel panel3 = new JPanel();
-        panel3.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.gridwidth = 3;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;
-        CharacterTab.add(panel3, gbc);
-        final JScrollPane scrollPane1 = new JScrollPane();
-        panel3.add(scrollPane1,
-                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null,
-                        0, false));
-        selectedCharacterPanel = new JPanel();
-        selectedCharacterPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-        scrollPane1.setViewportView(selectedCharacterPanel);
         ArtifactsTab = new JPanel();
         ArtifactsTab.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         ArtifactsTab.setBackground(new Color(-1));
