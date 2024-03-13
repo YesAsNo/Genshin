@@ -7,34 +7,43 @@ import java.io.FileReader;
 
 import java.util.*;
 
-public class Data {
+public class ToolData {
     public static Map<String,List<String>> charactersElementsMap = new TreeMap<>();
-    public static List<String> characters_flattened = new ArrayList<>();
+    public static List<String> charactersFlattened = new ArrayList<>();
+    public static Map<String, List<String>> mappingDomains = new TreeMap<>();
+    public static List<String> artifactsFlattened = new ArrayList<>();
+    public static Map<String, List<String>> weaponsRaritiesMap = new TreeMap<>();
+
     private static final String PATH_TO_CHARACTER_JSON = "./characters.json";
     private static final String PATH_TO_WEAPONS_JSON = "./weapons.json";
     private static final String PATH_TO_DOMAIN_MAPPINGS = "./mapping_domains.json";
-    public static HashMap<String, List<String>> mapping_domains = new HashMap<>();
-    public static List<String> artifacts_flattened = new ArrayList<>();
+
     private static void parseCharacters(Gson gson) throws Exception{
 
         JsonReader reader = new JsonReader(new FileReader(PATH_TO_CHARACTER_JSON));
         charactersElementsMap = gson.fromJson(reader, charactersElementsMap.getClass());
         List<List<String>> val_arrays = new ArrayList<>(charactersElementsMap.values());
-        val_arrays.forEach(characters_flattened::addAll);
-        Collections.sort(characters_flattened);
+        val_arrays.forEach(charactersFlattened::addAll);
+        Collections.sort(charactersFlattened);
     }
     private static void parseDomainMapping(Gson gson) throws Exception{
 
         JsonReader reader = new JsonReader(new FileReader(PATH_TO_DOMAIN_MAPPINGS));
-        mapping_domains = gson.fromJson(reader, mapping_domains.getClass());
-        List<List<String>> val_arrays = new ArrayList<>(mapping_domains.values());
-        val_arrays.forEach(artifacts_flattened::addAll);
-        Collections.sort(artifacts_flattened);
+        mappingDomains = gson.fromJson(reader, mappingDomains.getClass());
+        List<List<String>> val_arrays = new ArrayList<>(mappingDomains.values());
+        val_arrays.forEach(artifactsFlattened::addAll);
+        Collections.sort(artifactsFlattened);
+    }
+    private static void parseWeapons(Gson gson) throws Exception{
+        JsonReader reader = new JsonReader(new FileReader(PATH_TO_WEAPONS_JSON));
+        weaponsRaritiesMap = gson.fromJson(reader,weaponsRaritiesMap.getClass());
+
     }
     public static void main(String[] args) throws Exception {
         Gson gson = new Gson();
-        Program _program = new Program();
+        new ToolGUI();
         parseCharacters(gson);
         parseDomainMapping(gson);
+        parseWeapons(gson);
         }
     }
