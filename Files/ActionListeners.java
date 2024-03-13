@@ -1,12 +1,13 @@
 package Files;
 
+import static Files.ToolGUI.UNKNOWN_SET_MESSAGE;
+import static Files.ToolGUI.lookUpWeaponRarity;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Objects;
@@ -24,23 +25,35 @@ public class ActionListeners implements ActionListener {
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (_trigger.getClass() == dummyComboBox.getClass() && _object instanceof JLabel){
+        if (_trigger.getClass() == dummyComboBox.getClass() && _object instanceof JLabel label){
             String item = (String) ((JComboBox<?>) _trigger).getSelectedItem();
-            if (Objects.equals(item, ToolGUI.UNKNOWN_SET_MESSAGE)){
+            assert item != null;
+            if (item.equalsIgnoreCase(UNKNOWN_SET_MESSAGE)){
                 ImageIcon icon = new ImageIcon(
                         Objects.requireNonNull(getClass().getResource(ToolGUI.generateArtifactIconPath(ToolGUI.UNKNOWN_ARTIFACT))));
-                ((JLabel) _object).setIcon(icon);
+                label.setIcon(icon);
                 return;
             }
-            if (Objects.equals(((JLabel) _object).getToolTipText(), ToolGUI.TOOLTIP_FOR_LABELS_WITHOUT_ICON))
+            if (Objects.equals(label.getToolTipText(), ToolGUI.TOOLTIP_FOR_LABELS_WITHOUT_ICON))
             {
-                ((JLabel) _object).setText(item);
+                label.setText(item);
                 return;
             }
-            if (Objects.equals(((JLabel) _object).getToolTipText(), ToolGUI.TOOLTIP_FOR_LABELS_WITH_ICON)){
+            if (label.getToolTipText().equalsIgnoreCase(ToolGUI.TOOLTIP_FOR_WEAPON_NAME_LABEL)){
+                label.setText(item);
+                return;
+            }
+            if (label.getToolTipText().equalsIgnoreCase(ToolGUI.TOOLTIP_FOR_WEAPON_ICON_LABEL)){
+                WeaponInfo weaponInfo = lookUpWeaponRarity(item);
+                ImageIcon icon = new ImageIcon(
+                        Objects.requireNonNull(getClass().getResource(ToolGUI.generateWeaponPath(item,weaponInfo.getWeaponType(),weaponInfo.getRarity()))));
+                label.setIcon(icon);
+                return;
+            }
+            if (label.getToolTipText().equalsIgnoreCase(ToolGUI.TOOLTIP_FOR_LABELS_WITH_ICON)){
                 ImageIcon icon = new ImageIcon(
                         Objects.requireNonNull(getClass().getResource(ToolGUI.generateArtifactIconPath(item))));
-                ((JLabel) _object).setIcon(icon);
+                label.setIcon(icon);
 
             }
 

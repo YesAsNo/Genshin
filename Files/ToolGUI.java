@@ -1,7 +1,10 @@
 package Files;
 
 import static Files.ToolData.artifactsFlattened;
+import static Files.ToolData.characterWeaponsMap;
 import static Files.ToolData.charactersFlattened;
+import static Files.ToolData.weaponsRaritiesMap;
+import Files.ToolData.RARITY;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -37,6 +40,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -48,6 +52,8 @@ public class ToolGUI extends JFrame implements ActionListener {
 
     public static final String TOOLTIP_FOR_LABELS_WITHOUT_ICON = "Here will be the chosen set name shown";
     public static final String TOOLTIP_FOR_LABELS_WITH_ICON = "Here will be the chosen set icon shown";
+    public static final String TOOLTIP_FOR_WEAPON_NAME_LABEL = "Here will be the chosen weapon name shown";
+    public static final String TOOLTIP_FOR_WEAPON_ICON_LABEL = "Here will be the chosen weapon icon shown";
     public static final String UNKNOWN_SET_MESSAGE = "[ Empty Set Selector ]";
 
     public static final String UNKNOWN_ARTIFACT = "unknown_artifact";
@@ -254,6 +260,54 @@ public class ToolGUI extends JFrame implements ActionListener {
 
     }
 
+    public String lookUpWeaponType(String charName) {
+        for (String key : characterWeaponsMap.keySet()) {
+            List<String> characters = characterWeaponsMap.get(key);
+            if (characters.contains(charName)) {
+                return key;
+            }
+
+        }
+        return null;
+    }
+
+    public static List<String> lookUpWeapons(RARITY rarity, String weaponType) {
+
+        final String FOUR_STAR_WEAPON_KEY = "Four-Star " + weaponType;
+        final String FIVE_STAR_WEAPON_KEY = "Five-Star " + weaponType;
+
+        return switch (rarity) {
+            case FOUR_STAR -> weaponsRaritiesMap.get(FOUR_STAR_WEAPON_KEY);
+            case FIVE_STAR -> weaponsRaritiesMap.get(FIVE_STAR_WEAPON_KEY);
+        };
+    }
+
+    public static WeaponInfo lookUpWeaponRarity(String weaponName) {
+        for (String key : weaponsRaritiesMap.keySet()) {
+            List<String> weapons = weaponsRaritiesMap.get(key);
+            if (weapons.contains(weaponName)) {
+                return new WeaponInfo(key);
+            }
+        }
+        return new WeaponInfo("");
+    }
+
+    private void addAllowedWeapons(DefaultComboBoxModel<String> dcmb, String charName) {
+        dcmb.addElement("[ Empty Weapon Selector ]");
+        String weaponType = lookUpWeaponType(charName);
+        dcmb.addElement("[ 4-Star Weapons ]");
+        dcmb.addAll(lookUpWeapons(RARITY.FOUR_STAR, weaponType));
+        dcmb.addElement("[ 5-Star Weapons ]");
+        dcmb.addAll(lookUpWeapons(RARITY.FIVE_STAR, weaponType));
+    }
+
+    public static String generateWeaponPath(String weaponName, String weaponType, RARITY rarity) {
+        return switch (rarity) {
+            case FOUR_STAR -> "/Files/Images/Weapons/" + weaponType + "_4star/" + weaponName + ".png";
+            case FIVE_STAR -> "/Files/Images/Weapons/" + weaponType + "_5star/" + weaponName + ".png";
+        };
+    }
+
     /**
      * Generates a character page (in the tabbed pane).
      *
@@ -320,7 +374,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         }
         weaponSelectionBox.setInheritsPopupMenu(false);
         final DefaultComboBoxModel<String> defaultComboBoxModelForWeaponSelector = new DefaultComboBoxModel<>();
-        defaultComboBoxModelForWeaponSelector.addElement("[ Amos' Bow Selected ]");
+        addAllowedWeapons(defaultComboBoxModelForWeaponSelector, charName);
         weaponSelectionBox.setModel(defaultComboBoxModelForWeaponSelector);
         weaponSelectionBox.setToolTipText("");
         middleSelectorPanel.add(weaponSelectionBox,
@@ -460,6 +514,10 @@ public class ToolGUI extends JFrame implements ActionListener {
         gbc.anchor = GridBagConstraints.NORTHEAST;
         gbc.insets = new Insets(0, 0, 0, 20);
         templateTab.add(weaponIcon, gbc);
+        weaponSelectionBox.addActionListener(new ActionListeners(weaponSelectionBox, weaponNameLabel));
+        weaponSelectionBox.addActionListener(new ActionListeners(weaponSelectionBox, weaponIcon));
+        weaponNameLabel.setToolTipText(TOOLTIP_FOR_WEAPON_NAME_LABEL);
+        weaponIcon.setToolTipText(TOOLTIP_FOR_WEAPON_ICON_LABEL);
 
         JLabel charLabel = new JLabel();
         charLabel.setIcon(charIcon);

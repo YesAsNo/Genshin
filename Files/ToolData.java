@@ -13,10 +13,17 @@ public class ToolData {
     public static Map<String, List<String>> mappingDomains = new TreeMap<>();
     public static List<String> artifactsFlattened = new ArrayList<>();
     public static Map<String, List<String>> weaponsRaritiesMap = new TreeMap<>();
+    public static Map<String, List<String>> characterWeaponsMap = new TreeMap<>();
 
     private static final String PATH_TO_CHARACTER_JSON = "./characters.json";
     private static final String PATH_TO_WEAPONS_JSON = "./weapons.json";
     private static final String PATH_TO_DOMAIN_MAPPINGS = "./mapping_domains.json";
+    private static final String PATH_TO_CHARACTER_MAPPINGS = "./mapping_characters.json";
+
+    public enum RARITY {
+        FIVE_STAR,
+        FOUR_STAR
+    }
 
     private static void parseCharacters(Gson gson) throws Exception{
 
@@ -39,11 +46,17 @@ public class ToolData {
         weaponsRaritiesMap = gson.fromJson(reader,weaponsRaritiesMap.getClass());
 
     }
+    private static void parseCharacterMapping(Gson gson) throws Exception{
+        JsonReader reader = new JsonReader(new FileReader(PATH_TO_CHARACTER_MAPPINGS));
+        characterWeaponsMap = gson.fromJson(reader,characterWeaponsMap.getClass());
+
+    }
     public static void main(String[] args) throws Exception {
         Gson gson = new Gson();
         new ToolGUI();
         parseCharacters(gson);
         parseDomainMapping(gson);
         parseWeapons(gson);
+        parseCharacterMapping(gson);
         }
     }
