@@ -145,7 +145,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <grid id="a9cc6" layout-manager="GridLayoutManager" row-count="13" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                  <grid id="a9cc6" layout-manager="GridLayoutManager" row-count="12" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="5" left="5" bottom="5" right="5"/>
                     <constraints>
                       <grid row="0" column="1" row-span="5" col-span="1" vsize-policy="3" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
@@ -243,7 +243,7 @@
                       </component>
                       <component id="d2d9d" class="javax.swing.JComboBox" default-binding="true">
                         <constraints>
-                          <grid row="11" column="0" row-span="1" col-span="1" vsize-policy="2" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="2" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
                           <autoscrolls value="false"/>
@@ -258,7 +258,7 @@
                       </component>
                       <component id="6c0bf" class="javax.swing.JLabel">
                         <constraints>
-                          <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="1" use-parent-layout="false">
+                          <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="1" use-parent-layout="false">
                             <preferred-size width="177" height="23"/>
                           </grid>
                         </constraints>
@@ -266,14 +266,6 @@
                           <autoscrolls value="true"/>
                           <font name="Source Code Pro" size="18" style="1"/>
                           <text value="Noblesse Oblige"/>
-                        </properties>
-                      </component>
-                      <component id="b3bda" class="javax.swing.JButton" binding="addAnotherSetButton" default-binding="true">
-                        <constraints>
-                          <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="Add another set?"/>
                         </properties>
                       </component>
                       <grid id="23989" binding="ANOTHER_NECESSARY_spacer" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -295,18 +287,18 @@
                         <children/>
                       </grid>
                       <grid id="4d39f" binding="second_set_spacer" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                        <margin top="15" left="0" bottom="0" right="0"/>
+                        <margin top="43" left="0" bottom="0" right="0"/>
                         <constraints>
-                          <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                          <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties/>
                         <border type="none"/>
                         <children/>
                       </grid>
                       <grid id="85f27" binding="bottom_spacer" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                        <margin top="40" left="0" bottom="0" right="0"/>
+                        <margin top="43" left="0" bottom="0" right="0"/>
                         <constraints>
-                          <grid row="12" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                          <grid row="11" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties/>
                         <border type="none"/>
