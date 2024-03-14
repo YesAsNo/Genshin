@@ -250,6 +250,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         }
         return false;
     }
+
     public static CharacterCard getCharacterCard(String charName) {
         for (CharacterCard generatedCharacterCard : generatedCharacterCards) {
             if (generatedCharacterCard.getCharacterName().equalsIgnoreCase(charName)) {
@@ -551,8 +552,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         gbc.insets = new Insets(0, 0, 0, 20);
         templateTab.add(weaponIcon, gbc);
         weaponSelectionBox.addActionListener(new UpdateLabelListener(weaponNameLabel, weaponIcon, ToolData.SELECTION_BOX_TYPE.WEAPON));
-        weaponSelectionBox.addActionListener(new UpdateCharacterCardListener(selectedCharacterCard,
-                ToolData.CHARACTER_CARD_DATA_FIELD.WEAPON ));
+        weaponSelectionBox.addActionListener(new UpdateCharacterCardListener(selectedCharacterCard, ToolData.CHARACTER_CARD_DATA_FIELD.WEAPON));
         weaponNameLabel.setToolTipText(TOOLTIP_FOR_WEAPON_NAME_LABEL);
         weaponIcon.setToolTipText(TOOLTIP_FOR_WEAPON_ICON_LABEL);
 
@@ -597,10 +597,8 @@ public class ToolGUI extends JFrame implements ActionListener {
 
         set1comboBox.addActionListener(new UpdateLabelListener(set1NameLabel, set1Icon, ToolData.SELECTION_BOX_TYPE.ARTIFACT));
         set2ComboBox.addActionListener(new UpdateLabelListener(set2NameLabel, set2Icon, ToolData.SELECTION_BOX_TYPE.ARTIFACT));
-        set1comboBox.addActionListener(new UpdateCharacterCardListener(selectedCharacterCard,
-                ToolData.CHARACTER_CARD_DATA_FIELD.SET_ONE));
-        set2ComboBox.addActionListener(new UpdateCharacterCardListener(selectedCharacterCard,
-                ToolData.CHARACTER_CARD_DATA_FIELD.SET_TWO));
+        set1comboBox.addActionListener(new UpdateCharacterCardListener(selectedCharacterCard, ToolData.CHARACTER_CARD_DATA_FIELD.SET_ONE));
+        set2ComboBox.addActionListener(new UpdateCharacterCardListener(selectedCharacterCard, ToolData.CHARACTER_CARD_DATA_FIELD.SET_TWO));
 
         JPanel checkboxAndButtonPanel = new JPanel();
         checkboxAndButtonPanel.setLayout(new GridLayoutManager(6, 2, new Insets(3, 3, 3, 3), -1, -1));

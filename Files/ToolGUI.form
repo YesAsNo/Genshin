@@ -9,7 +9,7 @@
       <background color="-2702645"/>
       <enabled value="true"/>
     </properties>
-    <border SELECTION_BOX_TYPE="none"/>
+   <border type="none"/>
     <children>
       <vspacer id="676ab">
         <constraints>
@@ -34,7 +34,7 @@
         <properties>
           <background color="-3689540"/>
         </properties>
-        <border SELECTION_BOX_TYPE="none"/>
+        <border type="none"/>
         <children>
           <tabbedpane id="344eb" binding="characterTabPane">
             <constraints>
@@ -46,7 +46,7 @@
               <font name="Source Code Pro Black" size="20" style="1"/>
               <tabPlacement value="1"/>
             </properties>
-            <border SELECTION_BOX_TYPE="none"/>
+            <border type="none"/>
             <children>
               <grid id="28c03" binding="characterTab" layout-manager="GridBagLayout">
                 <constraints>
@@ -60,7 +60,7 @@
                   <opaque value="true"/>
                   <requestFocusEnabled value="true"/>
                 </properties>
-                <border SELECTION_BOX_TYPE="none"/>
+                <border type="none"/>
                 <children>
                   <grid id="14772" binding="selectedCharacterPanel" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
@@ -68,7 +68,7 @@
                       <gridbag weightx="1.0" weighty="1.0"/>
                     </constraints>
                     <properties/>
-                    <border SELECTION_BOX_TYPE="none"/>
+                    <border type="none"/>
                     <children/>
                   </grid>
                   <component id="c46ef" class="javax.swing.JButton" binding="searchConfirmButton" custom-create="true">
@@ -108,7 +108,7 @@
                 <properties>
                   <background color="-1"/>
                 </properties>
-                <border SELECTION_BOX_TYPE="none"/>
+                <border type="none"/>
                 <children/>
               </grid>
             </children>
