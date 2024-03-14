@@ -2,7 +2,6 @@ package Files;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-import com.sun.source.tree.Tree;
 
 import java.io.FileReader;
 
@@ -26,6 +25,10 @@ public class ToolData {
     public enum RARITY {
         FIVE_STAR,
         FOUR_STAR
+    }
+    public enum TYPE{
+        WEAPON,
+        ARTIFACT
     }
 
     private static void parseCharacters(Gson gson,JsonReader reader){

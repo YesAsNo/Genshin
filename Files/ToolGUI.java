@@ -41,22 +41,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 public class ToolGUI extends JFrame implements ActionListener {
 
     public static final String NO_CHARACTERS_MATCH_MESSAGE = "No fighters >:(";
     public static final String UNKNOWN_CHARACTER_PLACEHOLDER_NAME = "unknown_character";
     public static final int MAX_CHARACTERS_PER_LINE = 12;
-
     public static final String TOOLTIP_FOR_LABELS_WITHOUT_ICON = "Here will be the chosen set name shown";
     public static final String TOOLTIP_FOR_LABELS_WITH_ICON = "Here will be the chosen set icon shown";
     public static final String TOOLTIP_FOR_WEAPON_NAME_LABEL = "Here will be the chosen weapon name shown";
     public static final String TOOLTIP_FOR_WEAPON_ICON_LABEL = "Here will be the chosen weapon icon shown";
     public static final String UNKNOWN_SET_MESSAGE = "[ Empty Set Selector ]";
+    public static final String FOUR_STAR_WEAPON_DELIMITER = "[ 4-Star Weapons ]";
+    public static final String FIVE_STAR_WEAPON_DELIMITER = "[ 5-Star Weapons ]";
     public static final String UNKNOWN_ARTIFACT = "unknown_artifact";
+    public static final String UNKNOWN_WEAPON_MESSAGE = "[ Empty Weapon Selector ]";
     public static final String CLOSE_TEXT = "CLOSE";
 
     private JPanel panel1;
@@ -69,6 +71,7 @@ public class ToolGUI extends JFrame implements ActionListener {
     private JButton searchConfirmButton;
     private JPanel selectedCharacterPanel;
     private JScrollPane scrollPane1;
+    private static final List<CharacterCard> generatedCharacterCards = new ArrayList<>();
 
     public ToolGUI() {
         $$$setupUI$$$();
@@ -91,6 +94,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         panel1 = new JPanel();
         searchConfirmButton = new JButton("✓");
         searchConfirmButton.addActionListener(this);
+
         characterSelectorField = new JTextField();
         characterSelectorField.addMouseListener(new MouseAdapter() {
             @Override
@@ -148,7 +152,7 @@ public class ToolGUI extends JFrame implements ActionListener {
      */
     private void generateCharacterButton(String characterName, int number) {
         String characterIconPath = generateCharacterIconPath(characterName);
-        Icon characterIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource(characterIconPath)));
+        Icon characterIcon = new ImageIcon(characterIconPath);
         if (characterName.equalsIgnoreCase(UNKNOWN_CHARACTER_PLACEHOLDER_NAME)) {
             JLabel unknownCharacterLabel = new JLabel(characterIcon);
             unknownCharacterLabel.setText(NO_CHARACTERS_MATCH_MESSAGE);
@@ -200,6 +204,9 @@ public class ToolGUI extends JFrame implements ActionListener {
         characterButton.setBorderPainted(false);
         characterButton.setContentAreaFilled(false);
         characterButton.addActionListener(e -> {
+            if (!checkIfCharacterCardHasBeenGenerated(characterName)) {
+                generatedCharacterCards.add(new CharacterCard(characterName));
+            }
             if (!isTabAlreadyOpen(characterTabPane, characterName)) {
                 JPanel characterPage = generateCharacterPage(characterName, characterIcon);
                 characterTabPane.addTab(characterName, characterPage);
@@ -208,6 +215,7 @@ public class ToolGUI extends JFrame implements ActionListener {
                 characterTabPane.setSelectedIndex(characterTabPane.indexOfTab(characterName));
             }
         });
+
         return characterButton;
     }
 
@@ -227,11 +235,20 @@ public class ToolGUI extends JFrame implements ActionListener {
      * @return character icon path
      */
     public static String generateCharacterIconPath(String charName) {
-        return "/Files/Images/Characters/" + charName + ".png";
+        return "./Files/Images/Characters/" + charName + ".png";
     }
 
     public static String generateArtifactIconPath(String artifactName) {
-        return "/Files/Images/Artifacts/" + artifactName + ".png";
+        return "./Files/Images/Artifacts/" + artifactName + ".png";
+    }
+
+    public static boolean checkIfCharacterCardHasBeenGenerated(String charName) {
+        for (CharacterCard generatedCharacterCard : generatedCharacterCards) {
+            if (generatedCharacterCard.getCharacterName().equalsIgnoreCase(charName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -296,20 +313,24 @@ public class ToolGUI extends JFrame implements ActionListener {
         return artifactSetDescriptionsMap.get(setName);
     }
 
-    private void addAllowedWeapons(DefaultComboBoxModel<String> dcmb, String charName) {
-        dcmb.addElement("[ Empty Weapon Selector ]");
+    private void addAllowedWeapons(WeaponSelectorComboBoxModel dcmb, String charName) {
+        dcmb.addElement(UNKNOWN_WEAPON_MESSAGE);
         String weaponType = lookUpWeaponType(charName);
-        dcmb.addElement("[ 4-Star Weapons ]");
+        dcmb.addElement(FOUR_STAR_WEAPON_DELIMITER);
         dcmb.addAll(lookUpWeapons(RARITY.FOUR_STAR, weaponType));
-        dcmb.addElement("[ 5-Star Weapons ]");
+        dcmb.addElement(FIVE_STAR_WEAPON_DELIMITER);
         dcmb.addAll(lookUpWeapons(RARITY.FIVE_STAR, weaponType));
     }
 
     public static String generateWeaponPath(String weaponName, String weaponType, RARITY rarity) {
         return switch (rarity) {
-            case FOUR_STAR -> "/Files/Images/Weapons/" + weaponType + "_4star/" + weaponName + ".png";
-            case FIVE_STAR -> "/Files/Images/Weapons/" + weaponType + "_5star/" + weaponName + ".png";
+            case FOUR_STAR -> "./Files/Images/Weapons/" + weaponType + "_4star/" + weaponName + ".png";
+            case FIVE_STAR -> "./Files/Images/Weapons/" + weaponType + "_5star/" + weaponName + ".png";
         };
+    }
+
+    public static String generateWeaponPath() {
+        return "./Files/Images/Weapons/unknown_weapon.png";
     }
 
     /**
@@ -377,9 +398,9 @@ public class ToolGUI extends JFrame implements ActionListener {
             weaponSelectionBox.setFont(weaponSelectionBoxFont);
         }
         weaponSelectionBox.setInheritsPopupMenu(false);
-        final DefaultComboBoxModel<String> defaultComboBoxModelForWeaponSelector = new DefaultComboBoxModel<>();
-        addAllowedWeapons(defaultComboBoxModelForWeaponSelector, charName);
-        weaponSelectionBox.setModel(defaultComboBoxModelForWeaponSelector);
+        final WeaponSelectorComboBoxModel weaponSelectorComboBoxModel = new WeaponSelectorComboBoxModel();
+        addAllowedWeapons(weaponSelectorComboBoxModel, charName);
+        weaponSelectionBox.setModel(weaponSelectorComboBoxModel);
         weaponSelectionBox.setToolTipText("");
         middleSelectorPanel.add(weaponSelectionBox,
                 new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
@@ -392,7 +413,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         if (weaponNameLabelFont != null) {
             weaponNameLabel.setFont(weaponNameLabelFont);
         }
-        weaponNameLabel.setText("Amos's Bow");
+        weaponNameLabel.setText("");
         middleSelectorPanel.add(weaponNameLabel,
                 new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1,
@@ -511,7 +532,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         JLabel weaponIcon = new JLabel();
         weaponIcon.setHorizontalAlignment(4);
         weaponIcon.setHorizontalTextPosition(4);
-        weaponIcon.setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/Files/Images/Weapons/Bow_5star/Elegy for the End.png"))));
+        weaponIcon.setIcon(new ImageIcon(generateWeaponPath()));
         weaponIcon.setText("");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -520,8 +541,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         gbc.anchor = GridBagConstraints.NORTHEAST;
         gbc.insets = new Insets(0, 0, 0, 20);
         templateTab.add(weaponIcon, gbc);
-        weaponSelectionBox.addActionListener(new ActionListeners(weaponSelectionBox, weaponNameLabel));
-        weaponSelectionBox.addActionListener(new ActionListeners(weaponSelectionBox, weaponIcon));
+        weaponSelectionBox.addActionListener(new UpdateLabelListener(weaponNameLabel, weaponIcon, ToolData.TYPE.WEAPON));
         weaponNameLabel.setToolTipText(TOOLTIP_FOR_WEAPON_NAME_LABEL);
         weaponIcon.setToolTipText(TOOLTIP_FOR_WEAPON_ICON_LABEL);
 
@@ -540,8 +560,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         set1Icon.setToolTipText(TOOLTIP_FOR_LABELS_WITH_ICON);
         set1Icon.setHorizontalAlignment(4);
         set1Icon.setHorizontalTextPosition(4);
-        set1Icon.setIcon(new ImageIcon(
-                Objects.requireNonNull(getClass().getResource(ToolGUI.generateArtifactIconPath(UNKNOWN_ARTIFACT)))));
+        set1Icon.setIcon(new ImageIcon(ToolGUI.generateArtifactIconPath(UNKNOWN_ARTIFACT)));
         set1Icon.setText("");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -555,8 +574,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         set2Icon.setToolTipText(TOOLTIP_FOR_LABELS_WITH_ICON);
         set2Icon.setHorizontalAlignment(4);
         set2Icon.setHorizontalTextPosition(4);
-        set2Icon.setIcon(new ImageIcon(
-                Objects.requireNonNull(getClass().getResource(ToolGUI.generateArtifactIconPath(UNKNOWN_ARTIFACT)))));
+        set2Icon.setIcon(new ImageIcon(ToolGUI.generateArtifactIconPath(UNKNOWN_ARTIFACT)));
         set2Icon.setText("");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -566,10 +584,8 @@ public class ToolGUI extends JFrame implements ActionListener {
         gbc.insets = new Insets(5, 0, 0, 20);
         templateTab.add(set2Icon, gbc);
 
-        set1comboBox.addActionListener(new ActionListeners(set1comboBox, set1NameLabel));
-        set1comboBox.addActionListener(new ActionListeners(set1comboBox, set1Icon));
-        set2ComboBox.addActionListener(new ActionListeners(set2ComboBox, set2NameLabel));
-        set2ComboBox.addActionListener(new ActionListeners(set2ComboBox, set2Icon));
+        set1comboBox.addActionListener(new UpdateLabelListener(set1NameLabel, set1Icon, ToolData.TYPE.ARTIFACT));
+        set2ComboBox.addActionListener(new UpdateLabelListener(set2NameLabel, set2Icon, ToolData.TYPE.ARTIFACT));
 
         JPanel checkboxAndButtonPanel = new JPanel();
         checkboxAndButtonPanel.setLayout(new GridLayoutManager(6, 2, new Insets(3, 3, 3, 3), -1, -1));
@@ -641,7 +657,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         closeButton.setForeground(new Color(-6427));
         closeButton.setHideActionText(false);
         closeButton.setText(CLOSE_TEXT);
-        closeButton.addActionListener(new ActionListeners(closeButton, characterTabPane));
+        closeButton.addActionListener(new CloseButtonListener(characterTabPane));
         checkboxAndButtonPanel.add(closeButton,
                 new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
@@ -670,8 +686,8 @@ public class ToolGUI extends JFrame implements ActionListener {
                 new GridConstraints(5, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW,
                         new Dimension(150, 280), new Dimension(150, 280), null, 0, false));
-        set1comboBox.addActionListener(new ActionListeners(set1comboBox, setDetailsTextArea));
-        set2ComboBox.addActionListener(new ActionListeners(set2ComboBox, setDetailsTextArea));
+        set1comboBox.addActionListener(new UpdateTextAreaListener(setDetailsTextArea));
+        set2ComboBox.addActionListener(new UpdateTextAreaListener(setDetailsTextArea));
 
         return templateTab;
     }

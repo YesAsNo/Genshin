@@ -14,7 +14,7 @@ public class CharacterCard {
 
 
     public CharacterCard(String character_name) {
-        this.characterName=character_name;
+        this.characterName = character_name;
         characterNotes=null;
         weapon=null;
         weaponStatus =false;
