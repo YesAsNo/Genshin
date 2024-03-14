@@ -2,45 +2,43 @@ package Files;
 
 public class CharacterCard {
 
-    private String character_name;
-    private String character_notes;
+    private String characterName;
+    private String characterNotes;
     private String weapon;
-    private boolean weapon_status;
-    private String artifact_set1;
-    private boolean artifact_set1_status;
-    private String artifact_set2;
-    private boolean artifact_set2_status;
-    private boolean talent_status;
+    private boolean weaponStatus;
+    private String artifactSet1;
+    private boolean artifactSet1Status;
+    private String artifactSet2;
+    private boolean artifactSet2Status;
+    private boolean talentStatus;
 
-
-    public CharacterCard() {}
 
     public CharacterCard(String character_name) {
-        this.character_name=character_name;
-        character_notes=null;
+        this.characterName=character_name;
+        characterNotes=null;
         weapon=null;
-        weapon_status=false;
-        artifact_set1=null;
-        artifact_set1_status=false;
-        artifact_set2=null;
-        artifact_set2_status=false;
-        talent_status=false;
+        weaponStatus =false;
+        artifactSet1 =null;
+        artifactSet1Status=false;
+        artifactSet2=null;
+        artifactSet2Status=false;
+        talentStatus=false;
     }
 
     // Character Name
-    public String getCharacter_name() {
-        return character_name;
+    public String getCharacterName() {
+        return characterName;
     }
-    public void setCharacter_name(String character_name) {
-        this.character_name = character_name;
+    public void setCharacterName(String character_name) {
+        this.characterName = character_name;
     }
 
     // Character Notes
-    public String getCharacter_notes() {
-        return character_notes;
+    public String getCharacterNotes() {
+        return characterNotes;
     }
-    public void setCharacter_notes(String character_notes) {
-        this.character_notes = character_notes;
+    public void setCharacterNotes(String character_notes) {
+        this.characterNotes = character_notes;
     }
 
     // Weapon and Weapon Status
@@ -51,48 +49,48 @@ public class CharacterCard {
         this.weapon = weapon;
     }
 
-    public boolean getWeapon_status() {
-        return weapon_status;
+    public boolean getWeaponStatus() {
+        return weaponStatus;
     }
-    public void setWeapon_status(boolean weapon_status) {
-        this.weapon_status = weapon_status;
+    public void setWeaponStatus(boolean weapon_status) {
+        this.weaponStatus = weapon_status;
     }
 
     // Artifact Sets 1 and 2
-    public String getArtifact_set1() {
-        return artifact_set1;
+    public String getArtifactSet1() {
+        return artifactSet1;
     }
-    public void setArtifact_set1(String artifact_set1) {
-        this.artifact_set1 = artifact_set1;
-    }
-
-    public boolean getArtifact_set1_status() {
-        return artifact_set1_status;
-    }
-    public void setArtifact_set1_status(boolean artifact_set1_status) {
-        this.artifact_set1_status = artifact_set1_status;
+    public void setArtifactSet1(String artifactSet1) {
+        this.artifactSet1 = artifactSet1;
     }
 
-    public String getArtifact_set2() {
-        return artifact_set2;
+    public boolean getArtifactSet1_status() {
+        return artifactSet1Status;
+    }
+    public void setArtifactSet1Status(boolean artifact_set1_status) {
+        this.artifactSet1Status = artifact_set1_status;
+    }
+
+    public String getArtifactSet2() {
+        return artifactSet2;
     }
     public void setArtifact_set2(String artifact_set2) {
-        this.artifact_set2 = artifact_set2;
+        this.artifactSet2 = artifact_set2;
     }
 
-    public boolean getArtifact_set2_status() {
-        return artifact_set2_status;
+    public boolean getArtifactSet2Status() {
+        return artifactSet2Status;
     }
     public void setArtifact_set2_status(boolean artifact_set2_status) {
-        this.artifact_set2_status = artifact_set2_status;
+        this.artifactSet2Status = artifact_set2_status;
     }
 
     // Talent Status
-    public boolean getTalent_status() {
-        return talent_status;
+    public boolean getTalentStatus() {
+        return talentStatus;
     }
     public void setTalent_status(boolean talent_status) {
-        this.talent_status = talent_status;
+        this.talentStatus = talent_status;
     }
 }
 
