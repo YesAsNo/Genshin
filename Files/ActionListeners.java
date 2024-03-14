@@ -1,6 +1,7 @@
 package Files;
 
 import static Files.ToolGUI.UNKNOWN_SET_MESSAGE;
+import static Files.ToolGUI.lookUpSetDescription;
 import static Files.ToolGUI.lookUpWeaponRarity;
 
 import javax.swing.ImageIcon;
@@ -8,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Objects;
@@ -29,12 +31,20 @@ public class ActionListeners implements ActionListener {
             String item = (String) ((JComboBox<?>) _trigger).getSelectedItem();
             assert item != null;
             if (item.equalsIgnoreCase(UNKNOWN_SET_MESSAGE)){
-                ImageIcon icon = new ImageIcon(
-                        Objects.requireNonNull(getClass().getResource(ToolGUI.generateArtifactIconPath(ToolGUI.UNKNOWN_ARTIFACT))));
-                label.setIcon(icon);
-                return;
+
+                if (label.getToolTipText().equalsIgnoreCase(ToolGUI.TOOLTIP_FOR_LABELS_WITHOUT_ICON)){
+                    label.setText("");
+                    return;
+                }
+                if (label.getToolTipText().equalsIgnoreCase(ToolGUI.TOOLTIP_FOR_LABELS_WITH_ICON)){
+                    ImageIcon icon = new ImageIcon(
+                            Objects.requireNonNull(getClass().getResource(ToolGUI.generateArtifactIconPath(ToolGUI.UNKNOWN_ARTIFACT))));
+                    label.setIcon(icon);
+                    return;
+                }
+
             }
-            if (Objects.equals(label.getToolTipText(), ToolGUI.TOOLTIP_FOR_LABELS_WITHOUT_ICON))
+            if (label.getToolTipText().equalsIgnoreCase(ToolGUI.TOOLTIP_FOR_LABELS_WITHOUT_ICON))
             {
                 label.setText(item);
                 return;
@@ -63,6 +73,17 @@ public class ActionListeners implements ActionListener {
                 ((JTabbedPane) _object).removeTabAt(((JTabbedPane) _object).getSelectedIndex());
                 ((JTabbedPane) _object).setSelectedIndex(0);
             }
+        }
+        if (_trigger.getClass() == dummyComboBox.getClass() && _object instanceof JTextArea){
+            String item = (String) ((JComboBox<?>) _trigger).getSelectedItem();
+            assert item != null;
+            if (!item.equalsIgnoreCase(UNKNOWN_SET_MESSAGE)) {
+                ((JTextArea) _object).setText(lookUpSetDescription(item));
+            }
+            else{
+                ((JTextArea) _object).setText("");
+            }
+
         }
     }
 }
