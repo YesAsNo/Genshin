@@ -21,6 +21,7 @@ public class ToolData {
     private static final String PATH_TO_DOMAIN_MAPPINGS = "./mapping_domains.json";
     private static final String PATH_TO_CHARACTER_MAPPINGS = "./mapping_characters.json";
     private static final String PATH_TO_ARTIFACT_SET_MAPPINGS = "./set_descriptions.json";
+    public static final String SAVE_LOCATION = "./UserData/";
 
     public enum RARITY {
         FIVE_STAR,
@@ -37,8 +38,7 @@ public class ToolData {
         NOTES,
         FARMING_WEAPON_MATERIALS,
         FARMING_TALENT_MATERIALS,
-        FARMING_SET_ONE,
-        FARMING_SET_TWO
+        FARMING_SET_ONE, FARMING_SET_TWO
 
     }
 

@@ -13,5 +13,6 @@ public class CloseButtonListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         _tabbedPane.removeTabAt(_tabbedPane.getSelectedIndex());
         _tabbedPane.setSelectedIndex(0);
+
     }
 }

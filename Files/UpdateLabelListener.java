@@ -3,7 +3,7 @@ package Files;
 import static Files.ToolGUI.UNKNOWN_SET_MESSAGE;
 import static Files.ToolGUI.UNKNOWN_WEAPON_MESSAGE;
 import static Files.ToolGUI.generateArtifactIconPath;
-import static Files.ToolGUI.lookUpWeaponRarity;
+import static Files.ToolGUI.lookUpWeaponRarityAndType;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
@@ -42,7 +42,7 @@ public class UpdateLabelListener implements ActionListener {
         {
             _NameLabel.setText(item);
             if (_SELECTIONBOXTYPE == ToolData.SELECTION_BOX_TYPE.WEAPON) {
-                WeaponInfo weaponInfo = lookUpWeaponRarity(item);
+                WeaponInfo weaponInfo = lookUpWeaponRarityAndType(item);
                 icon = new ImageIcon(ToolGUI.generateWeaponPath(item, weaponInfo.getWeaponType(), weaponInfo.getRarity()));
             }
             else {

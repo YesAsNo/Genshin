@@ -1,5 +1,6 @@
 package Files;
 
+import static Files.ToolData.SAVE_LOCATION;
 import static Files.ToolData.artifactSetDescriptionsMap;
 import static Files.ToolData.artifactsFlattened;
 import static Files.ToolData.characterWeaponsMap;
@@ -7,6 +8,8 @@ import static Files.ToolData.charactersFlattened;
 import static Files.ToolData.weaponsRaritiesMap;
 import Files.ToolData.RARITY;
 
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -41,6 +44,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -60,6 +67,7 @@ public class ToolGUI extends JFrame implements ActionListener {
     public static final String UNKNOWN_ARTIFACT = "unknown_artifact";
     public static final String UNKNOWN_WEAPON_MESSAGE = "[ Empty Weapon Selector ]";
     public static final String CLOSE_TEXT = "CLOSE";
+    public static final int CHARACTER_LIMIT = 150;
 
     private JPanel panel1;
     private JLabel titleLabel;
@@ -102,6 +110,24 @@ public class ToolGUI extends JFrame implements ActionListener {
                 characterSelectorField.setText("");
             }
         });
+        readGeneratedCharacterCards();
+    }
+
+    void readGeneratedCharacterCards() {
+        File f_dir = new File(SAVE_LOCATION);
+        File[] savedCards = f_dir.listFiles();
+        assert savedCards != null;
+        Gson gson = new Gson();
+        try {
+            for (File savedCard : savedCards) {
+                JsonReader reader = new JsonReader(new FileReader(savedCard));
+                generatedCharacterCards.add(gson.fromJson(reader, CharacterCard.class));
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -286,10 +312,10 @@ public class ToolGUI extends JFrame implements ActionListener {
 
     }
 
-    public String lookUpWeaponType(String charName) {
+    public String lookUpWeaponCategoryForCharacter(String charName) {
         for (String key : characterWeaponsMap.keySet()) {
-            List<String> characters = characterWeaponsMap.get(key);
-            if (characters.contains(charName)) {
+            List<String> weapons = characterWeaponsMap.get(key);
+            if (weapons.contains(charName)) {
                 return key;
             }
 
@@ -308,7 +334,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         };
     }
 
-    public static WeaponInfo lookUpWeaponRarity(String weaponName) {
+    public static WeaponInfo lookUpWeaponRarityAndType(String weaponName) {
         for (String key : weaponsRaritiesMap.keySet()) {
             List<String> weapons = weaponsRaritiesMap.get(key);
             if (weapons.contains(weaponName)) {
@@ -324,7 +350,7 @@ public class ToolGUI extends JFrame implements ActionListener {
 
     private void addAllowedWeapons(WeaponSelectorComboBoxModel dcmb, String charName) {
         dcmb.addElement(UNKNOWN_WEAPON_MESSAGE);
-        String weaponType = lookUpWeaponType(charName);
+        String weaponType = lookUpWeaponCategoryForCharacter(charName);
         dcmb.addElement(FOUR_STAR_WEAPON_DELIMITER);
         dcmb.addAll(lookUpWeapons(RARITY.FOUR_STAR, weaponType));
         dcmb.addElement(FIVE_STAR_WEAPON_DELIMITER);
@@ -352,6 +378,7 @@ public class ToolGUI extends JFrame implements ActionListener {
     private JPanel generateCharacterPage(String charName, Icon charIcon) {
         JPanel templateTab = new JPanel();
         CharacterCard selectedCharacterCard = getCharacterCard(charName);
+        assert selectedCharacterCard != null;
         templateTab.setLayout(new GridBagLayout());
         JPanel middleSelectorPanel = new JPanel();
         middleSelectorPanel.setLayout(new GridLayoutManager(13, 1, new Insets(5, 5, 5, 5), -1, -1));
@@ -369,19 +396,21 @@ public class ToolGUI extends JFrame implements ActionListener {
         middleSelectorPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
                 TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
 
-        JTextField emptyNotesFieldTextField = new JTextField();
+        JTextField notesTextField = new JTextField();
         Font emptyNotesFieldTextFieldFont =
-                this.$$$getFont$$$("Source Code Pro", Font.BOLD, 14, emptyNotesFieldTextField.getFont());
+                this.$$$getFont$$$("Source Code Pro", Font.BOLD, 14, notesTextField.getFont());
         if (emptyNotesFieldTextFieldFont != null) {
-            emptyNotesFieldTextField.setFont(emptyNotesFieldTextFieldFont);
+            notesTextField.setFont(emptyNotesFieldTextFieldFont);
         }
-        emptyNotesFieldTextField.setHorizontalAlignment(10);
-        emptyNotesFieldTextField.setInheritsPopupMenu(false);
-        emptyNotesFieldTextField.setMargin(new Insets(2, 6, 2, 6));
-        emptyNotesFieldTextField.setOpaque(true);
-        emptyNotesFieldTextField.setRequestFocusEnabled(true);
-        emptyNotesFieldTextField.setText("[ Empty Notes Field ]");
-        middleSelectorPanel.add(emptyNotesFieldTextField,
+        notesTextField.setHorizontalAlignment(10);
+        notesTextField.setInheritsPopupMenu(false);
+        notesTextField.setMargin(new Insets(2, 6, 2, 6));
+        notesTextField.setOpaque(true);
+        notesTextField.setRequestFocusEnabled(true);
+        notesTextField.setText(selectedCharacterCard.getCharacterNotes());
+        notesTextField.setDocument(new NotesTextModel(CHARACTER_LIMIT));
+        notesTextField.getDocument().addDocumentListener(new NotesListener(selectedCharacterCard));
+        middleSelectorPanel.add(notesTextField,
                 new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL,
                         GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null,
                         new Dimension(50, -1), null, 0, false));
@@ -411,7 +440,8 @@ public class ToolGUI extends JFrame implements ActionListener {
         final WeaponSelectorComboBoxModel weaponSelectorComboBoxModel = new WeaponSelectorComboBoxModel();
         addAllowedWeapons(weaponSelectorComboBoxModel, charName);
         weaponSelectionBox.setModel(weaponSelectorComboBoxModel);
-        weaponSelectionBox.setToolTipText("");
+        weaponSelectionBox.setSelectedItem(selectedCharacterCard.getWeapon().isEmpty() ? UNKNOWN_WEAPON_MESSAGE :
+                selectedCharacterCard.getWeapon());
         middleSelectorPanel.add(weaponSelectionBox,
                 new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW,
@@ -423,7 +453,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         if (weaponNameLabelFont != null) {
             weaponNameLabel.setFont(weaponNameLabelFont);
         }
-        weaponNameLabel.setText("");
+        weaponNameLabel.setText(selectedCharacterCard.getWeapon());
         middleSelectorPanel.add(weaponNameLabel,
                 new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1,
@@ -440,7 +470,8 @@ public class ToolGUI extends JFrame implements ActionListener {
         set1NameLabel.setHorizontalAlignment(10);
         set1NameLabel.setHorizontalTextPosition(11);
         set1NameLabel.setInheritsPopupMenu(true);
-        set1NameLabel.setText("");
+        set1NameLabel.setText(
+                selectedCharacterCard.getArtifactSet1().isEmpty() ? "" : selectedCharacterCard.getArtifactSet1());
         set1NameLabel.setVerticalAlignment(0);
         set1NameLabel.setVerticalTextPosition(0);
         set1NameLabel.setToolTipText(TOOLTIP_FOR_LABELS_WITHOUT_ICON);
@@ -449,21 +480,22 @@ public class ToolGUI extends JFrame implements ActionListener {
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null,
                         new Dimension(177, 23), null, 1, false));
 
-        JComboBox<String> set1comboBox = new JComboBox<>();
-        set1comboBox.setAutoscrolls(false);
-        set1comboBox.setEditable(false);
-        set1comboBox.setFocusable(false);
-        Font set1comboBoxFont = this.$$$getFont$$$("Source Code Pro", Font.BOLD, 14, set1comboBox.getFont());
+        JComboBox<String> set1ComboBox = new JComboBox<>();
+        set1ComboBox.setAutoscrolls(false);
+        set1ComboBox.setEditable(false);
+        set1ComboBox.setFocusable(false);
+        Font set1comboBoxFont = this.$$$getFont$$$("Source Code Pro", Font.BOLD, 14, set1ComboBox.getFont());
         if (set1comboBoxFont != null) {
-            set1comboBox.setFont(set1comboBoxFont);
+            set1ComboBox.setFont(set1comboBoxFont);
         }
-        set1comboBox.setInheritsPopupMenu(false);
+        set1ComboBox.setInheritsPopupMenu(false);
         final DefaultComboBoxModel<String> defaultComboBoxModelForSet1Selector = new DefaultComboBoxModel<>();
         defaultComboBoxModelForSet1Selector.addElement(UNKNOWN_SET_MESSAGE);
         defaultComboBoxModelForSet1Selector.addAll(artifactsFlattened);
-        set1comboBox.setModel(defaultComboBoxModelForSet1Selector);
-        set1comboBox.setToolTipText("");
-        middleSelectorPanel.add(set1comboBox,
+        set1ComboBox.setModel(defaultComboBoxModelForSet1Selector);
+        set1ComboBox.setSelectedItem(selectedCharacterCard.getArtifactSet1().isEmpty() ? UNKNOWN_SET_MESSAGE :
+                selectedCharacterCard.getArtifactSet1());
+        middleSelectorPanel.add(set1ComboBox,
                 new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW,
                         GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
@@ -481,7 +513,8 @@ public class ToolGUI extends JFrame implements ActionListener {
         defaultComboBoxModelForSet2Selector.addElement(UNKNOWN_SET_MESSAGE);
         defaultComboBoxModelForSet2Selector.addAll(artifactsFlattened);
         set2ComboBox.setModel(defaultComboBoxModelForSet2Selector);
-        set2ComboBox.setToolTipText("");
+        set2ComboBox.setSelectedItem(selectedCharacterCard.getArtifactSet2().isEmpty() ? UNKNOWN_SET_MESSAGE :
+                selectedCharacterCard.getArtifactSet2());
         middleSelectorPanel.add(set2ComboBox,
                 new GridConstraints(11, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW,
@@ -494,7 +527,7 @@ public class ToolGUI extends JFrame implements ActionListener {
             set2NameLabel.setFont(set2NameLabelFont);
         }
         set2NameLabel.setToolTipText(TOOLTIP_FOR_LABELS_WITHOUT_ICON);
-        set2NameLabel.setText("");
+        set2NameLabel.setText(selectedCharacterCard.getArtifactSet2());
         middleSelectorPanel.add(set2NameLabel,
                 new GridConstraints(10, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null,
@@ -542,8 +575,13 @@ public class ToolGUI extends JFrame implements ActionListener {
         JLabel weaponIcon = new JLabel();
         weaponIcon.setHorizontalAlignment(4);
         weaponIcon.setHorizontalTextPosition(4);
-        weaponIcon.setIcon(new ImageIcon(generateWeaponPath()));
-        weaponIcon.setText("");
+        String savedWeaponName = selectedCharacterCard.getWeapon();
+        if (savedWeaponName.isEmpty()) {
+            weaponIcon.setIcon(new ImageIcon(generateWeaponPath()));
+        } else {
+            WeaponInfo weaponInfo = lookUpWeaponRarityAndType(savedWeaponName);
+            weaponIcon.setIcon(new ImageIcon(generateWeaponPath(savedWeaponName, weaponInfo.getWeaponType(), weaponInfo.getRarity())));
+        }
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 2;
@@ -558,7 +596,6 @@ public class ToolGUI extends JFrame implements ActionListener {
 
         JLabel charLabel = new JLabel();
         charLabel.setIcon(charIcon);
-        charLabel.setText("");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -571,8 +608,12 @@ public class ToolGUI extends JFrame implements ActionListener {
         set1Icon.setToolTipText(TOOLTIP_FOR_LABELS_WITH_ICON);
         set1Icon.setHorizontalAlignment(4);
         set1Icon.setHorizontalTextPosition(4);
-        set1Icon.setIcon(new ImageIcon(ToolGUI.generateArtifactIconPath(UNKNOWN_ARTIFACT)));
-        set1Icon.setText("");
+        String savedArtifactSet1Name = selectedCharacterCard.getArtifactSet1();
+        if (savedArtifactSet1Name.isEmpty()) {
+            set1Icon.setIcon(new ImageIcon(generateArtifactIconPath(UNKNOWN_ARTIFACT)));
+        } else {
+            set1Icon.setIcon(new ImageIcon(generateArtifactIconPath(savedArtifactSet1Name)));
+        }
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 3;
@@ -585,8 +626,12 @@ public class ToolGUI extends JFrame implements ActionListener {
         set2Icon.setToolTipText(TOOLTIP_FOR_LABELS_WITH_ICON);
         set2Icon.setHorizontalAlignment(4);
         set2Icon.setHorizontalTextPosition(4);
-        set2Icon.setIcon(new ImageIcon(ToolGUI.generateArtifactIconPath(UNKNOWN_ARTIFACT)));
-        set2Icon.setText("");
+        String savedArtifactSet2Name = selectedCharacterCard.getArtifactSet2();
+        if (savedArtifactSet2Name.isEmpty()) {
+            set2Icon.setIcon(new ImageIcon(generateArtifactIconPath(UNKNOWN_ARTIFACT)));
+        } else {
+            set2Icon.setIcon(new ImageIcon(generateArtifactIconPath(savedArtifactSet2Name)));
+        }
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 4;
@@ -595,9 +640,9 @@ public class ToolGUI extends JFrame implements ActionListener {
         gbc.insets = new Insets(5, 0, 0, 20);
         templateTab.add(set2Icon, gbc);
 
-        set1comboBox.addActionListener(new UpdateLabelListener(set1NameLabel, set1Icon, ToolData.SELECTION_BOX_TYPE.ARTIFACT));
+        set1ComboBox.addActionListener(new UpdateLabelListener(set1NameLabel, set1Icon, ToolData.SELECTION_BOX_TYPE.ARTIFACT));
         set2ComboBox.addActionListener(new UpdateLabelListener(set2NameLabel, set2Icon, ToolData.SELECTION_BOX_TYPE.ARTIFACT));
-        set1comboBox.addActionListener(new UpdateCharacterCardListener(selectedCharacterCard, ToolData.CHARACTER_CARD_DATA_FIELD.SET_ONE));
+        set1ComboBox.addActionListener(new UpdateCharacterCardListener(selectedCharacterCard, ToolData.CHARACTER_CARD_DATA_FIELD.SET_ONE));
         set2ComboBox.addActionListener(new UpdateCharacterCardListener(selectedCharacterCard, ToolData.CHARACTER_CARD_DATA_FIELD.SET_TWO));
 
         JPanel checkboxAndButtonPanel = new JPanel();
@@ -621,6 +666,13 @@ public class ToolGUI extends JFrame implements ActionListener {
             artifactListingCheckBox.setFont(artifactListingCheckBoxFont);
         }
         artifactListingCheckBox.setText("Artifact Listing");
+        artifactListingCheckBox.addItemListener(new UpdateCharacterCardListener(selectedCharacterCard,
+                ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_SET_ONE));
+        artifactListingCheckBox.addItemListener(new UpdateCharacterCardListener(selectedCharacterCard,
+                ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_SET_TWO));
+        if (selectedCharacterCard.getArtifactSet1Status() || selectedCharacterCard.getArtifactSet2Status()) {
+            artifactListingCheckBox.doClick();
+        }
         checkboxAndButtonPanel.add(artifactListingCheckBox,
                 new GridConstraints(2, 0, 1, 2, GridConstraints.ANCHOR_SOUTHWEST, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
@@ -632,6 +684,11 @@ public class ToolGUI extends JFrame implements ActionListener {
             talentListingCheckBox.setFont(talentListingCheckBoxFont);
         }
         talentListingCheckBox.setText("Talent Listing");
+        talentListingCheckBox.addItemListener(new UpdateCharacterCardListener(selectedCharacterCard,
+                ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_TALENT_MATERIALS));
+        if (selectedCharacterCard.getTalentStatus()) {
+            talentListingCheckBox.doClick();
+        }
         checkboxAndButtonPanel.add(talentListingCheckBox,
                 new GridConstraints(3, 0, 1, 2, GridConstraints.ANCHOR_NORTHWEST, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
@@ -656,6 +713,11 @@ public class ToolGUI extends JFrame implements ActionListener {
             weaponMaterialListingCheckbox.setFont(weaponMaterialListingCheckboxFont);
         }
         weaponMaterialListingCheckbox.setText("Weapon Material Listing");
+        weaponMaterialListingCheckbox.addItemListener(new UpdateCharacterCardListener(selectedCharacterCard,
+                ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_WEAPON_MATERIALS));
+        if (selectedCharacterCard.getWeaponStatus()) {
+            weaponMaterialListingCheckbox.doClick();
+        }
         checkboxAndButtonPanel.add(weaponMaterialListingCheckbox,
                 new GridConstraints(4, 0, 1, 2, GridConstraints.ANCHOR_SOUTHWEST, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
@@ -680,7 +742,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         saveButton.setBackground(new Color(-6039919));
         saveButton.setForeground(new Color(-394241));
         saveButton.setText("SAVE");
-        saveButton.addActionListener(new SaveButtonListener(characterTabPane));
+        saveButton.addActionListener(new SaveButtonListener(selectedCharacterCard));
         checkboxAndButtonPanel.add(saveButton,
                 new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
@@ -700,7 +762,7 @@ public class ToolGUI extends JFrame implements ActionListener {
                 new GridConstraints(5, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW,
                         new Dimension(150, 280), new Dimension(150, 280), null, 0, false));
-        set1comboBox.addActionListener(new UpdateTextAreaListener(setDetailsTextArea));
+        set1ComboBox.addActionListener(new UpdateTextAreaListener(setDetailsTextArea));
         set2ComboBox.addActionListener(new UpdateTextAreaListener(setDetailsTextArea));
 
         return templateTab;

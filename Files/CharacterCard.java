@@ -2,7 +2,7 @@ package Files;
 
 public class CharacterCard {
 
-    private String characterName;
+    private final String characterName;
     private String characterNotes;
     private String weapon;
     private boolean weaponStatus;
@@ -14,13 +14,14 @@ public class CharacterCard {
 
 
     public CharacterCard(String character_name) {
+        assert character_name != null;
         this.characterName = character_name;
-        characterNotes=null;
-        weapon=null;
+        characterNotes="";
+        weapon="";
         weaponStatus =false;
-        artifactSet1 =null;
+        artifactSet1 ="";
         artifactSet1Status=false;
-        artifactSet2=null;
+        artifactSet2="";
         artifactSet2Status=false;
         talentStatus=false;
     }
@@ -28,9 +29,6 @@ public class CharacterCard {
     // Character Name
     public String getCharacterName() {
         return characterName;
-    }
-    public void setCharacterName(String character_name) {
-        this.characterName = character_name;
     }
 
     // Character Notes
