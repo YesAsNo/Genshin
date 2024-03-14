@@ -42,7 +42,12 @@ public class ToolData {
 
     }
 
-
+    /**
+     * Parses Character-Element mapping from the supplied json file.
+     * Additionally, retrieves the characters from the mapping, puts them into a 1d array and sorts by alphabet.
+     * @param gson gson object
+     * @param reader Reader object with the path to the json file.
+     */
     private static void parseCharacters(Gson gson,JsonReader reader){
         assert gson != null;
         assert reader != null;
@@ -51,6 +56,12 @@ public class ToolData {
         val_arrays.forEach(charactersFlattened::addAll);
         Collections.sort(charactersFlattened);
     }
+    /**
+     * Parses Domain-Artifact set mapping from the supplied json file.
+     * Additionally, retrieves the artifacts from the mapping, puts them into a 1d array and sorts by alphabet.
+     * @param gson gson object
+     * @param reader Reader object with the path to the json file.
+     */
     private static void parseDomainMapping(Gson gson,JsonReader reader){
         assert gson != null;
         assert reader != null;
@@ -59,18 +70,33 @@ public class ToolData {
         val_arrays.forEach(artifactsFlattened::addAll);
         Collections.sort(artifactsFlattened);
     }
+    /**
+     * Parses Weapon-Rarity/Type mapping from the supplied json file.
+     * @param gson gson object
+     * @param reader Reader object with the path to the json file.
+     */
     private static void parseWeapons(Gson gson, JsonReader reader){
         assert gson != null;
         assert reader != null;
         weaponsRaritiesMap = gson.fromJson(reader,weaponsRaritiesMap.getClass());
 
     }
+    /**
+     * Parses Character-Weapons mapping from the supplied json file.
+     * @param gson gson object
+     * @param reader Reader object with the path to the json file.
+     */
     private static void parseCharacterMapping(Gson gson,JsonReader reader){
         assert gson != null;
         assert reader != null;
         characterWeaponsMap = gson.fromJson(reader,characterWeaponsMap.getClass());
 
     }
+    /**
+     * Parses Artifact Set - Set Description mapping from the supplied json file.
+     * @param gson gson object
+     * @param reader Reader object with the path to the json file.
+     */
     private static void parseArtifactSetDescriptionMapping(Gson gson,JsonReader reader){
         assert gson != null;
         assert reader != null;
