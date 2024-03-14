@@ -64,7 +64,7 @@ public class CharacterCard {
         this.artifactSet1 = artifactSet1;
     }
 
-    public boolean getArtifactSet1_status() {
+    public boolean getArtifactSet1Status() {
         return artifactSet1Status;
     }
     public void setArtifactSet1Status(boolean artifact_set1_status) {
@@ -74,14 +74,14 @@ public class CharacterCard {
     public String getArtifactSet2() {
         return artifactSet2;
     }
-    public void setArtifact_set2(String artifact_set2) {
+    public void setArtifactSet2(String artifact_set2) {
         this.artifactSet2 = artifact_set2;
     }
 
     public boolean getArtifactSet2Status() {
         return artifactSet2Status;
     }
-    public void setArtifact_set2_status(boolean artifact_set2_status) {
+    public void setArtifactSet2Status(boolean artifact_set2_status) {
         this.artifactSet2Status = artifact_set2_status;
     }
 
@@ -89,7 +89,7 @@ public class CharacterCard {
     public boolean getTalentStatus() {
         return talentStatus;
     }
-    public void setTalent_status(boolean talent_status) {
+    public void setTalentStatus(boolean talent_status) {
         this.talentStatus = talent_status;
     }
 }

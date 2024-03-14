@@ -26,10 +26,22 @@ public class ToolData {
         FIVE_STAR,
         FOUR_STAR
     }
-    public enum TYPE{
+    public enum SELECTION_BOX_TYPE {
         WEAPON,
         ARTIFACT
     }
+    public enum CHARACTER_CARD_DATA_FIELD{
+        WEAPON,
+        SET_ONE,
+        SET_TWO,
+        NOTES,
+        FARMING_WEAPON_MATERIALS,
+        FARMING_TALENT_MATERIALS,
+        FARMING_SET_ONE,
+        FARMING_SET_TWO
+
+    }
+
 
     private static void parseCharacters(Gson gson,JsonReader reader){
         assert gson != null;

@@ -250,6 +250,14 @@ public class ToolGUI extends JFrame implements ActionListener {
         }
         return false;
     }
+    public static CharacterCard getCharacterCard(String charName) {
+        for (CharacterCard generatedCharacterCard : generatedCharacterCards) {
+            if (generatedCharacterCard.getCharacterName().equalsIgnoreCase(charName)) {
+                return generatedCharacterCard;
+            }
+        }
+        return null;
+    }
 
     /**
      * Adds a character button to the selected character panel (after triggering actionPerformed)
@@ -342,6 +350,7 @@ public class ToolGUI extends JFrame implements ActionListener {
      */
     private JPanel generateCharacterPage(String charName, Icon charIcon) {
         JPanel templateTab = new JPanel();
+        CharacterCard selectedCharacterCard = getCharacterCard(charName);
         templateTab.setLayout(new GridBagLayout());
         JPanel middleSelectorPanel = new JPanel();
         middleSelectorPanel.setLayout(new GridLayoutManager(13, 1, new Insets(5, 5, 5, 5), -1, -1));
@@ -541,7 +550,9 @@ public class ToolGUI extends JFrame implements ActionListener {
         gbc.anchor = GridBagConstraints.NORTHEAST;
         gbc.insets = new Insets(0, 0, 0, 20);
         templateTab.add(weaponIcon, gbc);
-        weaponSelectionBox.addActionListener(new UpdateLabelListener(weaponNameLabel, weaponIcon, ToolData.TYPE.WEAPON));
+        weaponSelectionBox.addActionListener(new UpdateLabelListener(weaponNameLabel, weaponIcon, ToolData.SELECTION_BOX_TYPE.WEAPON));
+        weaponSelectionBox.addActionListener(new UpdateCharacterCardListener(selectedCharacterCard,
+                ToolData.CHARACTER_CARD_DATA_FIELD.WEAPON ));
         weaponNameLabel.setToolTipText(TOOLTIP_FOR_WEAPON_NAME_LABEL);
         weaponIcon.setToolTipText(TOOLTIP_FOR_WEAPON_ICON_LABEL);
 
@@ -584,8 +595,12 @@ public class ToolGUI extends JFrame implements ActionListener {
         gbc.insets = new Insets(5, 0, 0, 20);
         templateTab.add(set2Icon, gbc);
 
-        set1comboBox.addActionListener(new UpdateLabelListener(set1NameLabel, set1Icon, ToolData.TYPE.ARTIFACT));
-        set2ComboBox.addActionListener(new UpdateLabelListener(set2NameLabel, set2Icon, ToolData.TYPE.ARTIFACT));
+        set1comboBox.addActionListener(new UpdateLabelListener(set1NameLabel, set1Icon, ToolData.SELECTION_BOX_TYPE.ARTIFACT));
+        set2ComboBox.addActionListener(new UpdateLabelListener(set2NameLabel, set2Icon, ToolData.SELECTION_BOX_TYPE.ARTIFACT));
+        set1comboBox.addActionListener(new UpdateCharacterCardListener(selectedCharacterCard,
+                ToolData.CHARACTER_CARD_DATA_FIELD.SET_ONE));
+        set2ComboBox.addActionListener(new UpdateCharacterCardListener(selectedCharacterCard,
+                ToolData.CHARACTER_CARD_DATA_FIELD.SET_TWO));
 
         JPanel checkboxAndButtonPanel = new JPanel();
         checkboxAndButtonPanel.setLayout(new GridLayoutManager(6, 2, new Insets(3, 3, 3, 3), -1, -1));
@@ -667,6 +682,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         saveButton.setBackground(new Color(-6039919));
         saveButton.setForeground(new Color(-394241));
         saveButton.setText("SAVE");
+        saveButton.addActionListener(new SaveButtonListener(characterTabPane));
         checkboxAndButtonPanel.add(saveButton,
                 new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,

@@ -15,12 +15,12 @@ import java.awt.event.ActionListener;
 public class UpdateLabelListener implements ActionListener {
     private final JLabel _IconLabel;
     private final JLabel _NameLabel;
-    private final ToolData.TYPE _type;
+    private final ToolData.SELECTION_BOX_TYPE _SELECTIONBOXTYPE;
 
-    public UpdateLabelListener(JLabel nameLabel , JLabel iconLabel, ToolData.TYPE type){
+    public UpdateLabelListener(JLabel nameLabel , JLabel iconLabel, ToolData.SELECTION_BOX_TYPE SELECTION_BOX_TYPE){
         _NameLabel = nameLabel;
         _IconLabel = iconLabel;
-        _type = type;
+        _SELECTIONBOXTYPE = SELECTION_BOX_TYPE;
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -31,7 +31,7 @@ public class UpdateLabelListener implements ActionListener {
         {
 
             _NameLabel.setText("");
-            if (_type == ToolData.TYPE.ARTIFACT) {
+            if (_SELECTIONBOXTYPE == ToolData.SELECTION_BOX_TYPE.ARTIFACT) {
                 icon = new ImageIcon(generateArtifactIconPath(ToolGUI.UNKNOWN_ARTIFACT));
             }
             else {
@@ -41,7 +41,7 @@ public class UpdateLabelListener implements ActionListener {
         else
         {
             _NameLabel.setText(item);
-            if (_type == ToolData.TYPE.WEAPON) {
+            if (_SELECTIONBOXTYPE == ToolData.SELECTION_BOX_TYPE.WEAPON) {
                 WeaponInfo weaponInfo = lookUpWeaponRarity(item);
                 icon = new ImageIcon(ToolGUI.generateWeaponPath(item, weaponInfo.getWeaponType(), weaponInfo.getRarity()));
             }
