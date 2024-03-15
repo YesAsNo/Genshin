@@ -2,7 +2,7 @@ package Files;
 
 public class CharacterCard {
 
-    private String characterName;
+    private final String characterName;
     private String characterNotes;
     private String weapon;
     private boolean weaponStatus;
@@ -14,13 +14,14 @@ public class CharacterCard {
 
 
     public CharacterCard(String character_name) {
-        this.characterName=character_name;
-        characterNotes=null;
-        weapon=null;
+        assert character_name != null;
+        this.characterName = character_name;
+        characterNotes="";
+        weapon="";
         weaponStatus =false;
-        artifactSet1 =null;
+        artifactSet1 ="";
         artifactSet1Status=false;
-        artifactSet2=null;
+        artifactSet2="";
         artifactSet2Status=false;
         talentStatus=false;
     }
@@ -28,9 +29,6 @@ public class CharacterCard {
     // Character Name
     public String getCharacterName() {
         return characterName;
-    }
-    public void setCharacterName(String character_name) {
-        this.characterName = character_name;
     }
 
     // Character Notes
@@ -64,7 +62,7 @@ public class CharacterCard {
         this.artifactSet1 = artifactSet1;
     }
 
-    public boolean getArtifactSet1_status() {
+    public boolean getArtifactSet1Status() {
         return artifactSet1Status;
     }
     public void setArtifactSet1Status(boolean artifact_set1_status) {
@@ -74,14 +72,14 @@ public class CharacterCard {
     public String getArtifactSet2() {
         return artifactSet2;
     }
-    public void setArtifact_set2(String artifact_set2) {
+    public void setArtifactSet2(String artifact_set2) {
         this.artifactSet2 = artifact_set2;
     }
 
     public boolean getArtifactSet2Status() {
         return artifactSet2Status;
     }
-    public void setArtifact_set2_status(boolean artifact_set2_status) {
+    public void setArtifactSet2Status(boolean artifact_set2_status) {
         this.artifactSet2Status = artifact_set2_status;
     }
 
@@ -89,7 +87,7 @@ public class CharacterCard {
     public boolean getTalentStatus() {
         return talentStatus;
     }
-    public void setTalent_status(boolean talent_status) {
+    public void setTalentStatus(boolean talent_status) {
         this.talentStatus = talent_status;
     }
 }
