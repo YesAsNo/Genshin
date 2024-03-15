@@ -71,7 +71,7 @@
                     <border type="none"/>
                     <children/>
                   </grid>
-                  <component id="c46ef" class="javax.swing.JButton" binding="CheckButton" custom-create="true">
+                  <component id="c46ef" class="javax.swing.JButton" binding="CheckButton">
                     <constraints>
                       <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
@@ -85,7 +85,7 @@
                   </component>
                   <component id="1696f" class="javax.swing.JTextField" binding="characterSelectorField" custom-create="true">
                     <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag top="0" left="250" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
                     </constraints>
                     <properties>
@@ -100,16 +100,109 @@
                   </component>
                 </children>
               </grid>
-              <grid id="d9425" binding="ArtifactsTab" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
+              <grid id="d9425" binding="WeaponTab" layout-manager="GridBagLayout">
                 <constraints>
-                  <tabbedpane title="Artifacts"/>
+                  <tabbedpane title="Weapons"/>
                 </constraints>
                 <properties>
                   <background color="-1"/>
                 </properties>
                 <border type="none"/>
-                <children/>
+                <children>
+                  <grid id="3ee58" binding="weapon_tab_panel" layout-manager="GridBagLayout">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="1.0" weighty="1.0"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <grid id="10d66" binding="weapon_card" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties/>
+                        <border type="etched"/>
+                        <children>
+                          <component id="7253d" class="javax.swing.JLabel">
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <font name="Source Code Pro" style="1"/>
+                              <horizontalAlignment value="0"/>
+                              <horizontalTextPosition value="0"/>
+                              <icon value="Files/Images/Weapons/Bow_5star/Elegy for the End.png"/>
+                              <text value="[ Weapon Name ]"/>
+                              <verticalAlignment value="0"/>
+                              <verticalTextPosition value="3"/>
+                            </properties>
+                          </component>
+                          <component id="913cc" class="javax.swing.JCheckBox" binding="wp_checkbox">
+                            <constraints>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="Weapon Listing"/>
+                            </properties>
+                          </component>
+                          <component id="bf7c5" class="javax.swing.JLabel">
+                            <constraints>
+                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="1" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <font name="Source Code Pro" style="1"/>
+                              <horizontalAlignment value="0"/>
+                              <horizontalTextPosition value="0"/>
+                              <icon value="Files/Images/Weapon Materials/Aerosiderite.png"/>
+                              <text value=""/>
+                              <verticalAlignment value="0"/>
+                              <verticalTextPosition value="3"/>
+                            </properties>
+                          </component>
+                          <component id="2ec4e" class="javax.swing.JLabel">
+                            <constraints>
+                              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <font name="Source Code Pro" style="1"/>
+                              <text value="Type: Bow "/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                    </children>
+                  </grid>
+                  <component id="84655" class="javax.swing.JTextField" binding="weapons_tab_searchbar">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="1.0" weighty="0.0"/>
+                    </constraints>
+                    <properties>
+                      <enabled value="true"/>
+                      <font name="Source Code Pro Black" size="18" style="1"/>
+                      <inheritsPopupMenu value="false"/>
+                      <maximumSize width="240" height="33"/>
+                      <minimumSize width="240" height="33"/>
+                      <preferredSize width="240" height="33"/>
+                      <text value="Search by name or type!"/>
+                    </properties>
+                  </component>
+                  <component id="8dc33" class="javax.swing.JButton" binding="weapons_tab_button">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="1.0" weighty="0.0"/>
+                    </constraints>
+                    <properties>
+                      <maximumSize width="30" height="30"/>
+                      <minimumSize width="30" height="30"/>
+                      <preferredSize width="50" height="30"/>
+                      <text value="✓"/>
+                    </properties>
+                  </component>
+                </children>
               </grid>
               <grid id="bc306" layout-manager="GridBagLayout">
                 <constraints>
