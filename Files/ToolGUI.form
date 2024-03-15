@@ -9,7 +9,7 @@
       <background color="-2702645"/>
       <enabled value="true"/>
     </properties>
-    <border type="none"/>
+   <border type="none"/>
     <children>
       <vspacer id="676ab">
         <constraints>
