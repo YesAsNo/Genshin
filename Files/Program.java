@@ -1,6 +1,6 @@
 package Files;
 
-import static Files.Data.characters_flattened;
+import static Files.ToolData.charactersFlattened;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -67,7 +67,7 @@ public class Program extends JFrame implements ActionListener {
     private JButton devSearchButton;
     private JPanel devSearchResultPanel;
     private JTextField devNotesTextField;
-    private JComboBox devSet1SelectionBox;
+    private JComboBox<String> devSet1SelectionBox;
     private JCheckBox devArtifactListingCheckBox;
     private JCheckBox devTalentListingCheckBox;
     private JButton devCloseButton;
@@ -90,7 +90,7 @@ public class Program extends JFrame implements ActionListener {
     private JLabel devCharacterNameLabel;
     private JLabel devWeaponNameLabel;
     private JLabel devSet1NameLabel;
-    private JComboBox devSet2SelectionBox;
+    private JComboBox<String> devSet2SelectionBox;
     private JLabel devSet2NameLabel;
     private JLabel devWeaponIconLabel;
     private JLabel devCharacterIconLabel;
@@ -99,7 +99,7 @@ public class Program extends JFrame implements ActionListener {
     private JPanel devButtonAndCheckboxPanel;
     private JLabel devDomainListingsLabel;
     private JCheckBox devWepMatListingLabel;
-    private JComboBox devWeaponSelectorBox;
+    private JComboBox<String> devWeaponSelectorBox;
     private JScrollPane scrollPane1;
     private Set<String> _openTabs;
 
@@ -135,7 +135,7 @@ public class Program extends JFrame implements ActionListener {
 
         String userFieldInput = devSearchField.getText().toLowerCase();
 
-        for (String s : characters_flattened) {
+        for (String s : charactersFlattened) {
             if (s.toLowerCase().contains(userFieldInput)) {
                 matched = true;
                 generateCharacterButton(s, matchedCount);
