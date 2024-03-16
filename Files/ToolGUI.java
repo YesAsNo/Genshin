@@ -74,7 +74,7 @@ public class ToolGUI extends JFrame implements ActionListener {
     private JTabbedPane characterTabPane;
     private JPanel mainInformationPanel;
     private JPanel characterTab;
-    private JPanel artifactsTab;
+    private JPanel weaponsTab;
     private JTextField characterSelectorField;
     private JButton searchConfirmButton;
     private JPanel selectedCharacterPanel;
@@ -131,6 +131,7 @@ public class ToolGUI extends JFrame implements ActionListener {
             for (File savedCard : savedCards) {
                 JsonReader reader = new JsonReader(new FileReader(savedCard));
                 CharacterCard card = gson.fromJson(reader, CharacterCard.class);
+                card.setCharacterIcon();
                 generatedCharacterCards.add(card);
 
             }
@@ -148,13 +149,11 @@ public class ToolGUI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         String userFieldInput = characterSelectorField.getText().toLowerCase();
-        boolean matched = false;
         int matchedCount = 0;
         selectedCharacterPanel.removeAll();
 
         for (String s : charactersFlattened) {
             if (s.toLowerCase().contains(userFieldInput)) {
-                matched = true;
                 if (!userFieldInput.isEmpty()) {
                     generateCharacterButton(s, matchedCount);
                 }
@@ -162,7 +161,7 @@ public class ToolGUI extends JFrame implements ActionListener {
 
             }
         }
-        if (!matched || userFieldInput.isEmpty()) {
+        if (matchedCount == 0 || userFieldInput.isEmpty()) {
             generateCharacterButton(UNKNOWN_CHARACTER_PLACEHOLDER_NAME, matchedCount);
         } else {
             scrollPane1.setViewportView(selectedCharacterPanel);
@@ -184,13 +183,11 @@ public class ToolGUI extends JFrame implements ActionListener {
      * Generates a character button for the character specified by name and the index of the match.
      *
      * @param characterName the name of the character
-     * @param index         which character by count it is
+     * @param index which character by count it is
      */
     private void generateCharacterButton(String characterName, int index) {
-        String characterIconPath = generateCharacterIconPath(characterName);
-        Icon characterIcon = new ImageIcon(characterIconPath);
         if (characterName.equalsIgnoreCase(UNKNOWN_CHARACTER_PLACEHOLDER_NAME)) {
-            JLabel unknownCharacterLabel = new JLabel(characterIcon);
+            JLabel unknownCharacterLabel = new JLabel(generateCharacterIconPath(UNKNOWN_CHARACTER_PLACEHOLDER_NAME));
             unknownCharacterLabel.setText(NO_CHARACTERS_MATCH_MESSAGE);
             unknownCharacterLabel.setVerticalTextPosition(SwingConstants.BOTTOM);
             unknownCharacterLabel.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -199,8 +196,7 @@ public class ToolGUI extends JFrame implements ActionListener {
             selectedCharacterPanel.updateUI();
             return;
         }
-        JButton characterButton = getjButton(characterName, characterIcon);
-
+        JButton characterButton = getjButton(characterName);
         addCharacterButtonToSelectedCharacterPanel(characterButton, index);
 
     }
@@ -218,16 +214,36 @@ public class ToolGUI extends JFrame implements ActionListener {
     }
 
     /**
+     * Gets the card for the specified character.
+     *
+     * @param charName the character name
+     * @return character card
+     */
+    public CharacterCard getCharacterCard(String charName) {
+        for (CharacterCard generatedCharacterCard : generatedCharacterCards) {
+            if (generatedCharacterCard.getCharacterName().equalsIgnoreCase(charName)) {
+                return generatedCharacterCard;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Creates a JButton for the specified character.
      *
      * @param characterName the name of the character
-     * @param characterIcon the icon of the character
      * @return JButton for the character.
      */
-    private JButton getjButton(String characterName, Icon characterIcon) {
+    private JButton getjButton(String characterName) {
         JButton characterButton = new JButton();
-
-        characterButton.setIcon(characterIcon);
+        CharacterCard characterCard;
+        if (!checkIfCharacterCardHasBeenGenerated(characterName)) {
+            characterCard = new CharacterCard(characterName);
+            generatedCharacterCards.add(characterCard);
+        } else {
+            characterCard = getCharacterCard(characterName);
+        }
+        characterButton.setIcon(characterCard.getCharacterIcon());
         if (characterName.length() > MAX_CHARACTERS_PER_LINE) {
             characterButton.setText(removeWhitespace(characterName));
         } else {
@@ -240,11 +256,9 @@ public class ToolGUI extends JFrame implements ActionListener {
         characterButton.setBorderPainted(false);
         characterButton.setContentAreaFilled(false);
         characterButton.addActionListener(e -> {
-            if (!checkIfCharacterCardHasBeenGenerated(characterName)) {
-                generatedCharacterCards.add(new CharacterCard(characterName));
-            }
+
             if (!isTabAlreadyOpen(characterTabPane, characterName)) {
-                JPanel characterPage = generateCharacterPage(characterName, characterIcon);
+                JPanel characterPage = generateCharacterPage(characterCard);
                 characterTabPane.addTab(characterName, characterPage);
                 characterTabPane.setSelectedComponent(characterPage);
             } else {
@@ -258,7 +272,7 @@ public class ToolGUI extends JFrame implements ActionListener {
     /**
      * Verifies if a tab for the specified character already exists in the tabbed pane.
      *
-     * @param tp       the tabbed pane
+     * @param tp the tabbed pane
      * @param charName the specified character
      * @return true if the tab exists, otherwise false.
      */
@@ -300,6 +314,9 @@ public class ToolGUI extends JFrame implements ActionListener {
      */
 
     public static boolean checkIfCharacterCardHasBeenGenerated(String charName) {
+        if (generatedCharacterCards.isEmpty()) {
+            return false;
+        }
         for (CharacterCard generatedCharacterCard : generatedCharacterCards) {
             if (generatedCharacterCard.getCharacterName().equalsIgnoreCase(charName)) {
                 return true;
@@ -309,25 +326,10 @@ public class ToolGUI extends JFrame implements ActionListener {
     }
 
     /**
-     * Gets the card for the specified character.
-     *
-     * @param charName the character name
-     * @return character card
-     */
-    public static CharacterCard getCharacterCard(String charName) {
-        for (CharacterCard generatedCharacterCard : generatedCharacterCards) {
-            if (generatedCharacterCard.getCharacterName().equalsIgnoreCase(charName)) {
-                return generatedCharacterCard;
-            }
-        }
-        return null;
-    }
-
-    /**
      * Adds a character button to the selected character panel (after triggering actionPerformed)
      *
      * @param charButton the button to add
-     * @param index      the index of the match
+     * @param index the index of the match
      */
     private void addCharacterButtonToSelectedCharacterPanel(JButton charButton, int index) {
         GridBagConstraints gbc = new GridBagConstraints();
@@ -370,7 +372,7 @@ public class ToolGUI extends JFrame implements ActionListener {
     /**
      * Grabs all weapons based on their rarity and type.
      *
-     * @param rarity     rarity of the weapon
+     * @param rarity rarity of the weapon
      * @param weaponType type of the weapon
      * @return list of the weapons with the specified rarity.
      */
@@ -414,7 +416,7 @@ public class ToolGUI extends JFrame implements ActionListener {
     /**
      * Adds allowed weapons (that is, wieldable by the specified character) to the list of options in the weapon combobox.
      *
-     * @param dcmb     weapon selector combo box model used by the combo box
+     * @param dcmb weapon selector combo box model used by the combo box
      * @param charName character name
      */
     private void addAllowedWeapons(WeaponSelectorComboBoxModel dcmb, String charName) {
@@ -431,7 +433,7 @@ public class ToolGUI extends JFrame implements ActionListener {
      *
      * @param weaponName the name of the weapon
      * @param weaponType the type of the weapon
-     * @param rarity     the rarity of the weapon
+     * @param rarity the rarity of the weapon
      * @return the address of the icon for the weapon
      */
     public static String generateWeaponPath(String weaponName, String weaponType, RARITY rarity) {
@@ -470,7 +472,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         return middleSelectorPanel;
     }
 
-    private JTextField getNotesTextField(JPanel jpanel, CharacterCard selectedCharacterCard) {
+    private JTextField getNotesTextField(CharacterCard selectedCharacterCard, JPanel jpanel) {
         JTextField notesTextField = new JTextField();
         Font emptyNotesFieldTextFieldFont =
                 this.$$$getFont$$$("Source Code Pro", Font.BOLD, 14, notesTextField.getFont());
@@ -506,7 +508,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         return characterNameLabel;
     }
 
-    private JComboBox<String> getWeaponSelectionBox(String charName, CharacterCard characterCard, JPanel jpanel) {
+    private JComboBox<String> getWeaponSelectionBox(CharacterCard characterCard, JPanel jpanel) {
         JComboBox<String> weaponSelectionBox = new JComboBox<>();
         weaponSelectionBox.setAutoscrolls(false);
         weaponSelectionBox.setEditable(false);
@@ -517,10 +519,10 @@ public class ToolGUI extends JFrame implements ActionListener {
         }
         weaponSelectionBox.setInheritsPopupMenu(false);
         final WeaponSelectorComboBoxModel weaponSelectorComboBoxModel = new WeaponSelectorComboBoxModel();
-        addAllowedWeapons(weaponSelectorComboBoxModel, charName);
+        addAllowedWeapons(weaponSelectorComboBoxModel, characterCard.getCharacterName());
         weaponSelectionBox.setModel(weaponSelectorComboBoxModel);
-        weaponSelectionBox.setSelectedItem(characterCard.getWeapon().isEmpty() ? UNKNOWN_WEAPON_MESSAGE :
-                characterCard.getWeapon());
+        weaponSelectionBox.setSelectedItem(
+                characterCard.getWeapon().isEmpty() ? UNKNOWN_WEAPON_MESSAGE : characterCard.getWeapon());
         jpanel.add(weaponSelectionBox,
                 new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW,
@@ -555,8 +557,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         set1NameLabel.setHorizontalAlignment(10);
         set1NameLabel.setHorizontalTextPosition(11);
         set1NameLabel.setInheritsPopupMenu(true);
-        set1NameLabel.setText(
-                characterCard.getArtifactSet1().isEmpty() ? "" : characterCard.getArtifactSet1());
+        set1NameLabel.setText(characterCard.getArtifactSet1().isEmpty() ? "" : characterCard.getArtifactSet1());
         set1NameLabel.setVerticalAlignment(0);
         set1NameLabel.setVerticalTextPosition(0);
         set1NameLabel.setToolTipText(TOOLTIP_FOR_LABELS_WITHOUT_ICON);
@@ -581,8 +582,8 @@ public class ToolGUI extends JFrame implements ActionListener {
         defaultComboBoxModelForSet1Selector.addElement(UNKNOWN_SET_MESSAGE);
         defaultComboBoxModelForSet1Selector.addAll(artifactsFlattened);
         set1ComboBox.setModel(defaultComboBoxModelForSet1Selector);
-        set1ComboBox.setSelectedItem(characterCard.getArtifactSet1().isEmpty() ? UNKNOWN_SET_MESSAGE :
-                characterCard.getArtifactSet1());
+        set1ComboBox.setSelectedItem(
+                characterCard.getArtifactSet1().isEmpty() ? UNKNOWN_SET_MESSAGE : characterCard.getArtifactSet1());
         jpanel.add(set1ComboBox,
                 new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW,
@@ -604,8 +605,8 @@ public class ToolGUI extends JFrame implements ActionListener {
         defaultComboBoxModelForSet2Selector.addElement(UNKNOWN_SET_MESSAGE);
         defaultComboBoxModelForSet2Selector.addAll(artifactsFlattened);
         set2ComboBox.setModel(defaultComboBoxModelForSet2Selector);
-        set2ComboBox.setSelectedItem(characterCard.getArtifactSet2().isEmpty() ? UNKNOWN_SET_MESSAGE :
-                characterCard.getArtifactSet2());
+        set2ComboBox.setSelectedItem(
+                characterCard.getArtifactSet2().isEmpty() ? UNKNOWN_SET_MESSAGE : characterCard.getArtifactSet2());
         jpanel.add(set2ComboBox,
                 new GridConstraints(11, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW,
@@ -890,24 +891,22 @@ public class ToolGUI extends JFrame implements ActionListener {
     /**
      * Generates a character page (in the tabbed pane).
      *
-     * @param charName the character name
-     * @param charIcon the character icon
+     * @param characterCard the character card
      * @return the JPanel that is the character page.
      */
-    private JPanel generateCharacterPage(String charName, Icon charIcon) {
+    private JPanel generateCharacterPage(CharacterCard characterCard) {
         JPanel templateTab = new JPanel();
-        CharacterCard selectedCharacterCard = getCharacterCard(charName);
-        assert selectedCharacterCard != null;
+        assert characterCard != null;
         templateTab.setLayout(new GridBagLayout());
         JPanel middleSelectorPanel = getMiddleSelectorPanel(templateTab);
-        JTextField notesTextField = getNotesTextField(middleSelectorPanel, selectedCharacterCard);
-        JLabel characterNameLabel = getCharacterNameLabel(charName, middleSelectorPanel);
-        JComboBox<String> weaponSelectionBox = getWeaponSelectionBox(charName, selectedCharacterCard, middleSelectorPanel);
-        JLabel weaponNameLabel = getWeaponNameLabel(selectedCharacterCard, middleSelectorPanel);
-        JLabel set1NameLabel = getSet1NameLabel(selectedCharacterCard, middleSelectorPanel);
-        JComboBox<String> set1ComboBox = getSet1ComboBox(selectedCharacterCard, middleSelectorPanel);
-        JComboBox<String> set2ComboBox = getSet2ComboBox(selectedCharacterCard, middleSelectorPanel);
-        JLabel set2NameLabel = getSet2NameLabel(selectedCharacterCard, middleSelectorPanel);
+        JTextField notesTextField = getNotesTextField(characterCard, middleSelectorPanel);
+        JLabel characterNameLabel = getCharacterNameLabel(characterCard.getCharacterName(), middleSelectorPanel);
+        JComboBox<String> weaponSelectionBox = getWeaponSelectionBox(characterCard, middleSelectorPanel);
+        JLabel weaponNameLabel = getWeaponNameLabel(characterCard, middleSelectorPanel);
+        JLabel set1NameLabel = getSet1NameLabel(characterCard, middleSelectorPanel);
+        JComboBox<String> set1ComboBox = getSet1ComboBox(characterCard, middleSelectorPanel);
+        JComboBox<String> set2ComboBox = getSet2ComboBox(characterCard, middleSelectorPanel);
+        JLabel set2NameLabel = getSet2NameLabel(characterCard, middleSelectorPanel);
 
         uselessButton(middleSelectorPanel);
         getCharacterWeaponSpacer(middleSelectorPanel);
@@ -915,32 +914,30 @@ public class ToolGUI extends JFrame implements ActionListener {
         getSet2Spacer(middleSelectorPanel);
         getYetAnotherSpacerOnTheBottom(middleSelectorPanel);
 
-        JLabel weaponIconLabel = getWeaponIcon(selectedCharacterCard, templateTab);
+        JLabel weaponIconLabel = getWeaponIcon(characterCard, templateTab);
         weaponSelectionBox.addActionListener(new UpdateLabelListener(weaponNameLabel, weaponIconLabel, ToolData.SELECTION_BOX_TYPE.WEAPON));
-        weaponSelectionBox.addActionListener(new UpdateCharacterCardListener(selectedCharacterCard, ToolData.CHARACTER_CARD_DATA_FIELD.WEAPON));
+        weaponSelectionBox.addActionListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.WEAPON));
         weaponNameLabel.setToolTipText(TOOLTIP_FOR_WEAPON_NAME_LABEL);
-        JLabel charLabel = getCharLabel(charIcon, templateTab);
-        JLabel set1Icon = getSet1Icon(selectedCharacterCard, templateTab);
-        JLabel set2Icon = getSet2Icon(selectedCharacterCard, templateTab);
+        JLabel charLabel = getCharLabel(characterCard.getCharacterIcon(), templateTab);
+        JLabel set1Icon = getSet1Icon(characterCard, templateTab);
+        JLabel set2Icon = getSet2Icon(characterCard, templateTab);
 
         set1ComboBox.addActionListener(new UpdateLabelListener(set1NameLabel, set1Icon, ToolData.SELECTION_BOX_TYPE.ARTIFACT));
         set2ComboBox.addActionListener(new UpdateLabelListener(set2NameLabel, set2Icon, ToolData.SELECTION_BOX_TYPE.ARTIFACT));
-        set1ComboBox.addActionListener(new UpdateCharacterCardListener(selectedCharacterCard, ToolData.CHARACTER_CARD_DATA_FIELD.SET_ONE));
-        set2ComboBox.addActionListener(new UpdateCharacterCardListener(selectedCharacterCard, ToolData.CHARACTER_CARD_DATA_FIELD.SET_TWO));
+        set1ComboBox.addActionListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.SET_ONE));
+        set2ComboBox.addActionListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.SET_TWO));
 
         JPanel checkboxAndButtonPanel = getCheckboxAndButtonPanel(templateTab);
-        JCheckBox artifactListingCheckBox = getArtifactListingCheckBox(selectedCharacterCard, checkboxAndButtonPanel);
-        JCheckBox talentListingCheckBox = getTalentListingCheckBox(selectedCharacterCard, checkboxAndButtonPanel);
+        JCheckBox artifactListingCheckBox = getArtifactListingCheckBox(characterCard, checkboxAndButtonPanel);
+        JCheckBox talentListingCheckBox = getTalentListingCheckBox(characterCard, checkboxAndButtonPanel);
         JLabel domainListingsLabel = getDomainListingsLabel(checkboxAndButtonPanel);
-        JCheckBox weaponMaterialListingCheckbox = getWeaponMaterialListingCheckbox(selectedCharacterCard, checkboxAndButtonPanel);
+        JCheckBox weaponMaterialListingCheckbox = getWeaponMaterialListingCheckbox(characterCard, checkboxAndButtonPanel);
 
-        artifactListingCheckBox.addItemListener(new UpdateCharacterCardListener(selectedCharacterCard,
-                ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_SET_ONE));
-        artifactListingCheckBox.addItemListener(new UpdateCharacterCardListener(selectedCharacterCard,
-                ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_SET_TWO));
-        weaponMaterialListingCheckbox.addItemListener(new UpdateCharacterCardListener(selectedCharacterCard,
+        artifactListingCheckBox.addItemListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_SET_ONE));
+        artifactListingCheckBox.addItemListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_SET_TWO));
+        weaponMaterialListingCheckbox.addItemListener(new UpdateCharacterCardListener(characterCard,
                 ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_WEAPON_MATERIALS));
-        talentListingCheckBox.addItemListener(new UpdateCharacterCardListener(selectedCharacterCard,
+        talentListingCheckBox.addItemListener(new UpdateCharacterCardListener(characterCard,
                 ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_TALENT_MATERIALS));
 
         JButton closeButton = getCloseButton(checkboxAndButtonPanel);
@@ -948,11 +945,137 @@ public class ToolGUI extends JFrame implements ActionListener {
         JTextArea setDetailsTextArea = getSetDetailsTextArea(checkboxAndButtonPanel);
 
         closeButton.addActionListener(new CloseButtonListener(characterTabPane));
-        saveButton.addActionListener(new SaveButtonListener(selectedCharacterCard));
+        saveButton.addActionListener(new SaveButtonListener(characterCard));
         set1ComboBox.addActionListener(new UpdateTextAreaListener(setDetailsTextArea));
         set2ComboBox.addActionListener(new UpdateTextAreaListener(setDetailsTextArea));
 
         return templateTab;
+    }
+
+    private void setUpWeaponsPanel() {
+        JPanel devWeaponTabPanel = new JPanel();
+        devWeaponTabPanel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 3;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        weaponsTab.add(devWeaponTabPanel, gbc);
+        JScrollPane devWeaponTabScrollPane = new JScrollPane();
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        devWeaponTabPanel.add(devWeaponTabScrollPane, gbc);
+        JPanel devWeaponTabScrollPanePanel = new JPanel();
+        devWeaponTabScrollPanePanel.setLayout(new GridBagLayout());
+        devWeaponTabScrollPane.setViewportView(devWeaponTabScrollPanePanel);
+        JPanel devWeaponCard = new JPanel();
+        devWeaponCard.setLayout(new GridLayoutManager(2, 2, new Insets(5, 5, 5, 5), -1, -1));
+        devWeaponCard.setBackground(new Color(-1));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.NORTH;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        devWeaponTabScrollPanePanel.add(devWeaponCard, gbc);
+        devWeaponCard.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+        JLabel devWeaponIcon = new JLabel();
+        Font devWeaponIconFont = this.$$$getFont$$$("Source Code Pro", Font.BOLD, -1, devWeaponIcon.getFont());
+        if (devWeaponIconFont != null) {
+            devWeaponIcon.setFont(devWeaponIconFont);
+        }
+        devWeaponIcon.setHorizontalAlignment(0);
+        devWeaponIcon.setHorizontalTextPosition(0);
+        devWeaponIcon.setIcon(new ImageIcon(generateWeaponPath()));
+        devWeaponIcon.setText(UNKNOWN_WEAPON_MESSAGE);
+        devWeaponIcon.setVerticalAlignment(0);
+        devWeaponIcon.setVerticalTextPosition(3);
+        devWeaponCard.add(devWeaponIcon,
+                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
+                        false));
+        JCheckBox devWepMatListingCheckbox = new JCheckBox();
+        devWepMatListingCheckbox.setBackground(new Color(-1));
+        devWepMatListingCheckbox.setText("Weapon Listing");
+        devWeaponCard.add(devWepMatListingCheckbox,
+                new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                        GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        JLabel devWepMaterialPreview = new JLabel();
+        Font devWepMaterialPreviewFont =
+                this.$$$getFont$$$("Source Code Pro", Font.BOLD, -1, devWepMaterialPreview.getFont());
+        if (devWepMaterialPreviewFont != null) {
+            devWepMaterialPreview.setFont(devWepMaterialPreviewFont);
+        }
+        devWepMaterialPreview.setHorizontalAlignment(0);
+        devWepMaterialPreview.setHorizontalTextPosition(0);
+        devWepMaterialPreview.setIcon(new ImageIcon(generateWeaponPath()));
+        devWepMaterialPreview.setText("");
+        devWepMaterialPreview.setVerticalAlignment(0);
+        devWepMaterialPreview.setVerticalTextPosition(3);
+        devWeaponCard.add(devWepMaterialPreview,
+                new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
+                        false));
+        JLabel devWepTypeLabel = new JLabel();
+        Font devWepTypeLabelFont = this.$$$getFont$$$("Source Code Pro", Font.BOLD, -1, devWepTypeLabel.getFont());
+        if (devWepTypeLabelFont != null) {
+            devWepTypeLabel.setFont(devWepTypeLabelFont);
+        }
+        devWepTypeLabel.setText("Type: Bow ");
+        devWeaponCard.add(devWepTypeLabel,
+                new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
+                        false));
+        JTextField devWeaponsTabSearchbar = new JTextField();
+        devWeaponsTabSearchbar.setEnabled(true);
+        Font devWeaponsTabSearchbarFont =
+                this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 18, devWeaponsTabSearchbar.getFont());
+        if (devWeaponsTabSearchbarFont != null) {
+            devWeaponsTabSearchbar.setFont(devWeaponsTabSearchbarFont);
+        }
+        devWeaponsTabSearchbar.setInheritsPopupMenu(false);
+        devWeaponsTabSearchbar.setMaximumSize(new Dimension(240, 33));
+        devWeaponsTabSearchbar.setMinimumSize(new Dimension(240, 33));
+        devWeaponsTabSearchbar.setPreferredSize(new Dimension(240, 33));
+        devWeaponsTabSearchbar.setText("Search by name or type!");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.anchor = GridBagConstraints.EAST;
+        weaponsTab.add(devWeaponsTabSearchbar, gbc);
+        JButton devWeaponTabSearchButton = new JButton();
+        devWeaponTabSearchButton.setMaximumSize(new Dimension(30, 30));
+        devWeaponTabSearchButton.setMinimumSize(new Dimension(30, 30));
+        devWeaponTabSearchButton.setPreferredSize(new Dimension(50, 30));
+        devWeaponTabSearchButton.setText("✓");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        weaponsTab.add(devWeaponTabSearchButton, gbc);
+        JButton devSaveAllWeapons = new JButton();
+        devSaveAllWeapons.setBackground(new Color(-6039919));
+        Font devSaveAllWeaponsFont = this.$$$getFont$$$("Source Code Pro", Font.BOLD, -1, devSaveAllWeapons.getFont());
+        if (devSaveAllWeaponsFont != null) {
+            devSaveAllWeapons.setFont(devSaveAllWeaponsFont);
+        }
+        devSaveAllWeapons.setForeground(new Color(-394241));
+        devSaveAllWeapons.setText("SAVE all weapons");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(0, 20, 0, 0);
+        weaponsTab.add(devSaveAllWeapons, gbc);
     }
 
     /**
@@ -968,29 +1091,47 @@ public class ToolGUI extends JFrame implements ActionListener {
         panel1.setBackground(new Color(-2702645));
         panel1.setEnabled(true);
         final Spacer spacer1 = new Spacer();
-        panel1.add(spacer1, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panel1.add(spacer1,
+                new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1,
+                        GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         titleLabel = new JLabel();
         Font titleLabelFont = this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 20, titleLabel.getFont());
-        if (titleLabelFont != null) titleLabel.setFont(titleLabelFont);
+        if (titleLabelFont != null) {
+            titleLabel.setFont(titleLabelFont);
+        }
         titleLabel.setForeground(new Color(-14940151));
         titleLabel.setText("Genshin Domain Application");
-        panel1.add(titleLabel, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel1.add(titleLabel, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         mainInformationPanel = new JPanel();
         mainInformationPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         mainInformationPanel.setBackground(new Color(-3689540));
-        panel1.add(mainInformationPanel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        panel1.add(mainInformationPanel,
+                new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null,
+                        0, false));
         characterTabPane = new JTabbedPane();
-        Font characterTabPaneFont = this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 20, characterTabPane.getFont());
-        if (characterTabPaneFont != null) characterTabPane.setFont(characterTabPaneFont);
+        Font characterTabPaneFont =
+                this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 20, characterTabPane.getFont());
+        if (characterTabPaneFont != null) {
+            characterTabPane.setFont(characterTabPaneFont);
+        }
         characterTabPane.setTabPlacement(1);
-        mainInformationPanel.add(characterTabPane, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(200, 200), null, 0, false));
+        mainInformationPanel.add(characterTabPane,
+                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null,
+                        new Dimension(200, 200), null, 0, false));
         characterTab = new JPanel();
         characterTab.setLayout(new GridBagLayout());
         characterTab.setBackground(new Color(-1));
         characterTab.setEnabled(true);
         characterTab.setFocusCycleRoot(false);
         Font characterTabFont = this.$$$getFont$$$(null, -1, -1, characterTab.getFont());
-        if (characterTabFont != null) characterTab.setFont(characterTabFont);
+        if (characterTabFont != null) {
+            characterTab.setFont(characterTabFont);
+        }
         characterTab.setOpaque(true);
         characterTab.setRequestFocusEnabled(true);
         characterTabPane.addTab("Characters", characterTab);
@@ -1013,8 +1154,11 @@ public class ToolGUI extends JFrame implements ActionListener {
         gbc.anchor = GridBagConstraints.WEST;
         characterTab.add(searchConfirmButton, gbc);
         characterSelectorField.setEnabled(true);
-        Font characterSelectorFieldFont = this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 18, characterSelectorField.getFont());
-        if (characterSelectorFieldFont != null) characterSelectorField.setFont(characterSelectorFieldFont);
+        Font characterSelectorFieldFont =
+                this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 18, characterSelectorField.getFont());
+        if (characterSelectorFieldFont != null) {
+            characterSelectorField.setFont(characterSelectorFieldFont);
+        }
         characterSelectorField.setInheritsPopupMenu(false);
         characterSelectorField.setMaximumSize(new Dimension(240, 33));
         characterSelectorField.setMinimumSize(new Dimension(240, 33));
@@ -1026,17 +1170,17 @@ public class ToolGUI extends JFrame implements ActionListener {
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.insets = new Insets(0, 250, 0, 0);
         characterTab.add(characterSelectorField, gbc);
-        artifactsTab = new JPanel();
-        artifactsTab.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        artifactsTab.setBackground(new Color(-1));
-        characterTabPane.addTab("Artifacts", artifactsTab);
+        weaponsTab = new JPanel();
+        weaponsTab.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        weaponsTab.setBackground(new Color(-1));
+        characterTabPane.addTab("Weapons", weaponsTab);
     }
 
-    /**
-     * @noinspection ALL
-     */
+    /** @noinspection ALL */
     private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
-        if (currentFont == null) return null;
+        if (currentFont == null) {
+            return null;
+        }
         String resultName;
         if (fontName == null) {
             resultName = currentFont.getName();
@@ -1048,15 +1192,15 @@ public class ToolGUI extends JFrame implements ActionListener {
                 resultName = currentFont.getName();
             }
         }
-        Font font = new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
+        Font font = new Font(resultName, style >= 0 ? style : currentFont.getStyle(),
+                size >= 0 ? size : currentFont.getSize());
         boolean isMac = System.getProperty("os.name", "").toLowerCase(Locale.ENGLISH).startsWith("mac");
-        Font fontWithFallback = isMac ? new Font(font.getFamily(), font.getStyle(), font.getSize()) : new StyleContext().getFont(font.getFamily(), font.getStyle(), font.getSize());
+        Font fontWithFallback = isMac ? new Font(font.getFamily(), font.getStyle(), font.getSize()) :
+                new StyleContext().getFont(font.getFamily(), font.getStyle(), font.getSize());
         return fontWithFallback instanceof FontUIResource ? fontWithFallback : new FontUIResource(fontWithFallback);
     }
 
-    /**
-     * @noinspection ALL
-     */
+    /** @noinspection ALL */
     public JComponent $$$getRootComponent$$$() {
         return panel1;
     }

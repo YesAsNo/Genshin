@@ -1,8 +1,12 @@
 package Files;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+
 public class CharacterCard {
 
     private final String characterName;
+    private transient Icon characterIcon;
     private String characterNotes;
     private String weapon;
     private boolean weaponStatus;
@@ -16,6 +20,7 @@ public class CharacterCard {
     public CharacterCard(String character_name) {
         assert character_name != null;
         this.characterName = character_name;
+        setCharacterIcon();
         characterNotes="";
         weapon="";
         weaponStatus =false;
@@ -24,12 +29,19 @@ public class CharacterCard {
         artifactSet2="";
         artifactSet2Status=false;
         talentStatus=false;
-    }
 
+    }
     // Character Name
     public String getCharacterName() {
         return characterName;
     }
+    public void setCharacterIcon(){
+        ImageIcon charIcon = new ImageIcon(ToolGUI.generateCharacterIconPath(characterName));
+        assert charIcon.getImage() != null;
+        characterIcon = charIcon;
+
+    }
+    public Icon getCharacterIcon(){return characterIcon;}
 
     // Character Notes
     public String getCharacterNotes() {
