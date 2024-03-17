@@ -7,8 +7,8 @@ import static Files.ToolData.characterWeaponsMap;
 import static Files.ToolData.charactersFlattened;
 import static Files.ToolData.weaponsFlattened;
 import static Files.ToolData.weaponsRaritiesMap;
-import Files.ToolData.RARITY;
 
+import Files.ToolData.RARITY;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -44,7 +44,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -162,7 +161,6 @@ public class ToolGUI extends JFrame implements ActionListener {
             }
         } else {
             userFieldInput = devWeaponsTabSearchbar.getText().toLowerCase();
-            System.out.println("123455");
             devWeaponTabScrollPanePanel.removeAll();
             for (String s : weaponsFlattened) {
                 if (s.toLowerCase().contains(userFieldInput)) {
