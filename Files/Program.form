@@ -111,7 +111,7 @@
                 <children>
                   <grid id="3ee58" binding="devWeaponTabPanel" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="1" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                      <grid row="1" column="0" row-span="1" col-span="4" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="1.0" weighty="1.0"/>
                     </constraints>
                     <properties/>
@@ -197,8 +197,8 @@
                   </grid>
                   <component id="84655" class="javax.swing.JTextField" binding="devWeaponsTabSearchbar">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
-                      <gridbag weightx="1.0" weighty="0.0"/>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
                     <properties>
                       <enabled value="true"/>
@@ -207,12 +207,12 @@
                       <maximumSize width="240" height="33"/>
                       <minimumSize width="240" height="33"/>
                       <preferredSize width="240" height="33"/>
-                      <text value="Search by name or type!"/>
+                      <text value="Search by name!"/>
                     </properties>
                   </component>
                   <component id="8dc33" class="javax.swing.JButton" binding="devWeaponTabSearchButton">
                     <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
                     <properties>
@@ -224,7 +224,7 @@
                   </component>
                   <component id="c21d6" class="javax.swing.JButton" binding="devSaveAllWeapons">
                     <constraints>
-                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag top="0" left="20" bottom="0" right="0" weightx="1.0" weighty="0.0"/>
                     </constraints>
                     <properties>
@@ -232,6 +232,25 @@
                       <font name="Source Code Pro" style="1"/>
                       <foreground color="-394241"/>
                       <text value="SAVE all weapons"/>
+                    </properties>
+                  </component>
+                  <component id="9bb1d" class="javax.swing.JComboBox" binding="devFilterComboBox">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                      <gridbag top="0" left="0" bottom="0" right="20" weightx="1.0" weighty="0.0"/>
+                    </constraints>
+                    <properties>
+                      <background color="-2702645"/>
+                      <enabled value="true"/>
+                      <font name="Source Code Pro Black" style="1"/>
+                      <model>
+                        <item value="[ Filter ]"/>
+                        <item value="Claymore"/>
+                        <item value="Bow"/>
+                        <item value="Polearm"/>
+                        <item value="Sword"/>
+                        <item value="Catalyst"/>
+                      </model>
                     </properties>
                   </component>
                 </children>
