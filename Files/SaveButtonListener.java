@@ -23,10 +23,12 @@ public class SaveButtonListener implements ActionListener {
         JButton saveButton = (JButton) e.getSource();
         saveButton.setEnabled(false);
         Gson gson = new Gson();
-
-        File f_dir = new File(SAVE_LOCATION);
+        if (_characterCard.getWeapon().equalsIgnoreCase(ToolGUI.UNKNOWN_WEAPON_MESSAGE))
+        {
+            _characterCard.setWeapon("");
+            _characterCard.setWeaponStatus(false);
+        }
         File f = new File(SAVE_LOCATION + _characterCard.getCharacterName());
-        f_dir.mkdir();
         try{
             f.createNewFile();
             FileWriter fd = new FileWriter(f);

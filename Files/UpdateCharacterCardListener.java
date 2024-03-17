@@ -4,13 +4,13 @@ import static Files.ToolGUI.UNKNOWN_SET_MESSAGE;
 import static Files.ToolGUI.UNKNOWN_WEAPON_MESSAGE;
 import static javax.swing.DefaultButtonModel.SELECTED;
 
+import Files.ToolData.CHARACTER_CARD_DATA_FIELD;
+
 import javax.swing.JComboBox;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-
-import Files.ToolData.CHARACTER_CARD_DATA_FIELD;
 
 public class UpdateCharacterCardListener implements ActionListener, ItemListener {
     private final CharacterCard _characterCard;
