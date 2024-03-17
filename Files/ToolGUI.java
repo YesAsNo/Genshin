@@ -49,6 +49,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 public class ToolGUI extends JFrame implements ActionListener {
 
@@ -83,6 +86,9 @@ public class ToolGUI extends JFrame implements ActionListener {
     private final JPanel devWeaponTabScrollPanePanel = new JPanel();
     private static final List<CharacterCard> generatedCharacterCards = new ArrayList<>();
 
+    public static final Map<String, List<String>> farmedWeapons = new TreeMap<>();
+    public static final Map<String, List<String>> farmedArtifacts = new TreeMap<>();
+
     /**
      * Constructor of the GUI class.
      */
@@ -112,12 +118,14 @@ public class ToolGUI extends JFrame implements ActionListener {
         characterSelectorField = new JTextField();
         characterSelectorField.addMouseListener(new SearchBarListener());
         readGeneratedCharacterCards();
+        parseCharacterWeapons();
+        parseCharacterArtifacts();
     }
 
     /**
      * Reads character cards that have been saved in previous sessions.
      */
-    void readGeneratedCharacterCards() {
+    private void readGeneratedCharacterCards() {
         File f_dir = new File(SAVE_LOCATION);
         if (f_dir.mkdir()) {
             return;
@@ -131,11 +139,56 @@ public class ToolGUI extends JFrame implements ActionListener {
                 CharacterCard card = gson.fromJson(reader, CharacterCard.class);
                 card.setCharacterIcon();
                 generatedCharacterCards.add(card);
-            }
 
+            }
         } catch (IOException e) {
             System.out.println("Could not read saved character cards.");
         }
+    }
+
+    private void parseCharacterWeapons() {
+        for (CharacterCard characterCard : generatedCharacterCards) {
+            String charWeapon = characterCard.getWeapon();
+            if (!charWeapon.isEmpty() && characterCard.getWeaponStatus()) {
+                Set<String> keys = farmedWeapons.keySet();
+                if (keys.contains(charWeapon)) {
+                    farmedWeapons.get(charWeapon).add(characterCard.getCharacterName());
+                } else {
+                    List<String> chars = new ArrayList<>();
+                    chars.add(characterCard.getCharacterName());
+                    farmedWeapons.put(charWeapon, chars);
+                }
+            }
+        }
+        System.out.println(farmedWeapons.keySet().size());
+    }
+
+    private void parseCharacterArtifacts() {
+        for (CharacterCard characterCard : generatedCharacterCards) {
+            String charArtifactSet1 = characterCard.getArtifactSet1();
+            String charArtifactSet2 = characterCard.getArtifactSet2();
+            if (!charArtifactSet1.isEmpty() && characterCard.getArtifactSet1Status()) {
+                Set<String> keys = farmedArtifacts.keySet();
+                if (keys.contains(charArtifactSet1)) {
+                    farmedArtifacts.get(charArtifactSet1).add(characterCard.getCharacterName());
+                } else {
+                    List<String> chars = new ArrayList<>();
+                    chars.add(characterCard.getCharacterName());
+                    farmedArtifacts.put(charArtifactSet1, chars);
+                }
+            }
+            if (!charArtifactSet2.isEmpty() && characterCard.getArtifactSet2Status()) {
+                Set<String> keys = farmedArtifacts.keySet();
+                if (keys.contains(charArtifactSet2)) {
+                    farmedArtifacts.get(charArtifactSet2).add(characterCard.getCharacterName());
+                } else {
+                    List<String> chars = new ArrayList<>();
+                    chars.add(characterCard.getCharacterName());
+                    farmedArtifacts.put(charArtifactSet2, chars);
+                }
+            }
+        }
+        System.out.println(farmedArtifacts.keySet().size());
     }
 
     /**
