@@ -13,6 +13,7 @@ public class ToolData {
     public static Map<String, List<String>> mappingDomains = new TreeMap<>();
     public static List<String> artifactsFlattened = new ArrayList<>();
     public static Map<String, List<String>> weaponsRaritiesMap = new TreeMap<>();
+    public static List<String> weaponsFlattened = new ArrayList<>();
     public static Map<String, List<String>> characterWeaponsMap = new TreeMap<>();
     public static Map<String,String> artifactSetDescriptionsMap = new TreeMap<>();
 
@@ -79,7 +80,9 @@ public class ToolData {
         assert gson != null;
         assert reader != null;
         weaponsRaritiesMap = gson.fromJson(reader,weaponsRaritiesMap.getClass());
-
+        List<List<String>> val_arrays = new ArrayList<>(weaponsRaritiesMap.values());
+        val_arrays.forEach(weaponsFlattened::addAll);
+        Collections.sort(weaponsFlattened);
     }
     /**
      * Parses Character-Weapons mapping from the supplied json file.

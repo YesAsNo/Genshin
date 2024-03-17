@@ -35,7 +35,7 @@ public class UpdateLabelListener implements ActionListener {
                 icon = new ImageIcon(generateArtifactIconPath(ToolGUI.UNKNOWN_ARTIFACT));
             }
             else {
-                icon = new ImageIcon(ToolGUI.generateWeaponPath());
+                icon = new ImageIcon(ToolGUI.UNKNOWN_WEAPON_PATH);
             }
         }
         else

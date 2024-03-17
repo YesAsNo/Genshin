@@ -5,6 +5,7 @@ import static Files.ToolData.artifactSetDescriptionsMap;
 import static Files.ToolData.artifactsFlattened;
 import static Files.ToolData.characterWeaponsMap;
 import static Files.ToolData.charactersFlattened;
+import static Files.ToolData.weaponsFlattened;
 import static Files.ToolData.weaponsRaritiesMap;
 import Files.ToolData.RARITY;
 
@@ -42,8 +43,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.File;
 
 import java.io.FileReader;
@@ -56,7 +55,7 @@ public class ToolGUI extends JFrame implements ActionListener {
 
     public static final String NO_CHARACTERS_MATCH_MESSAGE = "No fighters >:(";
     public static final String UNKNOWN_CHARACTER_PLACEHOLDER_NAME = "unknown_character";
-    public static final int MAX_CHARACTERS_PER_LINE = 12;
+    public static final int MAX_CHARACTERS_PER_LINE = 15;
     public static final String TOOLTIP_FOR_LABELS_WITHOUT_ICON = "Here will be the chosen set name shown";
     public static final String TOOLTIP_FOR_LABELS_WITH_ICON = "Here will be the chosen set icon shown";
     public static final String TOOLTIP_FOR_WEAPON_NAME_LABEL = "Here will be the chosen weapon name shown";
@@ -66,6 +65,7 @@ public class ToolGUI extends JFrame implements ActionListener {
     public static final String FIVE_STAR_WEAPON_DELIMITER = "[ 5-Star Weapons ]";
     public static final String UNKNOWN_ARTIFACT = "unknown_artifact";
     public static final String UNKNOWN_WEAPON_MESSAGE = "[ Empty Weapon Selector ]";
+    public static final String UNKNOWN_WEAPON_PATH = "./Files/Images/Weapons/unknown_weapon.png";
     public static final String CLOSE_TEXT = "CLOSE";
     public static final int CHARACTER_LIMIT = 150;
 
@@ -78,7 +78,10 @@ public class ToolGUI extends JFrame implements ActionListener {
     private JTextField characterSelectorField;
     private JButton searchConfirmButton;
     private JPanel selectedCharacterPanel;
-    private JScrollPane scrollPane1;
+    private final JScrollPane characterSearchScrollPane = new JScrollPane();
+    private final JTextField devWeaponsTabSearchbar = new JTextField();
+    private final JButton devWeaponTabSearchButton = new JButton();
+    private final JPanel devWeaponTabScrollPanePanel = new JPanel();
     private static final List<CharacterCard> generatedCharacterCards = new ArrayList<>();
 
     /**
@@ -87,6 +90,7 @@ public class ToolGUI extends JFrame implements ActionListener {
 
     public ToolGUI() {
         $$$setupUI$$$();
+        setUpWeaponsPanel();
         setContentPane(panel1);
         setTitle("Genshin Domain App!");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -102,17 +106,12 @@ public class ToolGUI extends JFrame implements ActionListener {
     private void createUIComponents() {
         //Place custom component creation code here
         selectedCharacterPanel = new JPanel(new GridBagLayout());
-        scrollPane1 = new JScrollPane();
         panel1 = new JPanel();
-        searchConfirmButton = new JButton("✓");
+        searchConfirmButton = new JButton();
         searchConfirmButton.addActionListener(this);
+        devWeaponTabSearchButton.addActionListener(this);
         characterSelectorField = new JTextField();
-        characterSelectorField.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                characterSelectorField.setText("");
-            }
-        });
+        characterSelectorField.addMouseListener(new SearchBarListener());
         readGeneratedCharacterCards();
     }
 
@@ -133,7 +132,6 @@ public class ToolGUI extends JFrame implements ActionListener {
                 CharacterCard card = gson.fromJson(reader, CharacterCard.class);
                 card.setCharacterIcon();
                 generatedCharacterCards.add(card);
-
             }
 
         } catch (IOException e) {
@@ -148,23 +146,39 @@ public class ToolGUI extends JFrame implements ActionListener {
      */
     public void actionPerformed(ActionEvent e) {
 
-        String userFieldInput = characterSelectorField.getText().toLowerCase();
+        String userFieldInput;
         int matchedCount = 0;
-        selectedCharacterPanel.removeAll();
+        if (e.getSource() == searchConfirmButton) {
+            userFieldInput = characterSelectorField.getText().toLowerCase();
+            selectedCharacterPanel.removeAll();
+            for (String s : charactersFlattened) {
+                if (s.toLowerCase().contains(userFieldInput)) {
+                    if (!userFieldInput.isEmpty()) {
+                        generateCharacterButton(s, matchedCount);
+                    }
+                    matchedCount++;
 
-        for (String s : charactersFlattened) {
-            if (s.toLowerCase().contains(userFieldInput)) {
-                if (!userFieldInput.isEmpty()) {
-                    generateCharacterButton(s, matchedCount);
                 }
-                matchedCount++;
+            }
+        } else {
+            userFieldInput = devWeaponsTabSearchbar.getText().toLowerCase();
+            System.out.println("123455");
+            devWeaponTabScrollPanePanel.removeAll();
+            for (String s : weaponsFlattened) {
+                if (s.toLowerCase().contains(userFieldInput)) {
+                    if (!userFieldInput.isEmpty()) {
 
+                        generateWeaponCard(s, matchedCount);
+                    }
+                    matchedCount++;
+                }
             }
         }
+
         if (matchedCount == 0 || userFieldInput.isEmpty()) {
             generateCharacterButton(UNKNOWN_CHARACTER_PLACEHOLDER_NAME, matchedCount);
         } else {
-            scrollPane1.setViewportView(selectedCharacterPanel);
+            characterSearchScrollPane.setViewportView(selectedCharacterPanel);
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.gridx = 0;
             gbc.gridy = 1;
@@ -172,8 +186,8 @@ public class ToolGUI extends JFrame implements ActionListener {
             gbc.weightx = 1.0;
             gbc.weighty = 1.0;
             gbc.fill = GridBagConstraints.BOTH;
-            scrollPane1.updateUI();
-            characterTab.add(scrollPane1, gbc);
+            characterSearchScrollPane.updateUI();
+            characterTab.add(characterSearchScrollPane, gbc);
 
         }
 
@@ -244,11 +258,7 @@ public class ToolGUI extends JFrame implements ActionListener {
             characterCard = getCharacterCard(characterName);
         }
         characterButton.setIcon(characterCard.getCharacterIcon());
-        if (characterName.length() > MAX_CHARACTERS_PER_LINE) {
-            characterButton.setText(removeWhitespace(characterName));
-        } else {
-            characterButton.setText(characterName);
-        }
+        characterButton.setText(formatString(characterName));
         characterButton.setVerticalTextPosition(SwingConstants.BOTTOM);
         characterButton.setHorizontalTextPosition(SwingConstants.CENTER);
         setFont(characterButton);
@@ -346,8 +356,34 @@ public class ToolGUI extends JFrame implements ActionListener {
      * @param name the character name to be changed
      * @return edited string
      */
-    public String removeWhitespace(String name) {
-        return "<html><center>" + name.replace(" ", "<br>") + "</center></html>";
+    public String formatString(String name) {
+        final String HTML_BEGINNING = "<html><center>";
+        final String HTML_END = "</center></html>";
+        final String HTML_BREAK = "<br>";
+        if (name.length() <= MAX_CHARACTERS_PER_LINE) {
+            return HTML_BEGINNING + name + HTML_BREAK + " " + HTML_END;
+        }
+        List<Integer> whiteSpaceIndices = new ArrayList<>();
+
+        int whiteSpaceIndex = name.indexOf(' ');
+        while (whiteSpaceIndex >= 0) {
+            whiteSpaceIndices.add(whiteSpaceIndex);
+            if (whiteSpaceIndex + 1 >= name.length()) {
+                break;
+            } else {
+                whiteSpaceIndex = name.indexOf(' ', whiteSpaceIndex + 1);
+            }
+        }
+        if (whiteSpaceIndices.isEmpty()) {
+            return name;
+        } else if (whiteSpaceIndices.size() == 1) {
+            return HTML_BEGINNING + name.replace(" ", HTML_BREAK) + HTML_END;
+        } else {
+            int chosenIndex = whiteSpaceIndices.get(whiteSpaceIndices.size() / 2);
+            String namePart1 = name.substring(0, chosenIndex);
+            String namePart2 = name.substring(chosenIndex + 1);
+            return HTML_BEGINNING + namePart1 + HTML_BREAK + namePart2 + HTML_END;
+        }
 
     }
 
@@ -443,14 +479,12 @@ public class ToolGUI extends JFrame implements ActionListener {
         };
     }
 
-    /**
-     * Generates a path to the weapon icon for the "unknown weapon" placeholder
-     *
-     * @return the path
-     */
-
-    public static String generateWeaponPath() {
-        return "./Files/Images/Weapons/unknown_weapon.png";
+    public static String generateWeaponPath(String weaponName) {
+        WeaponInfo wi = lookUpWeaponRarityAndType(weaponName);
+        return switch (wi.getRarity()) {
+            case FOUR_STAR -> "./Files/Images/Weapons/" + wi.getWeaponType() + "_4star/" + weaponName + ".png";
+            case FIVE_STAR -> "./Files/Images/Weapons/" + wi.getWeaponType() + "_5star/" + weaponName + ".png";
+        };
     }
 
     private JPanel getMiddleSelectorPanel(JPanel jpanel) {
@@ -472,7 +506,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         return middleSelectorPanel;
     }
 
-    private JTextField getNotesTextField(CharacterCard selectedCharacterCard, JPanel jpanel) {
+    private void getNotesTextField(CharacterCard selectedCharacterCard, JPanel jpanel) {
         JTextField notesTextField = new JTextField();
         Font emptyNotesFieldTextFieldFont =
                 this.$$$getFont$$$("Source Code Pro", Font.BOLD, 14, notesTextField.getFont());
@@ -489,10 +523,9 @@ public class ToolGUI extends JFrame implements ActionListener {
                 new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL,
                         GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null,
                         new Dimension(50, -1), null, 0, false));
-        return notesTextField;
     }
 
-    private JLabel getCharacterNameLabel(String charName, JPanel jpanel) {
+    private void getCharacterNameLabel(String charName, JPanel jpanel) {
         JLabel characterNameLabel = new JLabel();
         characterNameLabel.setAutoscrolls(true);
         Font characterNameLabelFont =
@@ -505,7 +538,6 @@ public class ToolGUI extends JFrame implements ActionListener {
                 new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1,
                         false));
-        return characterNameLabel;
     }
 
     private JComboBox<String> getWeaponSelectionBox(CharacterCard characterCard, JPanel jpanel) {
@@ -685,7 +717,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         weaponIcon.setHorizontalTextPosition(4);
         String savedWeaponName = characterCard.getWeapon();
         if (savedWeaponName.isEmpty()) {
-            weaponIcon.setIcon(new ImageIcon(generateWeaponPath()));
+            weaponIcon.setIcon(new ImageIcon(UNKNOWN_WEAPON_PATH));
         } else {
             WeaponInfo weaponInfo = lookUpWeaponRarityAndType(savedWeaponName);
             weaponIcon.setIcon(new ImageIcon(generateWeaponPath(savedWeaponName, weaponInfo.getWeaponType(), weaponInfo.getRarity())));
@@ -701,7 +733,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         return weaponIcon;
     }
 
-    private JLabel getCharLabel(Icon charIcon, JPanel jpanel) {
+    private void getCharLabel(Icon charIcon, JPanel jpanel) {
         JLabel charLabel = new JLabel();
         charLabel.setIcon(charIcon);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -711,7 +743,6 @@ public class ToolGUI extends JFrame implements ActionListener {
         gbc.anchor = GridBagConstraints.SOUTHEAST;
         gbc.insets = new Insets(20, 0, 5, 20);
         jpanel.add(charLabel, gbc);
-        return charLabel;
     }
 
     private JLabel getSet1Icon(CharacterCard characterCard, JPanel jpanel) {
@@ -808,7 +839,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         return talentListingCheckBox;
     }
 
-    private JLabel getDomainListingsLabel(JPanel jpanel) {
+    private void getDomainListingsLabel(JPanel jpanel) {
         JLabel domainListingsLabel = new JLabel();
         Font domainListingsLabelFont =
                 this.$$$getFont$$$("Source Code Pro", Font.BOLD, 18, domainListingsLabel.getFont());
@@ -820,7 +851,6 @@ public class ToolGUI extends JFrame implements ActionListener {
                 new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
                         false));
-        return domainListingsLabel;
     }
 
     private JCheckBox getWeaponMaterialListingCheckbox(CharacterCard characterCard, JPanel jpanel) {
@@ -899,8 +929,8 @@ public class ToolGUI extends JFrame implements ActionListener {
         assert characterCard != null;
         templateTab.setLayout(new GridBagLayout());
         JPanel middleSelectorPanel = getMiddleSelectorPanel(templateTab);
-        JTextField notesTextField = getNotesTextField(characterCard, middleSelectorPanel);
-        JLabel characterNameLabel = getCharacterNameLabel(characterCard.getCharacterName(), middleSelectorPanel);
+        getNotesTextField(characterCard, middleSelectorPanel);
+        getCharacterNameLabel(characterCard.getCharacterName(), middleSelectorPanel);
         JComboBox<String> weaponSelectionBox = getWeaponSelectionBox(characterCard, middleSelectorPanel);
         JLabel weaponNameLabel = getWeaponNameLabel(characterCard, middleSelectorPanel);
         JLabel set1NameLabel = getSet1NameLabel(characterCard, middleSelectorPanel);
@@ -918,7 +948,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         weaponSelectionBox.addActionListener(new UpdateLabelListener(weaponNameLabel, weaponIconLabel, ToolData.SELECTION_BOX_TYPE.WEAPON));
         weaponSelectionBox.addActionListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.WEAPON));
         weaponNameLabel.setToolTipText(TOOLTIP_FOR_WEAPON_NAME_LABEL);
-        JLabel charLabel = getCharLabel(characterCard.getCharacterIcon(), templateTab);
+        getCharLabel(characterCard.getCharacterIcon(), templateTab);
         JLabel set1Icon = getSet1Icon(characterCard, templateTab);
         JLabel set2Icon = getSet2Icon(characterCard, templateTab);
 
@@ -930,7 +960,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         JPanel checkboxAndButtonPanel = getCheckboxAndButtonPanel(templateTab);
         JCheckBox artifactListingCheckBox = getArtifactListingCheckBox(characterCard, checkboxAndButtonPanel);
         JCheckBox talentListingCheckBox = getTalentListingCheckBox(characterCard, checkboxAndButtonPanel);
-        JLabel domainListingsLabel = getDomainListingsLabel(checkboxAndButtonPanel);
+        getDomainListingsLabel(checkboxAndButtonPanel);
         JCheckBox weaponMaterialListingCheckbox = getWeaponMaterialListingCheckbox(characterCard, checkboxAndButtonPanel);
 
         artifactListingCheckBox.addItemListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_SET_ONE));
@@ -952,34 +982,13 @@ public class ToolGUI extends JFrame implements ActionListener {
         return templateTab;
     }
 
-    private void setUpWeaponsPanel() {
-        JPanel devWeaponTabPanel = new JPanel();
-        devWeaponTabPanel.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.gridwidth = 3;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;
-        weaponsTab.add(devWeaponTabPanel, gbc);
-        JScrollPane devWeaponTabScrollPane = new JScrollPane();
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;
-        devWeaponTabPanel.add(devWeaponTabScrollPane, gbc);
-        JPanel devWeaponTabScrollPanePanel = new JPanel();
-        devWeaponTabScrollPanePanel.setLayout(new GridBagLayout());
-        devWeaponTabScrollPane.setViewportView(devWeaponTabScrollPanePanel);
+    private void generateWeaponCard(String weaponName, int matchedCount) {
         JPanel devWeaponCard = new JPanel();
         devWeaponCard.setLayout(new GridLayoutManager(2, 2, new Insets(5, 5, 5, 5), -1, -1));
         devWeaponCard.setBackground(new Color(-1));
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = matchedCount % 3;
+        gbc.gridy = (matchedCount - gbc.gridx) / 3;
         gbc.anchor = GridBagConstraints.NORTH;
         gbc.insets = new Insets(10, 10, 10, 10);
         devWeaponTabScrollPanePanel.add(devWeaponCard, gbc);
@@ -992,8 +1001,8 @@ public class ToolGUI extends JFrame implements ActionListener {
         }
         devWeaponIcon.setHorizontalAlignment(0);
         devWeaponIcon.setHorizontalTextPosition(0);
-        devWeaponIcon.setIcon(new ImageIcon(generateWeaponPath()));
-        devWeaponIcon.setText(UNKNOWN_WEAPON_MESSAGE);
+        devWeaponIcon.setIcon(new ImageIcon(generateWeaponPath(weaponName)));
+        devWeaponIcon.setText(formatString(weaponName));
         devWeaponIcon.setVerticalAlignment(0);
         devWeaponIcon.setVerticalTextPosition(3);
         devWeaponCard.add(devWeaponIcon,
@@ -1015,7 +1024,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         }
         devWepMaterialPreview.setHorizontalAlignment(0);
         devWepMaterialPreview.setHorizontalTextPosition(0);
-        devWepMaterialPreview.setIcon(new ImageIcon(generateWeaponPath()));
+        devWepMaterialPreview.setIcon(new ImageIcon(UNKNOWN_WEAPON_PATH));
         devWepMaterialPreview.setText("");
         devWepMaterialPreview.setVerticalAlignment(0);
         devWepMaterialPreview.setVerticalTextPosition(3);
@@ -1028,12 +1037,36 @@ public class ToolGUI extends JFrame implements ActionListener {
         if (devWepTypeLabelFont != null) {
             devWepTypeLabel.setFont(devWepTypeLabelFont);
         }
-        devWepTypeLabel.setText("Type: Bow ");
+        devWepTypeLabel.setText("Type: " + lookUpWeaponRarityAndType(weaponName).getWeaponType());
         devWeaponCard.add(devWepTypeLabel,
                 new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
                         false));
-        JTextField devWeaponsTabSearchbar = new JTextField();
+    }
+
+    private void setUpWeaponsPanel() {
+        JPanel devWeaponTabPanel = new JPanel();
+        devWeaponTabPanel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 3;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        weaponsTab.add(devWeaponTabPanel, gbc);
+        JScrollPane devWeaponTabScrollPane = new JScrollPane();
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        devWeaponTabPanel.add(devWeaponTabScrollPane, gbc);
+        devWeaponTabScrollPanePanel.setLayout(new GridBagLayout());
+        devWeaponTabScrollPane.setViewportView(devWeaponTabScrollPanePanel);
+        devWeaponTabScrollPane.updateUI();
+
         devWeaponsTabSearchbar.setEnabled(true);
         Font devWeaponsTabSearchbarFont =
                 this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 18, devWeaponsTabSearchbar.getFont());
@@ -1045,13 +1078,14 @@ public class ToolGUI extends JFrame implements ActionListener {
         devWeaponsTabSearchbar.setMinimumSize(new Dimension(240, 33));
         devWeaponsTabSearchbar.setPreferredSize(new Dimension(240, 33));
         devWeaponsTabSearchbar.setText("Search by name or type!");
+        devWeaponsTabSearchbar.addMouseListener(new SearchBarListener());
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 1.0;
         gbc.anchor = GridBagConstraints.EAST;
         weaponsTab.add(devWeaponsTabSearchbar, gbc);
-        JButton devWeaponTabSearchButton = new JButton();
+
         devWeaponTabSearchButton.setMaximumSize(new Dimension(30, 30));
         devWeaponTabSearchButton.setMinimumSize(new Dimension(30, 30));
         devWeaponTabSearchButton.setPreferredSize(new Dimension(50, 30));
@@ -1171,7 +1205,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         gbc.insets = new Insets(0, 250, 0, 0);
         characterTab.add(characterSelectorField, gbc);
         weaponsTab = new JPanel();
-        weaponsTab.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        weaponsTab.setLayout(new GridBagLayout());
         weaponsTab.setBackground(new Color(-1));
         characterTabPane.addTab("Weapons", weaponsTab);
     }

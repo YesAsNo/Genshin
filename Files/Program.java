@@ -292,7 +292,7 @@ public class Program extends JFrame implements ActionListener {
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
                         false));
         devPanelWithMainTabbedPane = new JPanel();
-        devPanelWithMainTabbedPane.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        devPanelWithMainTabbedPane.setLayout(new GridBagLayout());
         devPanelWithMainTabbedPane.setBackground(new Color(-3689540));
         devMainPanel.add(devPanelWithMainTabbedPane,
                 new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
@@ -305,11 +305,14 @@ public class Program extends JFrame implements ActionListener {
             devTabbedPane.setFont(devTabbedPaneFont);
         }
         devTabbedPane.setTabPlacement(1);
-        devPanelWithMainTabbedPane.add(devTabbedPane,
-                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null,
-                        new Dimension(200, 200), null, 0, false));
+        GridBagConstraints gbc;
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        devPanelWithMainTabbedPane.add(devTabbedPane, gbc);
         devCharacterTab = new JPanel();
         devCharacterTab.setLayout(new GridBagLayout());
         devCharacterTab.setBackground(new Color(-1));
@@ -322,7 +325,6 @@ public class Program extends JFrame implements ActionListener {
         devCharacterTab.setOpaque(true);
         devCharacterTab.setRequestFocusEnabled(true);
         devTabbedPane.addTab("Characters", devCharacterTab);
-        GridBagConstraints gbc;
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 1;
