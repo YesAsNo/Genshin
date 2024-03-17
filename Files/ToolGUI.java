@@ -134,7 +134,7 @@ public class ToolGUI extends JFrame implements ActionListener {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Could not read saved character cards.");
         }
     }
 
@@ -659,15 +659,6 @@ public class ToolGUI extends JFrame implements ActionListener {
         return set2NameLabel;
     }
 
-    /*private void uselessButton(JPanel jpanel) {
-        JButton addAnotherSetButton = new JButton();
-        addAnotherSetButton.setText("Add another set?");
-        jpanel.add(addAnotherSetButton,
-                new GridConstraints(8, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-                        GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-    }*/
-
     private void getCharacterWeaponSpacer(JPanel jpanel) {
         JPanel characterWeaponSpacer = new JPanel();
         characterWeaponSpacer.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 40, 0), -1, -1));
@@ -935,7 +926,6 @@ public class ToolGUI extends JFrame implements ActionListener {
         JComboBox<String> set2ComboBox = getSet2ComboBox(characterCard, middleSelectorPanel);
         JLabel set2NameLabel = getSet2NameLabel(characterCard, middleSelectorPanel);
 
-        //uselessButton(middleSelectorPanel);
         getCharacterWeaponSpacer(middleSelectorPanel);
         getWeaponSet1Spacer(middleSelectorPanel);
         getSet2Spacer(middleSelectorPanel);
