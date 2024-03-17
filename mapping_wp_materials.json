@@ -10,28 +10,45 @@
     "Sacrificial Bow", "Sacrificial Greatsword", "Sword of Descension", "The Black Sword", "The Flute", "The Widsith",
     "Wine and Song"],
 
-  "All Branch of a Distant Sea": [],
+  "All Branch of a Distant Sea": ["Everlasting Moonglow", "Mistsplitter Reforged", "Akuoumaru", "Amenoma Kageuchi",
+    "Hakushin Ring", "Oathsworn Eye", "Uraku Misugiri"],
 
-  "All Dandelion Gladiator": [],
+  "All Dandelion Gladiator": ["Amos' Bow", "Freedom-Sworn", "Lost Prayer to the Sacred Winds", "Skyward Spine",
+    "Wolf's Gravestone", "Alley Hunter", "Favonius Greatsword", "Favonius Lance", "Favonius Warbow", "Festering Desire",
+    "Frostbearer", "Mailed Flower", "Royal Bow", "Royal Greatsword", "Sacrificial Fragments", "Sacrificial Sword",
+    "Windblume Ode"],
 
-  "All Decarabian's": [],
+  "All Decarabian's": ["Aquila Favonia", "Song of Broken Pines", "Cinnabar Spindle", "Favonius Codex", "Favonius Sword",
+    "Mitternachts Waltz", "Royal Grimoire", "Royal Longsword", "Snow-Tombed Starsilver", "The Alley Flash", "The Bell",
+    "The Stringless", "The Viridescent Hunt", "Wolf-Fang"],
 
-  "All Goblet of the Pristine Sea": [],
+  "All Goblet of the Pristine Sea": ["Cashflow Supervision", "Ballad of the Fjords", "Portable Power Saw",
+    "Rightful Reward", "Tidal Shadow", "Ultimate Overlord's Mega Magic Sword"],
 
-  "All Guyun": [],
+  "All Guyun": ["Aqua Simulacra", "Jadefall's Splendor", "Primordial Jade Winged-Spear", "Summit Shaper",
+    "Blackcliff Agate", "Blackcliff Longsword", "Blackcliff Warbow", "Crescent Pike", "Lion's Roar", "Lithic Blade",
+    "Rust", "Sacrificial Jade", "Solar Pearl", "Whiteblind"],
 
-  "All Masks": [],
+  "All Masks": ["Engulfing Lightning", "Kagura's Verity", "Polar Star", "Kagotsurube Isshin", "Kitain Cross Spear",
+    "The Catch", "Wavebreaker's Fin"],
 
-  "All Mist Veiled Elixir": [],
+  "All Mist Veiled Elixir": ["Calamity Queller", "Crane's Echoing Call", "Primordial Jade Cutter", "The Unforged",
+    "Blackcliff Pole", "Blackcliff Slasher", "Dragon's Bane", "Eye of Perception", "Prototype Amber",
+    "Prototype Crescent", "Prototype Rancour", "Rainslasher", "Royal Spear"],
 
-  "All Narukami's": [],
+  "All Narukami's": ["Haran Geppaku Futsu", "Redhorn Stonethresher", "Thundering Pulse", "Hamayumi",
+    "Katsuragikiri Nagamasa", "Mouun's Moon", "Predator", "Toukabou Shigure"],
 
-  "All Oasis Garden's": [],
+  "All Oasis Garden's": ["A Thousand Floating Dreams", "Staff of the Scarlet Sands", "Fruit of Fulfillment",
+    "Moonpiercer", "Talking Stick", "Wandering Evenstar"],
 
-  "All Pure Sacred Dewdrop": [],
+  "All Pure Sacred Dewdrop": ["Splendor of Tranquil Waters", "Tome of the Eternal Flow", "Finale of the Deep",
+    "Flowing Purity", "The Dockhand's Assistant"],
 
-  "All Scorching Might": [],
+  "All Scorching Might": ["Beacon of the Reed Sea", "Hunter's Path", "Tulaytullah's Remembrance", "End of the Line",
+    "King's Squire", "Makhaira Aquamarine", "Scion of the Blazing Sun"],
 
-  "All Talisman of the Forest Dew": []
+  "All Talisman of the Forest Dew": ["Key of Khaj-Nisut", "Light of Foliar Incision", "Dialogues of the Desert Sages",
+    "Forest Regalia", "Ibis Piercer", "Sapwood Blade", "Xiphos' Moonlight"]
 
 }
