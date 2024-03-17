@@ -659,14 +659,14 @@ public class ToolGUI extends JFrame implements ActionListener {
         return set2NameLabel;
     }
 
-    private void uselessButton(JPanel jpanel) {
+    /*private void uselessButton(JPanel jpanel) {
         JButton addAnotherSetButton = new JButton();
         addAnotherSetButton.setText("Add another set?");
         jpanel.add(addAnotherSetButton,
                 new GridConstraints(8, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                         GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-    }
+    }*/
 
     private void getCharacterWeaponSpacer(JPanel jpanel) {
         JPanel characterWeaponSpacer = new JPanel();
@@ -690,7 +690,7 @@ public class ToolGUI extends JFrame implements ActionListener {
 
     private void getSet2Spacer(JPanel jpanel) {
         JPanel secondSetSpacer = new JPanel();
-        secondSetSpacer.setLayout(new GridLayoutManager(1, 1, new Insets(15, 0, 0, 0), -1, -1));
+        secondSetSpacer.setLayout(new GridLayoutManager(1, 1, new Insets(48, 0, 0, 0), -1, -1));
         jpanel.add(secondSetSpacer,
                 new GridConstraints(9, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
@@ -700,7 +700,7 @@ public class ToolGUI extends JFrame implements ActionListener {
 
     private void getYetAnotherSpacerOnTheBottom(JPanel jpanel) {
         JPanel bottomSpacer = new JPanel();
-        bottomSpacer.setLayout(new GridLayoutManager(1, 1, new Insets(40, 0, 0, 0), -1, -1));
+        bottomSpacer.setLayout(new GridLayoutManager(1, 1, new Insets(40, 0, 20, 0), -1, -1));
         jpanel.add(bottomSpacer,
                 new GridConstraints(12, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
@@ -935,7 +935,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         JComboBox<String> set2ComboBox = getSet2ComboBox(characterCard, middleSelectorPanel);
         JLabel set2NameLabel = getSet2NameLabel(characterCard, middleSelectorPanel);
 
-        uselessButton(middleSelectorPanel);
+        //uselessButton(middleSelectorPanel);
         getCharacterWeaponSpacer(middleSelectorPanel);
         getWeaponSet1Spacer(middleSelectorPanel);
         getSet2Spacer(middleSelectorPanel);
