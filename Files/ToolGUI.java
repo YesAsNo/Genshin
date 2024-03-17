@@ -158,6 +158,22 @@ public class ToolGUI extends JFrame implements ActionListener {
                     matchedCount++;
 
                 }
+
+            }
+            if (matchedCount == 0 || userFieldInput.isEmpty()) {
+                generateCharacterButton(UNKNOWN_CHARACTER_PLACEHOLDER_NAME, matchedCount);
+            } else {
+                characterSearchScrollPane.setViewportView(selectedCharacterPanel);
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.gridx = 0;
+                gbc.gridy = 1;
+                gbc.gridwidth = 3;
+                gbc.weightx = 1.0;
+                gbc.weighty = 1.0;
+                gbc.fill = GridBagConstraints.BOTH;
+                characterSearchScrollPane.updateUI();
+                characterTab.add(characterSearchScrollPane, gbc);
+
             }
         } else {
             userFieldInput = devWeaponsTabSearchbar.getText().toLowerCase();
@@ -172,23 +188,6 @@ public class ToolGUI extends JFrame implements ActionListener {
                 }
             }
         }
-
-        if (matchedCount == 0 || userFieldInput.isEmpty()) {
-            generateCharacterButton(UNKNOWN_CHARACTER_PLACEHOLDER_NAME, matchedCount);
-        } else {
-            characterSearchScrollPane.setViewportView(selectedCharacterPanel);
-            GridBagConstraints gbc = new GridBagConstraints();
-            gbc.gridx = 0;
-            gbc.gridy = 1;
-            gbc.gridwidth = 3;
-            gbc.weightx = 1.0;
-            gbc.weighty = 1.0;
-            gbc.fill = GridBagConstraints.BOTH;
-            characterSearchScrollPane.updateUI();
-            characterTab.add(characterSearchScrollPane, gbc);
-
-        }
-
     }
 
     /**
