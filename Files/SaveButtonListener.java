@@ -28,6 +28,16 @@ public class SaveButtonListener implements ActionListener {
             _characterCard.setWeapon("");
             _characterCard.setWeaponStatus(false);
         }
+        if (_characterCard.getArtifactSet1().equalsIgnoreCase(ToolGUI.UNKNOWN_SET_MESSAGE))
+        {
+            _characterCard.setArtifactSet1("");
+            _characterCard.setArtifactSet1Status(false);
+        }
+        if (_characterCard.getArtifactSet2().equalsIgnoreCase(ToolGUI.UNKNOWN_SET_MESSAGE))
+        {
+            _characterCard.setArtifactSet2("");
+            _characterCard.setArtifactSet2Status(false);
+        }
         File f = new File(SAVE_LOCATION + _characterCard.getCharacterName());
         try{
             f.createNewFile();
