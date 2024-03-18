@@ -419,7 +419,7 @@ public class Program extends JFrame implements ActionListener {
             devPrecisi0nLabel.setFont(devPrecisi0nLabelFont);
         }
         devPrecisi0nLabel.setForeground(new Color(-11071434));
-        devPrecisi0nLabel.setText("Precisi0n");
+        devPrecisi0nLabel.setText("precisi0n");
         devBasicInfoLeftPanel.add(devPrecisi0nLabel,
                 new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,

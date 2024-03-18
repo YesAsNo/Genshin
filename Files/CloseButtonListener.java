@@ -10,7 +10,7 @@ public class CloseButtonListener implements ActionListener {
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-        _cardGUI.dispose();
+        _cardGUI.setVisible(false);
 
     }
 }

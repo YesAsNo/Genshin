@@ -354,8 +354,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         characterButton.setContentAreaFilled(false);
         characterButton.addActionListener(e -> {
             if (isWindowAlreadyOpen(characterName)) {
-                System.out.println("123456");
-                getOpenWindow(characterName).toFront();
+                getOpenWindow(characterName).setVisible(true);
             } else {
                 new CharacterCardGUI(characterCard);
             }
@@ -381,7 +380,6 @@ public class ToolGUI extends JFrame implements ActionListener {
 
     public boolean isWindowAlreadyOpen(String charName) {
         Frame[] createdWindows = Frame.getFrames();
-        System.out.println(createdWindows.length);
         for (Frame window : createdWindows) {
             if (window != null && window.getTitle().contains(charName)) {
                 return true;
