@@ -2,6 +2,7 @@ package Files;
 
 import static Files.ToolGUI.UNKNOWN_SET_MESSAGE;
 import static Files.ToolGUI.UNKNOWN_WEAPON_MESSAGE;
+import static Files.ToolGUI.updateFarmedArtifacts;
 import static javax.swing.DefaultButtonModel.SELECTED;
 
 import Files.ToolData.CHARACTER_CARD_DATA_FIELD;
@@ -54,9 +55,27 @@ public class UpdateCharacterCardListener implements ActionListener, ItemListener
     }
     @Override
     public void itemStateChanged(ItemEvent e) {
+        boolean currentStatus;
+        String artifactSetName = "";
         switch(_changedData){
-            case FARMING_SET_ONE: _characterCard.setArtifactSet1Status(convertStateChangeToBool(e.getStateChange()));return;
-            case FARMING_SET_TWO: _characterCard.setArtifactSet2Status(convertStateChangeToBool(e.getStateChange()));return;
+            case FARMING_SET_ONE:
+                currentStatus = convertStateChangeToBool(e.getStateChange());
+                _characterCard.setArtifactSet1Status(currentStatus);
+                artifactSetName= _characterCard.getArtifactSet1();
+                if (!artifactSetName.isEmpty())
+                {
+                    updateFarmedArtifacts(artifactSetName,_characterCard.getCharacterName(),currentStatus);
+                }
+                return;
+            case FARMING_SET_TWO:
+                currentStatus = convertStateChangeToBool(e.getStateChange());
+                _characterCard.setArtifactSet2Status(currentStatus);
+                artifactSetName = _characterCard.getArtifactSet2();
+                if (!artifactSetName.isEmpty())
+                {
+                    updateFarmedArtifacts(artifactSetName,_characterCard.getCharacterName(),currentStatus);
+                }
+                return;
             case FARMING_TALENT_MATERIALS: _characterCard.setTalentStatus(convertStateChangeToBool(e.getStateChange()));return;
             case FARMING_WEAPON_MATERIALS: _characterCard.setWeaponStatus(convertStateChangeToBool(e.getStateChange()));return;
             default:

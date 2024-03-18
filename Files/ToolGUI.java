@@ -260,14 +260,28 @@ public class ToolGUI extends JFrame implements ActionListener {
             }
         }
     }
-    /*public void updateFarmedArtifacts(String setName, String charName, boolean isFarming){
+    public static void updateFarmedArtifacts(String setName, String charName, boolean isFarming){
         if (farmedArtifacts.containsKey(setName)){
             List <String> charactersFarmingSet = farmedArtifacts.get(setName);
-            if (charactersFarmingSet.contains(charName) && isFarming){
-
+            if (charactersFarmingSet.contains(charName)){
+                if(!isFarming){
+                    charactersFarmingSet.remove(charName);
+                }
+            }
+            else{
+                if(isFarming){
+                    charactersFarmingSet.add(charName);
+                }
             }
         }
-    }*/
+        else{
+            if (isFarming){
+                List <String> charactersFarmingSet = new ArrayList<>();
+                charactersFarmingSet.add(charName);
+                farmedArtifacts.put(setName,charactersFarmingSet);
+            }
+        }
+    }
     /**
      * Generates a character button for the character specified by name and the index of the match.
      *
