@@ -16,6 +16,7 @@ public class ToolData {
     public static List<String> weaponsFlattened = new ArrayList<>();
     public static Map<String, List<String>> characterWeaponsMap = new TreeMap<>();
     public static Map<String,String> artifactSetDescriptionsMap = new TreeMap<>();
+    public static Map<String,List<String>> weaponMaterialMap = new TreeMap<>();
 
     private static final String PATH_TO_CHARACTER_JSON = "./characters.json";
     private static final String PATH_TO_WEAPONS_JSON = "./weapons.json";
@@ -23,6 +24,7 @@ public class ToolData {
     private static final String PATH_TO_CHARACTER_MAPPINGS = "./mapping_characters.json";
     private static final String PATH_TO_ARTIFACT_SET_MAPPINGS = "./set_descriptions.json";
     public static final String SAVE_LOCATION = "./UserData/";
+    public static final String  PATH_TO_WEAPON_MATERIAL_MAPPINGS = "./mapping_wp_materials.json";
 
     public enum RARITY {
         FIVE_STAR,
@@ -105,6 +107,11 @@ public class ToolData {
         assert reader != null;
         artifactSetDescriptionsMap = gson.fromJson(reader,artifactSetDescriptionsMap.getClass());
     }
+    private static void parseWeaponMaterialMapping(Gson gson,JsonReader reader){
+        assert gson != null;
+        assert reader != null;
+        weaponMaterialMap = gson.fromJson(reader,weaponMaterialMap.getClass());
+    }
 
     public static void main(String[] args) throws Exception {
 
@@ -114,8 +121,9 @@ public class ToolData {
         parseWeapons(gson, new JsonReader(new FileReader(PATH_TO_WEAPONS_JSON)));
         parseCharacterMapping(gson, new JsonReader(new FileReader(PATH_TO_CHARACTER_MAPPINGS)));
         parseArtifactSetDescriptionMapping(gson, new JsonReader(new FileReader(PATH_TO_ARTIFACT_SET_MAPPINGS)));
-        //new ToolGUI();
-        new Program();
+        parseWeaponMaterialMapping(gson, new JsonReader(new FileReader(PATH_TO_WEAPON_MATERIAL_MAPPINGS)));
+        new ToolGUI();
+        //new Program();
 
         }
     }
