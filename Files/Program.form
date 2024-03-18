@@ -3,7 +3,7 @@
   <grid id="27dc6" binding="devMainPanel" custom-create="true" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="1058" height="667"/>
+      <xy x="20" y="20" width="1058" height="764"/>
     </constraints>
     <properties>
       <background color="-2702645"/>
@@ -48,6 +48,31 @@
             </properties>
             <border type="none"/>
             <children>
+              <grid id="fdec9" binding="devWelcomeTab" layout-manager="GridBagLayout">
+                <constraints>
+                  <tabbedpane title="Basic Info"/>
+                </constraints>
+                <properties>
+                  <background color="-1"/>
+                  <enabled value="true"/>
+                  <focusCycleRoot value="false"/>
+                  <font/>
+                  <opaque value="true"/>
+                  <requestFocusEnabled value="true"/>
+                </properties>
+                <border type="none"/>
+                <children>
+                  <grid id="2951a" layout-manager="GridBagLayout">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="1.0" weighty="1.0"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
+                </children>
+              </grid>
               <grid id="28c03" binding="devCharacterTab" layout-manager="GridBagLayout">
                 <constraints>
                   <tabbedpane title="Characters"/>
@@ -255,6 +280,87 @@
                   </component>
                 </children>
               </grid>
+              <grid id="3a4d3" binding="devDomainsTab" layout-manager="GridBagLayout">
+                <constraints>
+                  <tabbedpane title="Domains"/>
+                </constraints>
+                <properties>
+                  <background color="-1"/>
+                </properties>
+                <border type="none"/>
+                <children>
+                  <grid id="1eb11" binding="devDomainsTabPanel" layout-manager="GridBagLayout">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="4" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="1.0" weighty="1.0"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <scrollpane id="7986d" binding="devDomainsScrollPane">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="1.0" weighty="1.0"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <grid id="73979" binding="devDomainsPanelForEverything" layout-manager="GridBagLayout">
+                            <constraints/>
+                            <properties/>
+                            <border type="none"/>
+                            <children/>
+                          </grid>
+                        </children>
+                      </scrollpane>
+                    </children>
+                  </grid>
+                  <component id="752a8" class="javax.swing.JTextField">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="0.0" weighty="0.0"/>
+                    </constraints>
+                    <properties>
+                      <enabled value="true"/>
+                      <font name="Source Code Pro Black" size="18" style="1"/>
+                      <inheritsPopupMenu value="false"/>
+                      <maximumSize width="240" height="33"/>
+                      <minimumSize width="240" height="33"/>
+                      <preferredSize width="240" height="33"/>
+                      <text value="Search by name!"/>
+                    </properties>
+                  </component>
+                  <component id="1c477" class="javax.swing.JButton">
+                    <constraints>
+                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="1.0" weighty="0.0"/>
+                    </constraints>
+                    <properties>
+                      <maximumSize width="30" height="30"/>
+                      <minimumSize width="30" height="30"/>
+                      <preferredSize width="50" height="30"/>
+                      <text value="✓"/>
+                    </properties>
+                  </component>
+                  <component id="a1e11" class="javax.swing.JComboBox">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                      <gridbag top="0" left="0" bottom="0" right="20" weightx="1.0" weighty="0.0"/>
+                    </constraints>
+                    <properties>
+                      <background color="-2702645"/>
+                      <enabled value="true"/>
+                      <font name="Source Code Pro Black" style="1"/>
+                      <model>
+                        <item value="[ Filter ]"/>
+                        <item value="Artifacts"/>
+                        <item value="Talents"/>
+                        <item value="Weapons"/>
+                      </model>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
               <grid id="bc306" binding="devCharacterCardMainPanel" layout-manager="GridBagLayout">
                 <constraints>
                   <tabbedpane title="Untitled"/>
@@ -262,7 +368,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <grid id="a9cc6" binding="devCharacterCardSelectorPanel" layout-manager="GridLayoutManager" row-count="12" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                  <grid id="a9cc6" binding="devCharacterCardSelectorPanel" layout-manager="GridLayoutManager" row-count="16" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="5" left="5" bottom="5" right="5"/>
                     <constraints>
                       <grid row="0" column="1" row-span="5" col-span="1" vsize-policy="3" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
@@ -301,7 +407,7 @@
                       </component>
                       <component id="6c46e" class="javax.swing.JComboBox" binding="devWeaponSelectorBox">
                         <constraints>
-                          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="2" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="2" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
                           <autoscrolls value="false"/>
@@ -316,7 +422,7 @@
                       </component>
                       <component id="a93e3" class="javax.swing.JLabel" binding="devWeaponNameLabel">
                         <constraints>
-                          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
+                          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
                         </constraints>
                         <properties>
                           <autoscrolls value="true"/>
@@ -326,7 +432,7 @@
                       </component>
                       <component id="d04c6" class="javax.swing.JLabel" binding="devSet1NameLabel">
                         <constraints>
-                          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="1" use-parent-layout="false">
+                          <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="1" use-parent-layout="false">
                             <preferred-size width="177" height="23"/>
                           </grid>
                         </constraints>
@@ -345,7 +451,7 @@
                       </component>
                       <component id="eb157" class="javax.swing.JComboBox" binding="devSet1SelectionBox">
                         <constraints>
-                          <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="2" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="2" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
                           <autoscrolls value="false"/>
@@ -360,7 +466,7 @@
                       </component>
                       <component id="d2d9d" class="javax.swing.JComboBox" binding="devSet2SelectionBox">
                         <constraints>
-                          <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="2" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <grid row="13" column="0" row-span="1" col-span="1" vsize-policy="2" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
                           <autoscrolls value="false"/>
@@ -375,7 +481,7 @@
                       </component>
                       <component id="6c0bf" class="javax.swing.JLabel" binding="devSet2NameLabel">
                         <constraints>
-                          <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="1" use-parent-layout="false">
+                          <grid row="12" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="1" use-parent-layout="false">
                             <preferred-size width="177" height="23"/>
                           </grid>
                         </constraints>
@@ -386,34 +492,25 @@
                         </properties>
                       </component>
                       <grid id="23989" binding="devTopSpacer" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                        <margin top="0" left="0" bottom="40" right="0"/>
+                        <margin top="0" left="0" bottom="7" right="0"/>
                         <constraints>
-                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties/>
                         <border type="none"/>
                         <children/>
                       </grid>
                       <grid id="738ea" binding="devWeaponSet1Spacer" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                        <margin top="48" left="0" bottom="0" right="0"/>
+                        <margin top="15" left="0" bottom="0" right="0"/>
                         <constraints>
-                          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                          <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties/>
                         <border type="none"/>
                         <children/>
                       </grid>
                       <grid id="4d39f" binding="devSet1Set2Spacer" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                        <margin top="43" left="0" bottom="0" right="0"/>
-                        <constraints>
-                          <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties/>
-                        <border type="none"/>
-                        <children/>
-                      </grid>
-                      <grid id="85f27" binding="devBottomSpacer" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                        <margin top="43" left="0" bottom="0" right="0"/>
+                        <margin top="15" left="0" bottom="0" right="0"/>
                         <constraints>
                           <grid row="11" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                         </constraints>
@@ -421,6 +518,51 @@
                         <border type="none"/>
                         <children/>
                       </grid>
+                      <grid id="85f27" binding="devBottomSpacer" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="20" left="0" bottom="0" right="0"/>
+                        <constraints>
+                          <grid row="15" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children/>
+                      </grid>
+                      <component id="75f09" class="javax.swing.JCheckBox" binding="devArtifact1ListingCheckBox">
+                        <constraints>
+                          <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <font name="Source Code Pro" size="14"/>
+                          <text value="Set 1 Listing"/>
+                        </properties>
+                      </component>
+                      <component id="fe958" class="javax.swing.JCheckBox" binding="devArtifact2ListingCheckBox">
+                        <constraints>
+                          <grid row="14" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <font name="Source Code Pro" size="14"/>
+                          <text value="Set 2 Listing"/>
+                        </properties>
+                      </component>
+                      <component id="5983a" class="javax.swing.JCheckBox" binding="devTalentListingCheckBox">
+                        <constraints>
+                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <font name="Source Code Pro" size="14"/>
+                          <text value="Talent Listing"/>
+                        </properties>
+                      </component>
+                      <component id="69a6f" class="javax.swing.JCheckBox" binding="devWepMatListingLabel">
+                        <constraints>
+                          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <font name="Source Code Pro" size="14"/>
+                          <text value="Weapon Material Listing"/>
+                        </properties>
+                      </component>
                     </children>
                   </grid>
                   <component id="29c0f" class="javax.swing.JLabel" binding="devWeaponIconLabel">
@@ -469,7 +611,7 @@
                       <text value=""/>
                     </properties>
                   </component>
-                  <grid id="caa0e" binding="devButtonAndCheckboxPanel" layout-manager="GridLayoutManager" row-count="6" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                  <grid id="caa0e" binding="devButtonAndCheckboxPanel" layout-manager="GridLayoutManager" row-count="4" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="3" left="3" bottom="3" right="3"/>
                     <constraints>
                       <grid row="0" column="2" row-span="5" col-span="1" vsize-policy="3" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
@@ -478,40 +620,13 @@
                     <properties/>
                     <border type="etched"/>
                     <children>
-                      <component id="75f09" class="javax.swing.JCheckBox" binding="devArtifactListingCheckBox">
-                        <constraints>
-                          <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <font name="Source Code Pro" size="14"/>
-                          <text value="Artifact Listing"/>
-                        </properties>
-                      </component>
-                      <component id="5983a" class="javax.swing.JCheckBox" binding="devTalentListingCheckBox">
-                        <constraints>
-                          <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <font name="Source Code Pro" size="14"/>
-                          <text value="Talent Listing"/>
-                        </properties>
-                      </component>
                       <component id="f3d3d" class="javax.swing.JLabel" binding="devDomainListingsLabel">
                         <constraints>
                           <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
                           <font name="Source Code Pro" size="18" style="1"/>
-                          <text value="Domain listings"/>
-                        </properties>
-                      </component>
-                      <component id="69a6f" class="javax.swing.JCheckBox" binding="devWepMatListingLabel">
-                        <constraints>
-                          <grid row="4" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <font name="Source Code Pro" size="14"/>
-                          <text value="Weapon Material Listing"/>
+                          <text value="Set details          "/>
                         </properties>
                       </component>
                       <component id="45189" class="javax.swing.JButton" binding="devCloseButton">
@@ -538,9 +653,9 @@
                       </component>
                       <component id="b531f" class="javax.swing.JTextArea" binding="devSetDetailsTextArea">
                         <constraints>
-                          <grid row="5" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                            <minimum-size width="150" height="280"/>
-                            <preferred-size width="150" height="280"/>
+                          <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                            <minimum-size width="150" height="380"/>
+                            <preferred-size width="150" height="380"/>
                           </grid>
                         </constraints>
                         <properties>
