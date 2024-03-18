@@ -70,6 +70,7 @@ public class ToolGUI extends JFrame implements ActionListener {
     public static final String UNKNOWN_ARTIFACT = "unknown_artifact";
     public static final String UNKNOWN_WEAPON_MESSAGE = "[ Empty Weapon Selector ]";
     public static final String UNKNOWN_WEAPON_PATH = "./Files/Images/Weapons/unknown_weapon.png";
+    public static final String WEAPON_FILTER = "[ Filter ]";
     public static final String CLOSE_TEXT = "CLOSE";
     public static final int CHARACTER_LIMIT = 150;
 
@@ -83,11 +84,12 @@ public class ToolGUI extends JFrame implements ActionListener {
     private JButton searchConfirmButton;
     private JPanel selectedCharacterPanel;
     private final JScrollPane characterSearchScrollPane = new JScrollPane();
+    private final JScrollPane devWeaponTabScrollPane = new JScrollPane();
     private final JTextField devWeaponsTabSearchbar = new JTextField();
     private final JButton devWeaponTabSearchButton = new JButton();
     private final JPanel devWeaponTabScrollPanePanel = new JPanel();
     private static final List<CharacterCard> generatedCharacterCards = new ArrayList<>();
-
+    private static final JComboBox<String> devFilterComboBox = new JComboBox<>();
     public static final Map<String, List<String>> farmedWeapons = new TreeMap<>();
     public static final Map<String, List<String>> farmedArtifacts = new TreeMap<>();
 
@@ -202,20 +204,24 @@ public class ToolGUI extends JFrame implements ActionListener {
 
         String userFieldInput;
         int matchedCount = 0;
+        boolean debugMode;
         if (e.getSource() == searchConfirmButton) {
             userFieldInput = characterSelectorField.getText().toLowerCase();
+            debugMode = userFieldInput.equalsIgnoreCase("DEBUG");
             selectedCharacterPanel.removeAll();
-            for (String s : charactersFlattened) {
-                if (s.toLowerCase().contains(userFieldInput) || userFieldInput.equalsIgnoreCase("DEBUG")) {
-                    if (!userFieldInput.isEmpty()) {
-                        generateCharacterButton(s, matchedCount);
+            characterSearchScrollPane.updateUI();
+            if (!userFieldInput.isEmpty()) {
+                for (String s : charactersFlattened) {
+                    if (s.toLowerCase().contains(userFieldInput) || debugMode) {
+                        {
+                            generateCharacterButton(s, matchedCount);
+                        }
+                        matchedCount++;
+
                     }
-                    matchedCount++;
-
                 }
-
             }
-            if (matchedCount == 0 || userFieldInput.isEmpty()) {
+            if (matchedCount == 0) {
                 generateCharacterButton(UNKNOWN_CHARACTER_PLACEHOLDER_NAME, matchedCount);
             } else {
                 characterSearchScrollPane.setViewportView(selectedCharacterPanel);
@@ -226,25 +232,42 @@ public class ToolGUI extends JFrame implements ActionListener {
                 gbc.weightx = 1.0;
                 gbc.weighty = 1.0;
                 gbc.fill = GridBagConstraints.BOTH;
-                characterSearchScrollPane.updateUI();
+
                 characterTab.add(characterSearchScrollPane, gbc);
 
             }
         } else {
             userFieldInput = devWeaponsTabSearchbar.getText().toLowerCase();
+            debugMode = userFieldInput.equalsIgnoreCase("DEBUG");
             devWeaponTabScrollPanePanel.removeAll();
-            for (String s : weaponsFlattened) {
-                if (s.toLowerCase().contains(userFieldInput) || userFieldInput.equalsIgnoreCase("DEBUG")) {
-                    if (!userFieldInput.isEmpty()) {
+            devWeaponTabScrollPane.updateUI();
+            if (!userFieldInput.isEmpty()) {
 
-                        generateWeaponCard(s, matchedCount);
+                for (String s : weaponsFlattened) {
+                    String weaponCategory = lookUpWeaponRarityAndType(s).getWeaponType();
+                    String filterOption = (String) devFilterComboBox.getSelectedItem();
+                    assert weaponCategory != null;
+                    assert filterOption != null;
+                    if (s.toLowerCase().contains(userFieldInput) && (filterOption.equalsIgnoreCase(weaponCategory) ||
+                            filterOption.equalsIgnoreCase(WEAPON_FILTER)) || debugMode) {
+                        {
+                            generateWeaponCard(s, matchedCount);
+                        }
+                        matchedCount++;
                     }
-                    matchedCount++;
                 }
+
             }
         }
     }
+    /*public void updateFarmedArtifacts(String setName, String charName, boolean isFarming){
+        if (farmedArtifacts.containsKey(setName)){
+            List <String> charactersFarmingSet = farmedArtifacts.get(setName);
+            if (charactersFarmingSet.contains(charName) && isFarming){
 
+            }
+        }
+    }*/
     /**
      * Generates a character button for the character specified by name and the index of the match.
      *
@@ -1071,7 +1094,14 @@ public class ToolGUI extends JFrame implements ActionListener {
                         false));
         JCheckBox devWepMatListingCheckbox = new JCheckBox();
         devWepMatListingCheckbox.setBackground(new Color(-1));
-        devWepMatListingCheckbox.setText("Weapon Listing");
+        if (farmedWeapons.containsKey(weaponName)) {
+            devWepMatListingCheckbox.doClick();
+            devWepMatListingCheckbox.setEnabled(false);
+            devWepMatListingCheckbox.setText("Already Farmed");
+        } else {
+            devWepMatListingCheckbox.setText("List Weapon?");
+        }
+
         devWeaponCard.add(devWepMatListingCheckbox,
                 new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
@@ -1115,7 +1145,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         weaponsTab.add(devWeaponTabPanel, gbc);
-        JScrollPane devWeaponTabScrollPane = new JScrollPane();
+
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -1169,7 +1199,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(0, 20, 0, 0);
         weaponsTab.add(devSaveAllWeapons, gbc);
-        JComboBox<String> devFilterComboBox = new JComboBox<>();
+
         devFilterComboBox.setBackground(new Color(-2702645));
         devFilterComboBox.setEnabled(true);
         Font devFilterComboBoxFont =
