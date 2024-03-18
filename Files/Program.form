@@ -98,6 +98,9 @@
                             </constraints>
                             <properties>
                               <background color="-465419"/>
+                              <editable value="false"/>
+                              <enabled value="true"/>
+                              <focusable value="false"/>
                               <font name="Source Code Pro Semibold"/>
                               <foreground color="-11071434"/>
                               <margin top="30" left="20" bottom="10" right="10"/>
@@ -414,7 +417,7 @@
                 <children>
                   <grid id="1eb11" binding="devDomainsTabPanel" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="1" column="0" row-span="1" col-span="4" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                      <grid row="1" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="1.0" weighty="1.0"/>
                     </constraints>
                     <properties/>
@@ -432,43 +435,73 @@
                             <constraints/>
                             <properties/>
                             <border type="none"/>
-                            <children/>
+                            <children>
+                              <grid id="75a6a" layout-manager="GridLayoutManager" row-count="1" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                                <margin top="5" left="5" bottom="5" right="5"/>
+                                <constraints>
+                                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+                                  <gridbag top="0" left="50" bottom="0" right="50" weightx="1.0" weighty="1.0"/>
+                                </constraints>
+                                <properties/>
+                                <border type="etched"/>
+                                <children>
+                                  <component id="39eef" class="javax.swing.JLabel">
+                                    <constraints>
+                                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+                                    </constraints>
+                                    <properties>
+                                      <icon value="Files/Images/Weapon Materials/All Aerosiderite.png"/>
+                                      <text value=""/>
+                                    </properties>
+                                  </component>
+                                  <component id="a9b41" class="javax.swing.JLabel">
+                                    <constraints>
+                                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                    </constraints>
+                                    <properties>
+                                      <icon value="Files/Images/Weapon Materials/All Guyun.png"/>
+                                      <text value=""/>
+                                    </properties>
+                                  </component>
+                                  <component id="82ccc" class="javax.swing.JLabel">
+                                    <constraints>
+                                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                                    </constraints>
+                                    <properties>
+                                      <icon value="Files/Images/Weapon Materials/All Mist Veiled Elixir.png"/>
+                                      <text value=""/>
+                                    </properties>
+                                  </component>
+                                  <grid id="d8644" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                                    <margin top="0" left="0" bottom="0" right="0"/>
+                                    <constraints>
+                                      <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                                    </constraints>
+                                    <properties/>
+                                    <border type="none"/>
+                                    <children>
+                                      <component id="daec3" class="javax.swing.JLabel">
+                                        <constraints>
+                                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                                        </constraints>
+                                        <properties>
+                                          <text value="Label"/>
+                                        </properties>
+                                      </component>
+                                    </children>
+                                  </grid>
+                                </children>
+                              </grid>
+                            </children>
                           </grid>
                         </children>
                       </scrollpane>
                     </children>
                   </grid>
-                  <component id="752a8" class="javax.swing.JTextField">
-                    <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
-                      <gridbag weightx="0.0" weighty="0.0"/>
-                    </constraints>
-                    <properties>
-                      <enabled value="true"/>
-                      <font name="Source Code Pro Black" size="18" style="1"/>
-                      <inheritsPopupMenu value="false"/>
-                      <maximumSize width="240" height="33"/>
-                      <minimumSize width="240" height="33"/>
-                      <preferredSize width="240" height="33"/>
-                      <text value="Search by name!"/>
-                    </properties>
-                  </component>
-                  <component id="1c477" class="javax.swing.JButton">
-                    <constraints>
-                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                      <gridbag weightx="1.0" weighty="0.0"/>
-                    </constraints>
-                    <properties>
-                      <maximumSize width="30" height="30"/>
-                      <minimumSize width="30" height="30"/>
-                      <preferredSize width="50" height="30"/>
-                      <text value="✓"/>
-                    </properties>
-                  </component>
                   <component id="a1e11" class="javax.swing.JComboBox">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
-                      <gridbag top="0" left="0" bottom="0" right="20" weightx="1.0" weighty="0.0"/>
+                      <gridbag top="0" left="0" bottom="0" right="10" weightx="1.0" weighty="0.0"/>
                     </constraints>
                     <properties>
                       <background color="-2702645"/>
@@ -480,6 +513,18 @@
                         <item value="Talents"/>
                         <item value="Weapons"/>
                       </model>
+                    </properties>
+                  </component>
+                  <component id="1c477" class="javax.swing.JButton">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="1.0" weighty="0.0"/>
+                    </constraints>
+                    <properties>
+                      <maximumSize width="30" height="30"/>
+                      <minimumSize width="30" height="30"/>
+                      <preferredSize width="50" height="30"/>
+                      <text value="✓"/>
                     </properties>
                   </component>
                 </children>
