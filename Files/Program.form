@@ -70,7 +70,7 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <grid id="47fa" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                      <grid id="47fa" layout-manager="GridLayoutManager" row-count="5" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                         <margin top="0" left="0" bottom="0" right="0"/>
                         <constraints>
                           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -88,6 +88,54 @@
                             <properties>
                               <icon value="Files/Images/Aesthetics/Barbara_Hello.gif"/>
                               <text value=""/>
+                            </properties>
+                          </component>
+                          <component id="f4ec0" class="javax.swing.JTextPane" binding="forFutureUpdatesContactTextPane" default-binding="true">
+                            <constraints>
+                              <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="1" fill="1" indent="0" use-parent-layout="false">
+                                <preferred-size width="150" height="50"/>
+                              </grid>
+                            </constraints>
+                            <properties>
+                              <background color="-465419"/>
+                              <font name="Source Code Pro Semibold"/>
+                              <foreground color="-11071434"/>
+                              <margin top="30" left="20" bottom="10" right="10"/>
+                              <selectionColor color="-9555638"/>
+                              <text value="For future updates contact one of us. Make sure to keep your save file!"/>
+                            </properties>
+                          </component>
+                          <component id="844e9" class="javax.swing.JLabel">
+                            <constraints>
+                              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <background color="-465419"/>
+                              <font name="Source Code Pro Black" size="20" style="1"/>
+                              <foreground color="-11071434"/>
+                              <text value="✨ Creators ✨"/>
+                            </properties>
+                          </component>
+                          <component id="3de71" class="javax.swing.JLabel">
+                            <constraints>
+                              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <background color="-465419"/>
+                              <font name="Source Code Pro Semibold" size="18"/>
+                              <foreground color="-11071434"/>
+                              <text value="Linako (yes.as.no)"/>
+                            </properties>
+                          </component>
+                          <component id="98c63" class="javax.swing.JLabel">
+                            <constraints>
+                              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <background color="-465419"/>
+                              <font name="Source Code Pro Semibold" size="18"/>
+                              <foreground color="-11071434"/>
+                              <text value="Precisi0n"/>
                             </properties>
                           </component>
                         </children>
@@ -112,14 +160,9 @@
                               <background color="-465419"/>
                               <font name="Source Code Pro Black" size="20" style="1"/>
                               <foreground color="-11071434"/>
-                              <text value="✨ Welcome to GDA! ✨"/>
+                              <text value="✨ Welcome to GDApp! ✨"/>
                             </properties>
                           </component>
-                          <vspacer id="2abed">
-                            <constraints>
-                              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                            </constraints>
-                          </vspacer>
                           <grid id="9ed32" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                             <margin top="20" left="0" bottom="0" right="0"/>
                             <constraints>
@@ -131,6 +174,22 @@
                             <border type="none"/>
                             <children/>
                           </grid>
+                          <component id="e6fc3" class="javax.swing.JTextPane" binding="thisIsAPersonalTextPane" default-binding="true">
+                            <constraints>
+                              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                                <preferred-size width="150" height="50"/>
+                              </grid>
+                            </constraints>
+                            <properties>
+                              <background color="-465419"/>
+                              <editable value="false"/>
+                              <focusable value="false"/>
+                              <font name="Source Code Pro Semibold"/>
+                              <foreground color="-11071434"/>
+                              <margin top="30" left="20" bottom="10" right="10"/>
+                              <text value="This is a personal project to make our daily tasks a little bit more coordinated! Here's how to get started!&#10;&#10;-🔸✨ Character Tab ✨🔸-&#10;&#10;- Search by name, filter or type &quot;debug&quot; to see all characters&#10;- Fill in the desired information (2nd artifact set is optional)&#10;- Checkboxes exist for characters to show up in the domains tab. Unchecking will hide a character from its chosen materials, making it easier to tell who still needs those materials. For example, if a character is done with its talents, you should uncheck the character.&#10;&#10;-🔸✨ Weapon Tab ✨🔸-&#10;&#10;- Search by name, filter or type &quot;debug&quot; to see all weapons.&#10;- Only checkboxes appear. Checking a weapon will make it show up in farmed items in domains.&#10;&#10;-🔸✨ Domains Tab ✨🔸-&#10;&#10;- Search by name, filter or type &quot;debug&quot; to see all domains.&#10;- The chosen domain will show all characters/weapons checked in other tabs."/>
+                            </properties>
+                          </component>
                         </children>
                       </grid>
                     </children>
