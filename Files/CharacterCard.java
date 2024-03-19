@@ -36,7 +36,7 @@ public class CharacterCard {
         return characterName;
     }
     public void setCharacterIcon(){
-        ImageIcon charIcon = new ImageIcon(ToolGUI.generateCharacterIconPath(characterName));
+        ImageIcon charIcon = new ImageIcon(ToolGUI.generateResourceIconPath(characterName, ToolData.RESOURCE_TYPE.CHARACTER));
         assert charIcon.getImage() != null;
         characterIcon = charIcon;
 

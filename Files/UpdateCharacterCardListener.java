@@ -2,6 +2,7 @@ package Files;
 
 import static Files.ToolGUI.UNKNOWN_SET_MESSAGE;
 import static Files.ToolGUI.UNKNOWN_WEAPON_MESSAGE;
+import static Files.ToolGUI.farmedArtifacts;
 import static Files.ToolGUI.updateFarmedArtifacts;
 import static javax.swing.DefaultButtonModel.SELECTED;
 
@@ -65,7 +66,7 @@ public class UpdateCharacterCardListener implements ActionListener, ItemListener
                 farmedItemName= _characterCard.getArtifactSet1();
                 if (!farmedItemName.isEmpty())
                 {
-                    updateFarmedArtifacts(farmedItemName,_characterCard.getCharacterName(),currentStatus);
+                    updateFarmedArtifacts(farmedArtifacts,farmedItemName,_characterCard.getCharacterName(),currentStatus);
                 }
                 return;
             case FARMING_SET_TWO:
@@ -74,7 +75,7 @@ public class UpdateCharacterCardListener implements ActionListener, ItemListener
                 farmedItemName = _characterCard.getArtifactSet2();
                 if (!farmedItemName.isEmpty())
                 {
-                    updateFarmedArtifacts(farmedItemName,_characterCard.getCharacterName(),currentStatus);
+                    updateFarmedArtifacts(farmedArtifacts,farmedItemName,_characterCard.getCharacterName(),currentStatus);
                 }
                 return;
             case FARMING_TALENT_MATERIALS:

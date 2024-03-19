@@ -3,13 +3,13 @@ package Files;
 import static Files.ToolData.SAVE_LOCATION;
 import static Files.ToolData.artifactSetDescriptionsMap;
 import static Files.ToolData.characterWeaponsMap;
-import static Files.ToolData.charactersElementsMap;
 import static Files.ToolData.charactersFlattened;
 import static Files.ToolData.weaponMaterialMap;
 import static Files.ToolData.weaponsFlattened;
 import static Files.ToolData.weaponsRaritiesMap;
 
 import Files.ToolData.RARITY;
+import Files.ToolData.*;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -57,7 +57,7 @@ import java.util.TreeMap;
 public class ToolGUI extends JFrame implements ActionListener {
 
     public static final String NO_CHARACTERS_MATCH_MESSAGE = "No fighters >:(";
-    public static final String UNKNOWN_CHARACTER_PLACEHOLDER_NAME = "unknown_character";
+    public static final String UNKNOWN_CHARACTER = "unknown_character";
     public static final int MAX_CHARACTERS_PER_LINE = 15;
     public static final String TOOLTIP_FOR_LABELS_WITHOUT_ICON = "Here will be the chosen set name shown";
     public static final String TOOLTIP_FOR_LABELS_WITH_ICON = "Here will be the chosen set icon shown";
@@ -220,7 +220,7 @@ public class ToolGUI extends JFrame implements ActionListener {
                 }
             }
             if (matchedCount == 0) {
-                generateCharacterButton(UNKNOWN_CHARACTER_PLACEHOLDER_NAME, matchedCount);
+                generateCharacterButton(UNKNOWN_CHARACTER, matchedCount);
             } else {
                 characterSearchScrollPane.setViewportView(selectedCharacterPanel);
                 GridBagConstraints gbc = new GridBagConstraints();
@@ -259,9 +259,10 @@ public class ToolGUI extends JFrame implements ActionListener {
         }
     }
 
-    public static void updateFarmedArtifacts(String setName, String charName, boolean isFarming) {
-        if (farmedArtifacts.containsKey(setName)) {
-            List<String> charactersFarmingSet = farmedArtifacts.get(setName);
+    public static void updateFarmedArtifacts(Map<String, List<String>> farmedMap, String setName, String charName,
+                                             boolean isFarming) {
+        if (farmedMap.containsKey(setName)) {
+            List<String> charactersFarmingSet = farmedMap.get(setName);
             if (charactersFarmingSet.contains(charName)) {
                 if (!isFarming) {
                     charactersFarmingSet.remove(charName);
@@ -275,30 +276,7 @@ public class ToolGUI extends JFrame implements ActionListener {
             if (isFarming) {
                 List<String> charactersFarmingSet = new ArrayList<>();
                 charactersFarmingSet.add(charName);
-                farmedArtifacts.put(setName, charactersFarmingSet);
-            }
-        }
-    }
-    public static void updateFarmedWeaponMaterials(String weaponName, String charName, boolean isFarming){
-        if (farmedWeapons.containsKey(weaponName)){
-            List<String> charactersFarmingWeaponMats = farmedWeapons.get(weaponName);
-            if (charactersFarmingWeaponMats.contains(charName)){
-                if (!isFarming) {
-                    charactersFarmingWeaponMats.remove(charName);
-                }
-            } else
-                {
-                if (isFarming)
-                    {
-                    charactersFarmingWeaponMats.add(charName);
-                    }
-                }
-        }
-        else {
-            if (isFarming) {
-                List<String> charactersFarmingWeaponMaterials = new ArrayList<>();
-                charactersFarmingWeaponMaterials.add(charName);
-                farmedArtifacts.put(weaponName, charactersFarmingWeaponMaterials);
+                farmedMap.put(setName, charactersFarmingSet);
             }
         }
     }
@@ -310,8 +288,8 @@ public class ToolGUI extends JFrame implements ActionListener {
      * @param index which character by count it is
      */
     private void generateCharacterButton(String characterName, int index) {
-        if (characterName.equalsIgnoreCase(UNKNOWN_CHARACTER_PLACEHOLDER_NAME)) {
-            JLabel unknownCharacterLabel = new JLabel(generateCharacterIconPath(UNKNOWN_CHARACTER_PLACEHOLDER_NAME));
+        if (characterName.equalsIgnoreCase(UNKNOWN_CHARACTER)) {
+            JLabel unknownCharacterLabel = new JLabel(generateResourceIconPath(UNKNOWN_CHARACTER, RESOURCE_TYPE.CHARACTER));
             unknownCharacterLabel.setText(NO_CHARACTERS_MATCH_MESSAGE);
             unknownCharacterLabel.setVerticalTextPosition(SwingConstants.BOTTOM);
             unknownCharacterLabel.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -417,28 +395,30 @@ public class ToolGUI extends JFrame implements ActionListener {
     /**
      * Generates a path to the character icon.
      *
-     * @param charName the character name whose icon path is to be returned
+     * @param resourceName the character name whose icon path is to be returned
      * @return character icon path
      */
-    public static String generateCharacterIconPath(String charName) {
-        assert charactersElementsMap.containsKey(charName);
-        return "./Files/Images/Characters/" + charName + ".png";
-    }
+    public static String generateResourceIconPath(String resourceName, RESOURCE_TYPE resourceType) {
+        assert resourceName != null;
+        if (resourceType == RESOURCE_TYPE.CHARACTER) {
+            return "./Files/Images/Characters/" + resourceName + ".png";
+        } else if (resourceType == RESOURCE_TYPE.WEAPON_MATERIAL) {
+            return "./Files/Images/Weapon Materials/" + resourceName + ".png";
+        } else if (resourceType == RESOURCE_TYPE.ARTIFACT) {
+            return "./Files/Images/Artifacts/" + resourceName + ".png";
+        } else if (resourceType == RESOURCE_TYPE.WEAPON) {
+            if (resourceName.equalsIgnoreCase(UNKNOWN_WEAPON_MESSAGE)) {
+                return UNKNOWN_WEAPON_PATH;
+            }
+            WeaponInfo wi = lookUpWeaponRarityAndType(resourceName);
+            return switch (wi.getRarity()) {
+                case FOUR_STAR -> "./Files/Images/Weapons/" + wi.getWeaponType() + "_4star/" + resourceName + ".png";
+                case FIVE_STAR -> "./Files/Images/Weapons/" + wi.getWeaponType() + "_5star/" + resourceName + ".png";
+            };
+        } else {
+            return "";
+        }
 
-    public static String generateWeaponMaterialIconPath(String wmName) {
-        assert weaponMaterialMap.containsKey(wmName);
-        return "./Files/Images/Weapon Materials/" + wmName + ".png";
-    }
-
-    /**
-     * Generates a path to the artifact icon.
-     *
-     * @param artifactName the artifact set name whose icon is to be returned
-     * @return artifact set icon path
-     */
-    public static String generateArtifactIconPath(String artifactName) {
-        assert artifactSetDescriptionsMap.containsKey(artifactName);
-        return "./Files/Images/Artifacts/" + artifactName + ".png";
     }
 
     /**
@@ -585,29 +565,6 @@ public class ToolGUI extends JFrame implements ActionListener {
         return artifactSetDescriptionsMap.get(setName);
     }
 
-    /**
-     * Generates a path to the weapon icon. Necessary parameter information can be acquired by first executing lookUpWeaponRarityAndType method.
-     *
-     * @param weaponName the name of the weapon
-     * @param weaponType the type of the weapon
-     * @param rarity the rarity of the weapon
-     * @return the address of the icon for the weapon
-     */
-    public static String generateWeaponPath(String weaponName, String weaponType, RARITY rarity) {
-        return switch (rarity) {
-            case FOUR_STAR -> "./Files/Images/Weapons/" + weaponType + "_4star/" + weaponName + ".png";
-            case FIVE_STAR -> "./Files/Images/Weapons/" + weaponType + "_5star/" + weaponName + ".png";
-        };
-    }
-
-    public static String generateWeaponPath(String weaponName) {
-        WeaponInfo wi = lookUpWeaponRarityAndType(weaponName);
-        return switch (wi.getRarity()) {
-            case FOUR_STAR -> "./Files/Images/Weapons/" + wi.getWeaponType() + "_4star/" + weaponName + ".png";
-            case FIVE_STAR -> "./Files/Images/Weapons/" + wi.getWeaponType() + "_5star/" + weaponName + ".png";
-        };
-    }
-
     private void generateWeaponCard(String weaponName, int matchedCount) {
         JPanel devWeaponCard = new JPanel();
         devWeaponCard.setLayout(new GridLayoutManager(2, 2, new Insets(5, 5, 5, 5), -1, -1));
@@ -627,7 +584,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         }
         devWeaponIcon.setHorizontalAlignment(0);
         devWeaponIcon.setHorizontalTextPosition(0);
-        devWeaponIcon.setIcon(new ImageIcon(generateWeaponPath(weaponName)));
+        devWeaponIcon.setIcon(new ImageIcon(generateResourceIconPath(weaponName, RESOURCE_TYPE.WEAPON)));
         devWeaponIcon.setText(formatString(weaponName));
         devWeaponIcon.setVerticalAlignment(0);
         devWeaponIcon.setVerticalTextPosition(3);
@@ -657,7 +614,8 @@ public class ToolGUI extends JFrame implements ActionListener {
         }
         devWepMaterialPreview.setHorizontalAlignment(0);
         devWepMaterialPreview.setHorizontalTextPosition(0);
-        devWepMaterialPreview.setIcon(new ImageIcon(generateWeaponMaterialIconPath(lookUpWeaponMaterial(weaponName))));
+        devWepMaterialPreview.setIcon(new ImageIcon(
+                generateResourceIconPath(lookUpWeaponMaterial(weaponName), RESOURCE_TYPE.WEAPON_MATERIAL)));
         devWepMaterialPreview.setText("");
         devWepMaterialPreview.setVerticalAlignment(0);
         devWepMaterialPreview.setVerticalTextPosition(3);

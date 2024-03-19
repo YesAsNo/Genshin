@@ -1,9 +1,7 @@
 package Files;
 
-import static Files.ToolGUI.UNKNOWN_SET_MESSAGE;
-import static Files.ToolGUI.UNKNOWN_WEAPON_MESSAGE;
-import static Files.ToolGUI.generateArtifactIconPath;
-import static Files.ToolGUI.lookUpWeaponRarityAndType;
+import static Files.ToolGUI.*;
+import static Files.ToolData.*;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
@@ -15,12 +13,12 @@ import java.awt.event.ActionListener;
 public class UpdateLabelListener implements ActionListener {
     private final JLabel _IconLabel;
     private final JLabel _NameLabel;
-    private final ToolData.SELECTION_BOX_TYPE _SELECTIONBOXTYPE;
+    private final ToolData.RESOURCE_TYPE SELECTION_BOX_TYPE;
 
-    public UpdateLabelListener(JLabel nameLabel , JLabel iconLabel, ToolData.SELECTION_BOX_TYPE SELECTION_BOX_TYPE){
+    public UpdateLabelListener(JLabel nameLabel , JLabel iconLabel, ToolData.RESOURCE_TYPE RESOURCE_TYPE){
         _NameLabel = nameLabel;
         _IconLabel = iconLabel;
-        _SELECTIONBOXTYPE = SELECTION_BOX_TYPE;
+        SELECTION_BOX_TYPE = RESOURCE_TYPE;
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -31,8 +29,8 @@ public class UpdateLabelListener implements ActionListener {
         {
 
             _NameLabel.setText("");
-            if (_SELECTIONBOXTYPE == ToolData.SELECTION_BOX_TYPE.ARTIFACT) {
-                icon = new ImageIcon(generateArtifactIconPath(ToolGUI.UNKNOWN_ARTIFACT));
+            if (SELECTION_BOX_TYPE == RESOURCE_TYPE.ARTIFACT) {
+                icon = new ImageIcon(generateResourceIconPath(UNKNOWN_ARTIFACT, ToolData.RESOURCE_TYPE.ARTIFACT));
             }
             else {
                 icon = new ImageIcon(ToolGUI.UNKNOWN_WEAPON_PATH);
@@ -41,12 +39,11 @@ public class UpdateLabelListener implements ActionListener {
         else
         {
             _NameLabel.setText(item);
-            if (_SELECTIONBOXTYPE == ToolData.SELECTION_BOX_TYPE.WEAPON) {
-                WeaponInfo weaponInfo = lookUpWeaponRarityAndType(item);
-                icon = new ImageIcon(ToolGUI.generateWeaponPath(item, weaponInfo.getWeaponType(), weaponInfo.getRarity()));
+            if (SELECTION_BOX_TYPE == RESOURCE_TYPE.WEAPON) {
+                icon = new ImageIcon(generateResourceIconPath(item, ToolData.RESOURCE_TYPE.WEAPON));
             }
             else {
-                icon = new ImageIcon(generateArtifactIconPath(item));
+                icon = new ImageIcon(generateResourceIconPath(item, RESOURCE_TYPE.ARTIFACT));
             }
         }
         _IconLabel.setIcon(icon);

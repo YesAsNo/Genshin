@@ -30,18 +30,22 @@ public class ToolData {
         FIVE_STAR,
         FOUR_STAR
     }
-    public enum SELECTION_BOX_TYPE {
+    public enum RESOURCE_TYPE {
         WEAPON,
-        ARTIFACT
+        ARTIFACT,
+        WEAPON_MATERIAL,
+        CHARACTER
     }
     public enum CHARACTER_CARD_DATA_FIELD{
+        NAME,
         WEAPON,
         SET_ONE,
         SET_TWO,
         NOTES,
         FARMING_WEAPON_MATERIALS,
         FARMING_TALENT_MATERIALS,
-        FARMING_SET_ONE, FARMING_SET_TWO
+        FARMING_SET_ONE,
+        FARMING_SET_TWO
 
     }
 

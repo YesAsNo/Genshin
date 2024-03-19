@@ -1,5 +1,6 @@
 package Files;
 
+import static Files.ToolData.RESOURCE_TYPE;
 import static Files.ToolData.artifactsFlattened;
 import static Files.ToolGUI.CHARACTER_LIMIT;
 import static Files.ToolGUI.CLOSE_TEXT;
@@ -13,10 +14,8 @@ import static Files.ToolGUI.UNKNOWN_ARTIFACT;
 import static Files.ToolGUI.UNKNOWN_SET_MESSAGE;
 import static Files.ToolGUI.UNKNOWN_WEAPON_MESSAGE;
 import static Files.ToolGUI.UNKNOWN_WEAPON_PATH;
-import static Files.ToolGUI.generateArtifactIconPath;
-import static Files.ToolGUI.generateWeaponPath;
+import static Files.ToolGUI.generateResourceIconPath;
 import static Files.ToolGUI.lookUpWeaponCategoryForCharacter;
-import static Files.ToolGUI.lookUpWeaponRarityAndType;
 import static Files.ToolGUI.lookUpWeapons;
 
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -108,20 +107,6 @@ public class CharacterCardGUI extends JFrame {
                         new Dimension(50, -1), null, 0, false));
     }
 
-    private void getCharacterNameLabel(String charName, JPanel jpanel) {
-        JLabel characterNameLabel = new JLabel();
-        characterNameLabel.setAutoscrolls(true);
-        Font characterNameLabelFont =
-                $$$getFont$$$(Font.BOLD, 18, characterNameLabel.getFont());
-        if (characterNameLabelFont != null) {
-            characterNameLabel.setFont(characterNameLabelFont);
-        }
-        characterNameLabel.setText(charName);
-        jpanel.add(characterNameLabel,
-                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
-                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1,
-                        false));
-    }
 
     private JComboBox<String> getWeaponSelectionBox(CharacterCard characterCard, JPanel jpanel) {
         JComboBox<String> weaponSelectionBox = new JComboBox<>();
@@ -145,144 +130,63 @@ public class CharacterCardGUI extends JFrame {
         return weaponSelectionBox;
     }
 
-    private JLabel getWeaponNameLabel(CharacterCard characterCard, JPanel jpanel) {
-        JLabel weaponNameLabel = new JLabel();
-        weaponNameLabel.setAutoscrolls(true);
-        Font weaponNameLabelFont = $$$getFont$$$(Font.BOLD, 18, weaponNameLabel.getFont());
-        if (weaponNameLabelFont != null) {
-            weaponNameLabel.setFont(weaponNameLabelFont);
+
+    private JLabel getNameLabel(CharacterCard characterCard, JPanel jpanel, GridConstraints gc, ToolData.CHARACTER_CARD_DATA_FIELD dataField) {
+        JLabel setNameLabel = new JLabel();
+        setNameLabel.setAutoscrolls(true);
+        Font nameLabelFont = $$$getFont$$$(Font.BOLD, 18, setNameLabel.getFont());
+        if (nameLabelFont != null) {
+            setNameLabel.setFont(nameLabelFont);
         }
-        weaponNameLabel.setText(characterCard.getWeapon());
-        jpanel.add(weaponNameLabel,
-                new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
-                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1,
-                        false));
-        return weaponNameLabel;
+        if (dataField == ToolData.CHARACTER_CARD_DATA_FIELD.SET_ONE){
+            setNameLabel.setText(characterCard.getArtifactSet1());
+        }
+        if (dataField == ToolData.CHARACTER_CARD_DATA_FIELD.SET_TWO){
+            setNameLabel.setText(characterCard.getArtifactSet2());
+        }
+        if (dataField == ToolData.CHARACTER_CARD_DATA_FIELD.WEAPON){
+            setNameLabel.setText(characterCard.getWeapon());
+        }
+        if (dataField == ToolData.CHARACTER_CARD_DATA_FIELD.NAME){
+            setNameLabel.setText(characterCard.getCharacterName());
+        }
+
+        setNameLabel.setToolTipText(TOOLTIP_FOR_LABELS_WITHOUT_ICON);
+        jpanel.add(setNameLabel, gc);
+        return setNameLabel;
     }
 
-    private JLabel getSet1NameLabel(CharacterCard characterCard, JPanel jpanel) {
-        JLabel set1NameLabel = new JLabel();
-        set1NameLabel.setAlignmentY(0.5f);
-        set1NameLabel.setAutoscrolls(true);
-        set1NameLabel.setDoubleBuffered(false);
-        Font set1NameLabelFont = $$$getFont$$$(Font.BOLD, 18, set1NameLabel.getFont());
-        if (set1NameLabelFont != null) {
-            set1NameLabel.setFont(set1NameLabelFont);
-        }
-        set1NameLabel.setHorizontalAlignment(10);
-        set1NameLabel.setHorizontalTextPosition(11);
-        set1NameLabel.setInheritsPopupMenu(true);
-        set1NameLabel.setText(characterCard.getArtifactSet1().isEmpty() ? "" : characterCard.getArtifactSet1());
-        set1NameLabel.setVerticalAlignment(0);
-        set1NameLabel.setVerticalTextPosition(0);
-        set1NameLabel.setToolTipText(TOOLTIP_FOR_LABELS_WITHOUT_ICON);
-        jpanel.add(set1NameLabel,
-                new GridConstraints(8, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
-                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null,
-                        new Dimension(177, 23), null, 1, false));
-        return set1NameLabel;
-    }
-
-    private JComboBox<String> getSet1ComboBox(CharacterCard characterCard, JPanel jpanel) {
-        JComboBox<String> set1ComboBox = new JComboBox<>();
-        set1ComboBox.setAutoscrolls(false);
-        set1ComboBox.setEditable(false);
-        set1ComboBox.setFocusable(false);
-        Font set1comboBoxFont = $$$getFont$$$(Font.BOLD, 14, set1ComboBox.getFont());
+    private JComboBox<String> getSetComboBox(CharacterCard characterCard, JPanel jpanel, GridConstraints gc, ToolData.CHARACTER_CARD_DATA_FIELD dataField) {
+        JComboBox<String> setComboBox = new JComboBox<>();
+        setComboBox.setAutoscrolls(false);
+        setComboBox.setEditable(false);
+        setComboBox.setFocusable(false);
+        Font set1comboBoxFont = $$$getFont$$$(Font.BOLD, 14, setComboBox.getFont());
         if (set1comboBoxFont != null) {
-            set1ComboBox.setFont(set1comboBoxFont);
+            setComboBox.setFont(set1comboBoxFont);
         }
-        set1ComboBox.setInheritsPopupMenu(false);
+        setComboBox.setInheritsPopupMenu(false);
         final DefaultComboBoxModel<String> defaultComboBoxModelForSet1Selector = new DefaultComboBoxModel<>();
         defaultComboBoxModelForSet1Selector.addElement(UNKNOWN_SET_MESSAGE);
         defaultComboBoxModelForSet1Selector.addAll(artifactsFlattened);
-        set1ComboBox.setModel(defaultComboBoxModelForSet1Selector);
-        set1ComboBox.setSelectedItem(
-                characterCard.getArtifactSet1().isEmpty() ? UNKNOWN_SET_MESSAGE : characterCard.getArtifactSet1());
-        jpanel.add(set1ComboBox,
-                new GridConstraints(9, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW,
-                        GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        return set1ComboBox;
-    }
-
-    private JComboBox<String> getSet2ComboBox(CharacterCard characterCard, JPanel jpanel) {
-        JComboBox<String> set2ComboBox = new JComboBox<>();
-        set2ComboBox.setAutoscrolls(false);
-        set2ComboBox.setEditable(false);
-        set2ComboBox.setFocusable(false);
-        Font set2ComboBoxFont = $$$getFont$$$(Font.BOLD, 14, set2ComboBox.getFont());
-        if (set2ComboBoxFont != null) {
-            set2ComboBox.setFont(set2ComboBoxFont);
+        setComboBox.setModel(defaultComboBoxModelForSet1Selector);
+        if (dataField == ToolData.CHARACTER_CARD_DATA_FIELD.SET_ONE){
+            setComboBox.setSelectedItem(
+                    characterCard.getArtifactSet1().isEmpty() ? UNKNOWN_SET_MESSAGE : characterCard.getArtifactSet1());
         }
-        set2ComboBox.setInheritsPopupMenu(false);
-        final DefaultComboBoxModel<String> defaultComboBoxModelForSet2Selector = new DefaultComboBoxModel<>();
-        defaultComboBoxModelForSet2Selector.addElement(UNKNOWN_SET_MESSAGE);
-        defaultComboBoxModelForSet2Selector.addAll(artifactsFlattened);
-        set2ComboBox.setModel(defaultComboBoxModelForSet2Selector);
-        set2ComboBox.setSelectedItem(
-                characterCard.getArtifactSet2().isEmpty() ? UNKNOWN_SET_MESSAGE : characterCard.getArtifactSet2());
-        jpanel.add(set2ComboBox,
-                new GridConstraints(13, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW,
-                        GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        return set2ComboBox;
-    }
-
-    private JLabel getSet2NameLabel(CharacterCard characterCard, JPanel jpanel) {
-        JLabel set2NameLabel = new JLabel();
-        set2NameLabel.setAutoscrolls(true);
-        Font set2NameLabelFont = $$$getFont$$$(Font.BOLD, 18, set2NameLabel.getFont());
-        if (set2NameLabelFont != null) {
-            set2NameLabel.setFont(set2NameLabelFont);
+        if (dataField == ToolData.CHARACTER_CARD_DATA_FIELD.SET_TWO){
+            setComboBox.setSelectedItem(
+                    characterCard.getArtifactSet2().isEmpty() ? UNKNOWN_SET_MESSAGE : characterCard.getArtifactSet2());
         }
-        set2NameLabel.setToolTipText(TOOLTIP_FOR_LABELS_WITHOUT_ICON);
-        set2NameLabel.setText(characterCard.getArtifactSet2());
-        jpanel.add(set2NameLabel,
-                new GridConstraints(12, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
-                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null,
-                        new Dimension(177, 23), null, 1, false));
-        return set2NameLabel;
+
+        jpanel.add(setComboBox, gc);
+        return setComboBox;
     }
 
-    private void getCharacterWeaponSpacer(JPanel jpanel) {
+    private void generateSpacer(JPanel jpanel, GridLayoutManager gridLayoutManager, GridConstraints gridConstraints) {
         JPanel characterWeaponSpacer = new JPanel();
-        characterWeaponSpacer.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 7, 0), -1, -1));
-        jpanel.add(characterWeaponSpacer,
-                new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null,
-                        0, false));
-    }
-
-    private void getWeaponSet1Spacer(JPanel jpanel) {
-        JPanel weaponSet1Spacer = new JPanel();
-        weaponSet1Spacer.setLayout(new GridLayoutManager(1, 1, new Insets(15, 0, 0, 0), -1, -1));
-        jpanel.add(weaponSet1Spacer,
-                new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null,
-                        0, false));
-    }
-
-    private void getSet2Spacer(JPanel jpanel) {
-        JPanel secondSetSpacer = new JPanel();
-        secondSetSpacer.setLayout(new GridLayoutManager(1, 1, new Insets(15, 0, 0, 0), -1, -1));
-        jpanel.add(secondSetSpacer,
-                new GridConstraints(11, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null,
-                        0, false));
-    }
-
-    private void getYetAnotherSpacerOnTheBottom(JPanel jpanel) {
-        JPanel bottomSpacer = new JPanel();
-        bottomSpacer.setLayout(new GridLayoutManager(1, 1, new Insets(20, 0, 0, 0), -1, -1));
-        jpanel.add(bottomSpacer,
-                new GridConstraints(15, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null,
-                        0, false));
+        characterWeaponSpacer.setLayout(gridLayoutManager);
+        jpanel.add(characterWeaponSpacer, gridConstraints);
     }
 
     private JLabel getWeaponIcon(CharacterCard characterCard, JPanel jpanel) {
@@ -293,8 +197,7 @@ public class CharacterCardGUI extends JFrame {
         if (savedWeaponName.isEmpty()) {
             weaponIcon.setIcon(new ImageIcon(UNKNOWN_WEAPON_PATH));
         } else {
-            WeaponInfo weaponInfo = lookUpWeaponRarityAndType(savedWeaponName);
-            weaponIcon.setIcon(new ImageIcon(generateWeaponPath(savedWeaponName, weaponInfo.getWeaponType(), weaponInfo.getRarity())));
+            weaponIcon.setIcon(new ImageIcon(generateResourceIconPath(savedWeaponName, RESOURCE_TYPE.WEAPON)));
         }
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -326,9 +229,9 @@ public class CharacterCardGUI extends JFrame {
         set1Icon.setHorizontalTextPosition(4);
         String savedArtifactSet1Name = characterCard.getArtifactSet1();
         if (savedArtifactSet1Name.isEmpty()) {
-            set1Icon.setIcon(new ImageIcon(generateArtifactIconPath(UNKNOWN_ARTIFACT)));
+            set1Icon.setIcon(new ImageIcon(generateResourceIconPath(UNKNOWN_ARTIFACT,RESOURCE_TYPE.ARTIFACT)));
         } else {
-            set1Icon.setIcon(new ImageIcon(generateArtifactIconPath(savedArtifactSet1Name)));
+            set1Icon.setIcon(new ImageIcon(generateResourceIconPath(savedArtifactSet1Name,RESOURCE_TYPE.ARTIFACT)));
         }
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -347,9 +250,9 @@ public class CharacterCardGUI extends JFrame {
         set2Icon.setHorizontalTextPosition(4);
         String savedArtifactSet2Name = characterCard.getArtifactSet2();
         if (savedArtifactSet2Name.isEmpty()) {
-            set2Icon.setIcon(new ImageIcon(generateArtifactIconPath(UNKNOWN_ARTIFACT)));
+            set2Icon.setIcon(new ImageIcon(generateResourceIconPath(UNKNOWN_ARTIFACT, RESOURCE_TYPE.ARTIFACT)));
         } else {
-            set2Icon.setIcon(new ImageIcon(generateArtifactIconPath(savedArtifactSet2Name)));
+            set2Icon.setIcon(new ImageIcon(generateResourceIconPath(savedArtifactSet2Name,RESOURCE_TYPE.ARTIFACT)));
         }
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -378,58 +281,39 @@ public class CharacterCardGUI extends JFrame {
         return checkboxAndButtonPanel;
     }
 
-    private JCheckBox getArtifactSet1ListingCheckBox(CharacterCard characterCard, JPanel jpanel) {
-        JCheckBox artifactListingCheckBox = new JCheckBox();
-        Font artifactListingCheckBoxFont =
-                $$$getFont$$$(-1, 14, artifactListingCheckBox.getFont());
-        if (artifactListingCheckBoxFont != null) {
-            artifactListingCheckBox.setFont(artifactListingCheckBoxFont);
+    private JCheckBox getListingCheckBox(CharacterCard characterCard, JPanel jpanel, String title,
+                                         GridConstraints gridConstraints,
+                                         ToolData.CHARACTER_CARD_DATA_FIELD dataField) {
+        JCheckBox listingCheckBox = new JCheckBox();
+        Font listingCheckBoxFont =
+                $$$getFont$$$(-1, 14, listingCheckBox.getFont());
+        if (listingCheckBoxFont != null) {
+            listingCheckBox.setFont(listingCheckBoxFont);
         }
-        artifactListingCheckBox.setText("Artifact Listing");
-        if (characterCard.getArtifactSet1Status() || characterCard.getArtifactSet2Status()) {
-            artifactListingCheckBox.doClick();
+        listingCheckBox.setText(title);
+        if (dataField == ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_SET_ONE){
+            if (characterCard.getArtifactSet1Status()) {
+                listingCheckBox.doClick();
+            }
         }
-        jpanel.add(artifactListingCheckBox,
-                new GridConstraints(10, 0, 1, 1, GridConstraints.ANCHOR_SOUTHWEST, GridConstraints.FILL_NONE,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-                        GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        return artifactListingCheckBox;
+        if (dataField == ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_SET_TWO){
+            if (characterCard.getArtifactSet2Status()) {
+                listingCheckBox.doClick();
+            }
+        }
+        if (dataField == ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_TALENT_MATERIALS){
+            if (characterCard.getTalentStatus()) {
+                listingCheckBox.doClick();
+            }
+        }
+        if (dataField == ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_WEAPON_MATERIALS){
+            if (characterCard.getWeaponStatus()) {
+                listingCheckBox.doClick();
+            }
+        }
+        jpanel.add(listingCheckBox,gridConstraints);
+        return listingCheckBox;
     }
-    private JCheckBox getArtifactSet2ListingCheckBox(CharacterCard characterCard, JPanel jpanel) {
-        JCheckBox artifactListingCheckBox = new JCheckBox();
-        Font artifactListingCheckBoxFont =
-                $$$getFont$$$(-1, 14, artifactListingCheckBox.getFont());
-        if (artifactListingCheckBoxFont != null) {
-            artifactListingCheckBox.setFont(artifactListingCheckBoxFont);
-        }
-        artifactListingCheckBox.setText("Artifact Listing");
-        if (characterCard.getArtifactSet1Status() || characterCard.getArtifactSet2Status()) {
-            artifactListingCheckBox.doClick();
-        }
-        jpanel.add(artifactListingCheckBox,
-                new GridConstraints(14, 0, 1, 1, GridConstraints.ANCHOR_SOUTHWEST, GridConstraints.FILL_NONE,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-                        GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        return artifactListingCheckBox;
-    }
-
-    private JCheckBox getTalentListingCheckBox(CharacterCard characterCard, JPanel jpanel) {
-        JCheckBox talentListingCheckBox = new JCheckBox();
-        Font talentListingCheckBoxFont = $$$getFont$$$(-1, 14, talentListingCheckBox.getFont());
-        if (talentListingCheckBoxFont != null) {
-            talentListingCheckBox.setFont(talentListingCheckBoxFont);
-        }
-        talentListingCheckBox.setText("Talent Listing");
-        if (characterCard.getTalentStatus()) {
-            talentListingCheckBox.doClick();
-        }
-        jpanel.add(talentListingCheckBox,
-                new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_NORTHWEST, GridConstraints.FILL_NONE,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-                        GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        return talentListingCheckBox;
-    }
-
     private void getDomainListingsLabel(JPanel jpanel) {
         JLabel domainListingsLabel = new JLabel();
         Font domainListingsLabelFont =
@@ -443,25 +327,6 @@ public class CharacterCardGUI extends JFrame {
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
                         false));
     }
-
-    private JCheckBox getWeaponMaterialListingCheckbox(CharacterCard characterCard, JPanel jpanel) {
-        JCheckBox weaponMaterialListingCheckbox = new JCheckBox();
-        Font weaponMaterialListingCheckboxFont =
-                $$$getFont$$$(-1, 14, weaponMaterialListingCheckbox.getFont());
-        if (weaponMaterialListingCheckboxFont != null) {
-            weaponMaterialListingCheckbox.setFont(weaponMaterialListingCheckboxFont);
-        }
-        weaponMaterialListingCheckbox.setText("Weapon Material Listing");
-        if (characterCard.getWeaponStatus()) {
-            weaponMaterialListingCheckbox.doClick();
-        }
-        jpanel.add(weaponMaterialListingCheckbox,
-                new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_SOUTHWEST, GridConstraints.FILL_NONE,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-                        GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        return weaponMaterialListingCheckbox;
-    }
-
     private JButton getCloseButton(JPanel jpanel) {
         JButton closeButton = new JButton();
         closeButton.setBackground(new Color(-2725532));
@@ -521,39 +386,98 @@ public class CharacterCardGUI extends JFrame {
         templateTab.setLayout(new GridBagLayout());
         JPanel middleSelectorPanel = getMiddleSelectorPanel(templateTab);
         getNotesTextField(characterCard, middleSelectorPanel);
-        getCharacterNameLabel(characterCard.getCharacterName(), middleSelectorPanel);
+        getNameLabel(characterCard, middleSelectorPanel,
+                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
+                GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1,
+                false),
+                ToolData.CHARACTER_CARD_DATA_FIELD.NAME);
         JComboBox<String> weaponSelectionBox = getWeaponSelectionBox(characterCard, middleSelectorPanel);
-        JLabel weaponNameLabel = getWeaponNameLabel(characterCard, middleSelectorPanel);
-        JLabel set1NameLabel = getSet1NameLabel(characterCard, middleSelectorPanel);
-        JComboBox<String> set1ComboBox = getSet1ComboBox(characterCard, middleSelectorPanel);
-        JComboBox<String> set2ComboBox = getSet2ComboBox(characterCard, middleSelectorPanel);
-        JLabel set2NameLabel = getSet2NameLabel(characterCard, middleSelectorPanel);
+        JLabel weaponNameLabel = getNameLabel(characterCard, middleSelectorPanel,
+                new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
+                GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1,
+                false),
+                ToolData.CHARACTER_CARD_DATA_FIELD.WEAPON);
+        JLabel set1NameLabel = getNameLabel(characterCard, middleSelectorPanel,
+                new GridConstraints(8, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null,
+                new Dimension(177, 23), null, 1, false),
+                ToolData.CHARACTER_CARD_DATA_FIELD.SET_ONE);
+        JLabel set2NameLabel = getNameLabel(characterCard, middleSelectorPanel,
+                new GridConstraints(12, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null,
+                new Dimension(177, 23), null, 1, false),
+                ToolData.CHARACTER_CARD_DATA_FIELD.SET_TWO);
+        JComboBox<String> set1ComboBox = getSetComboBox(characterCard, middleSelectorPanel,
+                new GridConstraints(9, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW,
+                GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false),
+                ToolData.CHARACTER_CARD_DATA_FIELD.SET_ONE);
+        JComboBox<String> set2ComboBox = getSetComboBox(characterCard, middleSelectorPanel,
+                new GridConstraints(13, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW,
+                GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false),
+                ToolData.CHARACTER_CARD_DATA_FIELD.SET_TWO);
 
-        getCharacterWeaponSpacer(middleSelectorPanel);
-        getWeaponSet1Spacer(middleSelectorPanel);
-        getSet2Spacer(middleSelectorPanel);
-        getYetAnotherSpacerOnTheBottom(middleSelectorPanel);
+        generateSpacer(middleSelectorPanel,
+                new GridLayoutManager(1, 1, new Insets(0, 0, 7, 0), -1, -1),
+                new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null,
+                0, false));
+        generateSpacer(middleSelectorPanel,
+                new GridLayoutManager(1, 1, new Insets(15, 0, 0, 0), -1, -1),
+                new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null,
+                        0, false));
+        generateSpacer(middleSelectorPanel,
+                new GridLayoutManager(1, 1, new Insets(15, 0, 0, 0), -1, -1),
+                new GridConstraints(11, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null,
+                0, false));
+        generateSpacer(middleSelectorPanel,
+                new GridLayoutManager(1, 1, new Insets(20, 0, 0, 0), -1, -1),
+                new GridConstraints(15, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null,
+                        0, false));
 
         JLabel weaponIconLabel = getWeaponIcon(characterCard, templateTab);
-        weaponSelectionBox.addActionListener(new UpdateLabelListener(weaponNameLabel, weaponIconLabel, ToolData.SELECTION_BOX_TYPE.WEAPON));
+        weaponSelectionBox.addActionListener(new UpdateLabelListener(weaponNameLabel, weaponIconLabel, ToolData.RESOURCE_TYPE.WEAPON));
         weaponSelectionBox.addActionListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.WEAPON));
         weaponNameLabel.setToolTipText(TOOLTIP_FOR_WEAPON_NAME_LABEL);
         getCharLabel(characterCard.getCharacterIcon(), templateTab);
         JLabel set1Icon = getSet1Icon(characterCard, templateTab);
         JLabel set2Icon = getSet2Icon(characterCard, templateTab);
 
-        set1ComboBox.addActionListener(new UpdateLabelListener(set1NameLabel, set1Icon, ToolData.SELECTION_BOX_TYPE.ARTIFACT));
-        set2ComboBox.addActionListener(new UpdateLabelListener(set2NameLabel, set2Icon, ToolData.SELECTION_BOX_TYPE.ARTIFACT));
+        set1ComboBox.addActionListener(new UpdateLabelListener(set1NameLabel, set1Icon, ToolData.RESOURCE_TYPE.ARTIFACT));
+        set2ComboBox.addActionListener(new UpdateLabelListener(set2NameLabel, set2Icon, ToolData.RESOURCE_TYPE.ARTIFACT));
         set1ComboBox.addActionListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.SET_ONE));
         set2ComboBox.addActionListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.SET_TWO));
 
         JPanel checkboxAndButtonPanel = getCheckboxAndButtonPanel(templateTab);
-        JCheckBox artifactSet1ListingCheckBox = getArtifactSet1ListingCheckBox(characterCard, middleSelectorPanel);
-        JCheckBox artifactSet2ListingCheckBox = getArtifactSet2ListingCheckBox(characterCard, middleSelectorPanel);
-        JCheckBox talentListingCheckBox = getTalentListingCheckBox(characterCard, middleSelectorPanel);
+        JCheckBox artifactSet1ListingCheckBox = getListingCheckBox(characterCard, middleSelectorPanel,"Artifact Listing",
+                new GridConstraints(10, 0, 1, 1, GridConstraints.ANCHOR_SOUTHWEST, GridConstraints.FILL_NONE,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false),
+                ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_SET_ONE);
+        JCheckBox artifactSet2ListingCheckBox = getListingCheckBox(characterCard, middleSelectorPanel,"Artifact Listing",
+                new GridConstraints(14, 0, 1, 1, GridConstraints.ANCHOR_SOUTHWEST, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                        GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false),
+                ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_SET_TWO);
+        JCheckBox talentListingCheckBox = getListingCheckBox(characterCard, middleSelectorPanel,"Talent Listing",
+                new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_NORTHWEST, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                        GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false),
+                ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_TALENT_MATERIALS);
+        JCheckBox weaponMaterialListingCheckbox = getListingCheckBox(characterCard, middleSelectorPanel,"Weapon Material Listing",
+                new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_SOUTHWEST, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                        GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false),
+                ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_WEAPON_MATERIALS);
         getDomainListingsLabel(checkboxAndButtonPanel);
-        JCheckBox weaponMaterialListingCheckbox = getWeaponMaterialListingCheckbox(characterCard, middleSelectorPanel);
-
         artifactSet1ListingCheckBox.addItemListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_SET_ONE));
         artifactSet2ListingCheckBox.addItemListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_SET_TWO));
         weaponMaterialListingCheckbox.addItemListener(new UpdateCharacterCardListener(characterCard,
