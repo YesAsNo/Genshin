@@ -65,9 +65,9 @@ public class CharacterCardGUI extends JFrame {
         dcmb.addElement(UNKNOWN_WEAPON_MESSAGE);
         String weaponType = lookUpWeaponCategoryForCharacter(charName);
         dcmb.addElement(FOUR_STAR_WEAPON_DELIMITER);
-        dcmb.addAll(lookUpWeapons(ToolData.RARITY.FOUR_STAR, weaponType));
+        dcmb.addAll(lookUpWeapons(ToolData.WEAPON_RARITY.FOUR_STAR, weaponType));
         dcmb.addElement(FIVE_STAR_WEAPON_DELIMITER);
-        dcmb.addAll(lookUpWeapons(ToolData.RARITY.FIVE_STAR, weaponType));
+        dcmb.addAll(lookUpWeapons(ToolData.WEAPON_RARITY.FIVE_STAR, weaponType));
     }
     private JPanel getMiddleSelectorPanel(JPanel jpanel) {
         JPanel middleSelectorPanel = new JPanel();

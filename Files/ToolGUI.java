@@ -8,7 +8,7 @@ import static Files.ToolData.weaponMaterialMap;
 import static Files.ToolData.weaponsFlattened;
 import static Files.ToolData.weaponsRaritiesMap;
 
-import Files.ToolData.RARITY;
+import Files.ToolData.WEAPON_RARITY;
 import Files.ToolData.*;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -524,16 +524,16 @@ public class ToolGUI extends JFrame implements ActionListener {
     /**
      * Grabs all weapons based on their rarity and type.
      *
-     * @param rarity rarity of the weapon
+     * @param WEAPONRarity rarity of the weapon
      * @param weaponType type of the weapon
      * @return list of the weapons with the specified rarity.
      */
-    public static List<String> lookUpWeapons(RARITY rarity, String weaponType) {
+    public static List<String> lookUpWeapons(WEAPON_RARITY WEAPONRarity, String weaponType) {
 
         final String FOUR_STAR_WEAPON_KEY = "Four-Star " + weaponType;
         final String FIVE_STAR_WEAPON_KEY = "Five-Star " + weaponType;
 
-        return switch (rarity) {
+        return switch (WEAPONRarity) {
             case FOUR_STAR -> weaponsRaritiesMap.get(FOUR_STAR_WEAPON_KEY);
             case FIVE_STAR -> weaponsRaritiesMap.get(FIVE_STAR_WEAPON_KEY);
         };

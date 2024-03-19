@@ -26,7 +26,7 @@ public class ToolData {
     public static final String SAVE_LOCATION = "./UserData/";
     public static final String  PATH_TO_WEAPON_MATERIAL_MAPPINGS = "./mapping_wp_materials.json";
 
-    public enum RARITY {
+    public enum WEAPON_RARITY {
         FIVE_STAR,
         FOUR_STAR
     }
