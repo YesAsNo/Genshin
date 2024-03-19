@@ -4,6 +4,7 @@ import static Files.ToolGUI.*;
 import static Files.ToolData.*;
 
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import java.awt.event.ActionEvent;
@@ -13,11 +14,13 @@ import java.awt.event.ActionListener;
 public class UpdateLabelListener implements ActionListener {
     private final JLabel _IconLabel;
     private final JLabel _NameLabel;
+    private final JCheckBox _checkBox;
     private final ToolData.RESOURCE_TYPE SELECTION_BOX_TYPE;
 
-    public UpdateLabelListener(JLabel nameLabel , JLabel iconLabel, ToolData.RESOURCE_TYPE RESOURCE_TYPE){
+    public UpdateLabelListener(JLabel nameLabel , JLabel iconLabel, JCheckBox checkBox, ToolData.RESOURCE_TYPE RESOURCE_TYPE){
         _NameLabel = nameLabel;
         _IconLabel = iconLabel;
+        _checkBox = checkBox;
         SELECTION_BOX_TYPE = RESOURCE_TYPE;
     }
     @Override
@@ -29,6 +32,10 @@ public class UpdateLabelListener implements ActionListener {
         {
 
             _NameLabel.setText("");
+            _checkBox.setEnabled(false);
+            if (_checkBox.isSelected()){
+                _checkBox.setSelected(false);
+            }
             if (SELECTION_BOX_TYPE == RESOURCE_TYPE.ARTIFACT) {
                 icon = new ImageIcon(generateResourceIconPath(UNKNOWN_ARTIFACT, ToolData.RESOURCE_TYPE.ARTIFACT));
             }
@@ -39,6 +46,7 @@ public class UpdateLabelListener implements ActionListener {
         else
         {
             _NameLabel.setText(item);
+            _checkBox.setEnabled(true);
             if (SELECTION_BOX_TYPE == RESOURCE_TYPE.WEAPON) {
                 icon = new ImageIcon(generateResourceIconPath(item, ToolData.RESOURCE_TYPE.WEAPON));
             }

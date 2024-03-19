@@ -51,7 +51,7 @@ public class UpdateCharacterCardListener implements ActionListener, ItemListener
         }
 
     }
-    private boolean convertStateChangeToBool(int state){
+    public static boolean convertStateChangeToBool(int state){
         return !(state == SELECTED);
     }
     @Override

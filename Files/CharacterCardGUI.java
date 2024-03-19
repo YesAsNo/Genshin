@@ -295,10 +295,18 @@ public class CharacterCardGUI extends JFrame {
             if (characterCard.getArtifactSet1Status()) {
                 listingCheckBox.doClick();
             }
+            if (characterCard.getArtifactSet1().isEmpty()){
+                listingCheckBox.setSelected(false);
+                listingCheckBox.setEnabled(false);
+            }
         }
         if (dataField == ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_SET_TWO){
             if (characterCard.getArtifactSet2Status()) {
                 listingCheckBox.doClick();
+            }
+            if (characterCard.getArtifactSet2().isEmpty()){
+                listingCheckBox.setSelected(false);
+                listingCheckBox.setEnabled(false);
             }
         }
         if (dataField == ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_TALENT_MATERIALS){
@@ -309,6 +317,10 @@ public class CharacterCardGUI extends JFrame {
         if (dataField == ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_WEAPON_MATERIALS){
             if (characterCard.getWeaponStatus()) {
                 listingCheckBox.doClick();
+            }
+            if (characterCard.getWeapon().isEmpty()){
+                listingCheckBox.setSelected(false);
+                listingCheckBox.setEnabled(false);
             }
         }
         jpanel.add(listingCheckBox,gridConstraints);
@@ -393,9 +405,9 @@ public class CharacterCardGUI extends JFrame {
                 ToolData.CHARACTER_CARD_DATA_FIELD.NAME);
         JComboBox<String> weaponSelectionBox = getWeaponSelectionBox(characterCard, middleSelectorPanel);
         JLabel weaponNameLabel = getNameLabel(characterCard, middleSelectorPanel,
-                new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
-                GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1,
-                false),
+                new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null,
+                        new Dimension(177, 23), null, 1, false),
                 ToolData.CHARACTER_CARD_DATA_FIELD.WEAPON);
         JLabel set1NameLabel = getNameLabel(characterCard, middleSelectorPanel,
                 new GridConstraints(8, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
@@ -444,17 +456,13 @@ public class CharacterCardGUI extends JFrame {
                         0, false));
 
         JLabel weaponIconLabel = getWeaponIcon(characterCard, templateTab);
-        weaponSelectionBox.addActionListener(new UpdateLabelListener(weaponNameLabel, weaponIconLabel, ToolData.RESOURCE_TYPE.WEAPON));
-        weaponSelectionBox.addActionListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.WEAPON));
+
         weaponNameLabel.setToolTipText(TOOLTIP_FOR_WEAPON_NAME_LABEL);
         getCharLabel(characterCard.getCharacterIcon(), templateTab);
         JLabel set1Icon = getSet1Icon(characterCard, templateTab);
         JLabel set2Icon = getSet2Icon(characterCard, templateTab);
 
-        set1ComboBox.addActionListener(new UpdateLabelListener(set1NameLabel, set1Icon, ToolData.RESOURCE_TYPE.ARTIFACT));
-        set2ComboBox.addActionListener(new UpdateLabelListener(set2NameLabel, set2Icon, ToolData.RESOURCE_TYPE.ARTIFACT));
-        set1ComboBox.addActionListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.SET_ONE));
-        set2ComboBox.addActionListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.SET_TWO));
+
 
         JPanel checkboxAndButtonPanel = getCheckboxAndButtonPanel(templateTab);
         JCheckBox artifactSet1ListingCheckBox = getListingCheckBox(characterCard, middleSelectorPanel,"Artifact Listing",
@@ -484,6 +492,12 @@ public class CharacterCardGUI extends JFrame {
                 ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_WEAPON_MATERIALS));
         talentListingCheckBox.addItemListener(new UpdateCharacterCardListener(characterCard,
                 ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_TALENT_MATERIALS));
+        set1ComboBox.addActionListener(new UpdateLabelListener(set1NameLabel, set1Icon,artifactSet1ListingCheckBox, ToolData.RESOURCE_TYPE.ARTIFACT));
+        set2ComboBox.addActionListener(new UpdateLabelListener(set2NameLabel, set2Icon,artifactSet2ListingCheckBox, ToolData.RESOURCE_TYPE.ARTIFACT));
+        set1ComboBox.addActionListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.SET_ONE));
+        set2ComboBox.addActionListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.SET_TWO));
+        weaponSelectionBox.addActionListener(new UpdateLabelListener(weaponNameLabel, weaponIconLabel,weaponMaterialListingCheckbox, ToolData.RESOURCE_TYPE.WEAPON));
+        weaponSelectionBox.addActionListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.WEAPON));
 
         JButton closeButton = getCloseButton(checkboxAndButtonPanel);
         JButton saveButton = getSaveButton(checkboxAndButtonPanel);
