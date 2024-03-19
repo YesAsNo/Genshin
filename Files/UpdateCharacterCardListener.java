@@ -55,29 +55,36 @@ public class UpdateCharacterCardListener implements ActionListener, ItemListener
     }
     @Override
     public void itemStateChanged(ItemEvent e) {
+        //TODO: Add methods to update FarmedTalents and WeaponMats
         boolean currentStatus;
-        String artifactSetName = "";
+        String farmedItemName = "";
         switch(_changedData){
             case FARMING_SET_ONE:
                 currentStatus = convertStateChangeToBool(e.getStateChange());
                 _characterCard.setArtifactSet1Status(currentStatus);
-                artifactSetName= _characterCard.getArtifactSet1();
-                if (!artifactSetName.isEmpty())
+                farmedItemName= _characterCard.getArtifactSet1();
+                if (!farmedItemName.isEmpty())
                 {
-                    updateFarmedArtifacts(artifactSetName,_characterCard.getCharacterName(),currentStatus);
+                    updateFarmedArtifacts(farmedItemName,_characterCard.getCharacterName(),currentStatus);
                 }
                 return;
             case FARMING_SET_TWO:
                 currentStatus = convertStateChangeToBool(e.getStateChange());
                 _characterCard.setArtifactSet2Status(currentStatus);
-                artifactSetName = _characterCard.getArtifactSet2();
-                if (!artifactSetName.isEmpty())
+                farmedItemName = _characterCard.getArtifactSet2();
+                if (!farmedItemName.isEmpty())
                 {
-                    updateFarmedArtifacts(artifactSetName,_characterCard.getCharacterName(),currentStatus);
+                    updateFarmedArtifacts(farmedItemName,_characterCard.getCharacterName(),currentStatus);
                 }
                 return;
-            case FARMING_TALENT_MATERIALS: _characterCard.setTalentStatus(convertStateChangeToBool(e.getStateChange()));return;
-            case FARMING_WEAPON_MATERIALS: _characterCard.setWeaponStatus(convertStateChangeToBool(e.getStateChange()));return;
+            case FARMING_TALENT_MATERIALS:
+                currentStatus = convertStateChangeToBool(e.getStateChange());
+                _characterCard.setTalentStatus(currentStatus);
+                return;
+            case FARMING_WEAPON_MATERIALS:
+                currentStatus = convertStateChangeToBool(e.getStateChange());
+                _characterCard.setWeaponStatus(currentStatus);
+                return;
             default:
         }
 

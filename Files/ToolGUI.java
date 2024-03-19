@@ -358,14 +358,6 @@ public class ToolGUI extends JFrame implements ActionListener {
             } else {
                 new CharacterCardGUI(characterCard);
             }
-
-            /*if (!isTabAlreadyOpen(characterTabPane, characterName)) {
-                JPanel characterPage = generateCharacterPage(characterCard);
-                characterTabPane.addTab(characterName, characterPage);
-                characterTabPane.setSelectedComponent(characterPage);
-            } else {
-                characterTabPane.setSelectedIndex(characterTabPane.indexOfTab(characterName));
-            }*/
         });
 
         return characterButton;

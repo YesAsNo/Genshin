@@ -72,7 +72,7 @@ public class CharacterCardGUI extends JFrame {
     }
     private JPanel getMiddleSelectorPanel(JPanel jpanel) {
         JPanel middleSelectorPanel = new JPanel();
-        middleSelectorPanel.setLayout(new GridLayoutManager(13, 1, new Insets(5, 5, 5, 5), -1, -1));
+        middleSelectorPanel.setLayout(new GridLayoutManager(16, 1, new Insets(5, 5, 5, 5), -1, -1));
         middleSelectorPanel.setAlignmentY(0.5f);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 1;
@@ -139,7 +139,7 @@ public class CharacterCardGUI extends JFrame {
         weaponSelectionBox.setSelectedItem(
                 characterCard.getWeapon().isEmpty() ? UNKNOWN_WEAPON_MESSAGE : characterCard.getWeapon());
         jpanel.add(weaponSelectionBox,
-                new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
+                new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW,
                         GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         return weaponSelectionBox;
@@ -154,7 +154,7 @@ public class CharacterCardGUI extends JFrame {
         }
         weaponNameLabel.setText(characterCard.getWeapon());
         jpanel.add(weaponNameLabel,
-                new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
+                new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1,
                         false));
         return weaponNameLabel;
@@ -177,7 +177,7 @@ public class CharacterCardGUI extends JFrame {
         set1NameLabel.setVerticalTextPosition(0);
         set1NameLabel.setToolTipText(TOOLTIP_FOR_LABELS_WITHOUT_ICON);
         jpanel.add(set1NameLabel,
-                new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                new GridConstraints(8, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null,
                         new Dimension(177, 23), null, 1, false));
         return set1NameLabel;
@@ -200,7 +200,7 @@ public class CharacterCardGUI extends JFrame {
         set1ComboBox.setSelectedItem(
                 characterCard.getArtifactSet1().isEmpty() ? UNKNOWN_SET_MESSAGE : characterCard.getArtifactSet1());
         jpanel.add(set1ComboBox,
-                new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
+                new GridConstraints(9, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW,
                         GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         return set1ComboBox;
@@ -223,7 +223,7 @@ public class CharacterCardGUI extends JFrame {
         set2ComboBox.setSelectedItem(
                 characterCard.getArtifactSet2().isEmpty() ? UNKNOWN_SET_MESSAGE : characterCard.getArtifactSet2());
         jpanel.add(set2ComboBox,
-                new GridConstraints(11, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
+                new GridConstraints(13, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW,
                         GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         return set2ComboBox;
@@ -239,7 +239,7 @@ public class CharacterCardGUI extends JFrame {
         set2NameLabel.setToolTipText(TOOLTIP_FOR_LABELS_WITHOUT_ICON);
         set2NameLabel.setText(characterCard.getArtifactSet2());
         jpanel.add(set2NameLabel,
-                new GridConstraints(10, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                new GridConstraints(12, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null,
                         new Dimension(177, 23), null, 1, false));
         return set2NameLabel;
@@ -247,9 +247,9 @@ public class CharacterCardGUI extends JFrame {
 
     private void getCharacterWeaponSpacer(JPanel jpanel) {
         JPanel characterWeaponSpacer = new JPanel();
-        characterWeaponSpacer.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 40, 0), -1, -1));
+        characterWeaponSpacer.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 7, 0), -1, -1));
         jpanel.add(characterWeaponSpacer,
-                new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null,
                         0, false));
@@ -257,9 +257,9 @@ public class CharacterCardGUI extends JFrame {
 
     private void getWeaponSet1Spacer(JPanel jpanel) {
         JPanel weaponSet1Spacer = new JPanel();
-        weaponSet1Spacer.setLayout(new GridLayoutManager(1, 1, new Insets(48, 0, 0, 0), -1, -1));
+        weaponSet1Spacer.setLayout(new GridLayoutManager(1, 1, new Insets(15, 0, 0, 0), -1, -1));
         jpanel.add(weaponSet1Spacer,
-                new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null,
                         0, false));
@@ -267,9 +267,9 @@ public class CharacterCardGUI extends JFrame {
 
     private void getSet2Spacer(JPanel jpanel) {
         JPanel secondSetSpacer = new JPanel();
-        secondSetSpacer.setLayout(new GridLayoutManager(1, 1, new Insets(48, 0, 0, 0), -1, -1));
+        secondSetSpacer.setLayout(new GridLayoutManager(1, 1, new Insets(15, 0, 0, 0), -1, -1));
         jpanel.add(secondSetSpacer,
-                new GridConstraints(9, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                new GridConstraints(11, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null,
                         0, false));
@@ -277,9 +277,9 @@ public class CharacterCardGUI extends JFrame {
 
     private void getYetAnotherSpacerOnTheBottom(JPanel jpanel) {
         JPanel bottomSpacer = new JPanel();
-        bottomSpacer.setLayout(new GridLayoutManager(1, 1, new Insets(40, 0, 20, 0), -1, -1));
+        bottomSpacer.setLayout(new GridLayoutManager(1, 1, new Insets(20, 0, 0, 0), -1, -1));
         jpanel.add(bottomSpacer,
-                new GridConstraints(12, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                new GridConstraints(15, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null,
                         0, false));
@@ -378,7 +378,7 @@ public class CharacterCardGUI extends JFrame {
         return checkboxAndButtonPanel;
     }
 
-    private JCheckBox getArtifactListingCheckBox(CharacterCard characterCard, JPanel jpanel) {
+    private JCheckBox getArtifactSet1ListingCheckBox(CharacterCard characterCard, JPanel jpanel) {
         JCheckBox artifactListingCheckBox = new JCheckBox();
         Font artifactListingCheckBoxFont =
                 $$$getFont$$$(-1, 14, artifactListingCheckBox.getFont());
@@ -390,7 +390,24 @@ public class CharacterCardGUI extends JFrame {
             artifactListingCheckBox.doClick();
         }
         jpanel.add(artifactListingCheckBox,
-                new GridConstraints(2, 0, 1, 2, GridConstraints.ANCHOR_SOUTHWEST, GridConstraints.FILL_NONE,
+                new GridConstraints(10, 0, 1, 1, GridConstraints.ANCHOR_SOUTHWEST, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                        GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        return artifactListingCheckBox;
+    }
+    private JCheckBox getArtifactSet2ListingCheckBox(CharacterCard characterCard, JPanel jpanel) {
+        JCheckBox artifactListingCheckBox = new JCheckBox();
+        Font artifactListingCheckBoxFont =
+                $$$getFont$$$(-1, 14, artifactListingCheckBox.getFont());
+        if (artifactListingCheckBoxFont != null) {
+            artifactListingCheckBox.setFont(artifactListingCheckBoxFont);
+        }
+        artifactListingCheckBox.setText("Artifact Listing");
+        if (characterCard.getArtifactSet1Status() || characterCard.getArtifactSet2Status()) {
+            artifactListingCheckBox.doClick();
+        }
+        jpanel.add(artifactListingCheckBox,
+                new GridConstraints(14, 0, 1, 1, GridConstraints.ANCHOR_SOUTHWEST, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                         GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         return artifactListingCheckBox;
@@ -407,7 +424,7 @@ public class CharacterCardGUI extends JFrame {
             talentListingCheckBox.doClick();
         }
         jpanel.add(talentListingCheckBox,
-                new GridConstraints(3, 0, 1, 2, GridConstraints.ANCHOR_NORTHWEST, GridConstraints.FILL_NONE,
+                new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_NORTHWEST, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                         GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         return talentListingCheckBox;
@@ -439,7 +456,7 @@ public class CharacterCardGUI extends JFrame {
             weaponMaterialListingCheckbox.doClick();
         }
         jpanel.add(weaponMaterialListingCheckbox,
-                new GridConstraints(4, 0, 1, 2, GridConstraints.ANCHOR_SOUTHWEST, GridConstraints.FILL_NONE,
+                new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_SOUTHWEST, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                         GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         return weaponMaterialListingCheckbox;
@@ -486,9 +503,9 @@ public class CharacterCardGUI extends JFrame {
         }
         setDetailsTextArea.setText("[ Set Details ]");
         jpanel.add(setDetailsTextArea,
-                new GridConstraints(5, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                new GridConstraints(3, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW,
-                        new Dimension(150, 280), new Dimension(150, 280), null, 0, false));
+                        new Dimension(150, 380), new Dimension(150, 380), null, 0, false));
         return setDetailsTextArea;
     }
 
@@ -531,13 +548,14 @@ public class CharacterCardGUI extends JFrame {
         set2ComboBox.addActionListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.SET_TWO));
 
         JPanel checkboxAndButtonPanel = getCheckboxAndButtonPanel(templateTab);
-        JCheckBox artifactListingCheckBox = getArtifactListingCheckBox(characterCard, checkboxAndButtonPanel);
-        JCheckBox talentListingCheckBox = getTalentListingCheckBox(characterCard, checkboxAndButtonPanel);
+        JCheckBox artifactSet1ListingCheckBox = getArtifactSet1ListingCheckBox(characterCard, middleSelectorPanel);
+        JCheckBox artifactSet2ListingCheckBox = getArtifactSet2ListingCheckBox(characterCard, middleSelectorPanel);
+        JCheckBox talentListingCheckBox = getTalentListingCheckBox(characterCard, middleSelectorPanel);
         getDomainListingsLabel(checkboxAndButtonPanel);
-        JCheckBox weaponMaterialListingCheckbox = getWeaponMaterialListingCheckbox(characterCard, checkboxAndButtonPanel);
+        JCheckBox weaponMaterialListingCheckbox = getWeaponMaterialListingCheckbox(characterCard, middleSelectorPanel);
 
-        artifactListingCheckBox.addItemListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_SET_ONE));
-        artifactListingCheckBox.addItemListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_SET_TWO));
+        artifactSet1ListingCheckBox.addItemListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_SET_ONE));
+        artifactSet2ListingCheckBox.addItemListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_SET_TWO));
         weaponMaterialListingCheckbox.addItemListener(new UpdateCharacterCardListener(characterCard,
                 ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_WEAPON_MATERIALS));
         talentListingCheckBox.addItemListener(new UpdateCharacterCardListener(characterCard,

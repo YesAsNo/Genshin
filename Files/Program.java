@@ -44,7 +44,7 @@ public class Program extends JFrame implements ActionListener {
         $$$setupUI$$$();
         setContentPane(devMainPanel);
         setTitle("Genshin Domain App!");
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(1000, 600);
         setLocationRelativeTo(null);
         setVisible(true);
