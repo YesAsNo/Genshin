@@ -148,6 +148,9 @@ public class ToolGUI extends JFrame implements ActionListener {
         }
     }
 
+    /**
+     * Parses character weapons.
+     */
     private void parseCharacterWeapons() {
         for (CharacterCard characterCard : generatedCharacterCards) {
             String charWeapon = characterCard.getWeapon();
@@ -165,6 +168,9 @@ public class ToolGUI extends JFrame implements ActionListener {
         System.out.println(farmedWeapons.keySet().size());
     }
 
+    /**
+     * Parses character artifacts.
+     */
     private void parseCharacterArtifacts() {
         for (CharacterCard characterCard : generatedCharacterCards) {
             String charArtifactSet1 = characterCard.getArtifactSet1();
@@ -259,10 +265,17 @@ public class ToolGUI extends JFrame implements ActionListener {
         }
     }
 
-    public static void updateFarmedArtifacts(Map<String, List<String>> farmedMap, String setName, String charName,
-                                             boolean isFarming) {
-        if (farmedMap.containsKey(setName)) {
-            List<String> charactersFarmingSet = farmedMap.get(setName);
+    /**
+     * Updates the farmed map.
+     * @param farmedMap The map to update
+     * @param itemName The name of the item that is farmed.
+     * @param charName The name of the character that farms the item.
+     * @param isFarming Flag that designates whether the character has started (true) or stopped (false) farming the item.
+     */
+    public static void updateFarmedItemMap(Map<String, List<String>> farmedMap, String itemName, String charName,
+                                           boolean isFarming) {
+        if (farmedMap.containsKey(itemName)) {
+            List<String> charactersFarmingSet = farmedMap.get(itemName);
             if (charactersFarmingSet.contains(charName)) {
                 if (!isFarming) {
                     charactersFarmingSet.remove(charName);
@@ -276,7 +289,7 @@ public class ToolGUI extends JFrame implements ActionListener {
             if (isFarming) {
                 List<String> charactersFarmingSet = new ArrayList<>();
                 charactersFarmingSet.add(charName);
-                farmedMap.put(setName, charactersFarmingSet);
+                farmedMap.put(itemName, charactersFarmingSet);
             }
         }
     }
@@ -365,10 +378,10 @@ public class ToolGUI extends JFrame implements ActionListener {
     }
 
     /**
-     * Verifies if a tab for the specified character already exists in the tabbed pane.
+     * Verifies if a window for the specified character has already been opened.
      *
      * @param charName the specified character
-     * @return true if the tab exists, otherwise false.
+     * @return true if the window is open, otherwise false.
      */
 
     public boolean isWindowAlreadyOpen(String charName) {
@@ -381,6 +394,11 @@ public class ToolGUI extends JFrame implements ActionListener {
         return false;
     }
 
+    /**
+     * Gets the open window for the specified character.
+     * @param charName the name of the character
+     * @return window with the loaded character card for the specified character
+     */
     public Window getOpenWindow(String charName) {
         assert isWindowAlreadyOpen(charName);
         Frame[] createdWindows = Frame.getFrames();
@@ -393,9 +411,10 @@ public class ToolGUI extends JFrame implements ActionListener {
     }
 
     /**
-     * Generates a path to the character icon.
+     * Generates a path to the specified resource.
      *
-     * @param resourceName the character name whose icon path is to be returned
+     * @param resourceName the name of the resource
+     * @param resourceType the type of the resource
      * @return character icon path
      */
     public static String generateResourceIconPath(String resourceName, RESOURCE_TYPE resourceType) {
@@ -509,6 +528,12 @@ public class ToolGUI extends JFrame implements ActionListener {
         }
         return null;
     }
+
+    /**
+     * Looks up weapon material for the specified weapon.
+     * @param weaponName the weapon name
+     * @return the weapon material.
+     */
 
     public static String lookUpWeaponMaterial(String weaponName) {
         assert weaponsFlattened.contains(weaponName);
