@@ -2,15 +2,15 @@ package Files;
 import Files.ToolData.*;
 public class WeaponInfo {
 
-    private final WEAPON_RARITY WEAPONRarity;
+    private final WEAPON_RARITY weaponRarity;
     private final String weaponType;
     public WeaponInfo(String key){
 
         if (key.contains("Five")){
-            WEAPONRarity = WEAPON_RARITY.FIVE_STAR;
+            weaponRarity = WEAPON_RARITY.FIVE_STAR;
         }
         else{
-            WEAPONRarity = WEAPON_RARITY.FOUR_STAR;
+            weaponRarity = WEAPON_RARITY.FOUR_STAR;
         }
         String[] subkeys = key.split(" ");
         if (subkeys.length > 1){
@@ -22,7 +22,7 @@ public class WeaponInfo {
 
     }
     public WEAPON_RARITY getRarity(){
-        return WEAPONRarity;
+        return weaponRarity;
     }
     public String getWeaponType(){
         return weaponType;
