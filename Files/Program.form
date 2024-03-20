@@ -440,9 +440,11 @@
                                 <margin top="5" left="5" bottom="5" right="5"/>
                                 <constraints>
                                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
-                                  <gridbag top="0" left="50" bottom="0" right="50" weightx="1.0" weighty="1.0"/>
+                                  <gridbag top="10" left="50" bottom="0" right="50" weightx="1.0" weighty="1.0"/>
                                 </constraints>
-                                <properties/>
+                                <properties>
+                                  <background color="-1"/>
+                                </properties>
                                 <border type="etched"/>
                                 <children>
                                   <component id="39eef" class="javax.swing.JLabel">

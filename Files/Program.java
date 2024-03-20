@@ -373,11 +373,13 @@ public class Program extends JFrame implements ActionListener {
         devUpdatesTextPane.setEditable(false);
         devUpdatesTextPane.setEnabled(true);
         devUpdatesTextPane.setFocusable(false);
+
         Font devUpdatesTextPaneFont =
                 this.$$$getFont$$$("Source Code Pro Semibold", -1, -1, devUpdatesTextPane.getFont());
         if (devUpdatesTextPaneFont != null) {
             devUpdatesTextPane.setFont(devUpdatesTextPaneFont);
         }
+
         devUpdatesTextPane.setForeground(new Color(-11071434));
         devUpdatesTextPane.setMargin(new Insets(30, 20, 10, 10));
         devUpdatesTextPane.setSelectionColor(new Color(-9555638));
@@ -699,6 +701,7 @@ public class Program extends JFrame implements ActionListener {
         devDomainsScrollPane.setViewportView(devDomainsPanelForEverything);
         final JPanel panel1 = new JPanel();
         panel1.setLayout(new GridLayoutManager(1, 4, new Insets(5, 5, 5, 5), -1, -1));
+        panel1.setBackground(new Color(-1));
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -706,7 +709,7 @@ public class Program extends JFrame implements ActionListener {
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.NORTH;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(0, 50, 0, 50);
+        gbc.insets = new Insets(10, 50, 0, 50);
         devDomainsPanelForEverything.add(panel1, gbc);
         panel1.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
                 TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
