@@ -126,8 +126,8 @@ public class ToolData {
         parseCharacterMapping(gson, new JsonReader(new FileReader(PATH_TO_CHARACTER_MAPPINGS)));
         parseArtifactSetDescriptionMapping(gson, new JsonReader(new FileReader(PATH_TO_ARTIFACT_SET_MAPPINGS)));
         parseWeaponMaterialMapping(gson, new JsonReader(new FileReader(PATH_TO_WEAPON_MATERIAL_MAPPINGS)));
-        new ToolGUI();
-        //new Program();
+        //new ToolGUI();
+        new Program();
 
         }
     }
