@@ -1,6 +1,6 @@
 package Files;
 
-import static Files.Data.characters_flattened;
+import static Files.ToolData.charactersFlattened;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -36,16 +36,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.Set;
 
 public class Program extends JFrame implements ActionListener {
     public Program() {
         $$$setupUI$$$();
-        _openTabs.add("Characters");
-        _openTabs.add("Artifacts");
         setContentPane(devMainPanel);
         setTitle("Genshin Domain App!");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -67,7 +63,7 @@ public class Program extends JFrame implements ActionListener {
     private JButton devSearchButton;
     private JPanel devSearchResultPanel;
     private JTextField devNotesTextField;
-    private JComboBox devSet1SelectionBox;
+    private JComboBox<String> devSet1SelectionBox;
     private JCheckBox devArtifactListingCheckBox;
     private JCheckBox devTalentListingCheckBox;
     private JButton devCloseButton;
@@ -90,7 +86,7 @@ public class Program extends JFrame implements ActionListener {
     private JLabel devCharacterNameLabel;
     private JLabel devWeaponNameLabel;
     private JLabel devSet1NameLabel;
-    private JComboBox devSet2SelectionBox;
+    private JComboBox<String> devSet2SelectionBox;
     private JLabel devSet2NameLabel;
     private JLabel devWeaponIconLabel;
     private JLabel devCharacterIconLabel;
@@ -99,9 +95,8 @@ public class Program extends JFrame implements ActionListener {
     private JPanel devButtonAndCheckboxPanel;
     private JLabel devDomainListingsLabel;
     private JCheckBox devWepMatListingLabel;
-    private JComboBox devWeaponSelectorBox;
+    private JComboBox<String> devWeaponSelectorBox;
     private JScrollPane scrollPane1;
-    private Set<String> _openTabs;
 
     /**
      * Creates a few custom UI components by hand.
@@ -111,7 +106,6 @@ public class Program extends JFrame implements ActionListener {
         devSearchResultPanel = new JPanel(new GridBagLayout());
         scrollPane1 = new JScrollPane();
         devMainPanel = new JPanel();
-        _openTabs = new HashSet<>();
         devSearchButton = new JButton("✓");
         devSearchButton.addActionListener(this);
         devSearchField = new JTextField();
@@ -135,7 +129,7 @@ public class Program extends JFrame implements ActionListener {
 
         String userFieldInput = devSearchField.getText().toLowerCase();
 
-        for (String s : characters_flattened) {
+        for (String s : charactersFlattened) {
             if (s.toLowerCase().contains(userFieldInput)) {
                 matched = true;
                 generateCharacterButton(s, matchedCount);

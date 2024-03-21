@@ -113,7 +113,6 @@ public class ToolGUI extends JFrame implements ActionListener {
                 characterSelectorField.setText("");
             }
         });
-        System.out.println("2415");
         readGeneratedCharacterCards();
     }
 
