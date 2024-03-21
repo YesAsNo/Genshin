@@ -116,6 +116,7 @@ public class Program extends JFrame implements ActionListener {
     private JPanel devBasicInfoRightPanel;
     private JLabel devWelcomeLabel;
     private JPanel devBasicInfoSpacer;
+    private JPanel devWeaponMatDomain;
     private JScrollPane scrollPane1;
 
     /**
