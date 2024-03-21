@@ -2,6 +2,7 @@ package Files;
 
 import static Files.ToolData.RESOURCE_TYPE;
 import static Files.ToolData.artifactsFlattened;
+import static Files.ToolData.farmedWeapons;
 import static Files.ToolGUI.CHARACTER_LIMIT;
 import static Files.ToolGUI.CLOSE_TEXT;
 import static Files.ToolGUI.FIVE_STAR_WEAPON_DELIMITER;
@@ -505,6 +506,7 @@ public class CharacterCardGUI extends JFrame {
 
         closeButton.addActionListener(new CloseButtonListener(this));
         saveButton.addActionListener(new SaveButtonListener(characterCard));
+        saveButton.addActionListener(new WeaponCardListener(farmedWeapons));
         set1ComboBox.addActionListener(new UpdateTextAreaListener(setDetailsTextArea));
         set2ComboBox.addActionListener(new UpdateTextAreaListener(setDetailsTextArea));
 

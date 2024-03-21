@@ -1,8 +1,12 @@
 package Files;
 
+import static Files.ToolGUI.WEAPON_SAVE_FILE_NAME;
+
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 import java.util.*;
@@ -17,6 +21,8 @@ public class ToolData {
     public static Map<String, List<String>> characterWeaponsMap = new TreeMap<>();
     public static Map<String,String> artifactSetDescriptionsMap = new TreeMap<>();
     public static Map<String,List<String>> weaponMaterialMap = new TreeMap<>();
+    public static Map<String, List<String>> farmedWeapons = new TreeMap<>();
+    public static Map<String, List<String>> farmedArtifacts = new TreeMap<>();
 
     private static final String PATH_TO_CHARACTER_JSON = "./characters.json";
     private static final String PATH_TO_WEAPONS_JSON = "./weapons.json";
@@ -116,6 +122,16 @@ public class ToolData {
         assert reader != null;
         weaponMaterialMap = gson.fromJson(reader,weaponMaterialMap.getClass());
     }
+    private static void parseFarmedWeapons(Gson gson, File f)throws FileNotFoundException {
+        if (!f.exists()){
+            return;
+        }
+        assert gson != null;
+
+        JsonReader reader = new JsonReader(new FileReader(f));
+
+        farmedWeapons = gson.fromJson(reader,farmedWeapons.getClass());
+    }
 
     public static void main(String[] args) throws Exception {
 
@@ -126,8 +142,9 @@ public class ToolData {
         parseCharacterMapping(gson, new JsonReader(new FileReader(PATH_TO_CHARACTER_MAPPINGS)));
         parseArtifactSetDescriptionMapping(gson, new JsonReader(new FileReader(PATH_TO_ARTIFACT_SET_MAPPINGS)));
         parseWeaponMaterialMapping(gson, new JsonReader(new FileReader(PATH_TO_WEAPON_MATERIAL_MAPPINGS)));
-        //new ToolGUI();
-        new Program();
+        parseFarmedWeapons(gson, new File(SAVE_LOCATION+ WEAPON_SAVE_FILE_NAME ));
+        new ToolGUI();
+        //new Program();
 
         }
     }

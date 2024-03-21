@@ -1,5 +1,7 @@
 package Files;
 
+import static Files.ToolData.farmedArtifacts;
+import static Files.ToolData.farmedWeapons;
 import static Files.ToolGUI.*;
 import static javax.swing.DefaultButtonModel.SELECTED;
 
@@ -82,6 +84,10 @@ public class UpdateCharacterCardListener implements ActionListener, ItemListener
             case FARMING_WEAPON_MATERIALS:
                 currentStatus = convertStateChangeToBool(e.getStateChange());
                 _characterCard.setWeaponStatus(currentStatus);
+                farmedItemName = _characterCard.getWeapon();
+                if (!farmedItemName.isEmpty()){
+                    updateFarmedItemMap(farmedWeapons,farmedItemName,_characterCard.getCharacterName(),currentStatus);
+                }
                 return;
             default:
         }
