@@ -3,13 +3,20 @@ package Files;
 import static Files.ToolGUI.WEAPON_SAVE_FILE_NAME;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-
-import java.util.*;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class ToolData {
     public static Map<String,List<String>> charactersElementsMap = new TreeMap<>();
@@ -21,8 +28,8 @@ public class ToolData {
     public static Map<String, List<String>> characterWeaponsMap = new TreeMap<>();
     public static Map<String,String> artifactSetDescriptionsMap = new TreeMap<>();
     public static Map<String,List<String>> weaponMaterialMap = new TreeMap<>();
-    public static Map<String, List<String>> farmedWeapons = new TreeMap<>();
-    public static Map<String, List<String>> farmedArtifacts = new TreeMap<>();
+    public static Map<String, Set<String>> farmedWeapons = new TreeMap<>();
+    public static Map<String, Set<String>> farmedArtifacts = new TreeMap<>();
 
     private static final String PATH_TO_CHARACTER_JSON = "./characters.json";
     private static final String PATH_TO_WEAPONS_JSON = "./weapons.json";
@@ -127,10 +134,9 @@ public class ToolData {
             return;
         }
         assert gson != null;
-
+        Type setType = new TypeToken<Map<String,TreeSet<String>>>(){}.getType();
         JsonReader reader = new JsonReader(new FileReader(f));
-
-        farmedWeapons = gson.fromJson(reader,farmedWeapons.getClass());
+        farmedWeapons = gson.fromJson(reader,setType);
     }
 
     public static void main(String[] args) throws Exception {
@@ -142,7 +148,7 @@ public class ToolData {
         parseCharacterMapping(gson, new JsonReader(new FileReader(PATH_TO_CHARACTER_MAPPINGS)));
         parseArtifactSetDescriptionMapping(gson, new JsonReader(new FileReader(PATH_TO_ARTIFACT_SET_MAPPINGS)));
         parseWeaponMaterialMapping(gson, new JsonReader(new FileReader(PATH_TO_WEAPON_MATERIAL_MAPPINGS)));
-        parseFarmedWeapons(gson, new File(SAVE_LOCATION+ WEAPON_SAVE_FILE_NAME ));
+        parseFarmedWeapons(gson, new File(SAVE_LOCATION + WEAPON_SAVE_FILE_NAME ));
         new ToolGUI();
         //new Program();
 

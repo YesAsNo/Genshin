@@ -8,7 +8,7 @@ import com.intellij.uiDesigner.core.Spacer;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.*;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -21,6 +21,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.plaf.FontUIResource;
@@ -1426,6 +1427,48 @@ public class Program extends JFrame implements ActionListener {
                 new GridConstraints(3, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW,
                         new Dimension(150, 380), new Dimension(150, 380), null, 0, false));
+        devWeaponMatDomain = new JPanel();
+        devWeaponMatDomain.setLayout(new GridBagLayout());
+        devWeaponMatDomain.setBackground(new Color(-1));
+        devTabbedPane.addTab("WeaponMat", devWeaponMatDomain);
+        final JPanel panel13 = new JPanel();
+        panel13.setLayout(new GridBagLayout());
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        devWeaponMatDomain.add(panel13, gbc);
+        final JScrollPane scrollPane2 = new JScrollPane();
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        panel13.add(scrollPane2, gbc);
+        final JPanel panel14 = new JPanel();
+        panel14.setLayout(new GridBagLayout());
+        scrollPane2.setViewportView(panel14);
+        final JPanel panel15 = new JPanel();
+        panel15.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        panel15.setBackground(new Color(-1));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.BOTH;
+        panel14.add(panel15, gbc);
+        final JLabel label28 = new JLabel();
+        Font label28Font = this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 20, label28.getFont());
+        if (label28Font != null) {
+            label28.setFont(label28Font);
+        }
+        label28.setForeground(new Color(-1767091));
+        label28.setText("Hidden Palace of Lianshan Formula");
+        panel15.add(label28, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
+                GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /** @noinspection ALL */

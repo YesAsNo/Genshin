@@ -10,8 +10,8 @@ import static Files.ToolData.weaponMaterialMap;
 import static Files.ToolData.weaponsFlattened;
 import static Files.ToolData.weaponsRaritiesMap;
 
+import Files.ToolData.RESOURCE_TYPE;
 import Files.ToolData.WEAPON_RARITY;
-import Files.ToolData.*;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -54,6 +54,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class ToolGUI extends JFrame implements ActionListener {
 
@@ -90,7 +91,6 @@ public class ToolGUI extends JFrame implements ActionListener {
     private final JPanel devWeaponTabScrollPanePanel = new JPanel();
     private static final List<CharacterCard> generatedCharacterCards = new ArrayList<>();
     private static final JComboBox<String> devFilterComboBox = new JComboBox<>();
-
 
     /**
      * Constructor of the GUI class.
@@ -153,6 +153,7 @@ public class ToolGUI extends JFrame implements ActionListener {
      * Parses character weapons.
      */
     private void parseCharacterWeapons() {
+
         for (CharacterCard characterCard : generatedCharacterCards) {
             String charWeapon = characterCard.getWeapon();
             if (!charWeapon.isEmpty() && characterCard.getWeaponStatus()) {
@@ -160,7 +161,7 @@ public class ToolGUI extends JFrame implements ActionListener {
                 if (keys.contains(charWeapon)) {
                     farmedWeapons.get(charWeapon).add(characterCard.getCharacterName());
                 } else {
-                    List<String> chars = new ArrayList<>();
+                    Set<String> chars = new TreeSet<>();
                     chars.add(characterCard.getCharacterName());
                     farmedWeapons.put(charWeapon, chars);
                 }
@@ -181,7 +182,7 @@ public class ToolGUI extends JFrame implements ActionListener {
                 if (keys.contains(charArtifactSet1)) {
                     farmedArtifacts.get(charArtifactSet1).add(characterCard.getCharacterName());
                 } else {
-                    List<String> chars = new ArrayList<>();
+                    Set<String> chars = new TreeSet<>();
                     chars.add(characterCard.getCharacterName());
                     farmedArtifacts.put(charArtifactSet1, chars);
                 }
@@ -191,7 +192,7 @@ public class ToolGUI extends JFrame implements ActionListener {
                 if (keys.contains(charArtifactSet2)) {
                     farmedArtifacts.get(charArtifactSet2).add(characterCard.getCharacterName());
                 } else {
-                    List<String> chars = new ArrayList<>();
+                    Set<String> chars = new TreeSet<>();
                     chars.add(characterCard.getCharacterName());
                     farmedArtifacts.put(charArtifactSet2, chars);
                 }
@@ -274,10 +275,10 @@ public class ToolGUI extends JFrame implements ActionListener {
      * @param charName The name of the character that farms the item.
      * @param isFarming Flag that designates whether the character has started (true) or stopped (false) farming the item.
      */
-    public static void updateFarmedItemMap(Map<String, List<String>> farmedMap, String itemName, String charName,
+    public static void updateFarmedItemMap(Map<String, Set<String>> farmedMap, String itemName, String charName,
                                            boolean isFarming) {
         if (farmedMap.containsKey(itemName)) {
-            List<String> charactersFarmingSet = farmedMap.get(itemName);
+            Set<String> charactersFarmingSet = farmedMap.get(itemName);
             if (charactersFarmingSet.contains(charName)) {
                 if (!isFarming) {
                     charactersFarmingSet.remove(charName);
@@ -289,7 +290,7 @@ public class ToolGUI extends JFrame implements ActionListener {
             }
         } else {
             if (isFarming) {
-                List<String> charactersFarmingSet = new ArrayList<>();
+                Set<String> charactersFarmingSet = new TreeSet<>();
                 charactersFarmingSet.add(charName);
                 farmedMap.put(itemName, charactersFarmingSet);
             }
