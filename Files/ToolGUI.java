@@ -213,20 +213,17 @@ public class ToolGUI extends JFrame implements ActionListener {
         boolean debugMode;
         if (e.getSource() == searchConfirmButton) {
             userFieldInput = characterSelectorField.getText().toLowerCase();
-            debugMode = userFieldInput.equalsIgnoreCase("DEBUG");
             selectedCharacterPanel.removeAll();
             characterSearchScrollPane.updateUI();
-            if (!userFieldInput.isEmpty()) {
-                for (String s : charactersFlattened) {
-                    if (s.toLowerCase().contains(userFieldInput) || debugMode) {
-                        {
-                            generateCharacterButton(s, matchedCount);
-                        }
-                        matchedCount++;
+            for (String s : charactersFlattened) {
+                if (s.toLowerCase().contains(userFieldInput)) {
+                    {
+                        generateCharacterButton(s, matchedCount);
+                    }
+                    matchedCount++;
 
                     }
                 }
-            }
             if (matchedCount == 0) {
                 generateCharacterButton(UNKNOWN_CHARACTER, matchedCount);
             } else {
@@ -244,23 +241,18 @@ public class ToolGUI extends JFrame implements ActionListener {
             }
         } else {
             userFieldInput = devWeaponsTabSearchbar.getText().toLowerCase();
-            debugMode = userFieldInput.equalsIgnoreCase("DEBUG");
             devWeaponTabScrollPanePanel.removeAll();
             devWeaponTabScrollPane.updateUI();
-            if (!userFieldInput.isEmpty()) {
-
-                for (String s : weaponsFlattened) {
-                    String weaponCategory = lookUpWeaponRarityAndType(s).getWeaponType();
-                    String filterOption = (String) devFilterComboBox.getSelectedItem();
-                    assert weaponCategory != null;
-                    assert filterOption != null;
-                    if (s.toLowerCase().contains(userFieldInput) && (filterOption.equalsIgnoreCase(weaponCategory) ||
-                            filterOption.equalsIgnoreCase(WEAPON_FILTER)) || debugMode) {
-                        {
-                            generateWeaponCard(s, matchedCount);
-                        }
-                        matchedCount++;
-                    }
+            for (String s : weaponsFlattened) {
+                String weaponCategory = lookUpWeaponRarityAndType(s).getWeaponType();
+                String filterOption = (String) devFilterComboBox.getSelectedItem();
+                assert weaponCategory != null;
+                assert filterOption != null;
+                if (s.toLowerCase().contains(userFieldInput) && (filterOption.equalsIgnoreCase(weaponCategory) ||
+                        filterOption.equalsIgnoreCase(WEAPON_FILTER)))
+                {
+                    generateWeaponCard(s, matchedCount);
+                    matchedCount++;
                 }
 
             }
@@ -279,14 +271,11 @@ public class ToolGUI extends JFrame implements ActionListener {
                                            boolean isFarming) {
         if (farmedMap.containsKey(itemName)) {
             Set<String> charactersFarmingSet = farmedMap.get(itemName);
-            if (charactersFarmingSet.contains(charName)) {
-                if (!isFarming) {
-                    charactersFarmingSet.remove(charName);
-                }
-            } else {
-                if (isFarming) {
-                    charactersFarmingSet.add(charName);
-                }
+            if (isFarming) {
+                charactersFarmingSet.add(charName);
+            }
+            else {
+                charactersFarmingSet.remove(charName);
             }
         } else {
             if (isFarming) {
@@ -746,6 +735,7 @@ public class ToolGUI extends JFrame implements ActionListener {
         defaultComboBoxModel1.addElement("Polearm");
         defaultComboBoxModel1.addElement("Sword");
         defaultComboBoxModel1.addElement("Catalyst");
+
         devFilterComboBox.setModel(defaultComboBoxModel1);
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
