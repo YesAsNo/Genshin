@@ -1,0 +1,21 @@
+{
+  "Freedom": ["Traveler","Aloy", "Amber", "Barbara", "Diona", "Klee", "Sucrose", "Tartaglia"],
+  "Resistance":["Traveler","Bennett", "Diluc", "Eula", "Jean", "Mona", "Noelle", "Razor"],
+  "Ballad":["Traveler","Albedo", "Fischl", "Kaeya", "Lisa", "Mika", "Rosaria", "Venti"],
+
+  "Prosperity":["Traveler","Gaming", "Keqing", "Ningguang", "Qiqi", "Shenhe", "Xiao", "Yelan"],
+  "Diligence":["Traveler","Chongyun", "Ganyu", "Hu Tao", "Kaedehara Kazuha", "Xiangling", "Yaoyao", "Yun Jin"],
+  "Gold":["Traveler","Baizhu", "Beidou", "Xianyun", "Xingqiu", "Xinyan", "Yanfei", "Zhongli"],
+
+  "Transience":["Traveler","Kirara", "Sangonomiya Kokomi", "Heizou", "Thoma", "Yoimiya"],
+  "Elegance":["Traveler","Arataki Itto", "Kamisato Ayaka", "Kamisato Ayato", "Kujou Sara", "Kuki Shinobu"],
+  "Light":["Traveler","Chiori", "Gorou", "Raiden Shogun", "Sayu", "Yae Miko"],
+
+  "Admonition":["Traveler","Candace", "Cyno", "Faruzan", "Tighnari"],
+  "Ingenuity":["Traveler","Alhaitham", "Dori", "Kaveh", "Layla", "Nahida"],
+  "Praxis":["Traveler","Collei", "Dehya", "Nilou", "Wanderer"],
+
+  "Equity":["Traveler","Lyney", "Navia", "Neuvillette"],
+  "Justice":["Traveler","Charlotte", "Freminet", "Furina"],
+  "Order":["Traveler","Chevreuse", "Lynette", "Wriothesley"]
+}
