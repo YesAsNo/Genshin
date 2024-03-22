@@ -33,23 +33,32 @@ public class ToolData {
     public static Map<String, List<String>> weeklyBossMatsToCharactersMap = new TreeMap<>();
     public static Map<String, List<String>> talentBookMapping = new TreeMap<>();
     public static final String SAVE_LOCATION = "./UserData/";
-    private static final String PATH_TO_CHARACTER_JSON = "character___element.json";
-    public static final String PATH_TO_CHARACTER_WEEKLY_BOSS_MAT_MAPPING = "character___weekly_talent_material.json";
-    private static final String PATH_TO_WEAPONS_JSON = "weapon_type___weapon_name.json";
+    private static final String PATH_TO_CHARACTER_JSON = "element___character.json";
+    public static final String PATH_TO_CHARACTER_WEEKLY_BOSS_MAT_MAPPING = "weekly_talent_material___character.json";
+    private static final String PATH_TO_WEAPONS_JSON = "weapon_rarityandtype___weapon_name.json";
     private static final String PATH_TO_DOMAIN_MAPPINGS = "artifact_domain___artifact_set.json";
     private static final String PATH_TO_CHARACTER_MAPPINGS = "weapon_type___character.json";
     private static final String PATH_TO_ARTIFACT_SET_MAPPINGS = "artifact_set___artifact_set_description.json";
     public static final String  PATH_TO_WEAPON_MATERIAL_MAPPINGS = "weapon_material___weapon_name.json";
     public static final String PATH_TO_TALENT_BOOK_DOMAIN_MAPPING = "talent_domain___talent_book.json";
 
-    public static final List<String> PATHS_TO_DATA_FILES =
-            List.of("character___element.json", "character___weekly_talent_material.json", "character___talent_book.json",
-                    "artifact_domain___artifact_set.json", "weapon_type___character.json",
-                    "talent_domain___talent_book.json", "weapon_domain___weapon_material.json",
-                    "weekly_domain___weekly_boss_material.json",
-                    "weapon_material___weapon_name.json", "artifact_set___artifact_set_description.json",
-                    "weapon_type___weapon_name.json");
+    public static final Map<String, Boolean> PATHS_TO_DATA_FILES;
+    static {
+        PATHS_TO_DATA_FILES = new TreeMap<>();
+        PATHS_TO_DATA_FILES.put("element___character.json",true);
+        PATHS_TO_DATA_FILES.put("weekly_talent_material___character.json",false);
+        PATHS_TO_DATA_FILES.put("talent_book___character.json",false);
+        PATHS_TO_DATA_FILES.put("artifact_domain___artifact_set.json",true);
+        PATHS_TO_DATA_FILES.put("weapon_type___character.json",false);
+        PATHS_TO_DATA_FILES.put("talent_domain___talent_book.json",true);
+        PATHS_TO_DATA_FILES.put("weapon_domain___weapon_material.json",true);
+        PATHS_TO_DATA_FILES.put("weekly_domain___weekly_boss_material.json",true);
+        PATHS_TO_DATA_FILES.put("weapon_material___weapon_name.json",true);
+        PATHS_TO_DATA_FILES.put("artifact_set___artifact_set_description.json",true);
+        PATHS_TO_DATA_FILES.put("weapon_rarityandtype___weapon_name.json",false);
+    }
     public static final Map<String,Map<String,List<String>>> parsedDataFiles = new TreeMap<>();
+    public static final Map<String,List<String>> parsedFlattenedData = new TreeMap<>();
 
 
     public enum WEAPON_RARITY {
@@ -164,10 +173,17 @@ public class ToolData {
     private static void parseDataJsonFiles() throws FileNotFoundException {
         Gson gson = new Gson();
         Type setType = new TypeToken<Map<String,List<String>>>(){}.getType();
-        for (String path : PATHS_TO_DATA_FILES){
+        for (String path : PATHS_TO_DATA_FILES.keySet()){
             JsonReader reader = new JsonReader(new FileReader(path));
             Map<String, List<String>> parsedFile = gson.fromJson(reader,setType);
             parsedDataFiles.put(path,parsedFile);
+            if (PATHS_TO_DATA_FILES.get(path)){
+                List<List<String>> val_arrays = new ArrayList<>(parsedFile.values());
+                List<String> valuesFlattened = new ArrayList<>();
+                val_arrays.forEach(valuesFlattened::addAll);
+                Collections.sort(valuesFlattened);
+                parsedFlattenedData.put(path,valuesFlattened);
+            }
         }
     }
     public static void main(String[] args) throws Exception {
