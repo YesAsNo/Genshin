@@ -76,7 +76,6 @@ public class ToolGUI extends JFrame implements ActionListener {
     public static final int CHARACTER_LIMIT = 150;
     public static final String WEAPON_SAVE_FILE_NAME = "saved_weapons.json";
     private JPanel panel1;
-    private JLabel titleLabel;
     private JTabbedPane characterTabPane;
     private JPanel mainInformationPanel;
     private JPanel characterTab;
@@ -222,8 +221,8 @@ public class ToolGUI extends JFrame implements ActionListener {
                     }
                     matchedCount++;
 
-                    }
                 }
+            }
             if (matchedCount == 0) {
                 generateCharacterButton(UNKNOWN_CHARACTER, matchedCount);
             } else {
@@ -249,8 +248,7 @@ public class ToolGUI extends JFrame implements ActionListener {
                 assert weaponCategory != null;
                 assert filterOption != null;
                 if (s.toLowerCase().contains(userFieldInput) && (filterOption.equalsIgnoreCase(weaponCategory) ||
-                        filterOption.equalsIgnoreCase(WEAPON_FILTER)))
-                {
+                        filterOption.equalsIgnoreCase(WEAPON_FILTER))) {
                     generateWeaponCard(s, matchedCount);
                     matchedCount++;
                 }
@@ -273,8 +271,7 @@ public class ToolGUI extends JFrame implements ActionListener {
             Set<String> charactersFarmingSet = farmedMap.get(itemName);
             if (isFarming) {
                 charactersFarmingSet.add(charName);
-            }
-            else {
+            } else {
                 charactersFarmingSet.remove(charName);
             }
         } else {
@@ -755,27 +752,18 @@ public class ToolGUI extends JFrame implements ActionListener {
      */
     private void $$$setupUI$$$() {
         createUIComponents();
-        panel1.setLayout(new GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), -1, -1));
+        panel1.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
         panel1.setBackground(new Color(-2702645));
         panel1.setEnabled(true);
         final Spacer spacer1 = new Spacer();
         panel1.add(spacer1,
-                new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1,
+                new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1,
                         GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
-        titleLabel = new JLabel();
-        Font titleLabelFont = this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 20, titleLabel.getFont());
-        if (titleLabelFont != null) {
-            titleLabel.setFont(titleLabelFont);
-        }
-        titleLabel.setForeground(new Color(-14940151));
-        titleLabel.setText("Genshin Domain Application");
-        panel1.add(titleLabel, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
-                GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         mainInformationPanel = new JPanel();
         mainInformationPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         mainInformationPanel.setBackground(new Color(-3689540));
         panel1.add(mainInformationPanel,
-                new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null,
                         0, false));

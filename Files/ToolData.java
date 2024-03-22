@@ -30,14 +30,26 @@ public class ToolData {
     public static Map<String,List<String>> weaponMaterialMap = new TreeMap<>();
     public static Map<String, Set<String>> farmedWeapons = new TreeMap<>();
     public static Map<String, Set<String>> farmedArtifacts = new TreeMap<>();
-
-    private static final String PATH_TO_CHARACTER_JSON = "./characters.json";
-    private static final String PATH_TO_WEAPONS_JSON = "./weapons.json";
-    private static final String PATH_TO_DOMAIN_MAPPINGS = "./mapping_domains.json";
-    private static final String PATH_TO_CHARACTER_MAPPINGS = "./mapping_characters.json";
-    private static final String PATH_TO_ARTIFACT_SET_MAPPINGS = "./set_descriptions.json";
+    public static Map<String, List<String>> weeklyBossMatsToCharactersMap = new TreeMap<>();
+    public static Map<String, List<String>> talentBookMapping = new TreeMap<>();
     public static final String SAVE_LOCATION = "./UserData/";
-    public static final String  PATH_TO_WEAPON_MATERIAL_MAPPINGS = "./mapping_wp_materials.json";
+    private static final String PATH_TO_CHARACTER_JSON = "character_element.json";
+    public static final String PATH_TO_CHARACTER_WEEKLY_BOSS_MAT_MAPPING = "character_weekly_talent_material.json";
+    private static final String PATH_TO_WEAPONS_JSON = "weapon_type_weapon_name.json";
+    private static final String PATH_TO_DOMAIN_MAPPINGS = "artifact_domain_artifact_set.json";
+    private static final String PATH_TO_CHARACTER_MAPPINGS = "weapon_type_character.json";
+    private static final String PATH_TO_ARTIFACT_SET_MAPPINGS = "artifact_set_artifact_set_description.json";
+    public static final String  PATH_TO_WEAPON_MATERIAL_MAPPINGS = "weapon_material_weapon_name.json";
+    public static final String PATH_TO_TALENT_BOOK_DOMAIN_MAPPING = "talent_domain_talent_book.json";
+
+    public static final List<String> PATHS_TO_DATA_FILES =
+            List.of("character_element.json", "character_weekly_talent_material.json", "character_talent_book.json",
+                    "artifact_domain_artifact_set.json", "weapon_type_character.json", "talent_domain_talent_book.json",
+                    "weapon_domain_weapon_material.json", "weekly_domain_weekly_boss_material.json",
+                    "weapon_material_weapon_name.json",
+                    "artifact_set_artifact_set_description.json", "weapon_type_weapon_name.json");
+    public static final Map<String,Map<String,List<String>>> parsedDataFiles = new TreeMap<>();
+
 
     public enum WEAPON_RARITY {
         FIVE_STAR,
@@ -138,7 +150,25 @@ public class ToolData {
         JsonReader reader = new JsonReader(new FileReader(f));
         farmedWeapons = gson.fromJson(reader,setType);
     }
-
+    private static void parseCharacterWeeklyTalents(Gson gson, JsonReader reader){
+        assert gson != null;
+        assert reader != null;
+        weeklyBossMatsToCharactersMap = gson.fromJson(reader,weeklyBossMatsToCharactersMap.getClass());
+    }
+    private static void parseTalentBookDomains(Gson gson, JsonReader reader){
+        assert gson != null;
+        assert reader != null;
+        talentBookMapping = gson.fromJson(reader,talentBookMapping.getClass());
+    }
+    private static void parseDataJsonFiles() throws FileNotFoundException {
+        Gson gson = new Gson();
+        Type setType = new TypeToken<Map<String,List<String>>>(){}.getType();
+        for (String path : PATHS_TO_DATA_FILES){
+            JsonReader reader = new JsonReader(new FileReader(path));
+            Map<String, List<String>> parsedFile = gson.fromJson(reader,setType);
+            parsedDataFiles.put(path,parsedFile);
+        }
+    }
     public static void main(String[] args) throws Exception {
 
         Gson gson = new Gson();
@@ -149,6 +179,8 @@ public class ToolData {
         parseArtifactSetDescriptionMapping(gson, new JsonReader(new FileReader(PATH_TO_ARTIFACT_SET_MAPPINGS)));
         parseWeaponMaterialMapping(gson, new JsonReader(new FileReader(PATH_TO_WEAPON_MATERIAL_MAPPINGS)));
         parseFarmedWeapons(gson, new File(SAVE_LOCATION + WEAPON_SAVE_FILE_NAME));
+        parseCharacterWeeklyTalents(gson, new JsonReader(new FileReader(PATH_TO_CHARACTER_WEEKLY_BOSS_MAT_MAPPING)));
+        parseTalentBookDomains(gson, new JsonReader(new FileReader(PATH_TO_TALENT_BOOK_DOMAIN_MAPPING)));
         new ToolGUI();
         //new Program();
 
