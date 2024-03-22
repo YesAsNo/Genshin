@@ -42,7 +42,7 @@ public class ToolData {
         WEAPON_NAME("WeaponName"),
         WEEKLY_BOSS_MATERIAL("WeeklyBossMaterial");
         public final String stringToken;
-        private flattenedDataCategory(String data) {
+        flattenedDataCategory(String data) {
             this.stringToken = data;
         }
     }
@@ -59,7 +59,7 @@ public class ToolData {
         WEEKLYBOSSMAT_CHAR("WeeklyBossMaterial_Character"),
         WEEKLYDOMAIN_WEEKLYBOSSMAT("WeeklyDomain_WeeklyBossMaterial");
         public final String stringToken;
-        private knownMappings(String data) {
+        knownMappings(String data) {
             this.stringToken = data;
         }
     }

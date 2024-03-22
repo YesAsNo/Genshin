@@ -95,6 +95,31 @@ public class ToolGUI extends JFrame implements ActionListener {
     private JPanel devBasicInfoSpacer;
     private JTextPane devInfoTextPane;
     private JPanel welcomeTab;
+    private JPanel devDomainsTab;
+    private JPanel devDomainsTabPanel;
+    private JScrollPane devDomainsScrollPane;
+    private JPanel devDomainCardViewport;
+    private JButton domainSearchButton;
+    private JComboBox domainFilterBox;
+    private JPanel weaponMaterialDomainCard;
+    private JLabel materialIconR;
+    private JLabel materialIconMiddle;
+    private JLabel materialIconL;
+    private JPanel weaponMaterialInfoPanel;
+    private JLabel domainNameLabel;
+    private JLabel domainAllWeaponCounterLabel;
+    private JLabel domainListedWeaponCounterLabel;
+    private JPanel marginPanel;
+    private JLabel weaponMaterialDomainIconLabel;
+    private JPanel talentMaterialDomainCard;
+    private JPanel artifactDomainCard;
+    private JPanel weeklyBossDomainCard;
+    private JLabel talentBookIconRight;
+    private JLabel talentBookiconMiddle;
+    private JLabel talentBookIconLeft;
+    private JPanel talentMaterialDomainInfoPanel;
+    private JLabel talentMaterialDomainNameLabel;
+    private JLabel talentMaterialDomain;
     private final JScrollPane characterSearchScrollPane = new JScrollPane();
     private final JScrollPane devWeaponTabScrollPane = new JScrollPane();
     private final JTextField devWeaponsTabSearchbar = new JTextField();
@@ -795,6 +820,142 @@ public class ToolGUI extends JFrame implements ActionListener {
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null,
                         new Dimension(200, 200), null, 0, false));
+        welcomeTab = new JPanel();
+        welcomeTab.setLayout(new GridBagLayout());
+        characterTabPane.addTab("Welcome!", welcomeTab);
+        devBasicInfoPanel = new JPanel();
+        devBasicInfoPanel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc;
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        welcomeTab.add(devBasicInfoPanel, gbc);
+        devBasicInfoLeftPanel = new JPanel();
+        devBasicInfoLeftPanel.setLayout(new GridLayoutManager(5, 1, new Insets(0, 0, 0, 0), -1, -1));
+        devBasicInfoLeftPanel.setBackground(new Color(-465419));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.BOTH;
+        devBasicInfoPanel.add(devBasicInfoLeftPanel, gbc);
+        Welcome_Barbara = new JLabel();
+        Welcome_Barbara.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Aesthetics/Barbara_Hello.gif")));
+        Welcome_Barbara.setText("");
+        devBasicInfoLeftPanel.add(Welcome_Barbara,
+                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_NORTHWEST, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
+                        false));
+        devUpdatesTextPane = new JTextPane();
+        devUpdatesTextPane.setBackground(new Color(-465419));
+        devUpdatesTextPane.setEditable(false);
+        devUpdatesTextPane.setEnabled(true);
+        devUpdatesTextPane.setFocusable(false);
+        Font devUpdatesTextPaneFont =
+                this.$$$getFont$$$("Source Code Pro Semibold", -1, -1, devUpdatesTextPane.getFont());
+        if (devUpdatesTextPaneFont != null) {
+            devUpdatesTextPane.setFont(devUpdatesTextPaneFont);
+        }
+        devUpdatesTextPane.setForeground(new Color(-11071434));
+        devUpdatesTextPane.setMargin(new Insets(30, 20, 10, 10));
+        devUpdatesTextPane.setSelectionColor(new Color(-9555638));
+        devUpdatesTextPane.setText("For future updates contact one of us. Make sure to keep your save file!");
+        devBasicInfoLeftPanel.add(devUpdatesTextPane,
+                new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL,
+                        GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null,
+                        new Dimension(150, 50), null, 0, false));
+        devCreatorsLabel = new JLabel();
+        devCreatorsLabel.setBackground(new Color(-465419));
+        Font devCreatorsLabelFont =
+                this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 20, devCreatorsLabel.getFont());
+        if (devCreatorsLabelFont != null) {
+            devCreatorsLabel.setFont(devCreatorsLabelFont);
+        }
+        devCreatorsLabel.setForeground(new Color(-11071434));
+        devCreatorsLabel.setText("✨ Creators ✨");
+        devBasicInfoLeftPanel.add(devCreatorsLabel,
+                new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
+                        false));
+        devLinakoLabel = new JLabel();
+        devLinakoLabel.setBackground(new Color(-465419));
+        Font devLinakoLabelFont = this.$$$getFont$$$("Source Code Pro Semibold", -1, 18, devLinakoLabel.getFont());
+        if (devLinakoLabelFont != null) {
+            devLinakoLabel.setFont(devLinakoLabelFont);
+        }
+        devLinakoLabel.setForeground(new Color(-11071434));
+        devLinakoLabel.setText("Linako (yes.as.no)");
+        devBasicInfoLeftPanel.add(devLinakoLabel,
+                new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
+                        false));
+        devPrecisi0nLabel = new JLabel();
+        devPrecisi0nLabel.setBackground(new Color(-465419));
+        Font devPrecisi0nLabelFont =
+                this.$$$getFont$$$("Source Code Pro Semibold", -1, 18, devPrecisi0nLabel.getFont());
+        if (devPrecisi0nLabelFont != null) {
+            devPrecisi0nLabel.setFont(devPrecisi0nLabelFont);
+        }
+        devPrecisi0nLabel.setForeground(new Color(-11071434));
+        devPrecisi0nLabel.setText("precisi0n");
+        devBasicInfoLeftPanel.add(devPrecisi0nLabel,
+                new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
+                        false));
+        devBasicInfoRightPanel = new JPanel();
+        devBasicInfoRightPanel.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
+        devBasicInfoRightPanel.setBackground(new Color(-465419));
+        Font devBasicInfoRightPanelFont =
+                this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 22, devBasicInfoRightPanel.getFont());
+        if (devBasicInfoRightPanelFont != null) {
+            devBasicInfoRightPanel.setFont(devBasicInfoRightPanelFont);
+        }
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        devBasicInfoPanel.add(devBasicInfoRightPanel, gbc);
+        devWelcomeLabel = new JLabel();
+        devWelcomeLabel.setBackground(new Color(-465419));
+        Font devWelcomeLabelFont =
+                this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 20, devWelcomeLabel.getFont());
+        if (devWelcomeLabelFont != null) {
+            devWelcomeLabel.setFont(devWelcomeLabelFont);
+        }
+        devWelcomeLabel.setForeground(new Color(-11071434));
+        devWelcomeLabel.setText("✨ Welcome to GDApp! ✨");
+        devBasicInfoRightPanel.add(devWelcomeLabel,
+                new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
+                        false));
+        devBasicInfoSpacer = new JPanel();
+        devBasicInfoSpacer.setLayout(new GridLayoutManager(1, 1, new Insets(20, 0, 0, 0), -1, -1));
+        devBasicInfoSpacer.setBackground(new Color(-465419));
+        devBasicInfoRightPanel.add(devBasicInfoSpacer,
+                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null,
+                        0, false));
+        devInfoTextPane = new JTextPane();
+        devInfoTextPane.setBackground(new Color(-465419));
+        devInfoTextPane.setEditable(false);
+        devInfoTextPane.setFocusable(false);
+        Font devInfoTextPaneFont = this.$$$getFont$$$("Source Code Pro Semibold", -1, -1, devInfoTextPane.getFont());
+        if (devInfoTextPaneFont != null) {
+            devInfoTextPane.setFont(devInfoTextPaneFont);
+        }
+        devInfoTextPane.setForeground(new Color(-11071434));
+        devInfoTextPane.setMargin(new Insets(30, 20, 10, 10));
+        devInfoTextPane.setText(
+                "This is a personal project to make our daily tasks a little bit more coordinated! Here's how to get started!\n\n-\uD83D\uDD38✨ Character Tab ✨\uD83D\uDD38-\n\n- Search by name, filter or type \"debug\" to see all characters\n- Fill in the desired information (2nd artifact set is optional)\n- Checkboxes exist for characters to show up in the domains tab. Unchecking will hide a character from its chosen materials, making it easier to tell who still needs those materials. For example, if a character is done with its talents, you should uncheck the character.\n\n-\uD83D\uDD38✨ Weapon Tab ✨\uD83D\uDD38-\n\n- Search by name, filter or type \"debug\" to see all weapons.\n- Only checkboxes appear. Checking a weapon will make it show up in farmed items in domains.\n\n-\uD83D\uDD38✨ Domains Tab ✨\uD83D\uDD38-\n\n- Search by name, filter or type \"debug\" to see all domains.\n- The chosen domain will show all characters/weapons checked in other tabs.");
+        devBasicInfoRightPanel.add(devInfoTextPane,
+                new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                        GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null,
+                        new Dimension(150, 50), null, 0, false));
         characterTab = new JPanel();
         characterTab.setLayout(new GridBagLayout());
         characterTab.setBackground(new Color(-1));
@@ -807,7 +968,6 @@ public class ToolGUI extends JFrame implements ActionListener {
         characterTab.setOpaque(true);
         characterTab.setRequestFocusEnabled(true);
         characterTabPane.addTab("Characters", characterTab);
-        GridBagConstraints gbc;
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -846,6 +1006,483 @@ public class ToolGUI extends JFrame implements ActionListener {
         weaponsTab.setLayout(new GridBagLayout());
         weaponsTab.setBackground(new Color(-1));
         characterTabPane.addTab("Weapons", weaponsTab);
+        devDomainsTab = new JPanel();
+        devDomainsTab.setLayout(new GridBagLayout());
+        devDomainsTab.setBackground(new Color(-1));
+        characterTabPane.addTab("Domains", devDomainsTab);
+        devDomainsTabPanel = new JPanel();
+        devDomainsTabPanel.setLayout(new GridBagLayout());
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        devDomainsTab.add(devDomainsTabPanel, gbc);
+        devDomainsScrollPane = new JScrollPane();
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        devDomainsTabPanel.add(devDomainsScrollPane, gbc);
+        devDomainCardViewport = new JPanel();
+        devDomainCardViewport.setLayout(new GridBagLayout());
+        devDomainsScrollPane.setViewportView(devDomainCardViewport);
+        weaponMaterialDomainCard = new JPanel();
+        weaponMaterialDomainCard.setLayout(new GridBagLayout());
+        weaponMaterialDomainCard.setBackground(new Color(-10301));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(5, 100, 5, 100);
+        devDomainCardViewport.add(weaponMaterialDomainCard, gbc);
+        weaponMaterialDomainCard.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+        materialIconR = new JLabel();
+        materialIconR.setIcon(
+                new ImageIcon(getClass().getResource("/Files/Images/Weapon Materials/All Mist Veiled Elixir.png")));
+        materialIconR.setText("");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 4;
+        gbc.gridy = 0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.WEST;
+        weaponMaterialDomainCard.add(materialIconR, gbc);
+        materialIconMiddle = new JLabel();
+        materialIconMiddle.setIcon(
+                new ImageIcon(getClass().getResource("/Files/Images/Weapon Materials/All Guyun.png")));
+        materialIconMiddle.setText("");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 3;
+        gbc.gridy = 0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.WEST;
+        weaponMaterialDomainCard.add(materialIconMiddle, gbc);
+        materialIconL = new JLabel();
+        materialIconL.setIcon(
+                new ImageIcon(getClass().getResource("/Files/Images/Weapon Materials/All Aerosiderite.png")));
+        materialIconL.setText("");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.WEST;
+        weaponMaterialDomainCard.add(materialIconL, gbc);
+        weaponMaterialInfoPanel = new JPanel();
+        weaponMaterialInfoPanel.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
+        weaponMaterialInfoPanel.setAlignmentX(0.5f);
+        weaponMaterialInfoPanel.setAlignmentY(0.5f);
+        weaponMaterialInfoPanel.setBackground(new Color(-10301));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        weaponMaterialDomainCard.add(weaponMaterialInfoPanel, gbc);
+        domainNameLabel = new JLabel();
+        Font domainNameLabelFont = this.$$$getFont$$$("Source Code Pro", Font.BOLD, 18, domainNameLabel.getFont());
+        if (domainNameLabelFont != null) {
+            domainNameLabel.setFont(domainNameLabelFont);
+        }
+        domainNameLabel.setForeground(new Color(-13494016));
+        domainNameLabel.setText("Hidden Palace of Lianshan Formula");
+        weaponMaterialInfoPanel.add(domainNameLabel,
+                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
+                        false));
+        domainAllWeaponCounterLabel = new JLabel();
+        Font domainAllWeaponCounterLabelFont =
+                this.$$$getFont$$$("Source Code Pro", -1, 12, domainAllWeaponCounterLabel.getFont());
+        if (domainAllWeaponCounterLabelFont != null) {
+            domainAllWeaponCounterLabel.setFont(domainAllWeaponCounterLabelFont);
+        }
+        domainAllWeaponCounterLabel.setForeground(new Color(-13494016));
+        domainAllWeaponCounterLabel.setText("All weapons that need it: 53");
+        weaponMaterialInfoPanel.add(domainAllWeaponCounterLabel,
+                new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
+                        false));
+        domainListedWeaponCounterLabel = new JLabel();
+        Font domainListedWeaponCounterLabelFont =
+                this.$$$getFont$$$("Source Code Pro", -1, 12, domainListedWeaponCounterLabel.getFont());
+        if (domainListedWeaponCounterLabelFont != null) {
+            domainListedWeaponCounterLabel.setFont(domainListedWeaponCounterLabelFont);
+        }
+        domainListedWeaponCounterLabel.setForeground(new Color(-13494016));
+        domainListedWeaponCounterLabel.setText("Weapons listed for this domain: 34");
+        weaponMaterialInfoPanel.add(domainListedWeaponCounterLabel,
+                new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
+                        false));
+        marginPanel = new JPanel();
+        marginPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 5, 0, 5), -1, -1));
+        marginPanel.setAlignmentX(0.5f);
+        marginPanel.setAlignmentY(0.5f);
+        marginPanel.setBackground(new Color(-26768));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(0, 10, 0, 0);
+        weaponMaterialDomainCard.add(marginPanel, gbc);
+        weaponMaterialDomainIconLabel = new JLabel();
+        weaponMaterialDomainIconLabel.setAlignmentX(0.5f);
+        weaponMaterialDomainIconLabel.setFocusTraversalPolicyProvider(false);
+        weaponMaterialDomainIconLabel.setFocusable(false);
+        Font weaponMaterialDomainIconLabelFont =
+                this.$$$getFont$$$(null, Font.BOLD, 16, weaponMaterialDomainIconLabel.getFont());
+        if (weaponMaterialDomainIconLabelFont != null) {
+            weaponMaterialDomainIconLabel.setFont(weaponMaterialDomainIconLabelFont);
+        }
+        weaponMaterialDomainIconLabel.setForeground(new Color(-1));
+        weaponMaterialDomainIconLabel.setText("\uD83D\uDD2A");
+        marginPanel.add(weaponMaterialDomainIconLabel,
+                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
+                        false));
+        talentMaterialDomainCard = new JPanel();
+        talentMaterialDomainCard.setLayout(new GridBagLayout());
+        talentMaterialDomainCard.setBackground(new Color(-1068));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(5, 100, 5, 100);
+        devDomainCardViewport.add(talentMaterialDomainCard, gbc);
+        talentMaterialDomainCard.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+        talentBookIconRight = new JLabel();
+        talentBookIconRight.setIcon(
+                new ImageIcon(getClass().getResource("/Files/Images/Talent Materials/Resistance.png")));
+        talentBookIconRight.setText("");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 4;
+        gbc.gridy = 0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.WEST;
+        talentMaterialDomainCard.add(talentBookIconRight, gbc);
+        talentBookiconMiddle = new JLabel();
+        talentBookiconMiddle.setIcon(
+                new ImageIcon(getClass().getResource("/Files/Images/Talent Materials/Freedom.png")));
+        talentBookiconMiddle.setText("");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 3;
+        gbc.gridy = 0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.WEST;
+        talentMaterialDomainCard.add(talentBookiconMiddle, gbc);
+        talentBookIconLeft = new JLabel();
+        talentBookIconLeft.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Talent Materials/Ballad.png")));
+        talentBookIconLeft.setText("");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.WEST;
+        talentMaterialDomainCard.add(talentBookIconLeft, gbc);
+        talentMaterialDomainInfoPanel = new JPanel();
+        talentMaterialDomainInfoPanel.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
+        talentMaterialDomainInfoPanel.setAlignmentX(0.5f);
+        talentMaterialDomainInfoPanel.setAlignmentY(0.5f);
+        talentMaterialDomainInfoPanel.setBackground(new Color(-1068));
+        talentMaterialDomainInfoPanel.setEnabled(true);
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        talentMaterialDomainCard.add(talentMaterialDomainInfoPanel, gbc);
+        talentMaterialDomainNameLabel = new JLabel();
+        Font talentMaterialDomainNameLabelFont =
+                this.$$$getFont$$$("Source Code Pro", Font.BOLD, 18, talentMaterialDomainNameLabel.getFont());
+        if (talentMaterialDomainNameLabelFont != null) {
+            talentMaterialDomainNameLabel.setFont(talentMaterialDomainNameLabelFont);
+        }
+        talentMaterialDomainNameLabel.setForeground(new Color(-14541824));
+        talentMaterialDomainNameLabel.setText("Forsaken Rift");
+        talentMaterialDomainInfoPanel.add(talentMaterialDomainNameLabel,
+                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
+                        false));
+        talentMaterialDomain = new JLabel();
+        Font talentMaterialDomainFont = this.$$$getFont$$$("Source Code Pro", -1, 12, talentMaterialDomain.getFont());
+        if (talentMaterialDomainFont != null) {
+            talentMaterialDomain.setFont(talentMaterialDomainFont);
+        }
+        talentMaterialDomain.setForeground(new Color(-14541824));
+        talentMaterialDomain.setText("All characters that need it: 53");
+        talentMaterialDomainInfoPanel.add(talentMaterialDomain,
+                new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
+                        false));
+        final JLabel label1 = new JLabel();
+        Font label1Font = this.$$$getFont$$$("Source Code Pro", -1, 12, label1.getFont());
+        if (label1Font != null) {
+            label1.setFont(label1Font);
+        }
+        label1.setForeground(new Color(-14541824));
+        label1.setText("Characters listed for this domain: 34");
+        talentMaterialDomainInfoPanel.add(label1,
+                new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
+                        false));
+        final JPanel panel2 = new JPanel();
+        panel2.setLayout(new GridLayoutManager(1, 1, new Insets(0, 5, 0, 5), -1, -1));
+        panel2.setAlignmentX(0.5f);
+        panel2.setAlignmentY(0.5f);
+        panel2.setBackground(new Color(-10640));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(0, 10, 0, 0);
+        talentMaterialDomainCard.add(panel2, gbc);
+        final JLabel label2 = new JLabel();
+        label2.setAlignmentX(0.5f);
+        label2.setFocusTraversalPolicyProvider(false);
+        label2.setFocusable(false);
+        Font label2Font = this.$$$getFont$$$(null, Font.BOLD, 16, label2.getFont());
+        if (label2Font != null) {
+            label2.setFont(label2Font);
+        }
+        label2.setForeground(new Color(-1));
+        label2.setText("\uD83D\uDCD4");
+        panel2.add(label2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        artifactDomainCard = new JPanel();
+        artifactDomainCard.setLayout(new GridBagLayout());
+        artifactDomainCard.setBackground(new Color(-2756865));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.weightx = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(5, 100, 5, 100);
+        devDomainCardViewport.add(artifactDomainCard, gbc);
+        artifactDomainCard.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+        final JLabel label3 = new JLabel();
+        label3.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Artifacts/Heart of Depth.png")));
+        label3.setText("");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 3;
+        gbc.gridy = 0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.WEST;
+        artifactDomainCard.add(label3, gbc);
+        final JLabel label4 = new JLabel();
+        label4.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Artifacts/Blizzard Strayer.png")));
+        label4.setText("");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.WEST;
+        artifactDomainCard.add(label4, gbc);
+        final JPanel panel3 = new JPanel();
+        panel3.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
+        panel3.setAlignmentX(0.5f);
+        panel3.setAlignmentY(0.5f);
+        panel3.setBackground(new Color(-2756865));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        artifactDomainCard.add(panel3, gbc);
+        final JLabel label5 = new JLabel();
+        Font label5Font = this.$$$getFont$$$("Source Code Pro", Font.BOLD, 18, label5.getFont());
+        if (label5Font != null) {
+            label5.setFont(label5Font);
+        }
+        label5.setForeground(new Color(-16575201));
+        label5.setText("Peak of Vindagnyr");
+        panel3.add(label5, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label6 = new JLabel();
+        Font label6Font = this.$$$getFont$$$("Source Code Pro", -1, 12, label6.getFont());
+        if (label6Font != null) {
+            label6.setFont(label6Font);
+        }
+        label6.setForeground(new Color(-16575201));
+        label6.setText("All characters holding it: 53");
+        panel3.add(label6, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label7 = new JLabel();
+        Font label7Font = this.$$$getFont$$$("Source Code Pro", -1, 12, label7.getFont());
+        if (label7Font != null) {
+            label7.setFont(label7Font);
+        }
+        label7.setForeground(new Color(-16575201));
+        label7.setText("Characters listed for this domain: 34");
+        panel3.add(label7, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JPanel panel4 = new JPanel();
+        panel4.setLayout(new GridLayoutManager(1, 1, new Insets(0, 5, 0, 5), -1, -1));
+        panel4.setAlignmentX(0.5f);
+        panel4.setAlignmentY(0.5f);
+        panel4.setBackground(new Color(-9382145));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(0, 10, 0, 0);
+        artifactDomainCard.add(panel4, gbc);
+        final JLabel label8 = new JLabel();
+        label8.setAlignmentX(0.5f);
+        label8.setFocusTraversalPolicyProvider(false);
+        label8.setFocusable(false);
+        Font label8Font = this.$$$getFont$$$(null, Font.BOLD, 16, label8.getFont());
+        if (label8Font != null) {
+            label8.setFont(label8Font);
+        }
+        label8.setForeground(new Color(-1));
+        label8.setText("\uD83D\uDC51");
+        panel4.add(label8, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        weeklyBossDomainCard = new JPanel();
+        weeklyBossDomainCard.setLayout(new GridBagLayout());
+        weeklyBossDomainCard.setBackground(new Color(-11811));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.weightx = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(5, 100, 5, 100);
+        devDomainCardViewport.add(weeklyBossDomainCard, gbc);
+        weeklyBossDomainCard.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
+                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+        final JLabel label9 = new JLabel();
+        label9.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Weekly Bosses/Dvalin's Sigh.png")));
+        label9.setText("");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 4;
+        gbc.gridy = 0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.WEST;
+        weeklyBossDomainCard.add(label9, gbc);
+        final JLabel label10 = new JLabel();
+        label10.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Weekly Bosses/Dvalin's Plume.png")));
+        label10.setText("");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 3;
+        gbc.gridy = 0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.WEST;
+        weeklyBossDomainCard.add(label10, gbc);
+        final JLabel label11 = new JLabel();
+        label11.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Weekly Bosses/Dvalin's Claw.png")));
+        label11.setText("");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.WEST;
+        weeklyBossDomainCard.add(label11, gbc);
+        final JPanel panel5 = new JPanel();
+        panel5.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
+        panel5.setAlignmentX(0.5f);
+        panel5.setAlignmentY(0.5f);
+        panel5.setBackground(new Color(-11811));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        weeklyBossDomainCard.add(panel5, gbc);
+        final JLabel label12 = new JLabel();
+        Font label12Font = this.$$$getFont$$$("Source Code Pro", Font.BOLD, 18, label12.getFont());
+        if (label12Font != null) {
+            label12.setFont(label12Font);
+        }
+        label12.setForeground(new Color(-13236722));
+        label12.setText("Stormterror Dvalin");
+        panel5.add(label12, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label13 = new JLabel();
+        Font label13Font = this.$$$getFont$$$("Source Code Pro", -1, 12, label13.getFont());
+        if (label13Font != null) {
+            label13.setFont(label13Font);
+        }
+        label13.setForeground(new Color(-13236722));
+        label13.setText("All characters that need it: 53");
+        panel5.add(label13, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label14 = new JLabel();
+        Font label14Font = this.$$$getFont$$$("Source Code Pro", -1, 12, label14.getFont());
+        if (label14Font != null) {
+            label14.setFont(label14Font);
+        }
+        label14.setForeground(new Color(-13236722));
+        label14.setText("Characters listed for this weekly boss: 34");
+        panel5.add(label14, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JPanel panel6 = new JPanel();
+        panel6.setLayout(new GridLayoutManager(1, 1, new Insets(0, 5, 0, 5), -1, -1));
+        panel6.setAlignmentX(0.5f);
+        panel6.setAlignmentY(0.5f);
+        panel6.setBackground(new Color(-36698));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(0, 10, 0, 0);
+        weeklyBossDomainCard.add(panel6, gbc);
+        final JLabel label15 = new JLabel();
+        label15.setAlignmentX(0.5f);
+        label15.setFocusTraversalPolicyProvider(false);
+        label15.setFocusable(false);
+        Font label15Font = this.$$$getFont$$$(null, Font.BOLD, 16, label15.getFont());
+        if (label15Font != null) {
+            label15.setFont(label15Font);
+        }
+        label15.setForeground(new Color(-1));
+        label15.setText("\uD83D\uDC09");
+        panel6.add(label15, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        domainFilterBox = new JComboBox();
+        domainFilterBox.setBackground(new Color(-2702645));
+        domainFilterBox.setEnabled(true);
+        Font domainFilterBoxFont =
+                this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, -1, domainFilterBox.getFont());
+        if (domainFilterBoxFont != null) {
+            domainFilterBox.setFont(domainFilterBoxFont);
+        }
+        final DefaultComboBoxModel defaultComboBoxModel1 = new DefaultComboBoxModel();
+        defaultComboBoxModel1.addElement("[ Filter ]");
+        defaultComboBoxModel1.addElement("Artifacts");
+        defaultComboBoxModel1.addElement("Talents");
+        defaultComboBoxModel1.addElement("Weekly Talents");
+        defaultComboBoxModel1.addElement("Weapons");
+        domainFilterBox.setModel(defaultComboBoxModel1);
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.anchor = GridBagConstraints.EAST;
+        gbc.insets = new Insets(0, 0, 0, 10);
+        devDomainsTab.add(domainFilterBox, gbc);
+        domainSearchButton = new JButton();
+        domainSearchButton.setMaximumSize(new Dimension(30, 30));
+        domainSearchButton.setMinimumSize(new Dimension(30, 30));
+        domainSearchButton.setPreferredSize(new Dimension(50, 30));
+        domainSearchButton.setText("✓");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.anchor = GridBagConstraints.WEST;
+        devDomainsTab.add(domainSearchButton, gbc);
     }
 
     /** @noinspection ALL */
