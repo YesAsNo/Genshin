@@ -33,21 +33,22 @@ public class ToolData {
     public static Map<String, List<String>> weeklyBossMatsToCharactersMap = new TreeMap<>();
     public static Map<String, List<String>> talentBookMapping = new TreeMap<>();
     public static final String SAVE_LOCATION = "./UserData/";
-    private static final String PATH_TO_CHARACTER_JSON = "character_element.json";
-    public static final String PATH_TO_CHARACTER_WEEKLY_BOSS_MAT_MAPPING = "character_weekly_talent_material.json";
-    private static final String PATH_TO_WEAPONS_JSON = "weapon_type_weapon_name.json";
-    private static final String PATH_TO_DOMAIN_MAPPINGS = "artifact_domain_artifact_set.json";
-    private static final String PATH_TO_CHARACTER_MAPPINGS = "weapon_type_character.json";
-    private static final String PATH_TO_ARTIFACT_SET_MAPPINGS = "artifact_set_artifact_set_description.json";
-    public static final String  PATH_TO_WEAPON_MATERIAL_MAPPINGS = "weapon_material_weapon_name.json";
-    public static final String PATH_TO_TALENT_BOOK_DOMAIN_MAPPING = "talent_domain_talent_book.json";
+    private static final String PATH_TO_CHARACTER_JSON = "character___element.json";
+    public static final String PATH_TO_CHARACTER_WEEKLY_BOSS_MAT_MAPPING = "character___weekly_talent_material.json";
+    private static final String PATH_TO_WEAPONS_JSON = "weapon_type___weapon_name.json";
+    private static final String PATH_TO_DOMAIN_MAPPINGS = "artifact_domain___artifact_set.json";
+    private static final String PATH_TO_CHARACTER_MAPPINGS = "weapon_type___character.json";
+    private static final String PATH_TO_ARTIFACT_SET_MAPPINGS = "artifact_set___artifact_set_description.json";
+    public static final String  PATH_TO_WEAPON_MATERIAL_MAPPINGS = "weapon_material___weapon_name.json";
+    public static final String PATH_TO_TALENT_BOOK_DOMAIN_MAPPING = "talent_domain___talent_book.json";
 
     public static final List<String> PATHS_TO_DATA_FILES =
-            List.of("character_element.json", "character_weekly_talent_material.json", "character_talent_book.json",
-                    "artifact_domain_artifact_set.json", "weapon_type_character.json", "talent_domain_talent_book.json",
-                    "weapon_domain_weapon_material.json", "weekly_domain_weekly_boss_material.json",
-                    "weapon_material_weapon_name.json",
-                    "artifact_set_artifact_set_description.json", "weapon_type_weapon_name.json");
+            List.of("character___element.json", "character___weekly_talent_material.json", "character___talent_book.json",
+                    "artifact_domain___artifact_set.json", "weapon_type___character.json",
+                    "talent_domain___talent_book.json", "weapon_domain___weapon_material.json",
+                    "weekly_domain___weekly_boss_material.json",
+                    "weapon_material___weapon_name.json", "artifact_set___artifact_set_description.json",
+                    "weapon_type___weapon_name.json");
     public static final Map<String,Map<String,List<String>>> parsedDataFiles = new TreeMap<>();
 
 
