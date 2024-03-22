@@ -1,14 +1,13 @@
 package Files;
 
 import static Files.ToolData.SAVE_LOCATION;
-import static Files.ToolData.artifactSetDescriptionsMap;
-import static Files.ToolData.characterWeaponsMap;
-import static Files.ToolData.charactersFlattened;
 import static Files.ToolData.farmedArtifacts;
 import static Files.ToolData.farmedWeapons;
-import static Files.ToolData.weaponMaterialMap;
-import static Files.ToolData.weaponsFlattened;
-import static Files.ToolData.weaponsRaritiesMap;
+import static Files.ToolData.flattenedDataCategory;
+import static Files.ToolData.getArtifactSetDescription;
+import static Files.ToolData.getFlattenedData;
+import static Files.ToolData.getMapping;
+import static Files.ToolData.knownMappings;
 
 import Files.ToolData.RESOURCE_TYPE;
 import Files.ToolData.WEAPON_RARITY;
@@ -209,12 +208,11 @@ public class ToolGUI extends JFrame implements ActionListener {
 
         String userFieldInput;
         int matchedCount = 0;
-        boolean debugMode;
         if (e.getSource() == searchConfirmButton) {
             userFieldInput = characterSelectorField.getText().toLowerCase();
             selectedCharacterPanel.removeAll();
             characterSearchScrollPane.updateUI();
-            for (String s : charactersFlattened) {
+            for (String s : getFlattenedData(flattenedDataCategory.CHARACTER)) {
                 if (s.toLowerCase().contains(userFieldInput)) {
                     {
                         generateCharacterButton(s, matchedCount);
@@ -242,7 +240,7 @@ public class ToolGUI extends JFrame implements ActionListener {
             userFieldInput = devWeaponsTabSearchbar.getText().toLowerCase();
             devWeaponTabScrollPanePanel.removeAll();
             devWeaponTabScrollPane.updateUI();
-            for (String s : weaponsFlattened) {
+            for (String s : getFlattenedData(flattenedDataCategory.WEAPON_NAME)) {
                 String weaponCategory = lookUpWeaponRarityAndType(s).getWeaponType();
                 String filterOption = (String) devFilterComboBox.getSelectedItem();
                 assert weaponCategory != null;
@@ -509,8 +507,9 @@ public class ToolGUI extends JFrame implements ActionListener {
      */
 
     public static String lookUpWeaponCategoryForCharacter(String charName) {
-        for (String key : characterWeaponsMap.keySet()) {
-            List<String> weapons = characterWeaponsMap.get(key);
+        Map<String, List<String>> weaponMapping = getMapping(knownMappings.WEPTYPE_CHAR);
+        for (String key : weaponMapping.keySet()) {
+            List<String> weapons = weaponMapping.get(key);
             if (weapons.contains(charName)) {
                 return key;
             }
@@ -527,9 +526,10 @@ public class ToolGUI extends JFrame implements ActionListener {
      */
 
     public static String lookUpWeaponMaterial(String weaponName) {
-        assert weaponsFlattened.contains(weaponName);
-        for (String key : weaponMaterialMap.keySet()) {
-            List<String> weapons = weaponMaterialMap.get(key);
+        assert getFlattenedData(flattenedDataCategory.WEAPON_NAME).contains(weaponName);
+        Map<String, List<String>> mapping = getMapping(knownMappings.WEPMAT_WEPNAME);
+        for (String key : mapping.keySet()) {
+            List<String> weapons = mapping.get(key);
             if (weapons.contains(weaponName)) {
                 return key;
             }
@@ -548,10 +548,11 @@ public class ToolGUI extends JFrame implements ActionListener {
 
         final String FOUR_STAR_WEAPON_KEY = "Four-Star " + weaponType;
         final String FIVE_STAR_WEAPON_KEY = "Five-Star " + weaponType;
+        Map<String, List<String>> weaponMapping = getMapping(knownMappings.WEPRARITYANDTYPE_WEPNAME);
 
         return switch (WEAPONRarity) {
-            case FOUR_STAR -> weaponsRaritiesMap.get(FOUR_STAR_WEAPON_KEY);
-            case FIVE_STAR -> weaponsRaritiesMap.get(FIVE_STAR_WEAPON_KEY);
+            case FOUR_STAR -> weaponMapping.get(FOUR_STAR_WEAPON_KEY);
+            case FIVE_STAR -> weaponMapping.get(FIVE_STAR_WEAPON_KEY);
         };
     }
 
@@ -562,8 +563,10 @@ public class ToolGUI extends JFrame implements ActionListener {
      * @return WeaponInfo object with rarity and type of the weapon.
      */
     public static WeaponInfo lookUpWeaponRarityAndType(String weaponName) {
-        for (String key : weaponsRaritiesMap.keySet()) {
-            List<String> weapons = weaponsRaritiesMap.get(key);
+
+        Map<String, List<String>> weaponMapping = getMapping(knownMappings.WEPRARITYANDTYPE_WEPNAME);
+        for (String key : weaponMapping.keySet()) {
+            List<String> weapons = weaponMapping.get(key);
             if (weapons.contains(weaponName)) {
                 return new WeaponInfo(key);
             }
@@ -578,7 +581,7 @@ public class ToolGUI extends JFrame implements ActionListener {
      * @return the description of it as String.
      */
     public static String lookUpSetDescription(String setName) {
-        return artifactSetDescriptionsMap.get(setName);
+        return getArtifactSetDescription(setName);
     }
 
     private void generateWeaponCard(String weaponName, int matchedCount) {

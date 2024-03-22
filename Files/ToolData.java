@@ -1,64 +1,69 @@
 package Files;
 
-import static Files.ToolGUI.WEAPON_SAVE_FILE_NAME;
-
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 public class ToolData {
-    public static Map<String,List<String>> charactersElementsMap = new TreeMap<>();
-    public static List<String> charactersFlattened = new ArrayList<>();
-    public static Map<String, List<String>> mappingDomains = new TreeMap<>();
-    public static List<String> artifactsFlattened = new ArrayList<>();
-    public static Map<String, List<String>> weaponsRaritiesMap = new TreeMap<>();
-    public static List<String> weaponsFlattened = new ArrayList<>();
-    public static Map<String, List<String>> characterWeaponsMap = new TreeMap<>();
-    public static Map<String,String> artifactSetDescriptionsMap = new TreeMap<>();
-    public static Map<String,List<String>> weaponMaterialMap = new TreeMap<>();
+    private static Map<String,String> artifactSetDescriptions = new TreeMap<>();
     public static Map<String, Set<String>> farmedWeapons = new TreeMap<>();
     public static Map<String, Set<String>> farmedArtifacts = new TreeMap<>();
-    public static Map<String, List<String>> weeklyBossMatsToCharactersMap = new TreeMap<>();
-    public static Map<String, List<String>> talentBookMapping = new TreeMap<>();
     public static final String SAVE_LOCATION = "./UserData/";
-    private static final String PATH_TO_CHARACTER_JSON = "element___character.json";
-    public static final String PATH_TO_CHARACTER_WEEKLY_BOSS_MAT_MAPPING = "weekly_talent_material___character.json";
-    private static final String PATH_TO_WEAPONS_JSON = "weapon_rarityandtype___weapon_name.json";
-    private static final String PATH_TO_DOMAIN_MAPPINGS = "artifact_domain___artifact_set.json";
-    private static final String PATH_TO_CHARACTER_MAPPINGS = "weapon_type___character.json";
-    private static final String PATH_TO_ARTIFACT_SET_MAPPINGS = "artifact_set___artifact_set_description.json";
-    public static final String  PATH_TO_WEAPON_MATERIAL_MAPPINGS = "weapon_material___weapon_name.json";
-    public static final String PATH_TO_TALENT_BOOK_DOMAIN_MAPPING = "talent_domain___talent_book.json";
-
     public static final Map<String, Boolean> PATHS_TO_DATA_FILES;
     static {
         PATHS_TO_DATA_FILES = new TreeMap<>();
-        PATHS_TO_DATA_FILES.put("element___character.json",true);
-        PATHS_TO_DATA_FILES.put("weekly_talent_material___character.json",false);
-        PATHS_TO_DATA_FILES.put("talent_book___character.json",false);
-        PATHS_TO_DATA_FILES.put("artifact_domain___artifact_set.json",true);
-        PATHS_TO_DATA_FILES.put("weapon_type___character.json",false);
-        PATHS_TO_DATA_FILES.put("talent_domain___talent_book.json",true);
-        PATHS_TO_DATA_FILES.put("weapon_domain___weapon_material.json",true);
-        PATHS_TO_DATA_FILES.put("weekly_domain___weekly_boss_material.json",true);
-        PATHS_TO_DATA_FILES.put("weapon_material___weapon_name.json",true);
-        PATHS_TO_DATA_FILES.put("artifact_set___artifact_set_description.json",true);
-        PATHS_TO_DATA_FILES.put("weapon_rarityandtype___weapon_name.json",false);
+        PATHS_TO_DATA_FILES.put("./Element_Character.json",true);
+        PATHS_TO_DATA_FILES.put("./WeeklyBossMaterial_Character.json",false);
+        PATHS_TO_DATA_FILES.put("./TalentBook_Character.json",false);
+        PATHS_TO_DATA_FILES.put("./ArtifactDomain_ArtifactSet.json",true);
+        PATHS_TO_DATA_FILES.put("./WeaponType_Character.json",false);
+        PATHS_TO_DATA_FILES.put("./TalentDomain_TalentBook.json",true);
+        PATHS_TO_DATA_FILES.put("./WeaponDomain_WeaponMaterial.json",true);
+        PATHS_TO_DATA_FILES.put("./WeeklyDomain_WeeklyBossMaterial.json",true);
+        PATHS_TO_DATA_FILES.put("./WeaponMaterial_WeaponName.json",true);
+        PATHS_TO_DATA_FILES.put("./ArtifactSet_ArtifactSetDescription.json",false);
+        PATHS_TO_DATA_FILES.put("./WeaponRarityAndType_WeaponName.json",false);
     }
-    public static final Map<String,Map<String,List<String>>> parsedDataFiles = new TreeMap<>();
-    public static final Map<String,List<String>> parsedFlattenedData = new TreeMap<>();
+    private static final Map<String,Map<String,List<String>>> parsedMappings = new TreeMap<>();
+    private static final Map<String,List<String>> parsedFlattenedData = new TreeMap<>();
+    public enum flattenedDataCategory {
+        ARTIFACT_SET("ArtifactSet"),
+        CHARACTER("Character"),
+        TALENT_BOOK("TalentBook"),
+        WEAPON_MATERIAL("WeaponMaterial"),
+        WEAPON_NAME("WeaponName"),
+        WEEKLY_BOSS_MATERIAL("WeeklyBossMaterial");
+        public final String stringToken;
+        private flattenedDataCategory(String data) {
+            this.stringToken = data;
+        }
+    }
+    public enum knownMappings{
+        ARTIDOMAIN_ARTISET("ArtifactDomain_ArtifactSet"),
+        ARTISET_ARTISETDESC("ArtifactSet_ArtifactSetDescription"),
+        ELEM_CHAR("Element_Character"),
+        TALENT_CHAR("TalentBook_Character"),
+        TALENTDOMAIN_TALENT("TalentDomain_TalentBook"),
+        WEPDOMAIN_WEPMAT("WeaponDomain_WeaponMaterial"),
+        WEPMAT_WEPNAME("WeaponMaterial_WeaponName"),
+        WEPRARITYANDTYPE_WEPNAME("WeaponRarityAndType_WeaponName"),
+        WEPTYPE_CHAR("WeaponType_Character"),
+        WEEKLYBOSSMAT_CHAR("WeeklyBossMaterial_Character"),
+        WEEKLYDOMAIN_WEEKLYBOSSMAT("WeeklyDomain_WeeklyBossMaterial");
+        public final String stringToken;
+        private knownMappings(String data) {
+            this.stringToken = data;
+        }
+    }
+
 
 
     public enum WEAPON_RARITY {
@@ -83,121 +88,43 @@ public class ToolData {
         FARMING_SET_TWO
 
     }
+    public static List<String> getFlattenedData(flattenedDataCategory dc){
+        return parsedFlattenedData.get(dc.stringToken);
+    }
+    public static Map<String,List<String>> getMapping(knownMappings mapping){
+        return parsedMappings.get(mapping.stringToken);
+    }
+    public static String getArtifactSetDescription(String artifactSetName){
+        assert artifactSetDescriptions.containsKey(artifactSetName);
+        return artifactSetDescriptions.get(artifactSetName);
+    }
 
-    /**
-     * Parses Character-Element mapping from the supplied json file.
-     * Additionally, retrieves the characters from the mapping, puts them into a 1d array and sorts by alphabet.
-     * @param gson gson object
-     * @param reader Reader object with the path to the json file.
-     */
-    private static void parseCharacters(Gson gson,JsonReader reader){
-        assert gson != null;
-        assert reader != null;
-        charactersElementsMap = gson.fromJson(reader, charactersElementsMap.getClass());
-        List<List<String>> val_arrays = new ArrayList<>(charactersElementsMap.values());
-        val_arrays.forEach(charactersFlattened::addAll);
-        Collections.sort(charactersFlattened);
-    }
-    /**
-     * Parses Domain-Artifact set mapping from the supplied json file.
-     * Additionally, retrieves the artifacts from the mapping, puts them into a 1d array and sorts by alphabet.
-     * @param gson gson object
-     * @param reader Reader object with the path to the json file.
-     */
-    private static void parseDomainMapping(Gson gson,JsonReader reader){
-        assert gson != null;
-        assert reader != null;
-        mappingDomains = gson.fromJson(reader, mappingDomains.getClass());
-        List<List<String>> val_arrays = new ArrayList<>(mappingDomains.values());
-        val_arrays.forEach(artifactsFlattened::addAll);
-        Collections.sort(artifactsFlattened);
-    }
-    /**
-     * Parses Weapon-Rarity/Type mapping from the supplied json file.
-     * @param gson gson object
-     * @param reader Reader object with the path to the json file.
-     */
-    private static void parseWeapons(Gson gson, JsonReader reader){
-        assert gson != null;
-        assert reader != null;
-        weaponsRaritiesMap = gson.fromJson(reader,weaponsRaritiesMap.getClass());
-        List<List<String>> val_arrays = new ArrayList<>(weaponsRaritiesMap.values());
-        val_arrays.forEach(weaponsFlattened::addAll);
-        Collections.sort(weaponsFlattened);
-    }
-    /**
-     * Parses Character-Weapons mapping from the supplied json file.
-     * @param gson gson object
-     * @param reader Reader object with the path to the json file.
-     */
-    private static void parseCharacterMapping(Gson gson,JsonReader reader){
-        assert gson != null;
-        assert reader != null;
-        characterWeaponsMap = gson.fromJson(reader,characterWeaponsMap.getClass());
-
-    }
-    /**
-     * Parses Artifact Set - Set Description mapping from the supplied json file.
-     * @param gson gson object
-     * @param reader Reader object with the path to the json file.
-     */
-    private static void parseArtifactSetDescriptionMapping(Gson gson,JsonReader reader){
-        assert gson != null;
-        assert reader != null;
-        artifactSetDescriptionsMap = gson.fromJson(reader,artifactSetDescriptionsMap.getClass());
-    }
-    private static void parseWeaponMaterialMapping(Gson gson,JsonReader reader){
-        assert gson != null;
-        assert reader != null;
-        weaponMaterialMap = gson.fromJson(reader,weaponMaterialMap.getClass());
-    }
-    private static void parseFarmedWeapons(Gson gson, File f)throws FileNotFoundException {
-        if (!f.exists()){
-            return;
-        }
-        assert gson != null;
-        Type setType = new TypeToken<Map<String,TreeSet<String>>>(){}.getType();
-        JsonReader reader = new JsonReader(new FileReader(f));
-        farmedWeapons = gson.fromJson(reader,setType);
-    }
-    private static void parseCharacterWeeklyTalents(Gson gson, JsonReader reader){
-        assert gson != null;
-        assert reader != null;
-        weeklyBossMatsToCharactersMap = gson.fromJson(reader,weeklyBossMatsToCharactersMap.getClass());
-    }
-    private static void parseTalentBookDomains(Gson gson, JsonReader reader){
-        assert gson != null;
-        assert reader != null;
-        talentBookMapping = gson.fromJson(reader,talentBookMapping.getClass());
-    }
     private static void parseDataJsonFiles() throws FileNotFoundException {
         Gson gson = new Gson();
-        Type setType = new TypeToken<Map<String,List<String>>>(){}.getType();
         for (String path : PATHS_TO_DATA_FILES.keySet()){
             JsonReader reader = new JsonReader(new FileReader(path));
-            Map<String, List<String>> parsedFile = gson.fromJson(reader,setType);
-            parsedDataFiles.put(path,parsedFile);
+            String categoryName = (String) path.subSequence(path.indexOf('/') + 1,path.lastIndexOf("."));
+            if (categoryName.equalsIgnoreCase(knownMappings.ARTISET_ARTISETDESC.stringToken)){
+                artifactSetDescriptions = gson.fromJson(reader,artifactSetDescriptions.getClass());
+                continue;
+            }
+            TreeMap<String,List<String>> parsedMapping = new TreeMap<>();
+            parsedMapping = gson.fromJson(reader, parsedMapping.getClass());
+            parsedMappings.put(categoryName,parsedMapping);
             if (PATHS_TO_DATA_FILES.get(path)){
-                List<List<String>> val_arrays = new ArrayList<>(parsedFile.values());
+                List<List<String>> val_arrays = new ArrayList<>(parsedMapping.values());
                 List<String> valuesFlattened = new ArrayList<>();
                 val_arrays.forEach(valuesFlattened::addAll);
                 Collections.sort(valuesFlattened);
-                parsedFlattenedData.put(path,valuesFlattened);
+                parsedFlattenedData.put((String) path.subSequence(path.indexOf('_') + 1,path.lastIndexOf(".")),valuesFlattened);
             }
+
         }
+
     }
     public static void main(String[] args) throws Exception {
 
-        Gson gson = new Gson();
-        parseCharacters(gson,new JsonReader(new FileReader(PATH_TO_CHARACTER_JSON)));
-        parseDomainMapping(gson,new JsonReader(new FileReader(PATH_TO_DOMAIN_MAPPINGS)));
-        parseWeapons(gson, new JsonReader(new FileReader(PATH_TO_WEAPONS_JSON)));
-        parseCharacterMapping(gson, new JsonReader(new FileReader(PATH_TO_CHARACTER_MAPPINGS)));
-        parseArtifactSetDescriptionMapping(gson, new JsonReader(new FileReader(PATH_TO_ARTIFACT_SET_MAPPINGS)));
-        parseWeaponMaterialMapping(gson, new JsonReader(new FileReader(PATH_TO_WEAPON_MATERIAL_MAPPINGS)));
-        parseFarmedWeapons(gson, new File(SAVE_LOCATION + WEAPON_SAVE_FILE_NAME));
-        parseCharacterWeeklyTalents(gson, new JsonReader(new FileReader(PATH_TO_CHARACTER_WEEKLY_BOSS_MAT_MAPPING)));
-        parseTalentBookDomains(gson, new JsonReader(new FileReader(PATH_TO_TALENT_BOOK_DOMAIN_MAPPING)));
+        parseDataJsonFiles();
         new ToolGUI();
         //new Program();
 

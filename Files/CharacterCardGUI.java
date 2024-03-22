@@ -1,8 +1,8 @@
 package Files;
 
 import static Files.ToolData.RESOURCE_TYPE;
-import static Files.ToolData.artifactsFlattened;
 import static Files.ToolData.farmedWeapons;
+import static Files.ToolData.getFlattenedData;
 import static Files.ToolGUI.CHARACTER_LIMIT;
 import static Files.ToolGUI.CLOSE_TEXT;
 import static Files.ToolGUI.FIVE_STAR_WEAPON_DELIMITER;
@@ -169,7 +169,7 @@ public class CharacterCardGUI extends JFrame {
         setComboBox.setInheritsPopupMenu(false);
         final DefaultComboBoxModel<String> defaultComboBoxModelForSet1Selector = new DefaultComboBoxModel<>();
         defaultComboBoxModelForSet1Selector.addElement(UNKNOWN_SET_MESSAGE);
-        defaultComboBoxModelForSet1Selector.addAll(artifactsFlattened);
+        defaultComboBoxModelForSet1Selector.addAll(getFlattenedData(ToolData.flattenedDataCategory.ARTIFACT_SET));
         setComboBox.setModel(defaultComboBoxModelForSet1Selector);
         if (dataField == ToolData.CHARACTER_CARD_DATA_FIELD.SET_ONE){
             setComboBox.setSelectedItem(
