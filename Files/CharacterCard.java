@@ -1,5 +1,7 @@
 package Files;
 
+import static Files.ToolData.generateResourceIconPath;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
@@ -36,7 +38,7 @@ public class CharacterCard {
         return characterName;
     }
     public void setCharacterIcon(){
-        ImageIcon charIcon = new ImageIcon(ToolGUI.generateResourceIconPath(characterName, ToolData.RESOURCE_TYPE.CHARACTER));
+        ImageIcon charIcon = new ImageIcon(generateResourceIconPath(characterName, ToolData.RESOURCE_TYPE.CHARACTER));
         assert charIcon.getImage() != null;
         characterIcon = charIcon;
 

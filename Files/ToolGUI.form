@@ -26,7 +26,7 @@
         </properties>
         <border type="none"/>
         <children>
-          <tabbedpane id="344eb" binding="characterTabPane">
+          <tabbedpane id="344eb" binding="mainTabbedPane">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
                 <preferred-size width="200" height="200"/>
@@ -183,68 +183,6 @@
                     </children>
                   </grid>
                 </children>
-              </grid>
-              <grid id="28c03" binding="characterTab" layout-manager="GridBagLayout">
-                <constraints>
-                  <tabbedpane title="Characters"/>
-                </constraints>
-                <properties>
-                  <background color="-1"/>
-                  <enabled value="true"/>
-                  <focusCycleRoot value="false"/>
-                  <font/>
-                  <opaque value="true"/>
-                  <requestFocusEnabled value="true"/>
-                </properties>
-                <border type="none"/>
-                <children>
-                  <grid id="14772" binding="selectedCharacterPanel" custom-create="true" layout-manager="GridBagLayout">
-                    <constraints>
-                      <grid row="1" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                      <gridbag weightx="1.0" weighty="1.0"/>
-                    </constraints>
-                    <properties/>
-                    <border type="none"/>
-                    <children/>
-                  </grid>
-                  <component id="c46ef" class="javax.swing.JButton" binding="searchConfirmButton" custom-create="true">
-                    <constraints>
-                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                      <gridbag weightx="0.0" weighty="0.0"/>
-                    </constraints>
-                    <properties>
-                      <maximumSize width="30" height="30"/>
-                      <minimumSize width="30" height="30"/>
-                      <preferredSize width="50" height="30"/>
-                      <text value="✓"/>
-                    </properties>
-                  </component>
-                  <component id="1696f" class="javax.swing.JTextField" binding="characterSelectorField" custom-create="true">
-                    <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
-                      <gridbag top="0" left="250" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
-                    </constraints>
-                    <properties>
-                      <enabled value="true"/>
-                      <font name="Source Code Pro Black" size="18" style="1"/>
-                      <inheritsPopupMenu value="false"/>
-                      <maximumSize width="240" height="33"/>
-                      <minimumSize width="240" height="33"/>
-                      <preferredSize width="240" height="33"/>
-                      <text value="Choose your fighter!"/>
-                    </properties>
-                  </component>
-                </children>
-              </grid>
-              <grid id="d9425" binding="weaponsTab" layout-manager="GridBagLayout">
-                <constraints>
-                  <tabbedpane title="Weapons"/>
-                </constraints>
-                <properties>
-                  <background color="-1"/>
-                </properties>
-                <border type="none"/>
-                <children/>
               </grid>
               <grid id="b14c1" binding="devDomainsTab" layout-manager="GridBagLayout">
                 <constraints>

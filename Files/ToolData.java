@@ -1,11 +1,19 @@
 package Files;
 
+import static Files.ToolGUI.UNKNOWN_WEAPON_MESSAGE;
+import static Files.ToolGUI.UNKNOWN_WEAPON_PATH;
+
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 public class ToolData {
     private static Map<String,String> artifactSetDescriptions = new TreeMap<>();
@@ -115,7 +123,16 @@ public class ToolData {
         assert artifactSetDescriptions.containsKey(artifactSetName);
         return artifactSetDescriptions.get(artifactSetName);
     }
+    /**
+     * Looks up a set description from the name.
+     *
+     * @param setName the name of the set
+     * @return the description of it as String.
+     */
 
+    public static String lookUpSetDescription(String setName) {
+        return getArtifactSetDescription(setName);
+    }
     private static void parseDataJsonFiles() throws FileNotFoundException {
         Gson gson = new Gson();
         for (String path : PATHS_TO_DATA_FILES.keySet()){
@@ -138,6 +155,106 @@ public class ToolData {
 
         }
 
+    }
+    /**
+     * Generates a path to the specified resource.
+     *
+     * @param resourceName the name of the resource
+     * @param resourceType the type of the resource
+     * @return character icon path
+     */
+    public static String generateResourceIconPath(String resourceName, RESOURCE_TYPE resourceType) {
+        assert resourceName != null;
+        if (resourceType == RESOURCE_TYPE.CHARACTER) {
+            return "./Files/Images/Characters/" + resourceName + ".png";
+        } else if (resourceType == RESOURCE_TYPE.WEAPON_MATERIAL) {
+            return "./Files/Images/Weapon Materials/" + resourceName + ".png";
+        } else if (resourceType == RESOURCE_TYPE.ARTIFACT) {
+            return "./Files/Images/Artifacts/" + resourceName + ".png";
+        } else if (resourceType == RESOURCE_TYPE.WEAPON) {
+            if (resourceName.equalsIgnoreCase(UNKNOWN_WEAPON_MESSAGE)) {
+                return UNKNOWN_WEAPON_PATH;
+            }
+            WeaponInfo wi = lookUpWeaponRarityAndType(resourceName);
+            return switch (wi.getRarity()) {
+                case FOUR_STAR -> "./Files/Images/Weapons/" + wi.getWeaponType() + "_4star/" + resourceName + ".png";
+                case FIVE_STAR -> "./Files/Images/Weapons/" + wi.getWeaponType() + "_5star/" + resourceName + ".png";
+            };
+        } else {
+            return "";
+        }
+
+    }
+    /**
+     * Looks up what weapon category is assigned to the character, i.e. what type of weapons the character can wield.
+     *
+     * @param charName the name of the character
+     * @return the string that represents the category (one of five possibilities)
+     */
+
+    public static String lookUpWeaponCategoryForCharacter(String charName) {
+        Map<String, List<String>> weaponMapping = getMapping(knownMappings.WEPTYPE_CHAR);
+        for (String key : weaponMapping.keySet()) {
+            List<String> weapons = weaponMapping.get(key);
+            if (weapons.contains(charName)) {
+                return key;
+            }
+
+        }
+        return null;
+    }
+    /**
+     * Looks up weapon material for the specified weapon.
+     *
+     * @param weaponName the weapon name
+     * @return the weapon material.
+     */
+
+    public static String lookUpWeaponMaterial(String weaponName) {
+        assert getFlattenedData(flattenedDataCategory.WEAPON_NAME).contains(weaponName);
+        Map<String, List<String>> mapping = getMapping(knownMappings.WEPMAT_WEPNAME);
+        for (String key : mapping.keySet()) {
+            List<String> weapons = mapping.get(key);
+            if (weapons.contains(weaponName)) {
+                return key;
+            }
+        }
+        return null;
+    }
+    /**
+     * Grabs all weapons based on their rarity and type.
+     *
+     * @param WEAPONRarity rarity of the weapon
+     * @param weaponType type of the weapon
+     * @return list of the weapons with the specified rarity.
+     */
+    public static List<String> lookUpWeapons(WEAPON_RARITY WEAPONRarity, String weaponType) {
+
+        final String FOUR_STAR_WEAPON_KEY = "Four-Star " + weaponType;
+        final String FIVE_STAR_WEAPON_KEY = "Five-Star " + weaponType;
+        Map<String, List<String>> weaponMapping = getMapping(knownMappings.WEPRARITYANDTYPE_WEPNAME);
+
+        return switch (WEAPONRarity) {
+            case FOUR_STAR -> weaponMapping.get(FOUR_STAR_WEAPON_KEY);
+            case FIVE_STAR -> weaponMapping.get(FIVE_STAR_WEAPON_KEY);
+        };
+    }
+    /**
+     * Looks up the rarity and type of specified weapon.
+     *
+     * @param weaponName the weapon name
+     * @return WeaponInfo object with rarity and type of the weapon.
+     */
+    public static WeaponInfo lookUpWeaponRarityAndType(String weaponName) {
+
+        Map<String, List<String>> weaponMapping = getMapping(knownMappings.WEPRARITYANDTYPE_WEPNAME);
+        for (String key : weaponMapping.keySet()) {
+            List<String> weapons = weaponMapping.get(key);
+            if (weapons.contains(weaponName)) {
+                return new WeaponInfo(key);
+            }
+        }
+        return new WeaponInfo("");
     }
     public static void main(String[] args) throws Exception {
 

@@ -1,23 +1,18 @@
 package Files;
 
 import static Files.ToolData.RESOURCE_TYPE;
-import static Files.ToolData.farmedWeapons;
+import static Files.ToolData.generateResourceIconPath;
 import static Files.ToolData.getFlattenedData;
+import static Files.ToolData.lookUpWeaponCategoryForCharacter;
+import static Files.ToolData.lookUpWeapons;
 import static Files.ToolGUI.CHARACTER_LIMIT;
 import static Files.ToolGUI.CLOSE_TEXT;
 import static Files.ToolGUI.FIVE_STAR_WEAPON_DELIMITER;
 import static Files.ToolGUI.FOUR_STAR_WEAPON_DELIMITER;
-import static Files.ToolGUI.TOOLTIP_FOR_LABELS_WITHOUT_ICON;
-import static Files.ToolGUI.TOOLTIP_FOR_LABELS_WITH_ICON;
-import static Files.ToolGUI.TOOLTIP_FOR_WEAPON_ICON_LABEL;
-import static Files.ToolGUI.TOOLTIP_FOR_WEAPON_NAME_LABEL;
 import static Files.ToolGUI.UNKNOWN_ARTIFACT;
 import static Files.ToolGUI.UNKNOWN_SET_MESSAGE;
 import static Files.ToolGUI.UNKNOWN_WEAPON_MESSAGE;
 import static Files.ToolGUI.UNKNOWN_WEAPON_PATH;
-import static Files.ToolGUI.generateResourceIconPath;
-import static Files.ToolGUI.lookUpWeaponCategoryForCharacter;
-import static Files.ToolGUI.lookUpWeapons;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -152,7 +147,6 @@ public class CharacterCardGUI extends JFrame {
             setNameLabel.setText(characterCard.getCharacterName());
         }
 
-        setNameLabel.setToolTipText(TOOLTIP_FOR_LABELS_WITHOUT_ICON);
         jpanel.add(setNameLabel, gc);
         return setNameLabel;
     }
@@ -207,7 +201,6 @@ public class CharacterCardGUI extends JFrame {
         gbc.anchor = GridBagConstraints.NORTHEAST;
         gbc.insets = new Insets(0, 0, 0, 20);
         jpanel.add(weaponIcon, gbc);
-        weaponIcon.setToolTipText(TOOLTIP_FOR_WEAPON_ICON_LABEL);
         return weaponIcon;
     }
 
@@ -225,7 +218,6 @@ public class CharacterCardGUI extends JFrame {
 
     private JLabel getSet1Icon(CharacterCard characterCard, JPanel jpanel) {
         JLabel set1Icon = new JLabel();
-        set1Icon.setToolTipText(TOOLTIP_FOR_LABELS_WITH_ICON);
         set1Icon.setHorizontalAlignment(4);
         set1Icon.setHorizontalTextPosition(4);
         String savedArtifactSet1Name = characterCard.getArtifactSet1();
@@ -246,7 +238,6 @@ public class CharacterCardGUI extends JFrame {
 
     private JLabel getSet2Icon(CharacterCard characterCard, JPanel jpanel) {
         JLabel set2Icon = new JLabel();
-        set2Icon.setToolTipText(TOOLTIP_FOR_LABELS_WITH_ICON);
         set2Icon.setHorizontalAlignment(4);
         set2Icon.setHorizontalTextPosition(4);
         String savedArtifactSet2Name = characterCard.getArtifactSet2();
@@ -458,7 +449,6 @@ public class CharacterCardGUI extends JFrame {
 
         JLabel weaponIconLabel = getWeaponIcon(characterCard, templateTab);
 
-        weaponNameLabel.setToolTipText(TOOLTIP_FOR_WEAPON_NAME_LABEL);
         getCharLabel(characterCard.getCharacterIcon(), templateTab);
         JLabel set1Icon = getSet1Icon(characterCard, templateTab);
         JLabel set2Icon = getSet2Icon(characterCard, templateTab);
@@ -506,7 +496,7 @@ public class CharacterCardGUI extends JFrame {
 
         closeButton.addActionListener(new CloseButtonListener(this));
         saveButton.addActionListener(new SaveButtonListener(characterCard));
-        saveButton.addActionListener(new WeaponCardListener(farmedWeapons));
+        //TODO: saveButton.addActionListener(new WeaponTabGUI(farmedWeapons));
         set1ComboBox.addActionListener(new UpdateTextAreaListener(setDetailsTextArea));
         set2ComboBox.addActionListener(new UpdateTextAreaListener(setDetailsTextArea));
 

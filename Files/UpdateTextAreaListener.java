@@ -1,7 +1,7 @@
 package Files;
 
+import static Files.ToolData.lookUpSetDescription;
 import static Files.ToolGUI.UNKNOWN_SET_MESSAGE;
-import static Files.ToolGUI.lookUpSetDescription;
 
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
