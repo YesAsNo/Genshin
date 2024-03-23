@@ -119,6 +119,12 @@ public class Program extends JFrame implements ActionListener {
     private JLabel devWelcomeLabel;
     private JPanel devBasicInfoSpacer;
     private JPanel devWeaponMatDomain;
+    private JPanel weaponMatDomainPanel;
+    private JPanel talentBookMatDomain;
+    private JPanel artifactDomainPanel;
+    private JPanel weeklyBossDomainPanel;
+    private JPanel infoPanel;
+    private JPanel infoMarginPanel;
     private JScrollPane scrollPane1;
 
     /**
@@ -687,17 +693,18 @@ public class Program extends JFrame implements ActionListener {
         devDomainsPanelForEverything = new JPanel();
         devDomainsPanelForEverything.setLayout(new GridBagLayout());
         devDomainsScrollPane.setViewportView(devDomainsPanelForEverything);
-        final JPanel panel1 = new JPanel();
-        panel1.setLayout(new GridBagLayout());
-        panel1.setBackground(new Color(-10301));
+        weaponMatDomainPanel = new JPanel();
+        weaponMatDomainPanel.setLayout(new GridBagLayout());
+        weaponMatDomainPanel.setBackground(new Color(-10301));
+        weaponMatDomainPanel.setEnabled(true);
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(5, 100, 5, 100);
-        devDomainsPanelForEverything.add(panel1, gbc);
-        panel1.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
+        devDomainsPanelForEverything.add(weaponMatDomainPanel, gbc);
+        weaponMatDomainPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
                 TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         final JLabel label1 = new JLabel();
         label1.setIcon(
@@ -708,7 +715,7 @@ public class Program extends JFrame implements ActionListener {
         gbc.gridy = 0;
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.WEST;
-        panel1.add(label1, gbc);
+        weaponMatDomainPanel.add(label1, gbc);
         final JLabel label2 = new JLabel();
         label2.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Weapon Materials/All Guyun.png")));
         label2.setText("");
@@ -717,7 +724,7 @@ public class Program extends JFrame implements ActionListener {
         gbc.gridy = 0;
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.WEST;
-        panel1.add(label2, gbc);
+        weaponMatDomainPanel.add(label2, gbc);
         final JLabel label3 = new JLabel();
         label3.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Weapon Materials/All Aerosiderite.png")));
         label3.setText("");
@@ -726,19 +733,19 @@ public class Program extends JFrame implements ActionListener {
         gbc.gridy = 0;
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.WEST;
-        panel1.add(label3, gbc);
-        final JPanel panel2 = new JPanel();
-        panel2.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
-        panel2.setAlignmentX(0.5f);
-        panel2.setAlignmentY(0.5f);
-        panel2.setBackground(new Color(-10301));
+        weaponMatDomainPanel.add(label3, gbc);
+        final JPanel panel1 = new JPanel();
+        panel1.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
+        panel1.setAlignmentX(0.5f);
+        panel1.setAlignmentY(0.5f);
+        panel1.setBackground(new Color(-10301));
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
-        panel1.add(panel2, gbc);
+        weaponMatDomainPanel.add(panel1, gbc);
         final JLabel label4 = new JLabel();
         Font label4Font = this.$$$getFont$$$("Source Code Pro", Font.BOLD, 18, label4.getFont());
         if (label4Font != null) {
@@ -746,7 +753,7 @@ public class Program extends JFrame implements ActionListener {
         }
         label4.setForeground(new Color(-13494016));
         label4.setText("Hidden Palace of Lianshan Formula");
-        panel2.add(label4, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+        panel1.add(label4, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                 GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label5 = new JLabel();
         Font label5Font = this.$$$getFont$$$("Source Code Pro", -1, 12, label5.getFont());
@@ -755,7 +762,7 @@ public class Program extends JFrame implements ActionListener {
         }
         label5.setForeground(new Color(-13494016));
         label5.setText("All weapons that need it: 53");
-        panel2.add(label5, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+        panel1.add(label5, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                 GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label6 = new JLabel();
         Font label6Font = this.$$$getFont$$$("Source Code Pro", -1, 12, label6.getFont());
@@ -764,19 +771,19 @@ public class Program extends JFrame implements ActionListener {
         }
         label6.setForeground(new Color(-13494016));
         label6.setText("Weapons listed for this domain: 34");
-        panel2.add(label6, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+        panel1.add(label6, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                 GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JPanel panel3 = new JPanel();
-        panel3.setLayout(new GridLayoutManager(1, 1, new Insets(0, 5, 0, 5), -1, -1));
-        panel3.setAlignmentX(0.5f);
-        panel3.setAlignmentY(0.5f);
-        panel3.setBackground(new Color(-26768));
+        final JPanel panel2 = new JPanel();
+        panel2.setLayout(new GridLayoutManager(1, 1, new Insets(0, 5, 0, 5), -1, -1));
+        panel2.setAlignmentX(0.5f);
+        panel2.setAlignmentY(0.5f);
+        panel2.setBackground(new Color(-26768));
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(0, 10, 0, 0);
-        panel1.add(panel3, gbc);
+        weaponMatDomainPanel.add(panel2, gbc);
         final JLabel label7 = new JLabel();
         label7.setAlignmentX(0.5f);
         label7.setFocusTraversalPolicyProvider(false);
@@ -787,19 +794,19 @@ public class Program extends JFrame implements ActionListener {
         }
         label7.setForeground(new Color(-1));
         label7.setText("\uD83D\uDD2A");
-        panel3.add(label7, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+        panel2.add(label7, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                 GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JPanel panel4 = new JPanel();
-        panel4.setLayout(new GridBagLayout());
-        panel4.setBackground(new Color(-1068));
+        talentBookMatDomain = new JPanel();
+        talentBookMatDomain.setLayout(new GridBagLayout());
+        talentBookMatDomain.setBackground(new Color(-1068));
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.weightx = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(5, 100, 5, 100);
-        devDomainsPanelForEverything.add(panel4, gbc);
-        panel4.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
+        devDomainsPanelForEverything.add(talentBookMatDomain, gbc);
+        talentBookMatDomain.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
                 TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         final JLabel label8 = new JLabel();
         label8.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Talent Materials/Resistance.png")));
@@ -809,7 +816,7 @@ public class Program extends JFrame implements ActionListener {
         gbc.gridy = 0;
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.WEST;
-        panel4.add(label8, gbc);
+        talentBookMatDomain.add(label8, gbc);
         final JLabel label9 = new JLabel();
         label9.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Talent Materials/Freedom.png")));
         label9.setText("");
@@ -818,7 +825,7 @@ public class Program extends JFrame implements ActionListener {
         gbc.gridy = 0;
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.WEST;
-        panel4.add(label9, gbc);
+        talentBookMatDomain.add(label9, gbc);
         final JLabel label10 = new JLabel();
         label10.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Talent Materials/Ballad.png")));
         label10.setText("");
@@ -827,19 +834,19 @@ public class Program extends JFrame implements ActionListener {
         gbc.gridy = 0;
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.WEST;
-        panel4.add(label10, gbc);
-        final JPanel panel5 = new JPanel();
-        panel5.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
-        panel5.setAlignmentX(0.5f);
-        panel5.setAlignmentY(0.5f);
-        panel5.setBackground(new Color(-1068));
+        talentBookMatDomain.add(label10, gbc);
+        final JPanel panel3 = new JPanel();
+        panel3.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
+        panel3.setAlignmentX(0.5f);
+        panel3.setAlignmentY(0.5f);
+        panel3.setBackground(new Color(-1068));
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
-        panel4.add(panel5, gbc);
+        talentBookMatDomain.add(panel3, gbc);
         final JLabel label11 = new JLabel();
         Font label11Font = this.$$$getFont$$$("Source Code Pro", Font.BOLD, 18, label11.getFont());
         if (label11Font != null) {
@@ -847,7 +854,7 @@ public class Program extends JFrame implements ActionListener {
         }
         label11.setForeground(new Color(-14541824));
         label11.setText("Forsaken Rift");
-        panel5.add(label11, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+        panel3.add(label11, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                 GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label12 = new JLabel();
         Font label12Font = this.$$$getFont$$$("Source Code Pro", -1, 12, label12.getFont());
@@ -856,7 +863,7 @@ public class Program extends JFrame implements ActionListener {
         }
         label12.setForeground(new Color(-14541824));
         label12.setText("All characters that need it: 53");
-        panel5.add(label12, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+        panel3.add(label12, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                 GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label13 = new JLabel();
         Font label13Font = this.$$$getFont$$$("Source Code Pro", -1, 12, label13.getFont());
@@ -865,19 +872,19 @@ public class Program extends JFrame implements ActionListener {
         }
         label13.setForeground(new Color(-14541824));
         label13.setText("Characters listed for this domain: 34");
-        panel5.add(label13, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+        panel3.add(label13, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                 GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JPanel panel6 = new JPanel();
-        panel6.setLayout(new GridLayoutManager(1, 1, new Insets(0, 5, 0, 5), -1, -1));
-        panel6.setAlignmentX(0.5f);
-        panel6.setAlignmentY(0.5f);
-        panel6.setBackground(new Color(-10640));
+        final JPanel panel4 = new JPanel();
+        panel4.setLayout(new GridLayoutManager(1, 1, new Insets(0, 5, 0, 5), -1, -1));
+        panel4.setAlignmentX(0.5f);
+        panel4.setAlignmentY(0.5f);
+        panel4.setBackground(new Color(-10640));
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(0, 10, 0, 0);
-        panel4.add(panel6, gbc);
+        talentBookMatDomain.add(panel4, gbc);
         final JLabel label14 = new JLabel();
         label14.setAlignmentX(0.5f);
         label14.setFocusTraversalPolicyProvider(false);
@@ -888,19 +895,19 @@ public class Program extends JFrame implements ActionListener {
         }
         label14.setForeground(new Color(-1));
         label14.setText("\uD83D\uDCD4");
-        panel6.add(label14, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+        panel4.add(label14, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                 GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JPanel panel7 = new JPanel();
-        panel7.setLayout(new GridBagLayout());
-        panel7.setBackground(new Color(-2756865));
+        artifactDomainPanel = new JPanel();
+        artifactDomainPanel.setLayout(new GridBagLayout());
+        artifactDomainPanel.setBackground(new Color(-2756865));
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.weightx = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(5, 100, 5, 100);
-        devDomainsPanelForEverything.add(panel7, gbc);
-        panel7.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
+        devDomainsPanelForEverything.add(artifactDomainPanel, gbc);
+        artifactDomainPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
                 TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         final JLabel label15 = new JLabel();
         label15.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Artifacts/Heart of Depth.png")));
@@ -910,7 +917,7 @@ public class Program extends JFrame implements ActionListener {
         gbc.gridy = 0;
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.WEST;
-        panel7.add(label15, gbc);
+        artifactDomainPanel.add(label15, gbc);
         final JLabel label16 = new JLabel();
         label16.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Artifacts/Blizzard Strayer.png")));
         label16.setText("");
@@ -919,19 +926,19 @@ public class Program extends JFrame implements ActionListener {
         gbc.gridy = 0;
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.WEST;
-        panel7.add(label16, gbc);
-        final JPanel panel8 = new JPanel();
-        panel8.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
-        panel8.setAlignmentX(0.5f);
-        panel8.setAlignmentY(0.5f);
-        panel8.setBackground(new Color(-2756865));
+        artifactDomainPanel.add(label16, gbc);
+        final JPanel panel5 = new JPanel();
+        panel5.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
+        panel5.setAlignmentX(0.5f);
+        panel5.setAlignmentY(0.5f);
+        panel5.setBackground(new Color(-2756865));
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
-        panel7.add(panel8, gbc);
+        artifactDomainPanel.add(panel5, gbc);
         final JLabel label17 = new JLabel();
         Font label17Font = this.$$$getFont$$$("Source Code Pro", Font.BOLD, 18, label17.getFont());
         if (label17Font != null) {
@@ -939,7 +946,7 @@ public class Program extends JFrame implements ActionListener {
         }
         label17.setForeground(new Color(-16575201));
         label17.setText("Peak of Vindagnyr");
-        panel8.add(label17, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+        panel5.add(label17, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                 GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label18 = new JLabel();
         Font label18Font = this.$$$getFont$$$("Source Code Pro", -1, 12, label18.getFont());
@@ -948,7 +955,7 @@ public class Program extends JFrame implements ActionListener {
         }
         label18.setForeground(new Color(-16575201));
         label18.setText("All characters holding it: 53");
-        panel8.add(label18, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+        panel5.add(label18, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                 GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label19 = new JLabel();
         Font label19Font = this.$$$getFont$$$("Source Code Pro", -1, 12, label19.getFont());
@@ -957,19 +964,19 @@ public class Program extends JFrame implements ActionListener {
         }
         label19.setForeground(new Color(-16575201));
         label19.setText("Characters listed for this domain: 34");
-        panel8.add(label19, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+        panel5.add(label19, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                 GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JPanel panel9 = new JPanel();
-        panel9.setLayout(new GridLayoutManager(1, 1, new Insets(0, 5, 0, 5), -1, -1));
-        panel9.setAlignmentX(0.5f);
-        panel9.setAlignmentY(0.5f);
-        panel9.setBackground(new Color(-9382145));
+        final JPanel panel6 = new JPanel();
+        panel6.setLayout(new GridLayoutManager(1, 1, new Insets(0, 5, 0, 5), -1, -1));
+        panel6.setAlignmentX(0.5f);
+        panel6.setAlignmentY(0.5f);
+        panel6.setBackground(new Color(-9382145));
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(0, 10, 0, 0);
-        panel7.add(panel9, gbc);
+        artifactDomainPanel.add(panel6, gbc);
         final JLabel label20 = new JLabel();
         label20.setAlignmentX(0.5f);
         label20.setFocusTraversalPolicyProvider(false);
@@ -980,19 +987,19 @@ public class Program extends JFrame implements ActionListener {
         }
         label20.setForeground(new Color(-1));
         label20.setText("\uD83D\uDC51");
-        panel9.add(label20, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+        panel6.add(label20, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                 GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JPanel panel10 = new JPanel();
-        panel10.setLayout(new GridBagLayout());
-        panel10.setBackground(new Color(-11811));
+        weeklyBossDomainPanel = new JPanel();
+        weeklyBossDomainPanel.setLayout(new GridBagLayout());
+        weeklyBossDomainPanel.setBackground(new Color(-11811));
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.weightx = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(5, 100, 5, 100);
-        devDomainsPanelForEverything.add(panel10, gbc);
-        panel10.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
+        devDomainsPanelForEverything.add(weeklyBossDomainPanel, gbc);
+        weeklyBossDomainPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
                 TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         final JLabel label21 = new JLabel();
         label21.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Weekly Bosses/Dvalin's Sigh.png")));
@@ -1002,7 +1009,7 @@ public class Program extends JFrame implements ActionListener {
         gbc.gridy = 0;
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.WEST;
-        panel10.add(label21, gbc);
+        weeklyBossDomainPanel.add(label21, gbc);
         final JLabel label22 = new JLabel();
         label22.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Weekly Bosses/Dvalin's Plume.png")));
         label22.setText("");
@@ -1011,7 +1018,7 @@ public class Program extends JFrame implements ActionListener {
         gbc.gridy = 0;
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.WEST;
-        panel10.add(label22, gbc);
+        weeklyBossDomainPanel.add(label22, gbc);
         final JLabel label23 = new JLabel();
         label23.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Weekly Bosses/Dvalin's Claw.png")));
         label23.setText("");
@@ -1020,19 +1027,19 @@ public class Program extends JFrame implements ActionListener {
         gbc.gridy = 0;
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.WEST;
-        panel10.add(label23, gbc);
-        final JPanel panel11 = new JPanel();
-        panel11.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
-        panel11.setAlignmentX(0.5f);
-        panel11.setAlignmentY(0.5f);
-        panel11.setBackground(new Color(-11811));
+        weeklyBossDomainPanel.add(label23, gbc);
+        final JPanel panel7 = new JPanel();
+        panel7.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
+        panel7.setAlignmentX(0.5f);
+        panel7.setAlignmentY(0.5f);
+        panel7.setBackground(new Color(-11811));
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
-        panel10.add(panel11, gbc);
+        weeklyBossDomainPanel.add(panel7, gbc);
         final JLabel label24 = new JLabel();
         Font label24Font = this.$$$getFont$$$("Source Code Pro", Font.BOLD, 18, label24.getFont());
         if (label24Font != null) {
@@ -1040,7 +1047,7 @@ public class Program extends JFrame implements ActionListener {
         }
         label24.setForeground(new Color(-13236722));
         label24.setText("Stormterror Dvalin");
-        panel11.add(label24, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+        panel7.add(label24, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                 GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label25 = new JLabel();
         Font label25Font = this.$$$getFont$$$("Source Code Pro", -1, 12, label25.getFont());
@@ -1049,7 +1056,7 @@ public class Program extends JFrame implements ActionListener {
         }
         label25.setForeground(new Color(-13236722));
         label25.setText("All characters that need it: 53");
-        panel11.add(label25, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+        panel7.add(label25, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                 GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label26 = new JLabel();
         Font label26Font = this.$$$getFont$$$("Source Code Pro", -1, 12, label26.getFont());
@@ -1058,19 +1065,19 @@ public class Program extends JFrame implements ActionListener {
         }
         label26.setForeground(new Color(-13236722));
         label26.setText("Characters listed for this weekly boss: 34");
-        panel11.add(label26, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+        panel7.add(label26, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                 GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JPanel panel12 = new JPanel();
-        panel12.setLayout(new GridLayoutManager(1, 1, new Insets(0, 5, 0, 5), -1, -1));
-        panel12.setAlignmentX(0.5f);
-        panel12.setAlignmentY(0.5f);
-        panel12.setBackground(new Color(-36698));
+        final JPanel panel8 = new JPanel();
+        panel8.setLayout(new GridLayoutManager(1, 1, new Insets(0, 5, 0, 5), -1, -1));
+        panel8.setAlignmentX(0.5f);
+        panel8.setAlignmentY(0.5f);
+        panel8.setBackground(new Color(-36698));
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(0, 10, 0, 0);
-        panel10.add(panel12, gbc);
+        weeklyBossDomainPanel.add(panel8, gbc);
         final JLabel label27 = new JLabel();
         label27.setAlignmentX(0.5f);
         label27.setFocusTraversalPolicyProvider(false);
@@ -1081,7 +1088,7 @@ public class Program extends JFrame implements ActionListener {
         }
         label27.setForeground(new Color(-1));
         label27.setText("\uD83D\uDC09");
-        panel12.add(label27, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+        panel8.add(label27, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                 GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JComboBox comboBox1 = new JComboBox();
         comboBox1.setBackground(new Color(-2702645));
@@ -1432,8 +1439,8 @@ public class Program extends JFrame implements ActionListener {
         devWeaponMatDomain.setLayout(new GridBagLayout());
         devWeaponMatDomain.setBackground(new Color(-1));
         devTabbedPane.addTab("WeaponMat", devWeaponMatDomain);
-        final JPanel panel13 = new JPanel();
-        panel13.setLayout(new GridBagLayout());
+        final JPanel panel9 = new JPanel();
+        panel9.setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -1441,7 +1448,7 @@ public class Program extends JFrame implements ActionListener {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
-        devWeaponMatDomain.add(panel13, gbc);
+        devWeaponMatDomain.add(panel9, gbc);
         final JScrollPane scrollPane2 = new JScrollPane();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -1449,18 +1456,18 @@ public class Program extends JFrame implements ActionListener {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
-        panel13.add(scrollPane2, gbc);
-        final JPanel panel14 = new JPanel();
-        panel14.setLayout(new GridBagLayout());
-        scrollPane2.setViewportView(panel14);
-        final JPanel panel15 = new JPanel();
-        panel15.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        panel15.setBackground(new Color(-1));
+        panel9.add(scrollPane2, gbc);
+        final JPanel panel10 = new JPanel();
+        panel10.setLayout(new GridBagLayout());
+        scrollPane2.setViewportView(panel10);
+        final JPanel panel11 = new JPanel();
+        panel11.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        panel11.setBackground(new Color(-1));
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.fill = GridBagConstraints.BOTH;
-        panel14.add(panel15, gbc);
+        panel10.add(panel11, gbc);
         final JLabel label28 = new JLabel();
         Font label28Font = this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 20, label28.getFont());
         if (label28Font != null) {
@@ -1468,7 +1475,7 @@ public class Program extends JFrame implements ActionListener {
         }
         label28.setForeground(new Color(-1767091));
         label28.setText("Hidden Palace of Lianshan Formula");
-        panel15.add(label28, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
+        panel11.add(label28, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
                 GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 

@@ -512,7 +512,7 @@ public class CharacterCardGUI extends JFrame {
 
         return templateTab;
     }
-    private Font $$$getFont$$$(int style, int size, Font currentFont) {
+    public static Font $$$getFont$$$(int style, int size, Font currentFont) {
         if (currentFont == null) {
             return null;
         }
