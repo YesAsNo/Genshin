@@ -1,6 +1,7 @@
 package Files;
 
 import static Files.ToolData.SAVE_LOCATION;
+import static Files.ToolData.WEAPON_FILTER_OPTIONS.*;
 import static Files.ToolData.farmedArtifacts;
 import static Files.ToolData.farmedWeapons;
 import static Files.ToolData.flattenedDataCategory;
@@ -752,12 +753,10 @@ public class ToolGUI extends JFrame implements ActionListener {
             devFilterComboBox.setFont(devFilterComboBoxFont);
         }
         final DefaultComboBoxModel<String> defaultComboBoxModel1 = new DefaultComboBoxModel<>();
-        defaultComboBoxModel1.addElement("[ Filter ]");
-        defaultComboBoxModel1.addElement("Claymore");
-        defaultComboBoxModel1.addElement("Bow");
-        defaultComboBoxModel1.addElement("Polearm");
-        defaultComboBoxModel1.addElement("Sword");
-        defaultComboBoxModel1.addElement("Catalyst");
+
+        for (ToolData.WEAPON_FILTER_OPTIONS options : ALL_OPTIONS.keySet()) {
+            defaultComboBoxModel1.addElement(options.filterOption);
+        }
 
         devFilterComboBox.setModel(defaultComboBoxModel1);
         gbc = new GridBagConstraints();

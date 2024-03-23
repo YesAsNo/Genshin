@@ -5,12 +5,7 @@ import com.google.gson.stream.JsonReader;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 
 public class ToolData {
     private static Map<String,String> artifactSetDescriptions = new TreeMap<>();
@@ -88,6 +83,28 @@ public class ToolData {
         FARMING_SET_TWO
 
     }
+    public enum WEAPON_FILTER_OPTIONS{
+        NO_FILTER("[ Filter ]"),
+        CLAYMORE("Claymore"),
+        BOW("Bow"),
+        POLEARM("Polearm"),
+        SWORD("Sword"),
+        CATALYST("Catalyst");
+
+        public static final Map<WEAPON_FILTER_OPTIONS, String> ALL_OPTIONS = new TreeMap<>();
+
+        static {
+            for (WEAPON_FILTER_OPTIONS e: values()) {
+                ALL_OPTIONS.put(e, e.filterOption);
+            }
+        }
+
+        public final String filterOption;
+        private WEAPON_FILTER_OPTIONS(String filterOption) {
+            this.filterOption = filterOption;
+        }
+    }
+
     public static List<String> getFlattenedData(flattenedDataCategory dc){
         return parsedFlattenedData.get(dc.stringToken);
     }
@@ -125,8 +142,8 @@ public class ToolData {
     public static void main(String[] args) throws Exception {
 
         parseDataJsonFiles();
-        //new ToolGUI();
-        new Program();
+        new ToolGUI();
+        //new Program();
 
         }
     }
