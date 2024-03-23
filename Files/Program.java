@@ -301,9 +301,10 @@ public class Program extends JFrame implements ActionListener {
      */
     private void $$$setupUI$$$() {
         createUIComponents();
-        devMainPanel.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
+        devMainPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         devMainPanel.setBackground(new Color(-465419));
         devMainPanel.setEnabled(true);
+
         final Spacer spacer1 = new Spacer();
         devMainPanel.add(spacer1,
                 new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1,
