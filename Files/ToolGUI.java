@@ -87,7 +87,7 @@ public class ToolGUI extends JFrame {
     public ToolGUI() {
         $$$setupUI$$$();
         addTab("Characters", _characterTabGUI.getMainPanel());
-        addTab("Weapons",_weaponsTabGUI.getMainPanel());
+        addTab("Weapons", _weaponsTabGUI.getMainPanel());
         setContentPane(mainPanel);
         setTitle("Genshin Domain App!");
         setDefaultCloseOperation(EXIT_ON_CLOSE);

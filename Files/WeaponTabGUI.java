@@ -40,7 +40,7 @@ import java.io.IOException;
 
 public class WeaponTabGUI implements ItemListener, ActionListener {
 
-    private final JPanel mainPanel = new JPanel();
+    private final JPanel mainPanel = new JPanel(new GridBagLayout());
     private final JScrollPane devWeaponTabScrollPane = new JScrollPane();
     private final JTextField devWeaponsTabSearchbar = new JTextField();
     private final JButton devWeaponTabSearchButton = new JButton();
@@ -168,9 +168,8 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
 
     private void setUpWeaponsPanel() {
 
-        mainPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        JPanel overviewPanel = new JPanel();
+        JPanel overviewPanel = new JPanel(new GridBagLayout());
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 4;
@@ -185,7 +184,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
-        mainPanel.add(devWeaponTabScrollPane, gbc);
+        overviewPanel.add(devWeaponTabScrollPane, gbc);
         devWeaponTabScrollPanePanel.setLayout(new GridBagLayout());
         devWeaponTabScrollPane.setViewportView(devWeaponTabScrollPanePanel);
         devWeaponTabScrollPane.updateUI();

@@ -168,8 +168,7 @@ public final class CharacterTabGUI implements ActionListener {
             gbc.weighty = 1.0;
             gbc.fill = GridBagConstraints.BOTH;
 
-            searchResultPanel.add(searchScrollPane, gbc);
-
+            mainPanel.add(searchScrollPane, gbc);
         }
     }
     /**
