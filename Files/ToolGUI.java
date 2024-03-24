@@ -1,9 +1,6 @@
 package Files;
 
 import static Files.ToolData.SAVE_LOCATION;
-import static Files.WeaponTabGUI.FARMED_FOR_A_SPECIFIED_CHARACTER;
-import static Files.WeaponTabGUI.FARMED_GENERALLY;
-import static Files.WeaponTabGUI.NOT_FARMING;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -150,18 +147,6 @@ public class ToolGUI extends JFrame {
             return farmedArtifacts;
         } else {
             return farmedWeapons;
-        }
-    }
-
-    public static int checkIfWeaponIsFarmed(String weaponName) {
-        if (farmedWeapons.containsKey(weaponName)) {
-            if (farmedWeapons.get(weaponName).size() > 1) {
-                return FARMED_FOR_A_SPECIFIED_CHARACTER;
-            } else {
-                return FARMED_GENERALLY;
-            }
-        } else {
-            return NOT_FARMING;
         }
     }
 
