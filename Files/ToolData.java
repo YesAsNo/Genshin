@@ -12,13 +12,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 public class ToolData {
     private static Map<String,String> artifactSetDescriptions = new TreeMap<>();
-    public static Map<String, Set<String>> farmedWeapons = new TreeMap<>();
-    public static Map<String, Set<String>> farmedArtifacts = new TreeMap<>();
     public static final String SAVE_LOCATION = "./UserData/";
     public static final Map<String, Boolean> PATHS_TO_DATA_FILES;
     static {

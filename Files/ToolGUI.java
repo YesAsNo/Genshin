@@ -1,10 +1,9 @@
 package Files;
 
 import static Files.ToolData.SAVE_LOCATION;
-import static Files.ToolData.farmedArtifacts;
-import static Files.ToolData.farmedWeapons;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -32,12 +31,14 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 public class ToolGUI extends JFrame {
@@ -75,7 +76,8 @@ public class ToolGUI extends JFrame {
     private JPanel devDomainCardViewport;
     private JButton domainSearchButton;
     private JComboBox<String> domainFilterBox;
-
+    private static Map<String, Set<String>> farmedWeapons = new TreeMap<>();
+    public static Map<String, Set<String>> farmedArtifacts = new TreeMap<>();
     private static final List<CharacterCard> generatedCharacterCards = new ArrayList<>();
     private static final CharacterTabGUI _characterTabGUI = new CharacterTabGUI();
     private static final WeaponTabGUI _weaponsTabGUI = new WeaponTabGUI();
@@ -105,7 +107,25 @@ public class ToolGUI extends JFrame {
         mainPanel = new JPanel();
         readGeneratedCharacterCards();
         parseCharacterWeapons();
+        parseFarmedWeapons();
         parseCharacterArtifacts();
+    }
+    private void parseFarmedWeapons(){
+        Gson gson = new Gson();
+        File f = new File(SAVE_LOCATION + WEAPON_SAVE_FILE_NAME);
+        if (!f.exists()){
+            return;
+        }
+        try {
+            JsonReader reader = new JsonReader(new FileReader(f));
+            farmedWeapons = gson.fromJson(reader, new TypeToken<TreeMap<String, Set<String>>>() {}.getClass());
+            if (farmedWeapons == null){
+                farmedWeapons = new TreeMap<>();
+            }
+        }
+        catch(IOException ex){
+            System.out.println("The weapon save file failed to parse.");
+        }
     }
 
     public void addDomainCardToViewport(JPanel jPanel, GridBagConstraints gbc) {
@@ -118,6 +138,15 @@ public class ToolGUI extends JFrame {
 
     public static void addCharacterCard(CharacterCard characterCard) {
         generatedCharacterCards.add(characterCard);
+    }
+
+    public static Map<String, Set<String>> getFarmedMapping(ToolData.RESOURCE_TYPE rt) {
+        assert rt != null;
+        if (rt == ToolData.RESOURCE_TYPE.ARTIFACT) {
+            return farmedArtifacts;
+        } else {
+            return farmedWeapons;
+        }
     }
 
     /**
@@ -148,7 +177,9 @@ public class ToolGUI extends JFrame {
      * Parses character weapons.
      */
     private void parseCharacterWeapons() {
-
+        if (farmedWeapons.isEmpty()) {
+            System.out.println("1234");
+        }
         for (CharacterCard characterCard : generatedCharacterCards) {
             String charWeapon = characterCard.getWeapon();
             if (!charWeapon.isEmpty() && characterCard.getWeaponStatus()) {
@@ -162,7 +193,6 @@ public class ToolGUI extends JFrame {
                 }
             }
         }
-        System.out.println(farmedWeapons.keySet().size());
     }
 
     /**
@@ -221,7 +251,20 @@ public class ToolGUI extends JFrame {
             }
         }
     }
-
+    public static void serializeSave(){
+        Gson gson = new Gson();
+        File f = new File(SAVE_LOCATION + WEAPON_SAVE_FILE_NAME);
+        try{
+            f.createNewFile();
+            FileWriter fd = new FileWriter(f);
+            gson.toJson(farmedWeapons,fd);
+            fd.flush();
+            fd.close();
+        }
+        catch(IOException ex){
+            System.out.println("Failed to save weapons");
+        }
+    }
     /**
      * Sets the hardcoded font for the specified component.
      *

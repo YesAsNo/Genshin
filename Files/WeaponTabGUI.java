@@ -1,16 +1,16 @@
 package Files;
 
-import static Files.ToolData.SAVE_LOCATION;
 import static Files.ToolData.WEAPON_FILTER_OPTIONS.ALL_OPTIONS;
-import static Files.ToolData.farmedWeapons;
 import static Files.ToolData.generateResourceIconPath;
 import static Files.ToolData.getFlattenedData;
 import static Files.ToolData.lookUpWeaponMaterial;
 import static Files.ToolData.lookUpWeaponRarityAndType;
-import static Files.ToolGUI.WEAPON_SAVE_FILE_NAME;
+import static Files.ToolGUI.UNKNOWN_CHARACTER;
 import static Files.ToolGUI.formatString;
+import static Files.ToolGUI.getFarmedMapping;
+import static Files.ToolGUI.serializeSave;
+import static Files.ToolGUI.updateFarmedItemMap;
 
-import com.google.gson.Gson;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 
@@ -34,9 +34,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 public class WeaponTabGUI implements ItemListener, ActionListener {
 
@@ -47,15 +47,39 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
     private final JPanel devWeaponTabScrollPanePanel = new JPanel();
     private final JButton devSaveAllWeapons = new JButton();
     private static final JComboBox<String> devFilterComboBox = new JComboBox<>();
+    private static final Map<String,Integer> weaponsToUpdate = new TreeMap<>();
+    public static final int FARMED_FOR_A_SPECIFIED_CHARACTER = -1;
+    public static final int NOT_FARMING = 0;
+    public static final int STARTED_FARMING = 1;
 
     public WeaponTabGUI(){
         setUpWeaponsPanel();
+        parseWeaponsToUpdate();
+
     }
 
     public JPanel getMainPanel() {
         return mainPanel;
     }
+    private void parseWeaponsToUpdate(){
+        for (String weapon: getFlattenedData(ToolData.flattenedDataCategory.WEAPON_NAME)){
+            Map<String, Set<String>> mapping = getFarmedMapping(ToolData.RESOURCE_TYPE.WEAPON);
+            if (mapping.containsKey(weapon))
+            {
+                Set<String> chars = mapping.get(weapon);
+                if (chars.contains(UNKNOWN_CHARACTER)){
+                    weaponsToUpdate.put(weapon,STARTED_FARMING);
+                }
+                else{
+                    weaponsToUpdate.put(weapon,FARMED_FOR_A_SPECIFIED_CHARACTER);
+                }
+            }
+            else{
+                weaponsToUpdate.put(weapon,NOT_FARMING);
+            }
 
+        }
+    }
     @Override
     public void itemStateChanged(ItemEvent e) {
         ((JCheckBox)e.getSource()).setEnabled(false);
@@ -75,20 +99,19 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         triggerButton.setEnabled(true);
     }
     private void saveAllWeapons(){
-        Gson gson = new Gson();
-        File f = new File(SAVE_LOCATION + WEAPON_SAVE_FILE_NAME);
-        try{
-            f.createNewFile();
-            FileWriter fd = new FileWriter(f);
-            //TODO: gson.toJson(_farmedWeapons,fd);
-            fd.flush();
-            fd.close();
 
+        for(String weapon : weaponsToUpdate.keySet()){
+            if (weaponsToUpdate.get(weapon) == STARTED_FARMING){
+                updateFarmedItemMap(getFarmedMapping(ToolData.RESOURCE_TYPE.WEAPON),weapon,UNKNOWN_CHARACTER,true);
+            }
+            if (weaponsToUpdate.get(weapon) == NOT_FARMING) {
+                updateFarmedItemMap(getFarmedMapping(ToolData.RESOURCE_TYPE.WEAPON),weapon,UNKNOWN_CHARACTER,false);
+            }
+            //The third case was handled in the SaveButtonListener.
         }
-        catch(IOException ex){
-            System.out.println("Failed to save weapons");
-        }
+        serializeSave();
     }
+
     private void parseSearch() {
         String userFieldInput = devWeaponsTabSearchbar.getText().toLowerCase();
         devWeaponTabScrollPanePanel.removeAll();
@@ -107,6 +130,9 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
             }
 
         }
+    }
+    public static Map<String,Integer>getFarmingMap(){
+        return weaponsToUpdate;
     }
     public void generateWeaponCard(String weaponName, int matchedCount) {
         JPanel devWeaponCard = new JPanel();
@@ -133,14 +159,15 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
                         false));
         JCheckBox devWepMatListingCheckbox = new JCheckBox();
         devWepMatListingCheckbox.setBackground(new Color(-1));
-        if (farmedWeapons.containsKey(weaponName)) {
+        assert getFarmedMapping(ToolData.RESOURCE_TYPE.WEAPON) != null;
+        if (getFarmedMapping(ToolData.RESOURCE_TYPE.WEAPON).containsKey(weaponName)) {
             devWepMatListingCheckbox.setSelected(true);
             devWepMatListingCheckbox.setEnabled(false);
             devWepMatListingCheckbox.setText("Already Farmed");
         } else {
             devWepMatListingCheckbox.setText("List Weapon?");
         }
-        devWepMatListingCheckbox.addItemListener(this);
+        devWepMatListingCheckbox.addItemListener(new WeaponTabGUIListener(weaponName));
 
         devWeaponCard.add(devWepMatListingCheckbox,
                 new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,

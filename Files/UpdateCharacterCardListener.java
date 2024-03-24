@@ -1,8 +1,7 @@
 package Files;
 
-import static Files.ToolData.farmedArtifacts;
-import static Files.ToolData.farmedWeapons;
-import static Files.ToolGUI.*;
+import static Files.ToolGUI.UNKNOWN_SET_MESSAGE;
+import static Files.ToolGUI.UNKNOWN_WEAPON_MESSAGE;
 import static javax.swing.DefaultButtonModel.SELECTED;
 
 import Files.ToolData.CHARACTER_CARD_DATA_FIELD;
@@ -57,37 +56,19 @@ public class UpdateCharacterCardListener implements ActionListener, ItemListener
     public void itemStateChanged(ItemEvent e) {
         //TODO: Add methods to update FarmedTalents and WeaponMats
         boolean currentStatus;
-        String farmedItemName = "";
+        currentStatus = convertStateChangeToBool(e.getStateChange());
         switch(_changedData){
             case FARMING_SET_ONE:
-                currentStatus = convertStateChangeToBool(e.getStateChange());
                 _characterCard.setArtifactSet1Status(currentStatus);
-                farmedItemName= _characterCard.getArtifactSet1();
-                if (!farmedItemName.isEmpty())
-                {
-                    updateFarmedItemMap(farmedArtifacts,farmedItemName,_characterCard.getCharacterName(),currentStatus);
-                }
                 return;
             case FARMING_SET_TWO:
-                currentStatus = convertStateChangeToBool(e.getStateChange());
                 _characterCard.setArtifactSet2Status(currentStatus);
-                farmedItemName = _characterCard.getArtifactSet2();
-                if (!farmedItemName.isEmpty())
-                {
-                    updateFarmedItemMap(farmedArtifacts,farmedItemName,_characterCard.getCharacterName(),currentStatus);
-                }
                 return;
             case FARMING_TALENT_MATERIALS:
-                currentStatus = convertStateChangeToBool(e.getStateChange());
                 _characterCard.setTalentStatus(currentStatus);
                 return;
             case FARMING_WEAPON_MATERIALS:
-                currentStatus = convertStateChangeToBool(e.getStateChange());
                 _characterCard.setWeaponStatus(currentStatus);
-                farmedItemName = _characterCard.getWeapon();
-                if (!farmedItemName.isEmpty()){
-                    updateFarmedItemMap(farmedWeapons,farmedItemName,_characterCard.getCharacterName(),currentStatus);
-                }
                 return;
             default:
         }
