@@ -79,7 +79,7 @@ public class ToolGUI extends JFrame {
     private JPanel devDomainCardViewport;
     private JButton domainSearchButton;
     private JComboBox<String> domainFilterBox;
-    private static Map<String, Set<String>> farmedWeapons = new TreeMap<>();
+    private static final Map<String, Set<String>> farmedWeapons = new TreeMap<>();
     public static Map<String, Set<String>> farmedArtifacts = new TreeMap<>();
     private static final List<CharacterCard> generatedCharacterCards = new ArrayList<>();
     private static final CharacterTabGUI _characterTabGUI = new CharacterTabGUI();
@@ -122,10 +122,10 @@ public class ToolGUI extends JFrame {
         }
         try {
             JsonReader reader = new JsonReader(new FileReader(f));
-            farmedWeapons = gson.fromJson(reader, new TypeToken<TreeMap<String, Set<String>>>() {
+            TreeMap<String, Set<String>> map = gson.fromJson(reader, new TypeToken<TreeMap<String, Set<String>>>() {
             }.getClass());
-            if (farmedWeapons == null) {
-                farmedWeapons = new TreeMap<>();
+            if (map != null) {
+                farmedWeapons.putAll(map);
             }
         } catch (IOException ex) {
             System.out.println("The weapon save file failed to parse.");
@@ -152,19 +152,19 @@ public class ToolGUI extends JFrame {
             return farmedWeapons;
         }
     }
-    public static int checkIfWeaponIsFarmed(String weaponName){
-        if (farmedWeapons.containsKey(weaponName)){
-            if (farmedWeapons.get(weaponName).size() > 1){
+
+    public static int checkIfWeaponIsFarmed(String weaponName) {
+        if (farmedWeapons.containsKey(weaponName)) {
+            if (farmedWeapons.get(weaponName).size() > 1) {
                 return FARMED_FOR_A_SPECIFIED_CHARACTER;
-            }
-            else{
+            } else {
                 return FARMED_GENERALLY;
             }
-        }
-        else{
+        } else {
             return NOT_FARMING;
         }
     }
+
     /**
      * Reads character cards that have been saved in previous sessions.
      */
@@ -193,9 +193,6 @@ public class ToolGUI extends JFrame {
      * Parses character weapons.
      */
     private void parseCharacterWeapons() {
-        if (farmedWeapons.isEmpty()) {
-            System.out.println("1234");
-        }
         for (CharacterCard characterCard : generatedCharacterCards) {
             String charWeapon = characterCard.getWeapon();
             if (!charWeapon.isEmpty() && characterCard.getWeaponStatus()) {
@@ -209,6 +206,18 @@ public class ToolGUI extends JFrame {
                 }
             }
         }
+    }
+
+    public static boolean isSomeoneFarmingForTheWeapon(String weapon) {
+        if (generatedCharacterCards.isEmpty()) {
+            return false;
+        }
+        for (CharacterCard characterCard : generatedCharacterCards) {
+            if (characterCard.getWeapon().equalsIgnoreCase(weapon) && characterCard.getWeaponStatus()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -239,7 +248,6 @@ public class ToolGUI extends JFrame {
                 }
             }
         }
-        System.out.println(farmedArtifacts.keySet().size());
     }
 
     /**

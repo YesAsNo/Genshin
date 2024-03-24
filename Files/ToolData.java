@@ -96,17 +96,19 @@ public class ToolData {
         SWORD("Sword"),
         CATALYST("Catalyst");
 
-        public static final Map<WEAPON_FILTER_OPTIONS, String> ALL_OPTIONS = new TreeMap<>();
+        public static final Map<WEAPON_FILTER_OPTIONS, String> ALL_OPTION_BY_ENUM = new TreeMap<>();
+        public static final Map<String,WEAPON_FILTER_OPTIONS> ALL_OPTIONS_BY_STRING = new TreeMap<>();
 
         static {
             for (WEAPON_FILTER_OPTIONS e: values()) {
-                ALL_OPTIONS.put(e, e.filterOption);
+                ALL_OPTION_BY_ENUM.put(e, e.stringToken);
+                ALL_OPTIONS_BY_STRING.put(e.stringToken,e);
             }
         }
 
-        public final String filterOption;
-        private WEAPON_FILTER_OPTIONS(String filterOption) {
-            this.filterOption = filterOption;
+        public final String stringToken;
+        WEAPON_FILTER_OPTIONS(String stringToken) {
+            this.stringToken = stringToken;
         }
     }
 

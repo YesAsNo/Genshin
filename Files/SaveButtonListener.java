@@ -3,10 +3,12 @@ package Files;
 import static Files.ToolData.SAVE_LOCATION;
 import static Files.ToolGUI.getFarmedMapping;
 import static Files.ToolGUI.updateFarmedItemMap;
+import static Files.WeaponTabGUI.parseWeaponsMap;
 
 import com.google.gson.Gson;
 
 import javax.swing.JButton;
+import javax.swing.Timer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -36,6 +38,7 @@ public class SaveButtonListener implements ActionListener {
                     _characterCard.getWeapon(),
                     _characterCard.getCharacterName(),
                     _characterCard.getWeaponStatus());
+            parseWeaponsMap();
 
         }
         if (_characterCard.getArtifactSet1().equalsIgnoreCase(ToolGUI.UNKNOWN_SET_MESSAGE))
@@ -62,17 +65,27 @@ public class SaveButtonListener implements ActionListener {
         }
 
         File f = new File(SAVE_LOCATION + _characterCard.getCharacterName());
+        JButton triggerButton = (JButton) e.getSource();
         try{
             f.createNewFile();
             FileWriter fd = new FileWriter(f);
             gson.toJson(_characterCard,fd);
             fd.flush();
             fd.close();
+            Timer timer = new Timer(0, event->triggerButton.setText("SUCCESS"));
+            timer.setRepeats(false);
+            timer.start();
             }
         catch (IOException ex)
             {
                 System.out.println("Failed to save character details for character " +_characterCard.getCharacterName());
+                Timer timer = new Timer(0,event->triggerButton.setText("FAIL"));
+                timer.setRepeats(false);
+                timer.start();
             }
+        Timer timer = new Timer(1000,event->triggerButton.setText("SAVE"));
+        timer.setRepeats(false);
+        timer.start();
         saveButton.setEnabled(true);
     }
 }

@@ -453,8 +453,6 @@ public class CharacterCardGUI extends JFrame {
         JLabel set1Icon = getSet1Icon(characterCard, templateTab);
         JLabel set2Icon = getSet2Icon(characterCard, templateTab);
 
-
-
         JPanel checkboxAndButtonPanel = getCheckboxAndButtonPanel(templateTab);
         JCheckBox artifactSet1ListingCheckBox = getListingCheckBox(characterCard, middleSelectorPanel,"Artifact Listing",
                 new GridConstraints(10, 0, 1, 1, GridConstraints.ANCHOR_SOUTHWEST, GridConstraints.FILL_NONE,
