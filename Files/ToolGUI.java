@@ -81,6 +81,7 @@ public class ToolGUI extends JFrame {
     private static final List<CharacterCard> generatedCharacterCards = new ArrayList<>();
     private static final CharacterTabGUI _characterTabGUI = new CharacterTabGUI();
     private static final WeaponTabGUI _weaponsTabGUI = new WeaponTabGUI();
+    private static final DomainCardGUI _domainCardGUI = new DomainCardGUI();
 
     /**
      * Constructor of the GUI class.
@@ -90,6 +91,7 @@ public class ToolGUI extends JFrame {
         $$$setupUI$$$();
         addTab("Characters", _characterTabGUI.getMainPanel());
         addTab("Weapons", _weaponsTabGUI.getMainPanel());
+        addTab("Domains", _domainCardGUI.getMainPanel());
         setContentPane(mainPanel);
         setTitle("Genshin Domain App!");
         setDefaultCloseOperation(EXIT_ON_CLOSE);

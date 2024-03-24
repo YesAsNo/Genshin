@@ -6,23 +6,29 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-
+import java.util.Objects;
 
 public class DomainCardGUI {
-    private final JPanel _card;
-    private final ToolGUI _toolGUI;
+    private final JPanel domainsTab = new JPanel(new GridBagLayout());
     public enum decorationTheme{
         WEAPON_MATERIAL_THEME(-10301,-13494016,-26768,"\uD83D\uDD2A"),
-        TALENT_BOOK_THEME(-1068,-14541824,-10640,"\uD83D\uDCD4");
+        TALENT_BOOK_THEME(-1068,-14541824,-10640,"\uD83D\uDCD4"),
+        WEEKLY_BOSS_DOMAIN(-11811,-13236722,-36698,"\uD83D\uDC09"),
+        ARTIFACT_DOMAIN(-2756865,-16575201,-9382145,"\uD83D\uDC51");
         public final int panelBackgroundColor;
         public final int panelForegroundColor;
         public final int marginBackgroundColor;
@@ -34,52 +40,104 @@ public class DomainCardGUI {
             this.marginSymbol = symbol;
         }
     }
-    public DomainCardGUI(ToolGUI toolGUI) {
-        _toolGUI = toolGUI;
-        _card = new JPanel();
-        _card.setLayout(new GridBagLayout());
-        _card.setBackground(new Color(-10301));
+    public DomainCardGUI() {
+        JComboBox<String> comboBox1 = new JComboBox<>();
+        comboBox1.setBackground(new Color(-2702645));
+        comboBox1.setEnabled(true);
+        final DefaultComboBoxModel<String> defaultComboBoxModel2 = new DefaultComboBoxModel<>();
+        defaultComboBoxModel2.addElement("[ Filter ]");
+        defaultComboBoxModel2.addElement("Artifacts");
+        defaultComboBoxModel2.addElement("Talents");
+        defaultComboBoxModel2.addElement("Weekly Talents");
+        defaultComboBoxModel2.addElement("Weapons");
+        comboBox1.setModel(defaultComboBoxModel2);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.anchor = GridBagConstraints.EAST;
+        gbc.insets = new Insets(0, 0, 0, 10);
+        domainsTab.add(comboBox1, gbc);
+        final JButton button1 = new JButton();
+        button1.setMaximumSize(new Dimension(30, 30));
+        button1.setMinimumSize(new Dimension(30, 30));
+        button1.setPreferredSize(new Dimension(50, 30));
+        button1.setText("✓");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.anchor = GridBagConstraints.WEST;
+        domainsTab.add(button1, gbc);
+        domainsTab.setBackground(new Color(-1));
+        JPanel devDomainsTabPanel = new JPanel();
+        devDomainsTabPanel.setLayout(new GridBagLayout());
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        domainsTab.add(devDomainsTabPanel, gbc);
+        JScrollPane devDomainsScrollPane = new JScrollPane();
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        devDomainsTabPanel.add(devDomainsScrollPane, gbc);
+        JPanel devDomainsPanelForEverything = new JPanel();
+        devDomainsPanelForEverything.setLayout(new GridBagLayout());
+        devDomainsScrollPane.setViewportView(devDomainsPanelForEverything);
+
+    }
+    private void generateDomainCard(){
+        domainsTab.setBackground(new Color(-10301));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(5, 100, 5, 100);
-        _toolGUI.addDomainCardToViewport(_card,gbc);
-        _card.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
+        //TODO:_toolGUI.addDomainCardToViewport(domainsTab,gbc);
+        domainsTab.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
                 TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
 
         JLabel materialIconR = new JLabel();
         materialIconR.setIcon(
-                new ImageIcon(getClass().getResource("/Files/Images/Weapon Materials/All Mist Veiled Elixir.png")));
+                new ImageIcon(Objects.requireNonNull(
+                        getClass().getResource("/Files/Images/Weapon Materials/All Mist Veiled Elixir.png"))));
         materialIconR.setText("");
         gbc = new GridBagConstraints();
         gbc.gridx = 4;
         gbc.gridy = 0;
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.WEST;
-        _card.add(materialIconR, gbc);
+        domainsTab.add(materialIconR, gbc);
 
         JLabel materialIconMiddle = new JLabel();
         materialIconMiddle.setIcon(
-                new ImageIcon(getClass().getResource("/Files/Images/Weapon Materials/All Guyun.png")));
+                new ImageIcon(
+                        Objects.requireNonNull(getClass().getResource("/Files/Images/Weapon Materials/All Guyun.png"))));
         materialIconMiddle.setText("");
         gbc = new GridBagConstraints();
         gbc.gridx = 3;
         gbc.gridy = 0;
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.WEST;
-        _card.add(materialIconMiddle, gbc);
+        domainsTab.add(materialIconMiddle, gbc);
         JLabel materialIconL = new JLabel();
         materialIconL.setIcon(
-                new ImageIcon(getClass().getResource("/Files/Images/Weapon Materials/All Aerosiderite.png")));
+                new ImageIcon(Objects.requireNonNull(
+                        getClass().getResource("/Files/Images/Weapon Materials/All Aerosiderite.png"))));
         materialIconL.setText("");
         gbc = new GridBagConstraints();
         gbc.gridx = 2;
         gbc.gridy = 0;
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.WEST;
-        _card.add(materialIconL, gbc);
+        domainsTab.add(materialIconL, gbc);
         JPanel weaponMaterialInfoPanel = new JPanel();
         weaponMaterialInfoPanel.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
         weaponMaterialInfoPanel.setAlignmentX(0.5f);
@@ -91,7 +149,7 @@ public class DomainCardGUI {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
-        _card.add(weaponMaterialInfoPanel, gbc);
+        domainsTab.add(weaponMaterialInfoPanel, gbc);
         JLabel domainNameLabel = new JLabel();
         Font domainNameLabelFont = $$$getFont$$$( Font.BOLD, 18, domainNameLabel.getFont());
         if (domainNameLabelFont != null) {
@@ -137,7 +195,7 @@ public class DomainCardGUI {
         gbc.gridy = 0;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(0, 10, 0, 0);
-        _card.add(marginPanel, gbc);
+        domainsTab.add(marginPanel, gbc);
         JLabel weaponMaterialDomainIconLabel = new JLabel();
         weaponMaterialDomainIconLabel.setAlignmentX(0.5f);
         weaponMaterialDomainIconLabel.setFocusTraversalPolicyProvider(false);
@@ -154,5 +212,8 @@ public class DomainCardGUI {
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
                         false));
 
+    }
+    public JPanel getMainPanel(){
+        return domainsTab;
     }
 }
