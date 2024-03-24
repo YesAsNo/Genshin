@@ -1,7 +1,7 @@
 package Files;
 
+import static Files.WeaponTabGUI.FARMED_GENERALLY;
 import static Files.WeaponTabGUI.NOT_FARMING;
-import static Files.WeaponTabGUI.STARTED_FARMING;
 import static Files.WeaponTabGUI.getFarmingMap;
 
 import javax.swing.JCheckBox;
@@ -17,7 +17,7 @@ public class WeaponTabGUIListener implements ItemListener {
     public void itemStateChanged(ItemEvent e) {
         JCheckBox source = (JCheckBox) e.getSource();
         if (source.isSelected()){
-            getFarmingMap().put(weaponName,STARTED_FARMING);
+            getFarmingMap().put(weaponName, FARMED_GENERALLY);
         }
         else{
             getFarmingMap().put(weaponName,NOT_FARMING);

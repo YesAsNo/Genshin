@@ -496,7 +496,6 @@ public class CharacterCardGUI extends JFrame {
 
         closeButton.addActionListener(new CloseButtonListener(this));
         saveButton.addActionListener(new SaveButtonListener(characterCard));
-        //TODO: saveButton.addActionListener(new WeaponTabGUI(farmedWeapons));
         set1ComboBox.addActionListener(new UpdateTextAreaListener(setDetailsTextArea));
         set2ComboBox.addActionListener(new UpdateTextAreaListener(setDetailsTextArea));
 

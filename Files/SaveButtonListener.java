@@ -36,6 +36,7 @@ public class SaveButtonListener implements ActionListener {
                     _characterCard.getWeapon(),
                     _characterCard.getCharacterName(),
                     _characterCard.getWeaponStatus());
+
         }
         if (_characterCard.getArtifactSet1().equalsIgnoreCase(ToolGUI.UNKNOWN_SET_MESSAGE))
         {

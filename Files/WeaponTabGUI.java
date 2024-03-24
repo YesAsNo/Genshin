@@ -24,6 +24,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 import javax.swing.border.TitledBorder;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -34,6 +35,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -46,11 +48,19 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
     private final JButton devWeaponTabSearchButton = new JButton();
     private final JPanel devWeaponTabScrollPanePanel = new JPanel();
     private final JButton devSaveAllWeapons = new JButton();
+    private final JCheckBox showListedCheckBox = new JCheckBox();
+    private final JCheckBox showUnlistedCheckBox = new JCheckBox();
+    private final JLabel showMatchedAmountLabel = new JLabel();
     private static final JComboBox<String> devFilterComboBox = new JComboBox<>();
     private static final Map<String,Integer> weaponsToUpdate = new TreeMap<>();
     public static final int FARMED_FOR_A_SPECIFIED_CHARACTER = -1;
     public static final int NOT_FARMING = 0;
-    public static final int STARTED_FARMING = 1;
+    public static final int FARMED_GENERALLY = 1;
+    public enum SearchFlag{
+        ALL,
+        LISTED_ONLY,
+        UNLISTED_ONLY
+    }
 
     public WeaponTabGUI(){
         setUpWeaponsPanel();
@@ -68,7 +78,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
             {
                 Set<String> chars = mapping.get(weapon);
                 if (chars.contains(UNKNOWN_CHARACTER)){
-                    weaponsToUpdate.put(weapon,STARTED_FARMING);
+                    weaponsToUpdate.put(weapon, FARMED_GENERALLY);
                 }
                 else{
                     weaponsToUpdate.put(weapon,FARMED_FOR_A_SPECIFIED_CHARACTER);
@@ -80,11 +90,27 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
 
         }
     }
+    public static void updateWeaponsMap(String weaponName, int flag){
+        assert flag <= 1 && flag >= -1;
+        assert weaponsToUpdate.containsKey(weaponName);
+        weaponsToUpdate.put(weaponName,flag);
+    }
+
     @Override
     public void itemStateChanged(ItemEvent e) {
-        ((JCheckBox)e.getSource()).setEnabled(false);
-        //TODO: updateFarmedItemMap(_farmedWeapons,_weaponName,UNKNOWN_CHARACTER,convertStateChangeToBool(e.getStateChange()));
-        ((JCheckBox)e.getSource()).setEnabled(true);
+        showListedCheckBox.setEnabled(false);
+        showUnlistedCheckBox.setEnabled(false);
+        if (showListedCheckBox.isSelected() && !showUnlistedCheckBox.isSelected()){
+            parseSearch(SearchFlag.LISTED_ONLY);
+        }
+        else if (showUnlistedCheckBox.isSelected() && !showListedCheckBox.isSelected()){
+            parseSearch(SearchFlag.UNLISTED_ONLY);
+        }
+        else{
+            parseSearch(SearchFlag.ALL);
+        }
+        showListedCheckBox.setEnabled(true);
+        showUnlistedCheckBox.setEnabled(true);
     }
 
     @Override
@@ -92,16 +118,29 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         JButton triggerButton = (JButton) e.getSource();
         triggerButton.setEnabled(false);
         if (triggerButton == devSaveAllWeapons) {
-            saveAllWeapons();
+            try {
+                saveAllWeapons();
+                Timer timer = new Timer(0,event->triggerButton.setText("SUCCESS"));
+                timer.setRepeats(false);
+                timer.start();
+            }
+            catch (IOException ex){
+                Timer timer = new Timer(0,event->triggerButton.setText("FAIL"));
+                timer.setRepeats(false);
+                timer.start();
+            }
+            Timer timer = new Timer(1000,event->triggerButton.setText("SAVE"));
+            timer.setRepeats(false);
+            timer.start();
         } else {
-            parseSearch();
+            parseSearch(SearchFlag.ALL);
         }
         triggerButton.setEnabled(true);
     }
-    private void saveAllWeapons(){
+    private void saveAllWeapons() throws IOException {
 
         for(String weapon : weaponsToUpdate.keySet()){
-            if (weaponsToUpdate.get(weapon) == STARTED_FARMING){
+            if (weaponsToUpdate.get(weapon) == FARMED_GENERALLY){
                 updateFarmedItemMap(getFarmedMapping(ToolData.RESOURCE_TYPE.WEAPON),weapon,UNKNOWN_CHARACTER,true);
             }
             if (weaponsToUpdate.get(weapon) == NOT_FARMING) {
@@ -112,7 +151,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         serializeSave();
     }
 
-    private void parseSearch() {
+    private void parseSearch(SearchFlag flag) {
         String userFieldInput = devWeaponsTabSearchbar.getText().toLowerCase();
         devWeaponTabScrollPanePanel.removeAll();
         devWeaponTabScrollPane.updateUI();
@@ -125,7 +164,13 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
 
             if (s.toLowerCase().contains(userFieldInput) && (filterOption.equalsIgnoreCase(weaponCategory) ||
                     filterOption.equalsIgnoreCase(ToolData.WEAPON_FILTER_OPTIONS.NO_FILTER.filterOption))) {
-                generateWeaponCard(s, matchedCount);
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.gridx = matchedCount % 3;
+                gbc.gridy = (matchedCount - gbc.gridx) / 3;
+                gbc.anchor = GridBagConstraints.NORTH;
+                gbc.insets = new Insets(10, 10, 10, 10);
+                devWeaponTabScrollPanePanel.add(generateWeaponCard(s), gbc);
+
                 matchedCount++;
             }
 
@@ -134,16 +179,12 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
     public static Map<String,Integer>getFarmingMap(){
         return weaponsToUpdate;
     }
-    public void generateWeaponCard(String weaponName, int matchedCount) {
+    public JPanel generateWeaponCard(String weaponName) {
         JPanel devWeaponCard = new JPanel();
         devWeaponCard.setLayout(new GridLayoutManager(2, 2, new Insets(5, 5, 5, 5), -1, -1));
         devWeaponCard.setBackground(new Color(-1));
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = matchedCount % 3;
-        gbc.gridy = (matchedCount - gbc.gridx) / 3;
-        gbc.anchor = GridBagConstraints.NORTH;
-        gbc.insets = new Insets(10, 10, 10, 10);
-        devWeaponTabScrollPanePanel.add(devWeaponCard, gbc);
+
         devWeaponCard.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
                 TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         JLabel devWeaponIcon = new JLabel();
@@ -191,6 +232,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
                 new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
                         false));
+        return devWeaponCard;
     }
 
     private void setUpWeaponsPanel() {
@@ -199,7 +241,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         JPanel overviewPanel = new JPanel(new GridBagLayout());
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.gridwidth = 4;
+        gbc.gridwidth = 7;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
@@ -222,10 +264,10 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         devWeaponsTabSearchbar.setMaximumSize(new Dimension(240, 33));
         devWeaponsTabSearchbar.setMinimumSize(new Dimension(240, 33));
         devWeaponsTabSearchbar.setPreferredSize(new Dimension(240, 33));
-        devWeaponsTabSearchbar.setText("Search by name or type!");
+        devWeaponsTabSearchbar.setText("Search by name!");
         devWeaponsTabSearchbar.addMouseListener(new SearchBarListener());
         gbc = new GridBagConstraints();
-        gbc.gridx = 1;
+        gbc.gridx = 3;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.EAST;
         mainPanel.add(devWeaponsTabSearchbar, gbc);
@@ -236,21 +278,21 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         devWeaponTabSearchButton.setText("✓");
         devWeaponTabSearchButton.addActionListener(this);
         gbc = new GridBagConstraints();
-        gbc.gridx = 2;
+        gbc.gridx = 4;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
         mainPanel.add(devWeaponTabSearchButton, gbc);
 
         devSaveAllWeapons.setBackground(new Color(-6039919));
         devSaveAllWeapons.setForeground(new Color(-394241));
-        devSaveAllWeapons.setText("SAVE all weapons");
+        devSaveAllWeapons.setText("SAVE");
         devSaveAllWeapons.addActionListener(this);
         gbc = new GridBagConstraints();
-        gbc.gridx = 3;
+        gbc.gridx = 6;
         gbc.gridy = 0;
         gbc.weightx = 1.0;
         gbc.anchor = GridBagConstraints.WEST;
-        gbc.insets = new Insets(0, 20, 0, 0);
+        gbc.insets = new Insets(0, 20, 0, 5);
         mainPanel.add(devSaveAllWeapons, gbc);
 
         devFilterComboBox.setBackground(new Color(-2702645));
@@ -263,12 +305,40 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
 
         devFilterComboBox.setModel(defaultComboBoxModel1);
         gbc = new GridBagConstraints();
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.EAST;
+        gbc.insets = new Insets(0, 5, 0, 5);
+        mainPanel.add(devFilterComboBox, gbc);
+
+        showListedCheckBox.setBackground(new Color(-2702645));
+        showListedCheckBox.setForeground(new Color(-15072759));
+        showListedCheckBox.setText("Show listed ");
+        gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.anchor = GridBagConstraints.EAST;
-        gbc.insets = new Insets(0, 0, 0, 20);
-        mainPanel.add(devFilterComboBox, gbc);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(0, 5, 0, 5);
+        mainPanel.add(showListedCheckBox, gbc);
+        showUnlistedCheckBox.setBackground(new Color(-2702645));
+        showUnlistedCheckBox.setForeground(new Color(-15072759));
+        showUnlistedCheckBox.setText("Show unlisted ");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(0, 5, 0, 5);
+        mainPanel.add(showUnlistedCheckBox, gbc);
+
+        showListedCheckBox.addItemListener(this);
+        showUnlistedCheckBox.addItemListener(this);
+        showMatchedAmountLabel.setForeground(new Color(-15072759));
+        showMatchedAmountLabel.setText("Matches: 35");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 5;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(0, 5, 0, 5);
+        mainPanel.add(showMatchedAmountLabel, gbc);
     }
 
 }

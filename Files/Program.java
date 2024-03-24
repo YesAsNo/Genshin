@@ -5,7 +5,6 @@ import static Files.ToolData.getFlattenedData;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import com.intellij.uiDesigner.core.Spacer;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -304,11 +303,6 @@ public class Program extends JFrame implements ActionListener {
         devMainPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         devMainPanel.setBackground(new Color(-465419));
         devMainPanel.setEnabled(true);
-
-        final Spacer spacer1 = new Spacer();
-        devMainPanel.add(spacer1,
-                new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1,
-                        GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         devPanelWithMainTabbedPane = new JPanel();
         devPanelWithMainTabbedPane.setLayout(new GridBagLayout());
         devPanelWithMainTabbedPane.setBackground(new Color(-468502));

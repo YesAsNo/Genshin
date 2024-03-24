@@ -25,6 +25,7 @@ import java.awt.Insets;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Objects;
 
 public final class CharacterTabGUI implements ActionListener {
 
@@ -131,7 +132,7 @@ public final class CharacterTabGUI implements ActionListener {
         characterButton.setContentAreaFilled(false);
         characterButton.addActionListener(e -> {
             if (isWindowAlreadyOpen(characterName)) {
-                getOpenWindow(characterName).setVisible(true);
+                Objects.requireNonNull(getOpenWindow(characterName)).setVisible(true);
             } else {
                 new CharacterCardGUI(characterCard);
             }

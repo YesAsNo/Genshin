@@ -1,6 +1,9 @@
 package Files;
 
 import static Files.ToolData.SAVE_LOCATION;
+import static Files.WeaponTabGUI.FARMED_FOR_A_SPECIFIED_CHARACTER;
+import static Files.WeaponTabGUI.FARMED_GENERALLY;
+import static Files.WeaponTabGUI.NOT_FARMING;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -110,20 +113,21 @@ public class ToolGUI extends JFrame {
         parseFarmedWeapons();
         parseCharacterArtifacts();
     }
-    private void parseFarmedWeapons(){
+
+    private void parseFarmedWeapons() {
         Gson gson = new Gson();
         File f = new File(SAVE_LOCATION + WEAPON_SAVE_FILE_NAME);
-        if (!f.exists()){
+        if (!f.exists()) {
             return;
         }
         try {
             JsonReader reader = new JsonReader(new FileReader(f));
-            farmedWeapons = gson.fromJson(reader, new TypeToken<TreeMap<String, Set<String>>>() {}.getClass());
-            if (farmedWeapons == null){
+            farmedWeapons = gson.fromJson(reader, new TypeToken<TreeMap<String, Set<String>>>() {
+            }.getClass());
+            if (farmedWeapons == null) {
                 farmedWeapons = new TreeMap<>();
             }
-        }
-        catch(IOException ex){
+        } catch (IOException ex) {
             System.out.println("The weapon save file failed to parse.");
         }
     }
@@ -148,7 +152,19 @@ public class ToolGUI extends JFrame {
             return farmedWeapons;
         }
     }
-
+    public static int checkIfWeaponIsFarmed(String weaponName){
+        if (farmedWeapons.containsKey(weaponName)){
+            if (farmedWeapons.get(weaponName).size() > 1){
+                return FARMED_FOR_A_SPECIFIED_CHARACTER;
+            }
+            else{
+                return FARMED_GENERALLY;
+            }
+        }
+        else{
+            return NOT_FARMING;
+        }
+    }
     /**
      * Reads character cards that have been saved in previous sessions.
      */
@@ -251,27 +267,25 @@ public class ToolGUI extends JFrame {
             }
         }
     }
-    public static void serializeSave(){
+
+    public static void serializeSave() throws IOException {
         Gson gson = new Gson();
         File f = new File(SAVE_LOCATION + WEAPON_SAVE_FILE_NAME);
-        try{
-            f.createNewFile();
-            FileWriter fd = new FileWriter(f);
-            gson.toJson(farmedWeapons,fd);
-            fd.flush();
-            fd.close();
-        }
-        catch(IOException ex){
-            System.out.println("Failed to save weapons");
-        }
+
+        f.createNewFile();
+        FileWriter fd = new FileWriter(f);
+        gson.toJson(farmedWeapons, fd);
+        fd.flush();
+        fd.close();
     }
+
     /**
      * Sets the hardcoded font for the specified component.
      *
      * @param c component whose font is to be changed
      */
     public void setFont(Component c) {
-        Font font = $$$getFont$$$("Source Code Pro Black", Font.BOLD, 16, mainTabbedPane.getFont());
+        Font font = $$$getFont$$$("Source Code Pro Black", Font.BOLD, 16, c.getFont());
         if (font != null) {
             c.setFont(font);
         }
