@@ -50,8 +50,8 @@ public class ToolData {
         ARTIDOMAIN_ARTISET("ArtifactDomain_ArtifactSet"),
         ARTISET_ARTISETDESC("ArtifactSet_ArtifactSetDescription"),
         ELEM_CHAR("Element_Character"),
-        TALENT_CHAR("TalentBook_Character"),
-        TALENTDOMAIN_TALENT("TalentDomain_TalentBook"),
+        TALENTBOOK_CHAR("TalentBook_Character"),
+        TALENTDOMAIN_TALENTBOOK("TalentDomain_TalentBook"),
         WEPDOMAIN_WEPMAT("WeaponDomain_WeaponMaterial"),
         WEPMAT_WEPNAME("WeaponMaterial_WeaponName"),
         WEPRARITYANDTYPE_WEPNAME("WeaponRarityAndType_WeaponName"),
@@ -64,8 +64,6 @@ public class ToolData {
         }
     }
 
-
-
     public enum WEAPON_RARITY {
         FIVE_STAR,
         FOUR_STAR
@@ -74,7 +72,9 @@ public class ToolData {
         WEAPON,
         ARTIFACT,
         WEAPON_MATERIAL,
-        CHARACTER
+        CHARACTER,
+        TALENT_BOOK,
+        WEEKLY_BOSS_MATERIAL
     }
     public enum CHARACTER_CARD_DATA_FIELD{
         NAME,
@@ -96,12 +96,12 @@ public class ToolData {
         SWORD("Sword"),
         CATALYST("Catalyst");
 
-        public static final Map<WEAPON_FILTER_OPTIONS, String> ALL_OPTION_BY_ENUM = new TreeMap<>();
+        public static final Map<WEAPON_FILTER_OPTIONS, String> ALL_OPTIONS_BY_ENUM = new TreeMap<>();
         public static final Map<String,WEAPON_FILTER_OPTIONS> ALL_OPTIONS_BY_STRING = new TreeMap<>();
 
         static {
             for (WEAPON_FILTER_OPTIONS e: values()) {
-                ALL_OPTION_BY_ENUM.put(e, e.stringToken);
+                ALL_OPTIONS_BY_ENUM.put(e, e.stringToken);
                 ALL_OPTIONS_BY_STRING.put(e.stringToken,e);
             }
         }
@@ -164,24 +164,24 @@ public class ToolData {
      */
     public static String generateResourceIconPath(String resourceName, RESOURCE_TYPE resourceType) {
         assert resourceName != null;
-        if (resourceType == RESOURCE_TYPE.CHARACTER) {
-            return "./Files/Images/Characters/" + resourceName + ".png";
-        } else if (resourceType == RESOURCE_TYPE.WEAPON_MATERIAL) {
-            return "./Files/Images/Weapon Materials/" + resourceName + ".png";
-        } else if (resourceType == RESOURCE_TYPE.ARTIFACT) {
-            return "./Files/Images/Artifacts/" + resourceName + ".png";
-        } else if (resourceType == RESOURCE_TYPE.WEAPON) {
-            if (resourceName.equalsIgnoreCase(UNKNOWN_WEAPON_MESSAGE)) {
-                return UNKNOWN_WEAPON_PATH;
+        return switch (resourceType){
+            case WEAPON -> {
+                if (resourceName.equalsIgnoreCase(UNKNOWN_WEAPON_MESSAGE))
+                {
+                    yield UNKNOWN_WEAPON_PATH;
+                }
+                WeaponInfo wi = lookUpWeaponRarityAndType(resourceName);
+                yield switch (wi.getRarity()) {
+                    case FOUR_STAR -> "./Files/Images/Weapons/" + wi.getWeaponType() + "_4star/" + resourceName + ".png";
+                    case FIVE_STAR -> "./Files/Images/Weapons/" + wi.getWeaponType() + "_5star/" + resourceName + ".png";
+                };
             }
-            WeaponInfo wi = lookUpWeaponRarityAndType(resourceName);
-            return switch (wi.getRarity()) {
-                case FOUR_STAR -> "./Files/Images/Weapons/" + wi.getWeaponType() + "_4star/" + resourceName + ".png";
-                case FIVE_STAR -> "./Files/Images/Weapons/" + wi.getWeaponType() + "_5star/" + resourceName + ".png";
-            };
-        } else {
-            return "";
-        }
+            case ARTIFACT -> "./Files/Images/Artifacts/" + resourceName + ".png";
+            case WEAPON_MATERIAL -> "./Files/Images/Weapon Materials/" + resourceName + ".png";
+            case CHARACTER -> "./Files/Images/Characters/" + resourceName + ".png";
+            case TALENT_BOOK -> "./Files/Images/Talent Materials/" + resourceName + ".png";
+            case WEEKLY_BOSS_MATERIAL -> "./Files/Images/Weekly Bosses/" + resourceName + ".png";
+        };
 
     }
     /**

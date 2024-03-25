@@ -1,7 +1,7 @@
 package Files;
 
+import static Files.ToolData.WEAPON_FILTER_OPTIONS.ALL_OPTIONS_BY_ENUM;
 import static Files.ToolData.WEAPON_FILTER_OPTIONS.ALL_OPTIONS_BY_STRING;
-import static Files.ToolData.WEAPON_FILTER_OPTIONS.ALL_OPTION_BY_ENUM;
 import static Files.ToolData.WEAPON_FILTER_OPTIONS.NO_FILTER;
 import static Files.ToolData.generateResourceIconPath;
 import static Files.ToolData.getFlattenedData;
@@ -311,7 +311,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         devFilterComboBox.setEnabled(true);
         final DefaultComboBoxModel<String> defaultComboBoxModel1 = new DefaultComboBoxModel<>();
 
-        for (ToolData.WEAPON_FILTER_OPTIONS options : ALL_OPTION_BY_ENUM.keySet()) {
+        for (ToolData.WEAPON_FILTER_OPTIONS options : ALL_OPTIONS_BY_ENUM.keySet()) {
             defaultComboBoxModel1.addElement(options.stringToken);
         }
 
