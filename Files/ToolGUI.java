@@ -1,6 +1,7 @@
 package Files;
 
 import static Files.ToolData.SAVE_LOCATION;
+import static Files.ToolData.getTalentBookForCharacter;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -77,7 +78,8 @@ public class ToolGUI extends JFrame {
     private JButton domainSearchButton;
     private JComboBox<String> domainFilterBox;
     private static final Map<String, Set<String>> farmedWeapons = new TreeMap<>();
-    public static Map<String, Set<String>> farmedArtifacts = new TreeMap<>();
+    public static final Map<String, Set<String>> farmedArtifacts = new TreeMap<>();
+    public static final Map<String, Set<String>> farmedTalents = new TreeMap<>();
     private static final List<CharacterCard> generatedCharacterCards = new ArrayList<>();
     private static final CharacterTabGUI _characterTabGUI = new CharacterTabGUI();
     private static final WeaponTabGUI _weaponsTabGUI = new WeaponTabGUI();
@@ -111,6 +113,7 @@ public class ToolGUI extends JFrame {
         parseCharacterWeapons();
         parseFarmedWeapons();
         parseCharacterArtifacts();
+        parseCharacterTalents();
     }
 
     private void parseFarmedWeapons() {
@@ -145,11 +148,14 @@ public class ToolGUI extends JFrame {
 
     public static Map<String, Set<String>> getFarmedMapping(ToolData.RESOURCE_TYPE rt) {
         assert rt != null;
-        if (rt == ToolData.RESOURCE_TYPE.ARTIFACT) {
-            return farmedArtifacts;
-        } else {
-            return farmedWeapons;
-        }
+        assert rt != ToolData.RESOURCE_TYPE.WEAPON_MATERIAL;
+        assert rt != ToolData.RESOURCE_TYPE.CHARACTER;
+        return switch (rt){
+            case WEAPON -> farmedWeapons;
+            case ARTIFACT -> farmedArtifacts;
+            case TALENT_BOOK, WEEKLY_BOSS_MATERIAL -> farmedTalents;
+            default -> throw new IllegalStateException("Unexpected value in getFarmedMapping: " + rt);
+        };
     }
 
     /**
@@ -236,7 +242,21 @@ public class ToolGUI extends JFrame {
             }
         }
     }
-
+    private void parseCharacterTalents() {
+        for (CharacterCard characterCard : generatedCharacterCards) {
+            if (characterCard.getTalentStatus()) {
+                String charTalent = getTalentBookForCharacter(characterCard.getCharacterName());
+                Set<String> keys = farmedTalents.keySet();
+                if (keys.contains(charTalent)) {
+                    farmedTalents.get(charTalent).add(characterCard.getCharacterName());
+                } else {
+                    Set<String> chars = new TreeSet<>();
+                    chars.add(characterCard.getCharacterName());
+                    farmedTalents.put(charTalent, chars);
+                }
+            }
+        }
+    }
     /**
      * Updates the farmed map.
      *

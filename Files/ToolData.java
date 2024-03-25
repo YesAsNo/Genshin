@@ -122,6 +122,15 @@ public class ToolData {
         assert artifactSetDescriptions.containsKey(artifactSetName);
         return artifactSetDescriptions.get(artifactSetName);
     }
+    public static String getWeaponMaterialForWeapon(String weaponName){
+        Map<String, List<String>> mapping = getMapping(knownMappings.WEPMAT_WEPNAME);
+        for (String weaponMat: mapping.keySet()){
+            if (mapping.get(weaponMat).contains(weaponName)){
+                return weaponMat;
+            }
+        }
+        return "";
+    }
     /**
      * Looks up a set description from the name.
      *
@@ -253,6 +262,15 @@ public class ToolData {
             }
         }
         return new WeaponInfo("");
+    }
+    public static String getTalentBookForCharacter(String characterName){
+        Map<String, List<String>> mapping = getMapping(knownMappings.TALENTBOOK_CHAR);
+        for (String key:mapping.keySet()){
+            if (mapping.get(key).contains(characterName)){
+                return key;
+            }
+        }
+        return "";
     }
     public static void main(String[] args) throws Exception {
 

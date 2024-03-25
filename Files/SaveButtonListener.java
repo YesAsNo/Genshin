@@ -1,6 +1,7 @@
 package Files;
 
 import static Files.ToolData.SAVE_LOCATION;
+import static Files.ToolData.getTalentBookForCharacter;
 import static Files.ToolGUI.getFarmedMapping;
 import static Files.ToolGUI.updateFarmedItemMap;
 import static Files.WeaponTabGUI.parseWeaponsMap;
@@ -62,6 +63,10 @@ public class SaveButtonListener implements ActionListener {
                     _characterCard.getArtifactSet2(),
                     _characterCard.getCharacterName(),
                     _characterCard.getArtifactSet2Status());
+        }
+        if (_characterCard.getTalentStatus()){
+            updateFarmedItemMap(getFarmedMapping(ToolData.RESOURCE_TYPE.TALENT_BOOK),
+                    getTalentBookForCharacter(_characterCard.getCharacterName()),_characterCard.getCharacterName(),true);
         }
 
         File f = new File(SAVE_LOCATION + _characterCard.getCharacterName());

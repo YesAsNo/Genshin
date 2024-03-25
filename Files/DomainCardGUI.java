@@ -6,12 +6,14 @@ import static Files.DomainCardGUI.DOMAIN_FILTER_OPTIONS.ALL_OPTIONS_BY_STRING;
 import static Files.ToolData.generateResourceIconPath;
 import static Files.ToolData.getFlattenedData;
 import static Files.ToolData.getMapping;
+import static Files.ToolData.getWeaponMaterialForWeapon;
 import static Files.ToolData.knownMappings.TALENTBOOK_CHAR;
 import static Files.ToolData.knownMappings.TALENTDOMAIN_TALENTBOOK;
 import static Files.ToolData.knownMappings.WEEKLYBOSSMAT_CHAR;
 import static Files.ToolData.knownMappings.WEEKLYDOMAIN_WEEKLYBOSSMAT;
 import static Files.ToolData.knownMappings.WEPDOMAIN_WEPMAT;
 import static Files.ToolData.knownMappings.WEPMAT_WEPNAME;
+import static Files.ToolGUI.getFarmedMapping;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -210,7 +212,9 @@ public class DomainCardGUI implements ActionListener {
             domainListedCounterLabel.setFont(domainListedCounterLabelFont);
         }
         domainListedCounterLabel.setForeground(new Color(dt.panelForegroundColor));
-        domainListedCounterLabel.setText("Weapons listed for this domain: 34");
+        labelText = getListedCounterLabel(domainName,getDomainResourceType(dt));
+        domainListedCounterLabel.setText(labelText[0]);
+        domainListedCounterLabel.setToolTipText(labelText[1]);
         domainInfoPanel.add(domainListedCounterLabel,
                 new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
@@ -295,6 +299,44 @@ public class DomainCardGUI implements ActionListener {
         labelText[1] = matchedCharacters.toString();
         return labelText;
 
+    }
+    public String[] getListedCounterLabel(String domainName, ToolData.RESOURCE_TYPE rt){
+        String[] labelText = new String[2];
+        String domainMaterialCategory = "";
+        Set<String> matchedItems = new TreeSet<>();
+        int counter = 0;
+        switch(rt){
+            case WEAPON_MATERIAL -> {
+                for (String weaponName: getFarmedMapping(rt).keySet()){
+                    if (!getFarmedMapping(rt).get(weaponName).isEmpty() &&
+                            getMapping(WEPDOMAIN_WEPMAT).get(domainName).contains(getWeaponMaterialForWeapon(weaponName))){
+                        counter++;
+                        matchedItems.add(weaponName);
+                    }
+                }
+            }
+            case ARTIFACT -> {
+                counter = getFlattenedData(ToolData.flattenedDataCategory.CHARACTER).size();
+                matchedItems.add("All characters");
+                domainMaterialCategory = "characters";
+            }
+            case WEEKLY_BOSS_MATERIAL -> {
+                /*for (String matName: getMapping(WEEKLYDOMAIN_WEEKLYBOSSMAT).get(domainName)){
+                    matchedItems.addAll(getMapping(WEEKLYBOSSMAT_CHAR).get(matName));
+                }
+                domainMaterialCategory = "characters";*/
+            }
+            case TALENT_BOOK -> {
+                /*for (String matName: getMapping(TALENTDOMAIN_TALENTBOOK).get(domainName)){
+                    matchedCharacters.addAll(getMapping(TALENTBOOK_CHAR).get(matName));
+                }
+                domainMaterialCategory = "characters";*/
+            }
+            default -> {}
+        }
+        labelText[0] = String.valueOf(counter);
+        labelText[1] = matchedItems.isEmpty() ? "None" : matchedItems.toString();
+        return labelText;
     }
     public JPanel getMainPanel(){
         return domainTab;

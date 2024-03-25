@@ -54,7 +54,6 @@ public class UpdateCharacterCardListener implements ActionListener, ItemListener
     }
     @Override
     public void itemStateChanged(ItemEvent e) {
-        //TODO: Add methods to update FarmedTalents and WeaponMats
         boolean currentStatus;
         currentStatus = convertStateChangeToBool(e.getStateChange());
         switch(_changedData){
