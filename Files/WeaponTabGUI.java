@@ -74,7 +74,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
     }
     public static void parseWeaponsMap(){
         for (String weapon: getFlattenedData(ToolData.flattenedDataCategory.WEAPON_NAME)){
-            Map<String, Set<String>> mapping = getFarmedMapping(ToolData.RESOURCE_TYPE.WEAPON);
+            Map<String, Set<String>> mapping = getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS);
             if (mapping.containsKey(weapon)&& !mapping.get(weapon).isEmpty())
             {
                 Set<String> chars = mapping.get(weapon);
@@ -139,10 +139,10 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
 
         for(String weapon : weaponsMap.keySet()){
             if (weaponsMap.get(weapon) == FARMED_GENERALLY){
-                updateFarmedItemMap(getFarmedMapping(ToolData.RESOURCE_TYPE.WEAPON),weapon,UNKNOWN_CHARACTER,true);
+                updateFarmedItemMap(getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS),weapon,UNKNOWN_CHARACTER,true);
             }
             if (weaponsMap.get(weapon) == NOT_FARMING) {
-                updateFarmedItemMap(getFarmedMapping(ToolData.RESOURCE_TYPE.WEAPON),weapon,UNKNOWN_CHARACTER,false);
+                updateFarmedItemMap(getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS),weapon,UNKNOWN_CHARACTER,false);
             }
             //The third case was handled in the SaveButtonListener.
         }
@@ -211,7 +211,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
                         false));
         JCheckBox devWepMatListingCheckbox = new JCheckBox();
         devWepMatListingCheckbox.setBackground(new Color(-1));
-        Map<String,Set<String>> mapping = getFarmedMapping(ToolData.RESOURCE_TYPE.WEAPON);
+        Map<String,Set<String>> mapping = getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS);
         assert mapping != null;
         if (isSomeoneFarmingForTheWeapon(weaponName)) {
             devWepMatListingCheckbox.setSelected(true);

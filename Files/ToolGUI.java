@@ -84,10 +84,9 @@ public class ToolGUI extends JFrame {
     private static final CharacterTabGUI _characterTabGUI = new CharacterTabGUI();
     private static final WeaponTabGUI _weaponsTabGUI = new WeaponTabGUI();
     private static final DomainCardGUI _domainCardGUI = new DomainCardGUI();
-    public enum FARMED_DATATYPE{
-        WEAPONS,
-        ARTIFACTS,
-        TALENTS
+
+    public enum FARMED_DATATYPE {
+        WEAPONS, ARTIFACTS, TALENTS
     }
 
     /**

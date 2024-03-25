@@ -35,7 +35,7 @@ public class SaveButtonListener implements ActionListener {
             _characterCard.setWeaponStatus(false);
         }
         else{
-            updateFarmedItemMap(getFarmedMapping(ToolData.RESOURCE_TYPE.WEAPON),
+            updateFarmedItemMap(getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS),
                     _characterCard.getWeapon(),
                     _characterCard.getCharacterName(),
                     _characterCard.getWeaponStatus());
@@ -48,7 +48,7 @@ public class SaveButtonListener implements ActionListener {
             _characterCard.setArtifactSet1Status(false);
         }
         else{
-            updateFarmedItemMap(getFarmedMapping(ToolData.RESOURCE_TYPE.ARTIFACT),
+            updateFarmedItemMap(getFarmedMapping(ToolGUI.FARMED_DATATYPE.ARTIFACTS),
                     _characterCard.getArtifactSet1(),
                     _characterCard.getCharacterName(),
                     _characterCard.getArtifactSet1Status());
@@ -59,13 +59,13 @@ public class SaveButtonListener implements ActionListener {
             _characterCard.setArtifactSet2Status(false);
         }
         else{
-            updateFarmedItemMap(getFarmedMapping(ToolData.RESOURCE_TYPE.ARTIFACT),
+            updateFarmedItemMap(getFarmedMapping(ToolGUI.FARMED_DATATYPE.ARTIFACTS),
                     _characterCard.getArtifactSet2(),
                     _characterCard.getCharacterName(),
                     _characterCard.getArtifactSet2Status());
         }
         if (_characterCard.getTalentStatus()){
-            updateFarmedItemMap(getFarmedMapping(ToolData.RESOURCE_TYPE.TALENT_BOOK),
+            updateFarmedItemMap(getFarmedMapping(ToolGUI.FARMED_DATATYPE.TALENTS),
                     getTalentBookForCharacter(_characterCard.getCharacterName()),_characterCard.getCharacterName(),true);
         }
 
