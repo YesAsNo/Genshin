@@ -307,14 +307,15 @@ public class DomainCardGUI implements ActionListener {
         int counter = 0;
         switch(rt){
             case WEAPON_MATERIAL -> {
-                for (String weaponName: getFarmedMapping(rt).keySet()){
-                    if (!getFarmedMapping(rt).get(weaponName).isEmpty() &&
+                for (String weaponName: getFarmedMapping(ToolData.RESOURCE_TYPE.WEAPON).keySet()){
+                    if (!getFarmedMapping(ToolData.RESOURCE_TYPE.WEAPON).get(weaponName).isEmpty() &&
                             getMapping(WEPDOMAIN_WEPMAT).get(domainName).contains(getWeaponMaterialForWeapon(weaponName))){
                         counter++;
                         matchedItems.add(weaponName);
                     }
                 }
             }
+            //TODO: Finish the remaining cases.
             case ARTIFACT -> {
                 counter = getFlattenedData(ToolData.flattenedDataCategory.CHARACTER).size();
                 matchedItems.add("All characters");

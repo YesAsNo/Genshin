@@ -150,7 +150,7 @@ public class ToolGUI extends JFrame {
         assert rt != null;
         assert rt != ToolData.RESOURCE_TYPE.WEAPON_MATERIAL;
         assert rt != ToolData.RESOURCE_TYPE.CHARACTER;
-        return switch (rt){
+        return switch (rt) {
             case WEAPON -> farmedWeapons;
             case ARTIFACT -> farmedArtifacts;
             case TALENT_BOOK, WEEKLY_BOSS_MATERIAL -> farmedTalents;
@@ -242,6 +242,7 @@ public class ToolGUI extends JFrame {
             }
         }
     }
+
     private void parseCharacterTalents() {
         for (CharacterCard characterCard : generatedCharacterCards) {
             if (characterCard.getTalentStatus()) {
@@ -257,6 +258,7 @@ public class ToolGUI extends JFrame {
             }
         }
     }
+
     /**
      * Updates the farmed map.
      *
