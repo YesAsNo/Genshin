@@ -34,7 +34,9 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class DomainCardGUI implements ActionListener {
     private final JPanel domainTab = new JPanel(new GridBagLayout());
@@ -194,7 +196,9 @@ public class DomainCardGUI implements ActionListener {
             domainAllCounterLabel.setFont(domainAllWeaponCounterLabelFont);
         }
         domainAllCounterLabel.setForeground(new Color(dt.panelForegroundColor));
-        domainAllCounterLabel.setText(getAllCounterLabel(domainName,getDomainResourceType(dt)));
+        String[] labelText = getAllCounterLabel(domainName,getDomainResourceType(dt));
+        domainAllCounterLabel.setText(labelText[0]);
+        domainAllCounterLabel.setToolTipText(labelText[1]);
         domainInfoPanel.add(domainAllCounterLabel,
                 new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
@@ -255,37 +259,41 @@ public class DomainCardGUI implements ActionListener {
             case ARTIFACT_DOMAIN_THEME -> ToolData.RESOURCE_TYPE.ARTIFACT;
         };
     }
-    public String getAllCounterLabel(String domainName,ToolData.RESOURCE_TYPE rt){
-        String beginning = "All";
+    public String[] getAllCounterLabel(String domainName,ToolData.RESOURCE_TYPE rt){
+        String[] labelText = new String[2];
         String domainMaterialCategory = "";
+        Set<String> matchedCharacters = new TreeSet<>();
         int counter = 0;
         switch(rt){
             case WEAPON_MATERIAL -> {
                 for (String matName: getMapping(WEPDOMAIN_WEPMAT).get(domainName)){
-                    counter += getMapping(WEPMAT_WEPNAME).get(matName).size();
+                    matchedCharacters.addAll(getMapping(WEPMAT_WEPNAME).get(matName));
                 }
                 domainMaterialCategory = "weapons";
             }
             case ARTIFACT -> {
                 counter = getFlattenedData(ToolData.flattenedDataCategory.CHARACTER).size();
+                matchedCharacters.add("All characters");
                 domainMaterialCategory = "characters";
             }
             case WEEKLY_BOSS_MATERIAL -> {
                 for (String matName: getMapping(WEEKLYDOMAIN_WEEKLYBOSSMAT).get(domainName)){
-                    System.out.println(matName);
-                    counter += getMapping(WEEKLYBOSSMAT_CHAR).get(matName).size();
+                    matchedCharacters.addAll(getMapping(WEEKLYBOSSMAT_CHAR).get(matName));
                 }
                 domainMaterialCategory = "characters";
             }
             case TALENT_BOOK -> {
                 for (String matName: getMapping(TALENTDOMAIN_TALENTBOOK).get(domainName)){
-                    counter += getMapping(TALENTBOOK_CHAR).get(matName).size();
+                    matchedCharacters.addAll(getMapping(TALENTBOOK_CHAR).get(matName));
                 }
                 domainMaterialCategory = "characters";
             }
             default -> {}
-        };
-        return beginning + " " + domainMaterialCategory +" " + "that need it: " + counter;
+        }
+        labelText[0] = "<html>" + "All" + " " + domainMaterialCategory + " " + "that need it: " + "<u>"
+                + (counter == 0 ? matchedCharacters.size() : counter ) + "</u>" + "</html>";
+        labelText[1] = matchedCharacters.toString();
+        return labelText;
 
     }
     public JPanel getMainPanel(){
