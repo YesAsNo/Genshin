@@ -4,7 +4,14 @@ import static Files.CharacterCardGUI.$$$getFont$$$;
 import static Files.DomainCardGUI.DOMAIN_FILTER_OPTIONS.ALL_OPTIONS_BY_ENUM;
 import static Files.DomainCardGUI.DOMAIN_FILTER_OPTIONS.ALL_OPTIONS_BY_STRING;
 import static Files.ToolData.generateResourceIconPath;
+import static Files.ToolData.getFlattenedData;
 import static Files.ToolData.getMapping;
+import static Files.ToolData.knownMappings.TALENTBOOK_CHAR;
+import static Files.ToolData.knownMappings.TALENTDOMAIN_TALENTBOOK;
+import static Files.ToolData.knownMappings.WEEKLYBOSSMAT_CHAR;
+import static Files.ToolData.knownMappings.WEEKLYDOMAIN_WEEKLYBOSSMAT;
+import static Files.ToolData.knownMappings.WEPDOMAIN_WEPMAT;
+import static Files.ToolData.knownMappings.WEPMAT_WEPNAME;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -43,8 +50,8 @@ public class DomainCardGUI implements ActionListener {
     public enum domainTheme {
         WEAPON_MATERIAL_THEME(-10301,-13494016,-26768,"\uD83D\uDD2A"),
         TALENT_BOOK_THEME(-1068,-14541824,-10640,"\uD83D\uDCD4"),
-        WEEKLY_BOSS_DOMAIN(-11811,-13236722,-36698,"\uD83D\uDC09"),
-        ARTIFACT_DOMAIN(-2756865,-16575201,-9382145,"\uD83D\uDC51");
+        WEEKLY_BOSS_DOMAIN_THEME(-11811,-13236722,-36698,"\uD83D\uDC09"),
+        ARTIFACT_DOMAIN_THEME(-2756865,-16575201,-9382145,"\uD83D\uDC51");
         public final int panelBackgroundColor;
         public final int panelForegroundColor;
         public final int marginBackgroundColor;
@@ -118,9 +125,9 @@ public class DomainCardGUI implements ActionListener {
         assert filter != null;
         switch(filter){
             case TALENT -> filteredThemes.add(domainTheme.TALENT_BOOK_THEME);
-            case ARTIFACT -> filteredThemes.add(domainTheme.ARTIFACT_DOMAIN);
+            case ARTIFACT -> filteredThemes.add(domainTheme.ARTIFACT_DOMAIN_THEME);
             case WEAPON_MAT -> filteredThemes.add(domainTheme.WEAPON_MATERIAL_THEME);
-            case WEEKLY -> filteredThemes.add(domainTheme.WEEKLY_BOSS_DOMAIN);
+            case WEEKLY -> filteredThemes.add(domainTheme.WEEKLY_BOSS_DOMAIN_THEME);
             case NO_FILTER -> filteredThemes.addAll(List.of(domainTheme.values()));
         }
         domainsPanelOverview.removeAll();
@@ -157,18 +164,18 @@ public class DomainCardGUI implements ActionListener {
             gbc.anchor = GridBagConstraints.WEST;
             domainCard.add(materialIcon, gbc);
         }
-        JPanel weaponMaterialInfoPanel = new JPanel();
-        weaponMaterialInfoPanel.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
-        weaponMaterialInfoPanel.setAlignmentX(0.5f);
-        weaponMaterialInfoPanel.setAlignmentY(0.5f);
-        weaponMaterialInfoPanel.setBackground(new Color(dt.panelBackgroundColor));
+        JPanel domainInfoPanel = new JPanel();
+        domainInfoPanel.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
+        domainInfoPanel.setAlignmentX(0.5f);
+        domainInfoPanel.setAlignmentY(0.5f);
+        domainInfoPanel.setBackground(new Color(dt.panelBackgroundColor));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
-        domainCard.add(weaponMaterialInfoPanel, gbc);
+        domainCard.add(domainInfoPanel, gbc);
         JLabel domainNameLabel = new JLabel();
         Font domainNameLabelFont = $$$getFont$$$( Font.BOLD, 18, domainNameLabel.getFont());
         if (domainNameLabelFont != null) {
@@ -176,31 +183,31 @@ public class DomainCardGUI implements ActionListener {
         }
         domainNameLabel.setForeground(new Color(dt.panelForegroundColor));
         domainNameLabel.setText(domainName);
-        weaponMaterialInfoPanel.add(domainNameLabel,
+        domainInfoPanel.add(domainNameLabel,
                 new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
                         false));
-        JLabel domainAllWeaponCounterLabel = new JLabel();
+        JLabel domainAllCounterLabel = new JLabel();
         Font domainAllWeaponCounterLabelFont =
-               $$$getFont$$$(-1, 12, domainAllWeaponCounterLabel.getFont());
+               $$$getFont$$$(-1, 12, domainAllCounterLabel.getFont());
         if (domainAllWeaponCounterLabelFont != null) {
-            domainAllWeaponCounterLabel.setFont(domainAllWeaponCounterLabelFont);
+            domainAllCounterLabel.setFont(domainAllWeaponCounterLabelFont);
         }
-        domainAllWeaponCounterLabel.setForeground(new Color(dt.panelForegroundColor));
-        domainAllWeaponCounterLabel.setText("All weapons that need it: 53");
-        weaponMaterialInfoPanel.add(domainAllWeaponCounterLabel,
+        domainAllCounterLabel.setForeground(new Color(dt.panelForegroundColor));
+        domainAllCounterLabel.setText(getAllCounterLabel(domainName,getDomainResourceType(dt)));
+        domainInfoPanel.add(domainAllCounterLabel,
                 new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
                         false));
-        JLabel domainListedWeaponCounterLabel = new JLabel();
-        Font domainListedWeaponCounterLabelFont =
-                $$$getFont$$$(-1, 12, domainListedWeaponCounterLabel.getFont());
-        if (domainListedWeaponCounterLabelFont != null) {
-            domainListedWeaponCounterLabel.setFont(domainListedWeaponCounterLabelFont);
+        JLabel domainListedCounterLabel = new JLabel();
+        Font domainListedCounterLabelFont =
+                $$$getFont$$$(-1, 12, domainListedCounterLabel.getFont());
+        if (domainListedCounterLabelFont != null) {
+            domainListedCounterLabel.setFont(domainListedCounterLabelFont);
         }
-        domainListedWeaponCounterLabel.setForeground(new Color(dt.panelForegroundColor));
-        domainListedWeaponCounterLabel.setText("Weapons listed for this domain: 34");
-        weaponMaterialInfoPanel.add(domainListedWeaponCounterLabel,
+        domainListedCounterLabel.setForeground(new Color(dt.panelForegroundColor));
+        domainListedCounterLabel.setText("Weapons listed for this domain: 34");
+        domainInfoPanel.add(domainListedCounterLabel,
                 new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
                         false));
@@ -215,18 +222,18 @@ public class DomainCardGUI implements ActionListener {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(0, 10, 0, 0);
         domainCard.add(marginPanel, gbc);
-        JLabel weaponMaterialDomainIconLabel = new JLabel();
-        weaponMaterialDomainIconLabel.setAlignmentX(0.5f);
-        weaponMaterialDomainIconLabel.setFocusTraversalPolicyProvider(false);
-        weaponMaterialDomainIconLabel.setFocusable(false);
+        JLabel domainIconLabel = new JLabel();
+        domainIconLabel.setAlignmentX(0.5f);
+        domainIconLabel.setFocusTraversalPolicyProvider(false);
+        domainIconLabel.setFocusable(false);
         Font weaponMaterialDomainIconLabelFont =
-                $$$getFont$$$(Font.BOLD, 16, weaponMaterialDomainIconLabel.getFont());
+                $$$getFont$$$(Font.BOLD, 16, domainIconLabel.getFont());
         if (weaponMaterialDomainIconLabelFont != null) {
-            weaponMaterialDomainIconLabel.setFont(weaponMaterialDomainIconLabelFont);
+            domainIconLabel.setFont(weaponMaterialDomainIconLabelFont);
         }
-        weaponMaterialDomainIconLabel.setForeground(new Color(-1));
-        weaponMaterialDomainIconLabel.setText(dt.marginSymbol);
-        marginPanel.add(weaponMaterialDomainIconLabel,
+        domainIconLabel.setForeground(new Color(-1));
+        domainIconLabel.setText(dt.marginSymbol);
+        marginPanel.add(domainIconLabel,
                 new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
                         false));
@@ -234,21 +241,53 @@ public class DomainCardGUI implements ActionListener {
     }
     public Map<String, List<String>> getDomainMapping(domainTheme dt){
         return switch(dt){
-            case WEAPON_MATERIAL_THEME -> getMapping(ToolData.knownMappings.WEPDOMAIN_WEPMAT);
-            case TALENT_BOOK_THEME -> getMapping(ToolData.knownMappings.TALENTDOMAIN_TALENTBOOK);
-            case WEEKLY_BOSS_DOMAIN -> getMapping(ToolData.knownMappings.WEEKLYDOMAIN_WEEKLYBOSSMAT);
-            case ARTIFACT_DOMAIN -> getMapping(ToolData.knownMappings.ARTIDOMAIN_ARTISET);
+            case WEAPON_MATERIAL_THEME -> getMapping(WEPDOMAIN_WEPMAT);
+            case TALENT_BOOK_THEME -> getMapping(TALENTDOMAIN_TALENTBOOK);
+            case WEEKLY_BOSS_DOMAIN_THEME -> getMapping(WEEKLYDOMAIN_WEEKLYBOSSMAT);
+            case ARTIFACT_DOMAIN_THEME -> getMapping(ToolData.knownMappings.ARTIDOMAIN_ARTISET);
         };
     }
     public ToolData.RESOURCE_TYPE getDomainResourceType(domainTheme dt){
         return switch(dt){
             case WEAPON_MATERIAL_THEME -> ToolData.RESOURCE_TYPE.WEAPON_MATERIAL;
             case TALENT_BOOK_THEME -> ToolData.RESOURCE_TYPE.TALENT_BOOK;
-            case WEEKLY_BOSS_DOMAIN -> ToolData.RESOURCE_TYPE.WEEKLY_BOSS_MATERIAL;
-            case ARTIFACT_DOMAIN -> ToolData.RESOURCE_TYPE.ARTIFACT;
+            case WEEKLY_BOSS_DOMAIN_THEME -> ToolData.RESOURCE_TYPE.WEEKLY_BOSS_MATERIAL;
+            case ARTIFACT_DOMAIN_THEME -> ToolData.RESOURCE_TYPE.ARTIFACT;
         };
     }
+    public String getAllCounterLabel(String domainName,ToolData.RESOURCE_TYPE rt){
+        String beginning = "All";
+        String domainMaterialCategory = "";
+        int counter = 0;
+        switch(rt){
+            case WEAPON_MATERIAL -> {
+                for (String matName: getMapping(WEPDOMAIN_WEPMAT).get(domainName)){
+                    counter += getMapping(WEPMAT_WEPNAME).get(matName).size();
+                }
+                domainMaterialCategory = "weapons";
+            }
+            case ARTIFACT -> {
+                counter = getFlattenedData(ToolData.flattenedDataCategory.CHARACTER).size();
+                domainMaterialCategory = "characters";
+            }
+            case WEEKLY_BOSS_MATERIAL -> {
+                for (String matName: getMapping(WEEKLYDOMAIN_WEEKLYBOSSMAT).get(domainName)){
+                    System.out.println(matName);
+                    counter += getMapping(WEEKLYBOSSMAT_CHAR).get(matName).size();
+                }
+                domainMaterialCategory = "characters";
+            }
+            case TALENT_BOOK -> {
+                for (String matName: getMapping(TALENTDOMAIN_TALENTBOOK).get(domainName)){
+                    counter += getMapping(TALENTBOOK_CHAR).get(matName).size();
+                }
+                domainMaterialCategory = "characters";
+            }
+            default -> {}
+        };
+        return beginning + " " + domainMaterialCategory +" " + "that need it: " + counter;
 
+    }
     public JPanel getMainPanel(){
         return domainTab;
     }

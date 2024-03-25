@@ -128,7 +128,6 @@ public class ToolData {
      * @param setName the name of the set
      * @return the description of it as String.
      */
-
     public static String lookUpSetDescription(String setName) {
         return getArtifactSetDescription(setName);
     }
