@@ -84,6 +84,11 @@ public class ToolGUI extends JFrame {
     private static final CharacterTabGUI _characterTabGUI = new CharacterTabGUI();
     private static final WeaponTabGUI _weaponsTabGUI = new WeaponTabGUI();
     private static final DomainCardGUI _domainCardGUI = new DomainCardGUI();
+    public enum FARMED_DATATYPE{
+        WEAPONS,
+        ARTIFACTS,
+        TALENTS
+    }
 
     /**
      * Constructor of the GUI class.
@@ -146,15 +151,12 @@ public class ToolGUI extends JFrame {
         generatedCharacterCards.add(characterCard);
     }
 
-    public static Map<String, Set<String>> getFarmedMapping(ToolData.RESOURCE_TYPE rt) {
-        assert rt != null;
-        assert rt != ToolData.RESOURCE_TYPE.WEAPON_MATERIAL;
-        assert rt != ToolData.RESOURCE_TYPE.CHARACTER;
-        return switch (rt) {
-            case WEAPON -> farmedWeapons;
-            case ARTIFACT -> farmedArtifacts;
-            case TALENT_BOOK, WEEKLY_BOSS_MATERIAL -> farmedTalents;
-            default -> throw new IllegalStateException("Unexpected value in getFarmedMapping: " + rt);
+    public static Map<String, Set<String>> getFarmedMapping(FARMED_DATATYPE fd) {
+        assert fd != null;
+        return switch (fd) {
+            case WEAPONS -> farmedWeapons;
+            case ARTIFACTS -> farmedArtifacts;
+            case TALENTS -> farmedTalents;
         };
     }
 
