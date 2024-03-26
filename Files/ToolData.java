@@ -275,8 +275,8 @@ public class ToolData {
     public static void main(String[] args) throws Exception {
 
         parseDataJsonFiles();
-        new ToolGUI();
-        //new Program();
+        //new ToolGUI();
+        new Program();
 
         }
     }
