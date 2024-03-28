@@ -5,7 +5,6 @@ import static Files.ToolData.getFlattenedData;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import com.intellij.uiDesigner.core.Spacer;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -132,6 +131,7 @@ public class Program extends JFrame implements ActionListener {
     private JPanel MonThu_Tab;
     private JPanel TuesFri_Tab;
     private JPanel WedSat_Tab;
+    private JButton wedSatButton;
     private JScrollPane scrollPane1;
 
     /**
@@ -554,7 +554,7 @@ public class Program extends JFrame implements ActionListener {
         gbc.insets = new Insets(0, 0, 0, 5);
         devWeaponTab.add(devWeaponTabSearchButton, gbc);
         devSaveAllWeapons = new JButton();
-        devSaveAllWeapons.setBackground(new Color(-6039919));
+        devSaveAllWeapons.setBackground(new Color(-2702645));
         Font devSaveAllWeaponsFont = this.$$$getFont$$$("Source Code Pro", Font.BOLD, -1, devSaveAllWeapons.getFont());
         if (devSaveAllWeaponsFont != null) devSaveAllWeapons.setFont(devSaveAllWeaponsFont);
         devSaveAllWeapons.setForeground(new Color(-394241));
@@ -628,7 +628,7 @@ public class Program extends JFrame implements ActionListener {
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.gridwidth = 2;
+        gbc.gridwidth = 5;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
@@ -991,6 +991,7 @@ public class Program extends JFrame implements ActionListener {
         panel6.add(label27, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JComboBox comboBox1 = new JComboBox();
         comboBox1.setBackground(new Color(-2702645));
+        comboBox1.setEditable(false);
         comboBox1.setEnabled(true);
         Font comboBox1Font = this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, -1, comboBox1.getFont());
         if (comboBox1Font != null) comboBox1.setFont(comboBox1Font);
@@ -1004,21 +1005,46 @@ public class Program extends JFrame implements ActionListener {
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.anchor = GridBagConstraints.EAST;
-        gbc.insets = new Insets(0, 0, 0, 10);
+        gbc.insets = new Insets(0, 300, 0, 5);
         devDomainsTab.add(comboBox1, gbc);
+        wedSatButton = new JButton();
+        wedSatButton.setBackground(new Color(-2702645));
+        wedSatButton.setForeground(new Color(-13236722));
+        wedSatButton.setText("Wed/Sat");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 3;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.insets = new Insets(0, 0, 0, 5);
+        devDomainsTab.add(wedSatButton, gbc);
         final JButton button1 = new JButton();
-        button1.setMaximumSize(new Dimension(30, 30));
-        button1.setMinimumSize(new Dimension(30, 30));
-        button1.setPreferredSize(new Dimension(50, 30));
-        button1.setText("✓");
+        button1.setBackground(new Color(-5275240));
+        button1.setEnabled(true);
+        button1.setForeground(new Color(-1));
+        button1.setText("Tues/Fri");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(0, 0, 0, 5);
+        devDomainsTab.add(button1, gbc);
+        final JButton button2 = new JButton();
+        button2.setBackground(new Color(-2702645));
+        button2.setForeground(new Color(-13236722));
+        button2.setText("Mon/Thu");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.anchor = GridBagConstraints.WEST;
-        devDomainsTab.add(button1, gbc);
+        gbc.insets = new Insets(0, 0, 0, 5);
+        devDomainsTab.add(button2, gbc);
+        final JButton button3 = new JButton();
+        button3.setBackground(new Color(-2702645));
+        button3.setForeground(new Color(-13236722));
+        button3.setText("All");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 4;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        devDomainsTab.add(button3, gbc);
         devCharacterCardMainPanel = new JPanel();
         devCharacterCardMainPanel.setLayout(new GridBagLayout());
         devTabbedPane.addTab("Untitled", devCharacterCardMainPanel);
