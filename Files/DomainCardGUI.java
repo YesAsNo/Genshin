@@ -7,6 +7,7 @@ import static Files.ToolData.generateResourceIconPath;
 import static Files.ToolData.getFlattenedData;
 import static Files.ToolData.getMapping;
 import static Files.ToolData.getWeaponMaterialForWeapon;
+import static Files.ToolData.knownMappings.DAY_AVAILABLEMATS;
 import static Files.ToolData.knownMappings.TALENTBOOK_CHAR;
 import static Files.ToolData.knownMappings.TALENTDOMAIN_TALENTBOOK;
 import static Files.ToolData.knownMappings.WEEKLYBOSSMAT_CHAR;
@@ -18,13 +19,16 @@ import static Files.ToolGUI.getFarmedMapping;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.GrayFilter;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
 import java.awt.Color;
@@ -35,6 +39,9 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -45,11 +52,24 @@ public class DomainCardGUI implements ActionListener {
     private final JPanel domainTab = new JPanel(new GridBagLayout());
     private final JComboBox<String> filterBox = new JComboBox<>();
     private final JPanel domainsPanelOverview = new JPanel(new GridBagLayout());
+    private final Map<String, List<String>> dayToAvailableMaterialsMapping = getMapping(DAY_AVAILABLEMATS);
+    private static final JRadioButton wedSatButton = new JRadioButton();
+    private static final JRadioButton tueFriButton = new JRadioButton();
+    private static final JRadioButton monThuButton = new JRadioButton();
+    private static final JRadioButton allButton = new JRadioButton();
+    private static final ButtonGroup bg = new ButtonGroup();
+    static {
+        bg.add(wedSatButton);
+        bg.add(tueFriButton);
+        bg.add(monThuButton);
+        bg.add(allButton);
+    }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
         DOMAIN_FILTER_OPTIONS option = ALL_OPTIONS_BY_STRING.get((String)filterBox.getSelectedItem());
-        parseFilter(option);
+        parseFilter(option,getDayFilter());
     }
 
     public enum domainTheme {
@@ -105,7 +125,7 @@ public class DomainCardGUI implements ActionListener {
         domainTab.add(filterBox, gbc);
         domainTab.setBackground(new Color(-1));
 
-        JButton wedSatButton = new JButton();
+
         wedSatButton.setBackground(new Color(-2702645));
         wedSatButton.setForeground(new Color(-13236722));
         wedSatButton.setText("Wed/Sat");
@@ -115,9 +135,8 @@ public class DomainCardGUI implements ActionListener {
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.insets = new Insets(0, 0, 0, 5);
         domainTab.add(wedSatButton, gbc);
-        JButton tueFriButton = new JButton();
+
         tueFriButton.setBackground(new Color(-5275240));
-        tueFriButton.setEnabled(true);
         tueFriButton.setForeground(new Color(-1));
         tueFriButton.setText("Tues/Fri");
         gbc = new GridBagConstraints();
@@ -125,7 +144,7 @@ public class DomainCardGUI implements ActionListener {
         gbc.gridy = 0;
         gbc.insets = new Insets(0, 0, 0, 5);
         domainTab.add(tueFriButton, gbc);
-        JButton monThuButton = new JButton();
+
         monThuButton.setBackground(new Color(-2702645));
         monThuButton.setForeground(new Color(-13236722));
         monThuButton.setText("Mon/Thu");
@@ -134,7 +153,8 @@ public class DomainCardGUI implements ActionListener {
         gbc.gridy = 0;
         gbc.insets = new Insets(0, 0, 0, 5);
         domainTab.add(monThuButton, gbc);
-        JButton allButton = new JButton();
+
+
         allButton.setBackground(new Color(-2702645));
         allButton.setForeground(new Color(-13236722));
         allButton.setText("All");
@@ -161,8 +181,23 @@ public class DomainCardGUI implements ActionListener {
         gbc.fill = GridBagConstraints.BOTH;
         devDomainsTabPanel.add(devDomainsScrollPane, gbc);
         devDomainsScrollPane.setViewportView(domainsPanelOverview);
+
+        wedSatButton.addActionListener(this);
+        monThuButton.addActionListener(this);
+        tueFriButton.addActionListener(this);
+        allButton.addActionListener(this);
+        allButton.setSelected(true);
     }
-    private void parseFilter(DOMAIN_FILTER_OPTIONS filter){
+    private String getDayFilter(){
+        for (Enumeration<AbstractButton> it = bg.getElements();it.hasMoreElements();){
+            AbstractButton button = it.nextElement();
+            if (button.getModel() == bg.getSelection()){
+                return button.getText();
+            }
+        }
+        return allButton.getText();
+    }
+    private void parseFilter(DOMAIN_FILTER_OPTIONS filter,String dayFilter){
         List<domainTheme> filteredThemes = new ArrayList<>();
         assert filter != null;
         switch(filter){
@@ -185,26 +220,35 @@ public class DomainCardGUI implements ActionListener {
                 gbc.fill = GridBagConstraints.BOTH;
                 gbc.insets = new Insets(5, 100, 5, 100);
                 domainsPanelOverview.add(generateDomainCard(dt, domainName,
-                        domainMapping.get(domainName)), gbc);
+                        domainMapping.get(domainName),dayFilter), gbc);
             }
         }
     }
-    private JPanel generateDomainCard(domainTheme dt,String domainName, List<String> domainMaterials){
+    private JPanel generateDomainCard(domainTheme dt,String domainName, List<String> domainMaterials,String dayFilter){
         JPanel domainCard = new JPanel(new GridBagLayout());
         domainCard.setBackground(new Color(dt.panelBackgroundColor));
         domainCard.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
                 TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         int i = 0;
         for (String materialName : domainMaterials){
-            JLabel materialIcon = new JLabel();
-            materialIcon.setIcon(new ImageIcon(generateResourceIconPath(materialName, getDomainResourceType(dt))));
-            materialIcon.setText("");
+
+            JLabel materialIconLabel = new JLabel();
+            ImageIcon materialIcon = new ImageIcon(generateResourceIconPath(materialName, getDomainResourceType(dt)));
+
+            if (dayFilter.equalsIgnoreCase("All") ||getDomainResourceType(dt) == ToolData.RESOURCE_TYPE.WEEKLY_BOSS_MATERIAL
+                    || getDomainResourceType(dt) == ToolData.RESOURCE_TYPE.ARTIFACT|| dayToAvailableMaterialsMapping.get(dayFilter).contains(materialName)) {
+                materialIconLabel.setIcon(materialIcon);
+            }
+            else{
+                materialIconLabel.setIcon(new ImageIcon(GrayFilter.createDisabledImage(materialIcon.getImage())));
+            }
+            materialIconLabel.setText("");
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.gridx = 2 + i++;
             gbc.gridy = 0;
             gbc.weighty = 1.0;
             gbc.anchor = GridBagConstraints.WEST;
-            domainCard.add(materialIcon, gbc);
+            domainCard.add(materialIconLabel, gbc);
         }
         JPanel domainInfoPanel = new JPanel();
         domainInfoPanel.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
@@ -379,5 +423,11 @@ public class DomainCardGUI implements ActionListener {
     }
     public JPanel getMainPanel(){
         return domainTab;
+    }
+    public static int getDayNumberOld(Date date) {
+        Calendar cal = Calendar.getInstance();
+        System.out.println(cal);
+        cal.setTime(date);
+        return cal.get(Calendar.DAY_OF_WEEK);
     }
 }

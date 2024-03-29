@@ -31,6 +31,7 @@ public class ToolData {
         PATHS_TO_DATA_FILES.put("./WeaponMaterial_WeaponName.json",true);
         PATHS_TO_DATA_FILES.put("./ArtifactSet_ArtifactSetDescription.json",false);
         PATHS_TO_DATA_FILES.put("./WeaponRarityAndType_WeaponName.json",false);
+        PATHS_TO_DATA_FILES.put("./Day_AvailableMaterials.json",false);
     }
     private static final Map<String,Map<String,List<String>>> parsedMappings = new TreeMap<>();
     private static final Map<String,List<String>> parsedFlattenedData = new TreeMap<>();
@@ -49,6 +50,7 @@ public class ToolData {
     public enum knownMappings{
         ARTIDOMAIN_ARTISET("ArtifactDomain_ArtifactSet"),
         ARTISET_ARTISETDESC("ArtifactSet_ArtifactSetDescription"),
+        DAY_AVAILABLEMATS("Day_AvailableMaterials"),
         ELEM_CHAR("Element_Character"),
         TALENTBOOK_CHAR("TalentBook_Character"),
         TALENTDOMAIN_TALENTBOOK("TalentDomain_TalentBook"),
@@ -149,9 +151,13 @@ public class ToolData {
                 artifactSetDescriptions = gson.fromJson(reader,artifactSetDescriptions.getClass());
                 continue;
             }
+
             TreeMap<String,List<String>> parsedMapping = new TreeMap<>();
             parsedMapping = gson.fromJson(reader, parsedMapping.getClass());
             parsedMappings.put(categoryName,parsedMapping);
+            if (categoryName.equalsIgnoreCase(knownMappings.DAY_AVAILABLEMATS.stringToken)){
+                System.out.println(parsedMapping);
+            }
             if (PATHS_TO_DATA_FILES.get(path)){
                 List<List<String>> val_arrays = new ArrayList<>(parsedMapping.values());
                 List<String> valuesFlattened = new ArrayList<>();
