@@ -21,6 +21,7 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -100,16 +101,53 @@ public class DomainCardGUI implements ActionListener {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.insets = new Insets(0, 0, 0, 10);
+        gbc.insets = new Insets(0, 300, 0, 5);
         domainTab.add(filterBox, gbc);
         domainTab.setBackground(new Color(-1));
+
+        JButton wedSatButton = new JButton();
+        wedSatButton.setBackground(new Color(-2702645));
+        wedSatButton.setForeground(new Color(-13236722));
+        wedSatButton.setText("Wed/Sat");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 3;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.insets = new Insets(0, 0, 0, 5);
+        domainTab.add(wedSatButton, gbc);
+        JButton tueFriButton = new JButton();
+        tueFriButton.setBackground(new Color(-5275240));
+        tueFriButton.setEnabled(true);
+        tueFriButton.setForeground(new Color(-1));
+        tueFriButton.setText("Tues/Fri");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(0, 0, 0, 5);
+        domainTab.add(tueFriButton, gbc);
+        JButton monThuButton = new JButton();
+        monThuButton.setBackground(new Color(-2702645));
+        monThuButton.setForeground(new Color(-13236722));
+        monThuButton.setText("Mon/Thu");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(0, 0, 0, 5);
+        domainTab.add(monThuButton, gbc);
+        JButton allButton = new JButton();
+        allButton.setBackground(new Color(-2702645));
+        allButton.setForeground(new Color(-13236722));
+        allButton.setText("All");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 4;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        domainTab.add(allButton, gbc);
         JPanel devDomainsTabPanel = new JPanel();
         devDomainsTabPanel.setLayout(new GridBagLayout());
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.gridwidth = 2;
+        gbc.gridwidth = 5;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
@@ -322,16 +360,16 @@ public class DomainCardGUI implements ActionListener {
                 domainMaterialCategory = "characters";
             }
             case WEEKLY_BOSS_MATERIAL -> {
-                /*for (String matName: getMapping(WEEKLYDOMAIN_WEEKLYBOSSMAT).get(domainName)){
+                for (String matName: getMapping(WEEKLYDOMAIN_WEEKLYBOSSMAT).get(domainName)){
                     matchedItems.addAll(getMapping(WEEKLYBOSSMAT_CHAR).get(matName));
                 }
-                domainMaterialCategory = "characters";*/
+                domainMaterialCategory = "characters";
             }
             case TALENT_BOOK -> {
-                /*for (String matName: getMapping(TALENTDOMAIN_TALENTBOOK).get(domainName)){
-                    matchedCharacters.addAll(getMapping(TALENTBOOK_CHAR).get(matName));
+                for (String matName: getMapping(TALENTDOMAIN_TALENTBOOK).get(domainName)){
+                    matchedItems.addAll(getMapping(TALENTBOOK_CHAR).get(matName));
                 }
-                domainMaterialCategory = "characters";*/
+                domainMaterialCategory = "characters";
             }
             default -> {}
         }
