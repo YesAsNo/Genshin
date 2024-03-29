@@ -7,6 +7,7 @@ import static Files.ToolData.generateResourceIconPath;
 import static Files.ToolData.getFlattenedData;
 import static Files.ToolData.getMapping;
 import static Files.ToolData.getWeaponMaterialForWeapon;
+import static Files.ToolData.knownMappings.ARTIDOMAIN_ARTISET;
 import static Files.ToolData.knownMappings.DAY_AVAILABLEMATS;
 import static Files.ToolData.knownMappings.TALENTBOOK_CHAR;
 import static Files.ToolData.knownMappings.TALENTDOMAIN_TALENTBOOK;
@@ -39,6 +40,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -49,7 +51,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-public class DomainTabGUI extends MouseInputAdapter implements ActionListener {
+public class DomainTabGUI implements ActionListener {
     private final JPanel domainTab = new JPanel(new GridBagLayout());
     private final JComboBox<String> filterBox = new JComboBox<>();
     private final JPanel domainsPanelOverview = new JPanel(new GridBagLayout());
@@ -227,7 +229,7 @@ public class DomainTabGUI extends MouseInputAdapter implements ActionListener {
     }
     private JPanel generateDomainCard(domainTheme dt,String domainName, List<String> domainMaterials,String dayFilter){
         JPanel domainCard = new JPanel(new GridBagLayout());
-        domainCard.addMouseListener(new DomainCardGUI(dt,domainName,domainMaterials,dayFilter));
+        Map<String,ImageIcon>iconList = new TreeMap<>();
         domainCard.setBackground(new Color(dt.panelBackgroundColor));
         domainCard.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
                 TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
@@ -242,8 +244,10 @@ public class DomainTabGUI extends MouseInputAdapter implements ActionListener {
                 materialIconLabel.setIcon(materialIcon);
             }
             else{
-                materialIconLabel.setIcon(new ImageIcon(GrayFilter.createDisabledImage(materialIcon.getImage())));
+                materialIcon = new ImageIcon(GrayFilter.createDisabledImage(materialIcon.getImage()));
+                materialIconLabel.setIcon(materialIcon);
             }
+            iconList.put(materialName, materialIcon);
             materialIconLabel.setText("");
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.gridx = 2 + i++;
@@ -329,9 +333,15 @@ public class DomainTabGUI extends MouseInputAdapter implements ActionListener {
                 new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
                         false));
+        domainCard.addMouseListener(new MouseInputAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                new DomainCardGUI(domainName,dt,iconList,domainAllCounterLabel,domainListedCounterLabel);
+            }
+        });
         return domainCard;
     }
-    public Map<String, List<String>> getDomainMapping(domainTheme dt){
+    public static Map<String, List<String>> getDomainMapping(domainTheme dt){
         return switch(dt){
             case WEAPON_MATERIAL_THEME -> getMapping(WEPDOMAIN_WEPMAT);
             case TALENT_BOOK_THEME -> getMapping(TALENTDOMAIN_TALENTBOOK);
@@ -339,12 +349,20 @@ public class DomainTabGUI extends MouseInputAdapter implements ActionListener {
             case ARTIFACT_DOMAIN_THEME -> getMapping(ToolData.knownMappings.ARTIDOMAIN_ARTISET);
         };
     }
-    public ToolData.RESOURCE_TYPE getDomainResourceType(domainTheme dt){
+    public static ToolData.RESOURCE_TYPE getDomainResourceType(domainTheme dt){
         return switch(dt){
             case WEAPON_MATERIAL_THEME -> ToolData.RESOURCE_TYPE.WEAPON_MATERIAL;
             case TALENT_BOOK_THEME -> ToolData.RESOURCE_TYPE.TALENT_BOOK;
             case WEEKLY_BOSS_DOMAIN_THEME -> ToolData.RESOURCE_TYPE.WEEKLY_BOSS_MATERIAL;
             case ARTIFACT_DOMAIN_THEME -> ToolData.RESOURCE_TYPE.ARTIFACT;
+        };
+    }
+    public static Map<String, List<String>> getDomainResourceTypeMapping(domainTheme dt){
+        return switch (dt){
+            case WEAPON_MATERIAL_THEME -> getMapping(WEPMAT_WEPNAME);
+            case TALENT_BOOK_THEME -> getMapping(TALENTBOOK_CHAR);
+            case WEEKLY_BOSS_DOMAIN_THEME -> getMapping(WEEKLYBOSSMAT_CHAR);
+            case ARTIFACT_DOMAIN_THEME -> getMapping(ARTIDOMAIN_ARTISET);
         };
     }
     public String[] getAllCounterLabel(String domainName,ToolData.RESOURCE_TYPE rt){

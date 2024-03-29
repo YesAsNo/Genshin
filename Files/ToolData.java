@@ -216,26 +216,8 @@ public class ToolData {
         }
         return null;
     }
-    /**
-     * Looks up weapon material for the specified weapon.
-     *
-     * @param weaponName the weapon name
-     * @return the weapon material.
-     */
 
-    public static String lookUpWeaponMaterial(String weaponName) {
-        assert getFlattenedData(flattenedDataCategory.WEAPON_NAME).contains(weaponName);
-        Map<String, List<String>> mapping = getMapping(knownMappings.WEPMAT_WEPNAME);
-        for (String key : mapping.keySet()) {
-            List<String> weapons = mapping.get(key);
-            if (weapons.contains(weaponName)) {
-                return key;
-            }
-        }
-        return null;
-    }
-    /**
-     * Grabs all weapons based on their rarity and type.
+     /* Grabs all weapons based on their rarity and type.
      *
      * @param WEAPONRarity rarity of the weapon
      * @param weaponType type of the weapon

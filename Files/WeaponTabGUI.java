@@ -5,7 +5,7 @@ import static Files.ToolData.WEAPON_FILTER_OPTIONS.ALL_OPTIONS_BY_STRING;
 import static Files.ToolData.WEAPON_FILTER_OPTIONS.NO_FILTER;
 import static Files.ToolData.generateResourceIconPath;
 import static Files.ToolData.getFlattenedData;
-import static Files.ToolData.lookUpWeaponMaterial;
+import static Files.ToolData.getWeaponMaterialForWeapon;
 import static Files.ToolData.lookUpWeaponRarityAndType;
 import static Files.ToolGUI.UNKNOWN_CHARACTER;
 import static Files.ToolGUI.formatString;
@@ -230,7 +230,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         devWepMaterialPreview.setHorizontalAlignment(0);
         devWepMaterialPreview.setHorizontalTextPosition(0);
         devWepMaterialPreview.setIcon(new ImageIcon(
-                generateResourceIconPath(lookUpWeaponMaterial(weaponName), ToolData.RESOURCE_TYPE.WEAPON_MATERIAL)));
+                generateResourceIconPath(getWeaponMaterialForWeapon(weaponName), ToolData.RESOURCE_TYPE.WEAPON_MATERIAL)));
         devWepMaterialPreview.setText("");
         devWepMaterialPreview.setVerticalAlignment(0);
         devWepMaterialPreview.setVerticalTextPosition(3);
