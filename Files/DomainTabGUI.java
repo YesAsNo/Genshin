@@ -1,8 +1,8 @@
 package Files;
 
 import static Files.CharacterCardGUI.$$$getFont$$$;
-import static Files.DomainCardGUI.DOMAIN_FILTER_OPTIONS.ALL_OPTIONS_BY_ENUM;
-import static Files.DomainCardGUI.DOMAIN_FILTER_OPTIONS.ALL_OPTIONS_BY_STRING;
+import static Files.DomainTabGUI.DOMAIN_FILTER_OPTIONS.ALL_OPTIONS_BY_ENUM;
+import static Files.DomainTabGUI.DOMAIN_FILTER_OPTIONS.ALL_OPTIONS_BY_STRING;
 import static Files.ToolData.generateResourceIconPath;
 import static Files.ToolData.getFlattenedData;
 import static Files.ToolData.getMapping;
@@ -31,6 +31,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.MouseInputAdapter;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -38,6 +39,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -48,7 +50,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-public class DomainCardGUI implements ActionListener {
+public class DomainTabGUI extends MouseInputAdapter implements ActionListener {
     private final JPanel domainTab = new JPanel(new GridBagLayout());
     private final JComboBox<String> filterBox = new JComboBox<>();
     private final JPanel domainsPanelOverview = new JPanel(new GridBagLayout());
@@ -70,6 +72,10 @@ public class DomainCardGUI implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         DOMAIN_FILTER_OPTIONS option = ALL_OPTIONS_BY_STRING.get((String)filterBox.getSelectedItem());
         parseFilter(option,getDayFilter());
+    }
+    @Override
+    public void mousePressed(MouseEvent event){
+        System.out.println("1235");
     }
 
     public enum domainTheme {
@@ -110,7 +116,7 @@ public class DomainCardGUI implements ActionListener {
             this.stringToken = stringToken;
         }
     }
-    public DomainCardGUI() {
+    public DomainTabGUI() {
         filterBox.setBackground(new Color(-2702645));
         filterBox.setEnabled(true);
         final DefaultComboBoxModel<String> filterBoxModel = new DefaultComboBoxModel<>();
@@ -226,6 +232,7 @@ public class DomainCardGUI implements ActionListener {
     }
     private JPanel generateDomainCard(domainTheme dt,String domainName, List<String> domainMaterials,String dayFilter){
         JPanel domainCard = new JPanel(new GridBagLayout());
+        domainCard.addMouseListener(this);
         domainCard.setBackground(new Color(dt.panelBackgroundColor));
         domainCard.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
                 TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
