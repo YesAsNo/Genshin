@@ -127,7 +127,7 @@ public class Program extends JFrame implements ActionListener {
     private JCheckBox devShowListedCheckBox;
     private JCheckBox devShowUnlistedCheckBox;
     private JLabel devShowMatchedAmountLabel;
-    private JTabbedPane tabbedPane1;
+    private JTabbedPane itemOverviewTabbedPane;
     private JPanel MonThu_Tab;
     private JPanel TuesFri_Tab;
     private JPanel WedSat_Tab;
@@ -136,6 +136,24 @@ public class Program extends JFrame implements ActionListener {
     private JButton monThuButton;
     private JButton allButton;
     private JComboBox filterBox;
+    private JPanel mainPanel;
+    private JScrollPane mainPanelScrollPane;
+    private JPanel mainScrollPaneViewport;
+    private JPanel titlePanel;
+    private JLabel domainNameLabel;
+    private JLabel listedWeaponCounterLabel;
+    private JLabel allWeaponCounterLabel;
+    private JPanel itemOverviewPanel;
+    private JLabel listedWeaponHeadline;
+    private JLabel unlistedWeaponHeadline;
+    private JLabel weaponPlaceholder1;
+    private JLabel weaponPlaceholder2;
+    private JLabel weaponPlaceholder3;
+    private JLabel weaponPlaceholder4;
+    private JLabel weaponPlaceholder5;
+    private JLabel weaponPlaceholder6;
+    private JLabel weaponPlaceholder7;
+    private JLabel weaponPlaceholder8;
     private JScrollPane scrollPane1;
 
     /**
@@ -1519,8 +1537,8 @@ public class Program extends JFrame implements ActionListener {
         devWeaponMatDomain.setLayout(new GridBagLayout());
         devWeaponMatDomain.setBackground(new Color(-1));
         devTabbedPane.addTab("WeaponMat", devWeaponMatDomain);
-        final JPanel panel7 = new JPanel();
-        panel7.setLayout(new GridBagLayout());
+        mainPanel = new JPanel();
+        mainPanel.setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -1528,22 +1546,22 @@ public class Program extends JFrame implements ActionListener {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
-        devWeaponMatDomain.add(panel7, gbc);
-        final JScrollPane scrollPane2 = new JScrollPane();
+        devWeaponMatDomain.add(mainPanel, gbc);
+        mainPanelScrollPane = new JScrollPane();
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
-        panel7.add(scrollPane2, gbc);
-        final JPanel panel8 = new JPanel();
-        panel8.setLayout(new GridBagLayout());
-        panel8.setBackground(new Color(-465419));
-        scrollPane2.setViewportView(panel8);
-        final JPanel panel9 = new JPanel();
-        panel9.setLayout(new GridBagLayout());
-        panel9.setBackground(new Color(-10301));
+        mainPanel.add(mainPanelScrollPane, gbc);
+        mainScrollPaneViewport = new JPanel();
+        mainScrollPaneViewport.setLayout(new GridBagLayout());
+        mainScrollPaneViewport.setBackground(new Color(-465419));
+        mainPanelScrollPane.setViewportView(mainScrollPaneViewport);
+        titlePanel = new JPanel();
+        titlePanel.setLayout(new GridBagLayout());
+        titlePanel.setBackground(new Color(-10301));
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -1551,36 +1569,37 @@ public class Program extends JFrame implements ActionListener {
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(0, 50, 0, 50);
-        panel8.add(panel9, gbc);
-        panel9.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
+        mainScrollPaneViewport.add(titlePanel, gbc);
+        titlePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
                 TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
-        final JLabel label28 = new JLabel();
-        Font label28Font = this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 20, label28.getFont());
-        if (label28Font != null) {
-            label28.setFont(label28Font);
+        domainNameLabel = new JLabel();
+        Font domainNameLabelFont =
+                this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 20, domainNameLabel.getFont());
+        if (domainNameLabelFont != null) {
+            domainNameLabel.setFont(domainNameLabelFont);
         }
-        label28.setForeground(new Color(-13494016));
-        label28.setText("Hidden Palace of Lianshan Formula");
+        domainNameLabel.setForeground(new Color(-13494016));
+        domainNameLabel.setText("Hidden Palace of Lianshan Formula");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 1.0;
         gbc.anchor = GridBagConstraints.NORTH;
-        panel9.add(label28, gbc);
-        final JPanel panel10 = new JPanel();
-        panel10.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        panel10.setBackground(new Color(-10301));
+        titlePanel.add(domainNameLabel, gbc);
+        itemOverviewPanel = new JPanel();
+        itemOverviewPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        itemOverviewPanel.setBackground(new Color(-10301));
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
-        panel9.add(panel10, gbc);
-        tabbedPane1 = new JTabbedPane();
-        tabbedPane1.setBackground(new Color(-1));
-        tabbedPane1.setTabPlacement(2);
-        panel10.add(tabbedPane1,
+        titlePanel.add(itemOverviewPanel, gbc);
+        itemOverviewTabbedPane = new JTabbedPane();
+        itemOverviewTabbedPane.setBackground(new Color(-1));
+        itemOverviewTabbedPane.setTabPlacement(2);
+        itemOverviewPanel.add(itemOverviewTabbedPane,
                 new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null,
@@ -1588,256 +1607,235 @@ public class Program extends JFrame implements ActionListener {
         MonThu_Tab = new JPanel();
         MonThu_Tab.setLayout(new GridBagLayout());
         MonThu_Tab.setBackground(new Color(-1));
-        tabbedPane1.addTab("",
+        itemOverviewTabbedPane.addTab("",
                 new ImageIcon(getClass().getResource("/Files/Images/Weapon Materials/All Aerosiderite.png")),
                 MonThu_Tab);
-        final JScrollPane scrollPane3 = new JScrollPane();
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;
-        MonThu_Tab.add(scrollPane3, gbc);
-        final JPanel panel11 = new JPanel();
-        panel11.setLayout(new GridBagLayout());
-        panel11.setBackground(new Color(-26768));
-        scrollPane3.setViewportView(panel11);
-        final JLabel label29 = new JLabel();
-        Font label29Font = this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 14, label29.getFont());
-        if (label29Font != null) {
-            label29.setFont(label29Font);
+        listedWeaponHeadline = new JLabel();
+        Font listedWeaponHeadlineFont =
+                this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 14, listedWeaponHeadline.getFont());
+        if (listedWeaponHeadlineFont != null) {
+            listedWeaponHeadline.setFont(listedWeaponHeadlineFont);
         }
-        label29.setForeground(new Color(-13494016));
-        label29.setText("Weapons that still need this material");
+        listedWeaponHeadline.setForeground(new Color(-13494016));
+        listedWeaponHeadline.setText("Weapons that still need this material");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 1.0;
         gbc.weighty = 0.01;
         gbc.anchor = GridBagConstraints.NORTH;
-        panel11.add(label29, gbc);
-        final JPanel panel12 = new JPanel();
-        panel12.setLayout(new GridBagLayout());
-        panel12.setBackground(new Color(-1));
+        MonThu_Tab.add(listedWeaponHeadline, gbc);
+        unlistedWeaponHeadline = new JLabel();
+        Font unlistedWeaponHeadlineFont =
+                this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 14, unlistedWeaponHeadline.getFont());
+        if (unlistedWeaponHeadlineFont != null) {
+            unlistedWeaponHeadline.setFont(unlistedWeaponHeadlineFont);
+        }
+        unlistedWeaponHeadline.setForeground(new Color(-13494016));
+        unlistedWeaponHeadline.setText("Weapons that are unlisted");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.fill = GridBagConstraints.BOTH;
-        panel11.add(panel12, gbc);
-        final JPanel panel13 = new JPanel();
-        panel13.setLayout(new GridBagLayout());
-        panel13.setBackground(new Color(-1));
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
         gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;
-        panel12.add(panel13, gbc);
-        final JLabel label30 = new JLabel();
-        Font label30Font = this.$$$getFont$$$("Source Code Pro", Font.BOLD, -1, label30.getFont());
-        if (label30Font != null) {
-            label30.setFont(label30Font);
-        }
-        label30.setHorizontalAlignment(0);
-        label30.setHorizontalTextPosition(0);
-        label30.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Weapons/Bow_5star/Elegy for the End.png")));
-        label30.setText("[ Weapon Name ]");
-        label30.setVerticalAlignment(0);
-        label30.setVerticalTextPosition(3);
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
+        gbc.weighty = 0.1;
         gbc.anchor = GridBagConstraints.NORTH;
-        panel13.add(label30, gbc);
-        final JLabel label31 = new JLabel();
-        Font label31Font = this.$$$getFont$$$("Source Code Pro", Font.BOLD, -1, label31.getFont());
-        if (label31Font != null) {
-            label31.setFont(label31Font);
+        MonThu_Tab.add(unlistedWeaponHeadline, gbc);
+        weaponPlaceholder1 = new JLabel();
+        Font weaponPlaceholder1Font =
+                this.$$$getFont$$$("Source Code Pro", Font.BOLD, -1, weaponPlaceholder1.getFont());
+        if (weaponPlaceholder1Font != null) {
+            weaponPlaceholder1.setFont(weaponPlaceholder1Font);
         }
-        label31.setHorizontalAlignment(0);
-        label31.setHorizontalTextPosition(0);
-        label31.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Weapons/Bow_5star/Elegy for the End.png")));
-        label31.setText("[ Weapon Name ]");
-        label31.setVerticalAlignment(0);
-        label31.setVerticalTextPosition(3);
-        gbc = new GridBagConstraints();
-        gbc.gridx = 3;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        gbc.anchor = GridBagConstraints.NORTH;
-        panel13.add(label31, gbc);
-        final JLabel label32 = new JLabel();
-        Font label32Font = this.$$$getFont$$$("Source Code Pro", Font.BOLD, -1, label32.getFont());
-        if (label32Font != null) {
-            label32.setFont(label32Font);
-        }
-        label32.setHorizontalAlignment(0);
-        label32.setHorizontalTextPosition(0);
-        label32.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Weapons/Bow_5star/Elegy for the End.png")));
-        label32.setText("[ Weapon Name ]");
-        label32.setVerticalAlignment(0);
-        label32.setVerticalTextPosition(3);
-        gbc = new GridBagConstraints();
-        gbc.gridx = 2;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        gbc.anchor = GridBagConstraints.NORTH;
-        panel13.add(label32, gbc);
-        final JLabel label33 = new JLabel();
-        Font label33Font = this.$$$getFont$$$("Source Code Pro", Font.BOLD, -1, label33.getFont());
-        if (label33Font != null) {
-            label33.setFont(label33Font);
-        }
-        label33.setHorizontalAlignment(0);
-        label33.setHorizontalTextPosition(0);
-        label33.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Weapons/Bow_5star/Elegy for the End.png")));
-        label33.setText("[ Weapon Name ]");
-        label33.setVerticalAlignment(0);
-        label33.setVerticalTextPosition(3);
-        gbc = new GridBagConstraints();
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        gbc.anchor = GridBagConstraints.NORTH;
-        panel13.add(label33, gbc);
-        final JLabel label34 = new JLabel();
-        Font label34Font = this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 14, label34.getFont());
-        if (label34Font != null) {
-            label34.setFont(label34Font);
-        }
-        label34.setForeground(new Color(-13494016));
-        label34.setText("Weapons that are unlisted");
+        weaponPlaceholder1.setHorizontalAlignment(0);
+        weaponPlaceholder1.setHorizontalTextPosition(0);
+        weaponPlaceholder1.setIcon(
+                new ImageIcon(getClass().getResource("/Files/Images/Weapons/Bow_5star/Elegy for the End.png")));
+        weaponPlaceholder1.setText("[ Weapon Name ]");
+        weaponPlaceholder1.setVerticalAlignment(0);
+        weaponPlaceholder1.setVerticalTextPosition(3);
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.weightx = 1.0;
-        gbc.weighty = 0.1;
+        gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.NORTH;
-        panel11.add(label34, gbc);
-        final JPanel panel14 = new JPanel();
-        panel14.setLayout(new GridBagLayout());
-        panel14.setBackground(new Color(-1));
+        MonThu_Tab.add(weaponPlaceholder1, gbc);
+        weaponPlaceholder2 = new JLabel();
+        Font weaponPlaceholder2Font =
+                this.$$$getFont$$$("Source Code Pro", Font.BOLD, -1, weaponPlaceholder2.getFont());
+        if (weaponPlaceholder2Font != null) {
+            weaponPlaceholder2.setFont(weaponPlaceholder2Font);
+        }
+        weaponPlaceholder2.setHorizontalAlignment(0);
+        weaponPlaceholder2.setHorizontalTextPosition(0);
+        weaponPlaceholder2.setIcon(
+                new ImageIcon(getClass().getResource("/Files/Images/Weapons/Bow_5star/Elegy for the End.png")));
+        weaponPlaceholder2.setText("[ Weapon Name ]");
+        weaponPlaceholder2.setVerticalAlignment(0);
+        weaponPlaceholder2.setVerticalTextPosition(3);
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.weightx = 1.0;
-        gbc.weighty = 0.5;
-        gbc.fill = GridBagConstraints.BOTH;
-        panel11.add(panel14, gbc);
-        final JLabel label35 = new JLabel();
-        Font label35Font = this.$$$getFont$$$("Source Code Pro", Font.BOLD, -1, label35.getFont());
-        if (label35Font != null) {
-            label35.setFont(label35Font);
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.NORTH;
+        MonThu_Tab.add(weaponPlaceholder2, gbc);
+        weaponPlaceholder3 = new JLabel();
+        Font weaponPlaceholder3Font =
+                this.$$$getFont$$$("Source Code Pro", Font.BOLD, -1, weaponPlaceholder3.getFont());
+        if (weaponPlaceholder3Font != null) {
+            weaponPlaceholder3.setFont(weaponPlaceholder3Font);
         }
-        label35.setHorizontalAlignment(0);
-        label35.setHorizontalTextPosition(0);
-        label35.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Weapons/Bow_5star/Elegy for the End.png")));
-        label35.setText("[ Weapon Name ]");
-        label35.setVerticalAlignment(0);
-        label35.setVerticalTextPosition(3);
+        weaponPlaceholder3.setHorizontalAlignment(0);
+        weaponPlaceholder3.setHorizontalTextPosition(0);
+        weaponPlaceholder3.setIcon(
+                new ImageIcon(getClass().getResource("/Files/Images/Weapons/Bow_5star/Elegy for the End.png")));
+        weaponPlaceholder3.setText("[ Weapon Name ]");
+        weaponPlaceholder3.setVerticalAlignment(0);
+        weaponPlaceholder3.setVerticalTextPosition(3);
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 0;
+        gbc.gridy = 4;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.NORTH;
-        panel14.add(label35, gbc);
-        final JLabel label36 = new JLabel();
-        Font label36Font = this.$$$getFont$$$("Source Code Pro", Font.BOLD, -1, label36.getFont());
-        if (label36Font != null) {
-            label36.setFont(label36Font);
+        MonThu_Tab.add(weaponPlaceholder3, gbc);
+        weaponPlaceholder4 = new JLabel();
+        Font weaponPlaceholder4Font =
+                this.$$$getFont$$$("Source Code Pro", Font.BOLD, -1, weaponPlaceholder4.getFont());
+        if (weaponPlaceholder4Font != null) {
+            weaponPlaceholder4.setFont(weaponPlaceholder4Font);
         }
-        label36.setHorizontalAlignment(0);
-        label36.setHorizontalTextPosition(0);
-        label36.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Weapons/Bow_5star/Elegy for the End.png")));
-        label36.setText("[ Weapon Name ]");
-        label36.setVerticalAlignment(0);
-        label36.setVerticalTextPosition(3);
+        weaponPlaceholder4.setHorizontalAlignment(0);
+        weaponPlaceholder4.setHorizontalTextPosition(0);
+        weaponPlaceholder4.setIcon(
+                new ImageIcon(getClass().getResource("/Files/Images/Weapons/Bow_5star/Elegy for the End.png")));
+        weaponPlaceholder4.setText("[ Weapon Name ]");
+        weaponPlaceholder4.setVerticalAlignment(0);
+        weaponPlaceholder4.setVerticalTextPosition(3);
         gbc = new GridBagConstraints();
-        gbc.gridx = 3;
-        gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.gridy = 5;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.NORTH;
-        panel14.add(label36, gbc);
-        final JLabel label37 = new JLabel();
-        Font label37Font = this.$$$getFont$$$("Source Code Pro", Font.BOLD, -1, label37.getFont());
-        if (label37Font != null) {
-            label37.setFont(label37Font);
+        MonThu_Tab.add(weaponPlaceholder4, gbc);
+        weaponPlaceholder5 = new JLabel();
+        Font weaponPlaceholder5Font =
+                this.$$$getFont$$$("Source Code Pro", Font.BOLD, -1, weaponPlaceholder5.getFont());
+        if (weaponPlaceholder5Font != null) {
+            weaponPlaceholder5.setFont(weaponPlaceholder5Font);
         }
-        label37.setHorizontalAlignment(0);
-        label37.setHorizontalTextPosition(0);
-        label37.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Weapons/Bow_5star/Elegy for the End.png")));
-        label37.setText("[ Weapon Name ]");
-        label37.setVerticalAlignment(0);
-        label37.setVerticalTextPosition(3);
+        weaponPlaceholder5.setHorizontalAlignment(0);
+        weaponPlaceholder5.setHorizontalTextPosition(0);
+        weaponPlaceholder5.setIcon(
+                new ImageIcon(getClass().getResource("/Files/Images/Weapons/Bow_5star/Elegy for the End.png")));
+        weaponPlaceholder5.setText("[ Weapon Name ]");
+        weaponPlaceholder5.setVerticalAlignment(0);
+        weaponPlaceholder5.setVerticalTextPosition(3);
         gbc = new GridBagConstraints();
-        gbc.gridx = 2;
-        gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.gridy = 6;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.NORTH;
-        panel14.add(label37, gbc);
-        final JLabel label38 = new JLabel();
-        Font label38Font = this.$$$getFont$$$("Source Code Pro", Font.BOLD, -1, label38.getFont());
-        if (label38Font != null) {
-            label38.setFont(label38Font);
+        MonThu_Tab.add(weaponPlaceholder5, gbc);
+        weaponPlaceholder6 = new JLabel();
+        Font weaponPlaceholder6Font =
+                this.$$$getFont$$$("Source Code Pro", Font.BOLD, -1, weaponPlaceholder6.getFont());
+        if (weaponPlaceholder6Font != null) {
+            weaponPlaceholder6.setFont(weaponPlaceholder6Font);
         }
-        label38.setHorizontalAlignment(0);
-        label38.setHorizontalTextPosition(0);
-        label38.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Weapons/Bow_5star/Elegy for the End.png")));
-        label38.setText("[ Weapon Name ]");
-        label38.setVerticalAlignment(0);
-        label38.setVerticalTextPosition(3);
+        weaponPlaceholder6.setHorizontalAlignment(0);
+        weaponPlaceholder6.setHorizontalTextPosition(0);
+        weaponPlaceholder6.setIcon(
+                new ImageIcon(getClass().getResource("/Files/Images/Weapons/Bow_5star/Elegy for the End.png")));
+        weaponPlaceholder6.setText("[ Weapon Name ]");
+        weaponPlaceholder6.setVerticalAlignment(0);
+        weaponPlaceholder6.setVerticalTextPosition(3);
         gbc = new GridBagConstraints();
-        gbc.gridx = 1;
-        gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.gridy = 7;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.NORTH;
-        panel14.add(label38, gbc);
+        MonThu_Tab.add(weaponPlaceholder6, gbc);
+        weaponPlaceholder7 = new JLabel();
+        Font weaponPlaceholder7Font =
+                this.$$$getFont$$$("Source Code Pro", Font.BOLD, -1, weaponPlaceholder7.getFont());
+        if (weaponPlaceholder7Font != null) {
+            weaponPlaceholder7.setFont(weaponPlaceholder7Font);
+        }
+        weaponPlaceholder7.setHorizontalAlignment(0);
+        weaponPlaceholder7.setHorizontalTextPosition(0);
+        weaponPlaceholder7.setIcon(
+                new ImageIcon(getClass().getResource("/Files/Images/Weapons/Bow_5star/Elegy for the End.png")));
+        weaponPlaceholder7.setText("[ Weapon Name ]");
+        weaponPlaceholder7.setVerticalAlignment(0);
+        weaponPlaceholder7.setVerticalTextPosition(3);
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 8;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.NORTH;
+        MonThu_Tab.add(weaponPlaceholder7, gbc);
+        weaponPlaceholder8 = new JLabel();
+        Font weaponPlaceholder8Font =
+                this.$$$getFont$$$("Source Code Pro", Font.BOLD, -1, weaponPlaceholder8.getFont());
+        if (weaponPlaceholder8Font != null) {
+            weaponPlaceholder8.setFont(weaponPlaceholder8Font);
+        }
+        weaponPlaceholder8.setHorizontalAlignment(0);
+        weaponPlaceholder8.setHorizontalTextPosition(0);
+        weaponPlaceholder8.setIcon(
+                new ImageIcon(getClass().getResource("/Files/Images/Weapons/Bow_5star/Elegy for the End.png")));
+        weaponPlaceholder8.setText("[ Weapon Name ]");
+        weaponPlaceholder8.setVerticalAlignment(0);
+        weaponPlaceholder8.setVerticalTextPosition(3);
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 9;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.NORTH;
+        MonThu_Tab.add(weaponPlaceholder8, gbc);
         TuesFri_Tab = new JPanel();
         TuesFri_Tab.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         TuesFri_Tab.setBackground(new Color(-1));
-        tabbedPane1.addTab("", new ImageIcon(getClass().getResource("/Files/Images/Weapon Materials/All Guyun.png")),
-                TuesFri_Tab);
+        itemOverviewTabbedPane.addTab("",
+                new ImageIcon(getClass().getResource("/Files/Images/Weapon Materials/All Guyun.png")), TuesFri_Tab);
         WedSat_Tab = new JPanel();
         WedSat_Tab.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         WedSat_Tab.setBackground(new Color(-1));
-        tabbedPane1.addTab("",
+        itemOverviewTabbedPane.addTab("",
                 new ImageIcon(getClass().getResource("/Files/Images/Weapon Materials/All Mist Veiled Elixir.png")),
                 WedSat_Tab);
-        final JLabel label39 = new JLabel();
-        Font label39Font = this.$$$getFont$$$("Source Code Pro", -1, 12, label39.getFont());
-        if (label39Font != null) {
-            label39.setFont(label39Font);
+        listedWeaponCounterLabel = new JLabel();
+        Font listedWeaponCounterLabelFont =
+                this.$$$getFont$$$("Source Code Pro", -1, 12, listedWeaponCounterLabel.getFont());
+        if (listedWeaponCounterLabelFont != null) {
+            listedWeaponCounterLabel.setFont(listedWeaponCounterLabelFont);
         }
-        label39.setForeground(new Color(-13494016));
-        label39.setText("Weapons listed for this domain: 34");
+        listedWeaponCounterLabel.setForeground(new Color(-13494016));
+        listedWeaponCounterLabel.setText("Weapons listed for this domain: 34");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.weightx = 1.0;
-        panel9.add(label39, gbc);
-        final JLabel label40 = new JLabel();
-        Font label40Font = this.$$$getFont$$$("Source Code Pro", -1, 12, label40.getFont());
-        if (label40Font != null) {
-            label40.setFont(label40Font);
+        titlePanel.add(listedWeaponCounterLabel, gbc);
+        allWeaponCounterLabel = new JLabel();
+        Font allWeaponCounterLabelFont = this.$$$getFont$$$("Source Code Pro", -1, 12, allWeaponCounterLabel.getFont());
+        if (allWeaponCounterLabelFont != null) {
+            allWeaponCounterLabel.setFont(allWeaponCounterLabelFont);
         }
-        label40.setForeground(new Color(-13494016));
-        label40.setText("All weapons that need it: 53");
+        allWeaponCounterLabel.setForeground(new Color(-13494016));
+        allWeaponCounterLabel.setText("All weapons that need it: 53");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.weightx = 1.0;
-        panel9.add(label40, gbc);
+        titlePanel.add(allWeaponCounterLabel, gbc);
     }
 
     /** @noinspection ALL */

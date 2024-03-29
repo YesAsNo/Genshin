@@ -39,7 +39,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -72,10 +71,6 @@ public class DomainTabGUI extends MouseInputAdapter implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         DOMAIN_FILTER_OPTIONS option = ALL_OPTIONS_BY_STRING.get((String)filterBox.getSelectedItem());
         parseFilter(option,getDayFilter());
-    }
-    @Override
-    public void mousePressed(MouseEvent event){
-        System.out.println("1235");
     }
 
     public enum domainTheme {
@@ -232,7 +227,7 @@ public class DomainTabGUI extends MouseInputAdapter implements ActionListener {
     }
     private JPanel generateDomainCard(domainTheme dt,String domainName, List<String> domainMaterials,String dayFilter){
         JPanel domainCard = new JPanel(new GridBagLayout());
-        domainCard.addMouseListener(this);
+        domainCard.addMouseListener(new DomainCardGUI(dt,domainName,domainMaterials,dayFilter));
         domainCard.setBackground(new Color(dt.panelBackgroundColor));
         domainCard.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
                 TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));

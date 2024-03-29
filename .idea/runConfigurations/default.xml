@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="default" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="Files.ToolData" />
+    <module name="Genshin" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
