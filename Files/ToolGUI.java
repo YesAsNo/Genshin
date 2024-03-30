@@ -242,6 +242,7 @@ public class ToolGUI extends JFrame {
                 }
             }
         }
+        System.out.println(farmedArtifacts);
     }
 
     private void parseCharacterTalents() {

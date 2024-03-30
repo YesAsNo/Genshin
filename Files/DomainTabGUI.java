@@ -75,7 +75,7 @@ public class DomainTabGUI implements ActionListener {
         parseFilter(option,getDayFilter());
     }
 
-    public enum domainTheme {
+    public enum DOMAIN_THEME {
         WEAPON_MATERIAL_THEME(-10301,-13494016,-26768,"\uD83D\uDD2A"),
         TALENT_BOOK_THEME(-1068,-14541824,-10640,"\uD83D\uDCD4"),
         WEEKLY_BOSS_DOMAIN_THEME(-11811,-13236722,-36698,"\uD83D\uDC09"),
@@ -84,7 +84,7 @@ public class DomainTabGUI implements ActionListener {
         public final int panelForegroundColor;
         public final int marginBackgroundColor;
         public final String marginSymbol;
-        domainTheme(int bgColor, int fgColor, int marginBgColor, String symbol){
+        DOMAIN_THEME(int bgColor, int fgColor, int marginBgColor, String symbol){
             this.panelBackgroundColor = bgColor;
             this.panelForegroundColor = fgColor;
             this.marginBackgroundColor = marginBgColor;
@@ -201,19 +201,19 @@ public class DomainTabGUI implements ActionListener {
         return allButton.getText();
     }
     private void parseFilter(DOMAIN_FILTER_OPTIONS filter,String dayFilter){
-        List<domainTheme> filteredThemes = new ArrayList<>();
+        List<DOMAIN_THEME> filteredThemes = new ArrayList<>();
         assert filter != null;
         switch(filter){
-            case TALENT -> filteredThemes.add(domainTheme.TALENT_BOOK_THEME);
-            case ARTIFACT -> filteredThemes.add(domainTheme.ARTIFACT_DOMAIN_THEME);
-            case WEAPON_MAT -> filteredThemes.add(domainTheme.WEAPON_MATERIAL_THEME);
-            case WEEKLY -> filteredThemes.add(domainTheme.WEEKLY_BOSS_DOMAIN_THEME);
-            case NO_FILTER -> filteredThemes.addAll(List.of(domainTheme.values()));
+            case TALENT -> filteredThemes.add(DOMAIN_THEME.TALENT_BOOK_THEME);
+            case ARTIFACT -> filteredThemes.add(DOMAIN_THEME.ARTIFACT_DOMAIN_THEME);
+            case WEAPON_MAT -> filteredThemes.add(DOMAIN_THEME.WEAPON_MATERIAL_THEME);
+            case WEEKLY -> filteredThemes.add(DOMAIN_THEME.WEEKLY_BOSS_DOMAIN_THEME);
+            case NO_FILTER -> filteredThemes.addAll(List.of(DOMAIN_THEME.values()));
         }
         domainsPanelOverview.removeAll();
         domainsPanelOverview.updateUI();
         int i = 0;
-        for (domainTheme dt : filteredThemes) {
+        for (DOMAIN_THEME dt : filteredThemes) {
             Map<String, List<String>> domainMapping = getDomainMapping(dt);
             for (String domainName : domainMapping.keySet()) {
                 GridBagConstraints gbc = new GridBagConstraints();
@@ -227,7 +227,7 @@ public class DomainTabGUI implements ActionListener {
             }
         }
     }
-    private JPanel generateDomainCard(domainTheme dt,String domainName, List<String> domainMaterials,String dayFilter){
+    private JPanel generateDomainCard(DOMAIN_THEME dt, String domainName, List<String> domainMaterials, String dayFilter){
         JPanel domainCard = new JPanel(new GridBagLayout());
         Map<String,ImageIcon>iconList = new TreeMap<>();
         domainCard.setBackground(new Color(dt.panelBackgroundColor));
@@ -247,6 +247,7 @@ public class DomainTabGUI implements ActionListener {
                 materialIcon = new ImageIcon(GrayFilter.createDisabledImage(materialIcon.getImage()));
                 materialIconLabel.setIcon(materialIcon);
             }
+            materialIconLabel.setToolTipText(materialName);
             iconList.put(materialName, materialIcon);
             materialIconLabel.setText("");
             GridBagConstraints gbc = new GridBagConstraints();
@@ -341,15 +342,15 @@ public class DomainTabGUI implements ActionListener {
         });
         return domainCard;
     }
-    public static Map<String, List<String>> getDomainMapping(domainTheme dt){
+    public static Map<String, List<String>> getDomainMapping(DOMAIN_THEME dt){
         return switch(dt){
             case WEAPON_MATERIAL_THEME -> getMapping(WEPDOMAIN_WEPMAT);
             case TALENT_BOOK_THEME -> getMapping(TALENTDOMAIN_TALENTBOOK);
             case WEEKLY_BOSS_DOMAIN_THEME -> getMapping(WEEKLYDOMAIN_WEEKLYBOSSMAT);
-            case ARTIFACT_DOMAIN_THEME -> getMapping(ToolData.knownMappings.ARTIDOMAIN_ARTISET);
+            case ARTIFACT_DOMAIN_THEME -> getMapping(ARTIDOMAIN_ARTISET);
         };
     }
-    public static ToolData.RESOURCE_TYPE getDomainResourceType(domainTheme dt){
+    public static ToolData.RESOURCE_TYPE getDomainResourceType(DOMAIN_THEME dt){
         return switch(dt){
             case WEAPON_MATERIAL_THEME -> ToolData.RESOURCE_TYPE.WEAPON_MATERIAL;
             case TALENT_BOOK_THEME -> ToolData.RESOURCE_TYPE.TALENT_BOOK;
@@ -357,12 +358,25 @@ public class DomainTabGUI implements ActionListener {
             case ARTIFACT_DOMAIN_THEME -> ToolData.RESOURCE_TYPE.ARTIFACT;
         };
     }
-    public static Map<String, List<String>> getDomainResourceTypeMapping(domainTheme dt){
+    public static Map<String, List<String>> getDomainResourceTypeMapping(DOMAIN_THEME dt){
         return switch (dt){
             case WEAPON_MATERIAL_THEME -> getMapping(WEPMAT_WEPNAME);
             case TALENT_BOOK_THEME -> getMapping(TALENTBOOK_CHAR);
             case WEEKLY_BOSS_DOMAIN_THEME -> getMapping(WEEKLYBOSSMAT_CHAR);
             case ARTIFACT_DOMAIN_THEME -> getMapping(ARTIDOMAIN_ARTISET);
+        };
+    }
+    public static ToolData.RESOURCE_TYPE getDomainTargetResourceType(DOMAIN_THEME dt){
+        return switch (dt){
+            case WEAPON_MATERIAL_THEME -> ToolData.RESOURCE_TYPE.WEAPON;
+            case TALENT_BOOK_THEME, WEEKLY_BOSS_DOMAIN_THEME, ARTIFACT_DOMAIN_THEME -> ToolData.RESOURCE_TYPE.CHARACTER;
+        };
+    }
+    public static Map<String,Set<String>> getDomainFarmedMapping(DOMAIN_THEME dt){
+        return switch(dt){
+            case WEAPON_MATERIAL_THEME -> getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS);
+            case TALENT_BOOK_THEME, WEEKLY_BOSS_DOMAIN_THEME -> getFarmedMapping(ToolGUI.FARMED_DATATYPE.TALENTS);
+            case ARTIFACT_DOMAIN_THEME -> getFarmedMapping(ToolGUI.FARMED_DATATYPE.ARTIFACTS);
         };
     }
     public String[] getAllCounterLabel(String domainName,ToolData.RESOURCE_TYPE rt){

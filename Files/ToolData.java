@@ -155,9 +155,6 @@ public class ToolData {
             TreeMap<String,List<String>> parsedMapping = new TreeMap<>();
             parsedMapping = gson.fromJson(reader, parsedMapping.getClass());
             parsedMappings.put(categoryName,parsedMapping);
-            if (categoryName.equalsIgnoreCase(knownMappings.DAY_AVAILABLEMATS.stringToken)){
-                System.out.println(parsedMapping);
-            }
             if (PATHS_TO_DATA_FILES.get(path)){
                 List<List<String>> val_arrays = new ArrayList<>(parsedMapping.values());
                 List<String> valuesFlattened = new ArrayList<>();
