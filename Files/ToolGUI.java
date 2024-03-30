@@ -49,7 +49,6 @@ public class ToolGUI extends JFrame {
     public static final String UNKNOWN_ARTIFACT = "unknown_artifact";
     public static final String UNKNOWN_WEAPON_MESSAGE = "[ Empty Weapon Selector ]";
     public static final String UNKNOWN_WEAPON_PATH = "./Files/Images/Weapons/unknown_weapon.png";
-    public static final String CLOSE_TEXT = "CLOSE";
     public static final int CHARACTER_LIMIT = 150;
     public static final String WEAPON_SAVE_FILE_NAME = "saved_weapons.json";
     private JPanel mainPanel;
@@ -67,7 +66,6 @@ public class ToolGUI extends JFrame {
     private JPanel devBasicInfoSpacer;
     private JTextPane devInfoTextPane;
     private JPanel welcomeTab;
-    private JPanel devDomainCardViewport;
     private static final Map<String, Set<String>> farmedWeapons = new TreeMap<>();
     public static final Map<String, Set<String>> farmedArtifacts = new TreeMap<>();
     public static final Map<String, Set<String>> farmedTalents = new TreeMap<>();
@@ -127,10 +125,6 @@ public class ToolGUI extends JFrame {
         } catch (IOException ex) {
             System.out.println("The weapon save file failed to parse.");
         }
-    }
-
-    public void addDomainCardToViewport(JPanel jPanel, GridBagConstraints gbc) {
-        devDomainCardViewport.add(jPanel, gbc);
     }
 
     public void addTab(String title, JPanel jpanel) {

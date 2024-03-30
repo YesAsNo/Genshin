@@ -6,7 +6,6 @@ import static Files.ToolData.getFlattenedData;
 import static Files.ToolData.lookUpWeaponCategoryForCharacter;
 import static Files.ToolData.lookUpWeapons;
 import static Files.ToolGUI.CHARACTER_LIMIT;
-import static Files.ToolGUI.CLOSE_TEXT;
 import static Files.ToolGUI.FIVE_STAR_WEAPON_DELIMITER;
 import static Files.ToolGUI.FOUR_STAR_WEAPON_DELIMITER;
 import static Files.ToolGUI.UNKNOWN_ARTIFACT;
@@ -331,23 +330,6 @@ public class CharacterCardGUI extends JFrame {
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
                         false));
     }
-    private JButton getCloseButton(JPanel jpanel) {
-        JButton closeButton = new JButton();
-        closeButton.setBackground(new Color(-2725532));
-        Font closeButtonFont = $$$getFont$$$(Font.BOLD, -1, closeButton.getFont());
-        if (closeButtonFont != null) {
-            closeButton.setFont(closeButtonFont);
-        }
-        closeButton.setForeground(new Color(-6427));
-        closeButton.setHideActionText(false);
-        closeButton.setText(CLOSE_TEXT);
-        jpanel.add(closeButton,
-                new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-                        GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        return closeButton;
-    }
-
     private JButton getSaveButton(JPanel jpanel) {
         JButton saveButton = new JButton();
         saveButton.setBackground(new Color(-6039919));
@@ -488,11 +470,9 @@ public class CharacterCardGUI extends JFrame {
         weaponSelectionBox.addActionListener(new UpdateLabelListener(weaponNameLabel, weaponIconLabel,weaponMaterialListingCheckbox, ToolData.RESOURCE_TYPE.WEAPON));
         weaponSelectionBox.addActionListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.WEAPON));
 
-        JButton closeButton = getCloseButton(checkboxAndButtonPanel);
         JButton saveButton = getSaveButton(checkboxAndButtonPanel);
         JTextArea setDetailsTextArea = getSetDetailsTextArea(checkboxAndButtonPanel);
 
-        closeButton.addActionListener(new CloseButtonListener(this));
         saveButton.addActionListener(new SaveButtonListener(characterCard));
         set1ComboBox.addActionListener(new UpdateTextAreaListener(setDetailsTextArea));
         set2ComboBox.addActionListener(new UpdateTextAreaListener(setDetailsTextArea));
