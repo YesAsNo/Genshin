@@ -16,6 +16,12 @@ import static Files.ToolData.knownMappings.WEEKLYDOMAIN_WEEKLYBOSSMAT;
 import static Files.ToolData.knownMappings.WEPDOMAIN_WEPMAT;
 import static Files.ToolData.knownMappings.WEPMAT_WEPNAME;
 import static Files.ToolGUI.getFarmedMapping;
+import static java.util.Calendar.FRIDAY;
+import static java.util.Calendar.MONDAY;
+import static java.util.Calendar.SATURDAY;
+import static java.util.Calendar.THURSDAY;
+import static java.util.Calendar.TUESDAY;
+import static java.util.Calendar.WEDNESDAY;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -43,10 +49,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -74,7 +81,24 @@ public class DomainTabGUI implements ActionListener {
         DOMAIN_FILTER_OPTIONS option = ALL_OPTIONS_BY_STRING.get((String)filterBox.getSelectedItem());
         parseFilter(option,getDayFilter());
     }
+    public enum DAY_FILTER{
+        MONDAY_THURSDAY("Mon/Thu"),
+        TUESDAY_FRIDAY("Tues/Fri"),
+        WEDNESDAY_SATURDAY("Wed/Sat"),
+        SUNDAY_ALL("All");
+        public final String stringToken;
+        DAY_FILTER(String token){
+            stringToken = token;
+        }
+        public static final TreeMap<DAY_FILTER, String> ALL_OPTIONS_BY_ENUM = new TreeMap<>();
+        static {
+            for (DAY_FILTER v : DAY_FILTER.values()){
+                ALL_OPTIONS_BY_ENUM.put(v,v.stringToken);
+            }
+        }
 
+
+    }
     public enum DOMAIN_THEME {
         WEAPON_MATERIAL_THEME(-10301,-13494016,-26768,"\uD83D\uDD2A"),
         TALENT_BOOK_THEME(-1068,-14541824,-10640,"\uD83D\uDCD4"),
@@ -92,7 +116,7 @@ public class DomainTabGUI implements ActionListener {
         }
     }
     public enum DOMAIN_FILTER_OPTIONS{
-        NO_FILTER("[ Filter ]"),
+        NO_FILTER("All Domains"),
         ARTIFACT("Artifact"),
         TALENT("Talent Book"),
         WEEKLY("Weekly Boss Material"),
@@ -127,45 +151,30 @@ public class DomainTabGUI implements ActionListener {
         gbc.insets = new Insets(0, 300, 0, 5);
         domainTab.add(filterBox, gbc);
         domainTab.setBackground(new Color(-1));
-
-
-        wedSatButton.setBackground(new Color(-2702645));
-        wedSatButton.setForeground(new Color(-13236722));
-        wedSatButton.setText("Wed/Sat");
-        gbc = new GridBagConstraints();
-        gbc.gridx = 3;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        gbc.insets = new Insets(0, 0, 0, 5);
-        domainTab.add(wedSatButton, gbc);
-
-        tueFriButton.setBackground(new Color(-5275240));
-        tueFriButton.setForeground(new Color(-1));
-        tueFriButton.setText("Tues/Fri");
-        gbc = new GridBagConstraints();
-        gbc.gridx = 2;
-        gbc.gridy = 0;
-        gbc.insets = new Insets(0, 0, 0, 5);
-        domainTab.add(tueFriButton, gbc);
-
-        monThuButton.setBackground(new Color(-2702645));
-        monThuButton.setForeground(new Color(-13236722));
-        monThuButton.setText("Mon/Thu");
-        gbc = new GridBagConstraints();
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.insets = new Insets(0, 0, 0, 5);
-        domainTab.add(monThuButton, gbc);
-
-
-        allButton.setBackground(new Color(-2702645));
-        allButton.setForeground(new Color(-13236722));
-        allButton.setText("All");
-        gbc = new GridBagConstraints();
-        gbc.gridx = 4;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        domainTab.add(allButton, gbc);
+        NavigableSet<DAY_FILTER> dayFilters = DAY_FILTER.ALL_OPTIONS_BY_ENUM.navigableKeySet();
+        Iterator<DAY_FILTER> i = dayFilters.iterator();
+        int c = 1;
+        for (Enumeration<AbstractButton> it = bg.getElements(); it.hasMoreElements();){
+            AbstractButton button = it.nextElement();
+            DAY_FILTER f = i.next();
+            button.setText(f.stringToken);
+            if (f.stringToken.equalsIgnoreCase(getDayFilterToken())){
+                button.setSelected(true);
+                button.setBackground(new Color(-5275240));
+                button.setForeground(new Color(-1));
+                button.setToolTipText("(It is today)");
+            }
+            else{
+                button.setBackground(new Color(-2702645));
+                button.setForeground(new Color(-13236722));
+            }
+            gbc = new GridBagConstraints();
+            gbc.gridx = c;
+            gbc.gridy = 0;
+            gbc.insets = new Insets(0, 0, 0, 5);
+            c++;
+            domainTab.add(button,gbc);
+        }
         JPanel devDomainsTabPanel = new JPanel();
         devDomainsTabPanel.setLayout(new GridBagLayout());
         gbc.gridx = 0;
@@ -189,7 +198,6 @@ public class DomainTabGUI implements ActionListener {
         monThuButton.addActionListener(this);
         tueFriButton.addActionListener(this);
         allButton.addActionListener(this);
-        allButton.setSelected(true);
     }
     private String getDayFilter(){
         for (Enumeration<AbstractButton> it = bg.getElements();it.hasMoreElements();){
@@ -200,6 +208,7 @@ public class DomainTabGUI implements ActionListener {
         }
         return allButton.getText();
     }
+
     private void parseFilter(DOMAIN_FILTER_OPTIONS filter,String dayFilter){
         List<DOMAIN_THEME> filteredThemes = new ArrayList<>();
         assert filter != null;
@@ -239,7 +248,7 @@ public class DomainTabGUI implements ActionListener {
             JLabel materialIconLabel = new JLabel();
             ImageIcon materialIcon = new ImageIcon(generateResourceIconPath(materialName, getDomainResourceType(dt)));
 
-            if (dayFilter.equalsIgnoreCase("All") ||getDomainResourceType(dt) == ToolData.RESOURCE_TYPE.WEEKLY_BOSS_MATERIAL
+            if (dayFilter.equalsIgnoreCase(DAY_FILTER.SUNDAY_ALL.stringToken) ||getDomainResourceType(dt) == ToolData.RESOURCE_TYPE.WEEKLY_BOSS_MATERIAL
                     || getDomainResourceType(dt) == ToolData.RESOURCE_TYPE.ARTIFACT|| dayToAvailableMaterialsMapping.get(dayFilter).contains(materialName)) {
                 materialIconLabel.setIcon(materialIcon);
             }
@@ -458,10 +467,21 @@ public class DomainTabGUI implements ActionListener {
     public JPanel getMainPanel(){
         return domainTab;
     }
-    public static int getDayNumberOld(Date date) {
-        Calendar cal = Calendar.getInstance();
-        System.out.println(cal);
-        cal.setTime(date);
-        return cal.get(Calendar.DAY_OF_WEEK);
+    public static String getDayFilterToken() {
+        Calendar currentTime = Calendar.getInstance();
+        int currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
+        int currentDay = currentTime.get(Calendar.DAY_OF_WEEK);
+        if (currentHour < 4){
+            currentDay = (currentDay - 1) % 7;
+        }
+        String dayNumber;
+        switch (currentDay) {
+            case MONDAY, THURSDAY -> dayNumber = DAY_FILTER.MONDAY_THURSDAY.stringToken;
+            case TUESDAY, FRIDAY -> dayNumber = DAY_FILTER.TUESDAY_FRIDAY.stringToken;
+            case WEDNESDAY, SATURDAY -> dayNumber =  DAY_FILTER.WEDNESDAY_SATURDAY.stringToken;
+            default -> dayNumber = DAY_FILTER.SUNDAY_ALL.stringToken;
+        };
+        System.out.println("Current Day: "+dayNumber);
+        return dayNumber;
     }
 }

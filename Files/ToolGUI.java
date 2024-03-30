@@ -10,15 +10,11 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
 import javax.swing.plaf.FontUIResource;
@@ -71,12 +67,7 @@ public class ToolGUI extends JFrame {
     private JPanel devBasicInfoSpacer;
     private JTextPane devInfoTextPane;
     private JPanel welcomeTab;
-    private JPanel devDomainsTab;
-    private JPanel devDomainsTabPanel;
-    private JScrollPane devDomainsScrollPane;
     private JPanel devDomainCardViewport;
-    private JButton domainSearchButton;
-    private JComboBox<String> domainFilterBox;
     private static final Map<String, Set<String>> farmedWeapons = new TreeMap<>();
     public static final Map<String, Set<String>> farmedArtifacts = new TreeMap<>();
     public static final Map<String, Set<String>> farmedTalents = new TreeMap<>();
@@ -552,64 +543,6 @@ public class ToolGUI extends JFrame {
                 new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null,
                         new Dimension(150, 50), null, 0, false));
-        devDomainsTab = new JPanel();
-        devDomainsTab.setLayout(new GridBagLayout());
-        devDomainsTab.setBackground(new Color(-1));
-        mainTabbedPane.addTab("Domains", devDomainsTab);
-        devDomainsTabPanel = new JPanel();
-        devDomainsTabPanel.setLayout(new GridBagLayout());
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.gridwidth = 2;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;
-        devDomainsTab.add(devDomainsTabPanel, gbc);
-        devDomainsScrollPane = new JScrollPane();
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;
-        devDomainsTabPanel.add(devDomainsScrollPane, gbc);
-        devDomainCardViewport = new JPanel();
-        devDomainCardViewport.setLayout(new GridBagLayout());
-        devDomainsScrollPane.setViewportView(devDomainCardViewport);
-        domainFilterBox = new JComboBox();
-        domainFilterBox.setBackground(new Color(-2702645));
-        domainFilterBox.setEnabled(true);
-        Font domainFilterBoxFont =
-                this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, -1, domainFilterBox.getFont());
-        if (domainFilterBoxFont != null) {
-            domainFilterBox.setFont(domainFilterBoxFont);
-        }
-        final DefaultComboBoxModel defaultComboBoxModel1 = new DefaultComboBoxModel();
-        defaultComboBoxModel1.addElement("[ Filter ]");
-        defaultComboBoxModel1.addElement("Artifacts");
-        defaultComboBoxModel1.addElement("Talents");
-        defaultComboBoxModel1.addElement("Weekly Talents");
-        defaultComboBoxModel1.addElement("Weapons");
-        domainFilterBox.setModel(defaultComboBoxModel1);
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.anchor = GridBagConstraints.EAST;
-        gbc.insets = new Insets(0, 0, 0, 10);
-        devDomainsTab.add(domainFilterBox, gbc);
-        domainSearchButton = new JButton();
-        domainSearchButton.setMaximumSize(new Dimension(30, 30));
-        domainSearchButton.setMinimumSize(new Dimension(30, 30));
-        domainSearchButton.setPreferredSize(new Dimension(50, 30));
-        domainSearchButton.setText("✓");
-        gbc = new GridBagConstraints();
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.anchor = GridBagConstraints.WEST;
-        devDomainsTab.add(domainSearchButton, gbc);
     }
 
     /** @noinspection ALL */
