@@ -439,6 +439,7 @@ public class DomainTabGUI implements ActionListener {
                         matchedItems.add(weaponName);
                     }
                 }
+                domainMaterialCategory = "weapons";
             }
             //TODO: Finish the remaining cases.
             case ARTIFACT -> {
@@ -460,7 +461,8 @@ public class DomainTabGUI implements ActionListener {
             }
             default -> {}
         }
-        labelText[0] = String.valueOf(counter);
+        labelText[0] = "<html>" + "Listed" + " " + domainMaterialCategory + " " + "that need it: " + "<u>"
+                + (counter == 0 ? matchedItems.size() : counter ) + "</u>" + "</html>";
         labelText[1] = matchedItems.isEmpty() ? "None" : matchedItems.toString();
         return labelText;
     }
