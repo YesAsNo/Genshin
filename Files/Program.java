@@ -442,7 +442,7 @@ public class Program extends JFrame implements ActionListener {
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.gridwidth = 5;
+        gbc.gridwidth = 4;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
@@ -452,7 +452,7 @@ public class Program extends JFrame implements ActionListener {
         devSearchButton.setPreferredSize(new Dimension(50, 30));
         devSearchButton.setText("✓");
         gbc = new GridBagConstraints();
-        gbc.gridx = 3;
+        gbc.gridx = 2;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(0, 0, 0, 5);
@@ -466,7 +466,7 @@ public class Program extends JFrame implements ActionListener {
         devSearchField.setPreferredSize(new Dimension(240, 33));
         devSearchField.setText("Choose your fighter!");
         gbc = new GridBagConstraints();
-        gbc.gridx = 2;
+        gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(0, 5, 0, 0);
@@ -485,7 +485,7 @@ public class Program extends JFrame implements ActionListener {
         defaultComboBoxModel1.addElement("Catalyst");
         comboBox1.setModel(defaultComboBoxModel1);
         gbc = new GridBagConstraints();
-        gbc.gridx = 1;
+        gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.EAST;
         gbc.insets = new Insets(0, 266, 0, 5);
@@ -496,8 +496,9 @@ public class Program extends JFrame implements ActionListener {
         label1.setForeground(new Color(-15072759));
         label1.setText("Matches: 35");
         gbc = new GridBagConstraints();
-        gbc.gridx = 4;
+        gbc.gridx = 3;
         gbc.gridy = 0;
+        gbc.weightx = 1.0;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(0, 5, 0, 5);
         devCharacterTab.add(label1, gbc);
