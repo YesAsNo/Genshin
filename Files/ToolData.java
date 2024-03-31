@@ -20,18 +20,18 @@ public class ToolData {
     public static final Map<String, Boolean> PATHS_TO_DATA_FILES;
     static {
         PATHS_TO_DATA_FILES = new TreeMap<>();
-        PATHS_TO_DATA_FILES.put("./Element_Character.json",true);
-        PATHS_TO_DATA_FILES.put("./WeeklyBossMaterial_Character.json",false);
-        PATHS_TO_DATA_FILES.put("./TalentBook_Character.json",false);
-        PATHS_TO_DATA_FILES.put("./ArtifactDomain_ArtifactSet.json",true);
-        PATHS_TO_DATA_FILES.put("./WeaponType_Character.json",false);
-        PATHS_TO_DATA_FILES.put("./TalentDomain_TalentBook.json",true);
-        PATHS_TO_DATA_FILES.put("./WeaponDomain_WeaponMaterial.json",true);
-        PATHS_TO_DATA_FILES.put("./WeeklyDomain_WeeklyBossMaterial.json",true);
-        PATHS_TO_DATA_FILES.put("./WeaponMaterial_WeaponName.json",true);
-        PATHS_TO_DATA_FILES.put("./ArtifactSet_ArtifactSetDescription.json",false);
-        PATHS_TO_DATA_FILES.put("./WeaponRarityAndType_WeaponName.json",false);
-        PATHS_TO_DATA_FILES.put("./Day_AvailableMaterials.json",false);
+        PATHS_TO_DATA_FILES.put("./Files/JSONs/Element_Character.json",true);
+        PATHS_TO_DATA_FILES.put("./Files/JSONs/WeeklyBossMaterial_Character.json",false);
+        PATHS_TO_DATA_FILES.put("./Files/JSONs/TalentBook_Character.json",false);
+        PATHS_TO_DATA_FILES.put("./Files/JSONs/ArtifactDomain_ArtifactSet.json",true);
+        PATHS_TO_DATA_FILES.put("./Files/JSONs/WeaponType_Character.json",false);
+        PATHS_TO_DATA_FILES.put("./Files/JSONs/TalentDomain_TalentBook.json",true);
+        PATHS_TO_DATA_FILES.put("./Files/JSONs/WeaponDomain_WeaponMaterial.json",true);
+        PATHS_TO_DATA_FILES.put("./Files/JSONs/WeeklyDomain_WeeklyBossMaterial.json",true);
+        PATHS_TO_DATA_FILES.put("./Files/JSONs/WeaponMaterial_WeaponName.json",true);
+        PATHS_TO_DATA_FILES.put("./Files/JSONs/ArtifactSet_ArtifactSetDescription.json",false);
+        PATHS_TO_DATA_FILES.put("./Files/JSONs/WeaponRarityAndType_WeaponName.json",false);
+        PATHS_TO_DATA_FILES.put("./Files/JSONs/Day_AvailableMaterials.json",false);
     }
     private static final Map<String,Map<String,List<String>>> parsedMappings = new TreeMap<>();
     private static final Map<String,List<String>> parsedFlattenedData = new TreeMap<>();
@@ -260,8 +260,8 @@ public class ToolData {
     public static void main(String[] args) throws Exception {
 
         parseDataJsonFiles();
-        new ToolGUI();
-        //new Program();
+        //new ToolGUI();
+        new Program();
 
         }
     }
