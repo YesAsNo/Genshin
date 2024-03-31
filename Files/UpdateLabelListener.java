@@ -1,7 +1,10 @@
 package Files;
 
-import static Files.ToolGUI.*;
-import static Files.ToolData.*;
+import static Files.ToolData.RESOURCE_TYPE;
+import static Files.ToolData.generateResourceIconPath;
+import static Files.ToolGUI.UNKNOWN_ARTIFACT;
+import static Files.ToolGUI.UNKNOWN_SET_MESSAGE;
+import static Files.ToolGUI.UNKNOWN_WEAPON_MESSAGE;
 
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
@@ -25,7 +28,7 @@ public class UpdateLabelListener implements ActionListener {
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-        String item = (String) ((JComboBox<?>) e.getSource()).getSelectedItem();
+        String item = ((iconLabel) ((JComboBox<?>) e.getSource()).getSelectedItem()).getText();
         assert item != null;
         ImageIcon icon;
         if (item.equalsIgnoreCase(UNKNOWN_SET_MESSAGE) || item.equalsIgnoreCase(UNKNOWN_WEAPON_MESSAGE))

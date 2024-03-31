@@ -146,7 +146,7 @@ public class ToolData {
         Gson gson = new Gson();
         for (String path : PATHS_TO_DATA_FILES.keySet()){
             JsonReader reader = new JsonReader(new FileReader(path));
-            String categoryName = (String) path.subSequence(path.indexOf('/') + 1,path.lastIndexOf("."));
+            String categoryName = (String) path.subSequence(path.lastIndexOf('/') + 1,path.lastIndexOf("."));
             if (categoryName.equalsIgnoreCase(knownMappings.ARTISET_ARTISETDESC.stringToken)){
                 artifactSetDescriptions = gson.fromJson(reader,artifactSetDescriptions.getClass());
                 continue;
@@ -260,8 +260,8 @@ public class ToolData {
     public static void main(String[] args) throws Exception {
 
         parseDataJsonFiles();
-        //new ToolGUI();
-        new Program();
+        new ToolGUI();
+        //new Program();
 
         }
     }

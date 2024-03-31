@@ -36,10 +36,16 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class CharacterCardGUI extends JFrame {
+    private final Map<String,iconLabel> _labels = new LinkedHashMap<>();
     public CharacterCardGUI(CharacterCard characterCard){
         setTitle(characterCard.getCharacterName() + " Character Overview");
         setContentPane(generateCharacterPage(characterCard));
@@ -57,12 +63,32 @@ public class CharacterCardGUI extends JFrame {
      * @param charName character name
      */
     private void addAllowedWeapons(WeaponSelectorComboBoxModel dcmb, String charName) {
-        dcmb.addElement(UNKNOWN_WEAPON_MESSAGE);
-        String weaponType = lookUpWeaponCategoryForCharacter(charName);
-        dcmb.addElement(FOUR_STAR_WEAPON_DELIMITER);
-        dcmb.addAll(lookUpWeapons(ToolData.WEAPON_RARITY.FOUR_STAR, weaponType));
-        dcmb.addElement(FIVE_STAR_WEAPON_DELIMITER);
-        dcmb.addAll(lookUpWeapons(ToolData.WEAPON_RARITY.FIVE_STAR, weaponType));
+        iconLabel label = new iconLabel();
+        label.setText(UNKNOWN_WEAPON_MESSAGE);
+        Image default_img = new ImageIcon(UNKNOWN_WEAPON_PATH).getImage().getScaledInstance(20,20,Image.SCALE_SMOOTH);
+        label.setIcon(new ImageIcon(default_img));
+        _labels.put(UNKNOWN_WEAPON_MESSAGE,label);
+        for (ToolData.WEAPON_RARITY rarity: ToolData.WEAPON_RARITY.values()){
+            String weaponType = lookUpWeaponCategoryForCharacter(charName);
+            label = new iconLabel();
+            switch(rarity){
+                case FIVE_STAR -> label.setText(FIVE_STAR_WEAPON_DELIMITER);
+                case FOUR_STAR -> label.setText(FOUR_STAR_WEAPON_DELIMITER);
+            }
+            label.setIcon(new ImageIcon(default_img));
+            _labels.put(label.getText(),label);
+            List<String> weapons = lookUpWeapons(rarity, weaponType);
+            Collections.sort(weapons);
+            for (String weapon: weapons){
+                label = new iconLabel();
+                ImageIcon icon = new ImageIcon(generateResourceIconPath(weapon,RESOURCE_TYPE.WEAPON));
+                Image img = icon.getImage().getScaledInstance(20,20,Image.SCALE_SMOOTH);
+                label.setIcon(new ImageIcon(img));
+                label.setText(weapon);
+                _labels.put(weapon,label);
+            }
+        }
+        dcmb.addAll(_labels.values());
     }
     private JPanel getMiddleSelectorPanel(JPanel jpanel) {
         JPanel middleSelectorPanel = new JPanel();
@@ -103,8 +129,8 @@ public class CharacterCardGUI extends JFrame {
     }
 
 
-    private JComboBox<String> getWeaponSelectionBox(CharacterCard characterCard, JPanel jpanel) {
-        JComboBox<String> weaponSelectionBox = new JComboBox<>();
+    private JComboBox<iconLabel> getWeaponSelectionBox(CharacterCard characterCard, JPanel jpanel) {
+        JComboBox<iconLabel> weaponSelectionBox = new JComboBox<>();
         weaponSelectionBox.setAutoscrolls(false);
         weaponSelectionBox.setEditable(false);
         Font weaponSelectionBoxFont =
@@ -116,8 +142,8 @@ public class CharacterCardGUI extends JFrame {
         final WeaponSelectorComboBoxModel weaponSelectorComboBoxModel = new WeaponSelectorComboBoxModel();
         addAllowedWeapons(weaponSelectorComboBoxModel, characterCard.getCharacterName());
         weaponSelectionBox.setModel(weaponSelectorComboBoxModel);
-        weaponSelectionBox.setSelectedItem(
-                characterCard.getWeapon().isEmpty() ? UNKNOWN_WEAPON_MESSAGE : characterCard.getWeapon());
+        weaponSelectionBox.setRenderer(new ComboBoxRenderer());
+        weaponSelectionBox.setSelectedItem(characterCard.getWeapon().isEmpty() ? _labels.get(UNKNOWN_WEAPON_MESSAGE):_labels.get(characterCard.getWeapon()));
         jpanel.add(weaponSelectionBox,
                 new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW,
@@ -324,7 +350,7 @@ public class CharacterCardGUI extends JFrame {
         if (domainListingsLabelFont != null) {
             domainListingsLabel.setFont(domainListingsLabelFont);
         }
-        domainListingsLabel.setText("Domain listings");
+        domainListingsLabel.setText("Set Information");
         jpanel.add(domainListingsLabel,
                 new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
@@ -352,7 +378,6 @@ public class CharacterCardGUI extends JFrame {
         if (setDetailsTextAreaFont != null) {
             setDetailsTextArea.setFont(setDetailsTextAreaFont);
         }
-        setDetailsTextArea.setText("[ Set Details ]");
         jpanel.add(setDetailsTextArea,
                 new GridConstraints(3, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW,
@@ -377,7 +402,7 @@ public class CharacterCardGUI extends JFrame {
                 GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1,
                 false),
                 ToolData.CHARACTER_CARD_DATA_FIELD.NAME);
-        JComboBox<String> weaponSelectionBox = getWeaponSelectionBox(characterCard, middleSelectorPanel);
+        JComboBox<iconLabel> weaponSelectionBox = getWeaponSelectionBox(characterCard, middleSelectorPanel);
         JLabel weaponNameLabel = getNameLabel(characterCard, middleSelectorPanel,
                 new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                 GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null,

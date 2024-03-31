@@ -20,7 +20,7 @@ public class UpdateCharacterCardListener implements ActionListener, ItemListener
         _changedData = changedData;
     }
     public void actionPerformed(ActionEvent e) {
-        String item = (String) ((JComboBox<?>) e.getSource()).getSelectedItem();
+        String item = ((iconLabel) ((JComboBox<?>) e.getSource()).getSelectedItem()).getText();
         assert item != null;
         switch(_changedData){
             case WEAPON:
