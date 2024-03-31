@@ -437,7 +437,7 @@
                 <children>
                   <grid id="1eb11" binding="devDomainsTabPanel" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="1" column="0" row-span="1" col-span="5" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                      <grid row="1" column="0" row-span="1" col-span="7" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="1.0" weighty="1.0"/>
                     </constraints>
                     <properties/>
@@ -916,8 +916,8 @@
                   </grid>
                   <component id="a1e11" class="javax.swing.JComboBox" binding="filterBox">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                      <gridbag top="0" left="300" bottom="0" right="5" weightx="0.0" weighty="0.0"/>
+                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <gridbag top="0" left="5" bottom="0" right="5" weightx="0.0" weighty="0.0"/>
                     </constraints>
                     <properties>
                       <background color="-2702645"/>
@@ -935,47 +935,75 @@
                   </component>
                   <component id="82afc" class="javax.swing.JButton" binding="wedSatButton" default-binding="true">
                     <constraints>
-                      <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag top="0" left="0" bottom="0" right="5" weightx="0.0" weighty="0.0"/>
                     </constraints>
                     <properties>
                       <background color="-2702645"/>
+                      <font name="Source Code Pro Black"/>
                       <foreground color="-13236722"/>
                       <text value="Wed/Sat"/>
                     </properties>
                   </component>
                   <component id="f4593" class="javax.swing.JButton" binding="tueFriButton">
                     <constraints>
-                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag top="0" left="0" bottom="0" right="5" weightx="0.0" weighty="0.0"/>
                     </constraints>
                     <properties>
                       <background color="-5275240"/>
                       <enabled value="true"/>
+                      <font name="Source Code Pro Black"/>
                       <foreground color="-1"/>
                       <text value="Tues/Fri"/>
                     </properties>
                   </component>
                   <component id="aba52" class="javax.swing.JButton" binding="monThuButton">
                     <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag top="0" left="0" bottom="0" right="5" weightx="0.0" weighty="0.0"/>
                     </constraints>
                     <properties>
                       <background color="-2702645"/>
+                      <font name="Source Code Pro Black"/>
                       <foreground color="-13236722"/>
                       <text value="Mon/Thu"/>
                     </properties>
                   </component>
                   <component id="d59ab" class="javax.swing.JButton" binding="allButton">
                     <constraints>
-                      <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
                     <properties>
                       <background color="-2702645"/>
+                      <font name="Source Code Pro Black"/>
                       <foreground color="-13236722"/>
                       <text value="All"/>
+                    </properties>
+                  </component>
+                  <component id="239a4" class="javax.swing.JRadioButton" binding="showUnlistedRadioButton" default-binding="true">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <gridbag top="0" left="130" bottom="0" right="0" weightx="0.0" weighty="0.0"/>
+                    </constraints>
+                    <properties>
+                      <background color="-2702645"/>
+                      <font name="Source Code Pro Black"/>
+                      <foreground color="-13236722"/>
+                      <text value="Show unlisted "/>
+                    </properties>
+                  </component>
+                  <component id="119c4" class="javax.swing.JRadioButton" binding="listed">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                      <gridbag top="0" left="5" bottom="0" right="5" weightx="0.0" weighty="0.0"/>
+                    </constraints>
+                    <properties>
+                      <background color="-2702645"/>
+                      <font name="Source Code Pro Black"/>
+                      <foreground color="-13236722"/>
+                      <text value="Show listed "/>
                     </properties>
                   </component>
                 </children>
@@ -1230,7 +1258,7 @@
                       <text value=""/>
                     </properties>
                   </component>
-                  <grid id="caa0e" binding="devButtonAndCheckboxPanel" layout-manager="GridLayoutManager" row-count="4" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                  <grid id="caa0e" binding="devButtonAndCheckboxPanel" layout-manager="GridLayoutManager" row-count="4" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="3" left="3" bottom="3" right="3"/>
                     <constraints>
                       <grid row="0" column="2" row-span="5" col-span="1" vsize-policy="3" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
@@ -1241,23 +1269,11 @@
                     <children>
                       <component id="f3d3d" class="javax.swing.JLabel" binding="devDomainListingsLabel">
                         <constraints>
-                          <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
                           <font name="Source Code Pro" size="18" style="1"/>
                           <text value="Set details          "/>
-                        </properties>
-                      </component>
-                      <component id="45189" class="javax.swing.JButton" binding="devCloseButton">
-                        <constraints>
-                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <background color="-2725532"/>
-                          <font name="Source Code Pro" style="1"/>
-                          <foreground color="-6427"/>
-                          <hideActionText value="false"/>
-                          <text value="CLOSE"/>
                         </properties>
                       </component>
                       <component id="35f60" class="javax.swing.JButton" binding="devSaveButton">
@@ -1272,7 +1288,7 @@
                       </component>
                       <component id="b531f" class="javax.swing.JTextArea" binding="devSetDetailsTextArea">
                         <constraints>
-                          <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false">
                             <minimum-size width="150" height="380"/>
                             <preferred-size width="150" height="380"/>
                           </grid>
