@@ -1,6 +1,7 @@
 package Files;
 
 import static Files.ToolData.SAVE_LOCATION;
+import static Files.ToolData.getFonts;
 import static Files.ToolData.getTalentBookForCharacter;
 
 import com.google.gson.Gson;
@@ -84,6 +85,7 @@ public class ToolGUI extends JFrame {
 
     public ToolGUI() {
         $$$setupUI$$$();
+        mainTabbedPane.setFont(getFonts().get("SourceCodePro-Black").deriveFont(20.0F));
         addTab("Characters", _characterTabGUI.getMainPanel());
         addTab("Weapons", _weaponsTabGUI.getMainPanel());
         addTab("Domains", __DOMAIN_TAB_GUI.getMainPanel());

@@ -6,8 +6,12 @@ import static Files.ToolGUI.UNKNOWN_WEAPON_PATH;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,6 +20,7 @@ import java.util.TreeMap;
 
 public class ToolData {
     private static Map<String,String> artifactSetDescriptions = new TreeMap<>();
+    private static final Map<String,Font> fonts = new TreeMap<>();
     public static final String SAVE_LOCATION = "./UserData/";
     public static final Map<String, Boolean> PATHS_TO_DATA_FILES;
     static {
@@ -256,9 +261,32 @@ public class ToolData {
         }
         return "";
     }
+    private static void parseFonts(){
+        final String address = "./Files/Fonts/";
+        File fd = new File(address);
+        File[] fontFiles = fd.listFiles();
+
+        if (fontFiles != null) {
+            for (File fontFile : fontFiles) {
+                try {
+                    String fontName = (String)fontFile.getPath().subSequence(fontFile.getPath().lastIndexOf('\\') + 1,fontFile.getPath().lastIndexOf('.'));
+                    fonts.put(fontName, Font.createFont(Font.TRUETYPE_FONT, fontFile));
+                } catch (IOException e) {
+                    System.out.println("Failed to parse font: " + fontFile.getAbsolutePath());
+                } catch (FontFormatException e) {
+                    System.out.println(
+                            e.getMessage() + fontFile.getAbsolutePath());
+                }
+            }
+        }
+    }
+    public static Map<String,Font> getFonts(){
+        return fonts;
+    }
     public static void main(String[] args) throws Exception {
 
         parseDataJsonFiles();
+        parseFonts();
         new ToolGUI();
         //new Program();
 
