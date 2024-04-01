@@ -164,7 +164,6 @@ public class ToolData {
             }
 
         }
-
     }
     /**
      * Generates a path to the specified resource.

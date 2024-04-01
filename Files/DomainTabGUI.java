@@ -67,19 +67,26 @@ public class DomainTabGUI implements ActionListener {
     private static final JRadioButton tueFriButton = new JRadioButton();
     private static final JRadioButton monThuButton = new JRadioButton();
     private static final JRadioButton allButton = new JRadioButton();
-    private static final ButtonGroup bg = new ButtonGroup();
+    private static final ButtonGroup bg_dayFilter = new ButtonGroup();
     static {
-        bg.add(wedSatButton);
-        bg.add(tueFriButton);
-        bg.add(monThuButton);
-        bg.add(allButton);
+        bg_dayFilter.add(wedSatButton);
+        bg_dayFilter.add(tueFriButton);
+        bg_dayFilter.add(monThuButton);
+        bg_dayFilter.add(allButton);
     }
-
+    private static final JRadioButton showAllButton = new JRadioButton();
+    private static final JRadioButton showListedButton = new JRadioButton();
+    private static final ButtonGroup bg_listedFilter = new ButtonGroup();
+    static{
+        bg_listedFilter.add(showAllButton);
+        bg_listedFilter.add(showListedButton);
+        showAllButton.setSelected(true);
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         DOMAIN_FILTER_OPTIONS option = ALL_OPTIONS_BY_STRING.get((String)filterBox.getSelectedItem());
-        parseFilter(option,getDayFilter());
+        parseFilter(option,getDayFilter(),showAllButton.isSelected());
     }
     public enum DAY_FILTER{
         MONDAY_THURSDAY("Mon/Thu"),
@@ -138,6 +145,27 @@ public class DomainTabGUI implements ActionListener {
         }
     }
     public DomainTabGUI() {
+
+        showAllButton.setBackground(new Color(-2702645));
+        showAllButton.setForeground(new Color(-13236722));
+        showAllButton.setText("Show all ");
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(0, 130, 0, 0);
+        domainTab.add(showAllButton, gbc);
+
+        showListedButton.setBackground(new Color(-2702645));
+        showListedButton.setForeground(new Color(-13236722));
+        showListedButton.setText("Show listed ");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(0, 5, 0, 5);
+        domainTab.add(showListedButton, gbc);
+
         filterBox.setBackground(new Color(-2702645));
         filterBox.setEnabled(true);
         final DefaultComboBoxModel<String> filterBoxModel = new DefaultComboBoxModel<>();
@@ -145,16 +173,17 @@ public class DomainTabGUI implements ActionListener {
         filterBoxModel.setSelectedItem(DOMAIN_FILTER_OPTIONS.NO_FILTER.stringToken);
         filterBox.setModel(filterBoxModel);
         filterBox.addActionListener(this);
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
+        gbc = new GridBagConstraints();
+        gbc.gridx = 2;
         gbc.gridy = 0;
-        gbc.insets = new Insets(0, 300, 0, 5);
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(0, 5, 0, 5);
         domainTab.add(filterBox, gbc);
         domainTab.setBackground(new Color(-1));
         NavigableSet<DAY_FILTER> dayFilters = DAY_FILTER.ALL_OPTIONS_BY_ENUM.navigableKeySet();
         Iterator<DAY_FILTER> i = dayFilters.iterator();
-        int c = 1;
-        for (Enumeration<AbstractButton> it = bg.getElements(); it.hasMoreElements();){
+        int c = 0;
+        for (Enumeration<AbstractButton> it = bg_dayFilter.getElements(); it.hasMoreElements();){
             AbstractButton button = it.nextElement();
             DAY_FILTER f = i.next();
             button.setText(f.stringToken);
@@ -169,9 +198,10 @@ public class DomainTabGUI implements ActionListener {
                 button.setForeground(new Color(-13236722));
             }
             gbc = new GridBagConstraints();
-            gbc.gridx = c;
+            gbc.gridx = 3 + c;
             gbc.gridy = 0;
             gbc.insets = new Insets(0, 0, 0, 5);
+            gbc.anchor = GridBagConstraints.WEST;
             c++;
             domainTab.add(button,gbc);
         }
@@ -179,7 +209,7 @@ public class DomainTabGUI implements ActionListener {
         devDomainsTabPanel.setLayout(new GridBagLayout());
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.gridwidth = 5;
+        gbc.gridwidth = 7;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
@@ -198,18 +228,20 @@ public class DomainTabGUI implements ActionListener {
         monThuButton.addActionListener(this);
         tueFriButton.addActionListener(this);
         allButton.addActionListener(this);
+        showAllButton.addActionListener(this);
+        showListedButton.addActionListener(this);
     }
     private String getDayFilter(){
-        for (Enumeration<AbstractButton> it = bg.getElements();it.hasMoreElements();){
+        for (Enumeration<AbstractButton> it = bg_dayFilter.getElements(); it.hasMoreElements();){
             AbstractButton button = it.nextElement();
-            if (button.getModel() == bg.getSelection()){
+            if (button.getModel() == bg_dayFilter.getSelection()){
                 return button.getText();
             }
         }
         return allButton.getText();
     }
 
-    private void parseFilter(DOMAIN_FILTER_OPTIONS filter,String dayFilter){
+    private void parseFilter(DOMAIN_FILTER_OPTIONS filter,String dayFilter, boolean status){
         List<DOMAIN_THEME> filteredThemes = new ArrayList<>();
         assert filter != null;
         switch(filter){
@@ -225,16 +257,31 @@ public class DomainTabGUI implements ActionListener {
         for (DOMAIN_THEME dt : filteredThemes) {
             Map<String, List<String>> domainMapping = getDomainMapping(dt);
             for (String domainName : domainMapping.keySet()) {
-                GridBagConstraints gbc = new GridBagConstraints();
-                gbc.gridx = 0;
-                gbc.gridy = i++;
-                gbc.weightx = 1.0;
-                gbc.fill = GridBagConstraints.BOTH;
-                gbc.insets = new Insets(5, 100, 5, 100);
-                domainsPanelOverview.add(generateDomainCard(dt, domainName,
-                        domainMapping.get(domainName),dayFilter), gbc);
+                if (status || isSomethingFarmedInThisDomain(dt, domainName)) {
+                    GridBagConstraints gbc = new GridBagConstraints();
+                    gbc.gridx = 0;
+                    gbc.gridy = i++;
+                    gbc.weightx = 1.0;
+                    gbc.fill = GridBagConstraints.BOTH;
+                    gbc.insets = new Insets(5, 100, 5, 100);
+                    domainsPanelOverview.add(
+                            generateDomainCard(dt, domainName, domainMapping.get(domainName), dayFilter), gbc);
+                }
             }
         }
+    }
+    public static boolean isSomethingFarmedInThisDomain(DOMAIN_THEME dt,String domainName){
+        Map<String,Set<String>> farmedMapping = getDomainFarmedMapping(dt);
+        List<String> domainItems = getDomainMapping(dt).get(domainName);
+        for (String item : farmedMapping.keySet()){
+            if (dt == DOMAIN_THEME.WEAPON_MATERIAL_THEME && domainItems.contains(getWeaponMaterialForWeapon(item)) && !farmedMapping.get(item).isEmpty()){
+                return true;
+            }
+            else if (domainItems.contains(item) && !farmedMapping.get(item).isEmpty()){
+                return true;
+            }
+        }
+        return false;
     }
     private JPanel generateDomainCard(DOMAIN_THEME dt, String domainName, List<String> domainMaterials, String dayFilter){
         JPanel domainCard = new JPanel(new GridBagLayout());
@@ -260,11 +307,12 @@ public class DomainTabGUI implements ActionListener {
             iconList.put(materialName, materialIcon);
             materialIconLabel.setText("");
             GridBagConstraints gbc = new GridBagConstraints();
-            gbc.gridx = 2 + i++;
+            gbc.gridx = 2 + i;
             gbc.gridy = 0;
             gbc.weighty = 1.0;
-            gbc.anchor = GridBagConstraints.WEST;
+            gbc.anchor = GridBagConstraints.CENTER;
             domainCard.add(materialIconLabel, gbc);
+            i++;
         }
         JPanel domainInfoPanel = new JPanel();
         domainInfoPanel.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
@@ -289,20 +337,7 @@ public class DomainTabGUI implements ActionListener {
                 new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
                         false));
-        JLabel domainAllCounterLabel = new JLabel();
-        Font domainAllWeaponCounterLabelFont =
-               $$$getFont$$$(-1, 12, domainAllCounterLabel.getFont());
-        if (domainAllWeaponCounterLabelFont != null) {
-            domainAllCounterLabel.setFont(domainAllWeaponCounterLabelFont);
-        }
-        domainAllCounterLabel.setForeground(new Color(dt.panelForegroundColor));
-        String[] labelText = getAllCounterLabel(domainName,getDomainResourceType(dt));
-        domainAllCounterLabel.setText(labelText[0]);
-        domainAllCounterLabel.setToolTipText(labelText[1]);
-        domainInfoPanel.add(domainAllCounterLabel,
-                new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
-                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
-                        false));
+
         JLabel domainListedCounterLabel = new JLabel();
         Font domainListedCounterLabelFont =
                 $$$getFont$$$(-1, 12, domainListedCounterLabel.getFont());
@@ -310,9 +345,7 @@ public class DomainTabGUI implements ActionListener {
             domainListedCounterLabel.setFont(domainListedCounterLabelFont);
         }
         domainListedCounterLabel.setForeground(new Color(dt.panelForegroundColor));
-        labelText = getListedCounterLabel(domainName,getDomainResourceType(dt));
-        domainListedCounterLabel.setText(labelText[0]);
-        domainListedCounterLabel.setToolTipText(labelText[1]);
+        domainListedCounterLabel.setText(getListedCounterLabel(domainName,getDomainResourceType(dt)));
         domainInfoPanel.add(domainListedCounterLabel,
                 new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
@@ -346,7 +379,7 @@ public class DomainTabGUI implements ActionListener {
         domainCard.addMouseListener(new MouseInputAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                new DomainCardGUI(domainName,dt,iconList,domainAllCounterLabel,domainListedCounterLabel);
+                new DomainCardGUI(domainName,dt,iconList);
             }
         });
         return domainCard;
@@ -388,8 +421,8 @@ public class DomainTabGUI implements ActionListener {
             case ARTIFACT_DOMAIN_THEME -> getFarmedMapping(ToolGUI.FARMED_DATATYPE.ARTIFACTS);
         };
     }
-    public String[] getAllCounterLabel(String domainName,ToolData.RESOURCE_TYPE rt){
-        String[] labelText = new String[2];
+    public static String getAllCounterLabel(String domainName,ToolData.RESOURCE_TYPE rt){
+        String labelText;
         String domainMaterialCategory = "";
         Set<String> matchedCharacters = new TreeSet<>();
         int counter = 0;
@@ -419,51 +452,58 @@ public class DomainTabGUI implements ActionListener {
             }
             default -> {}
         }
-        labelText[0] = "<html>" + "All" + " " + domainMaterialCategory + " " + "that need it: " + "<u>"
+        labelText = "<html>" + "All" + " " + domainMaterialCategory + " " + "that need it: " + "<u>"
                 + (counter == 0 ? matchedCharacters.size() : counter ) + "</u>" + "</html>";
-        labelText[1] = matchedCharacters.toString();
         return labelText;
 
     }
-    public String[] getListedCounterLabel(String domainName, ToolData.RESOURCE_TYPE rt){
-        String[] labelText = new String[2];
+    public static String getListedCounterLabel(String domainName, ToolData.RESOURCE_TYPE rt){
+        String labelText;
         String domainMaterialCategory = "";
-        Set<String> matchedItems = new TreeSet<>();
         int counter = 0;
         switch(rt){
             case WEAPON_MATERIAL -> {
-                for (String weaponName: getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS).keySet()){
-                    if (!getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS).get(weaponName).isEmpty() &&
+                Map<String,Set<String>> mapping = getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS);
+                for (String weaponName: mapping.keySet()){
+                    if (!mapping.get(weaponName).isEmpty() &&
                             getMapping(WEPDOMAIN_WEPMAT).get(domainName).contains(getWeaponMaterialForWeapon(weaponName))){
                         counter++;
-                        matchedItems.add(weaponName);
                     }
                 }
                 domainMaterialCategory = "weapons";
             }
             //TODO: Finish the remaining cases.
             case ARTIFACT -> {
-                counter = getFlattenedData(ToolData.flattenedDataCategory.CHARACTER).size();
-                matchedItems.add("All characters");
+                Map<String,Set<String>> mapping = getFarmedMapping(ToolGUI.FARMED_DATATYPE.ARTIFACTS);
+                for (String setName : mapping.keySet()){
+                    if (!mapping.get(setName).isEmpty() && getMapping(ARTIDOMAIN_ARTISET).get(domainName).contains(setName)){
+                        counter += mapping.get(setName).size();
+                    }
+                }
                 domainMaterialCategory = "characters";
             }
             case WEEKLY_BOSS_MATERIAL -> {
-                for (String matName: getMapping(WEEKLYDOMAIN_WEEKLYBOSSMAT).get(domainName)){
-                    matchedItems.addAll(getMapping(WEEKLYBOSSMAT_CHAR).get(matName));
+                Map<String,Set<String>> mapping = getFarmedMapping(ToolGUI.FARMED_DATATYPE.TALENTS);
+                for (String materialName : mapping.keySet()){
+                    if (!mapping.get(materialName).isEmpty() && getMapping(WEEKLYDOMAIN_WEEKLYBOSSMAT).get(domainName).contains(materialName)){
+                        counter += mapping.get(materialName).size();
+                    }
                 }
                 domainMaterialCategory = "characters";
             }
             case TALENT_BOOK -> {
-                for (String matName: getMapping(TALENTDOMAIN_TALENTBOOK).get(domainName)){
-                    matchedItems.addAll(getMapping(TALENTBOOK_CHAR).get(matName));
+                Map<String,Set<String>> mapping = getFarmedMapping(ToolGUI.FARMED_DATATYPE.TALENTS);
+                for (String bookName : mapping.keySet()){
+                    if (!mapping.get(bookName).isEmpty() && getMapping(TALENTDOMAIN_TALENTBOOK).get(domainName).contains(bookName)){
+                        counter += mapping.get(bookName).size();
+                    }
                 }
                 domainMaterialCategory = "characters";
             }
             default -> {}
         }
-        labelText[0] = "<html>" + "Listed" + " " + domainMaterialCategory + " " + "that need it: " + "<u>"
-                + (counter == 0 ? matchedItems.size() : counter ) + "</u>" + "</html>";
-        labelText[1] = matchedItems.isEmpty() ? "None" : matchedItems.toString();
+        labelText = "<html>" + "Listed" + " " + domainMaterialCategory + " " + "that need it: " + "<u>"
+                + counter + "</u>" + "</html>";
         return labelText;
     }
     public JPanel getMainPanel(){
@@ -482,8 +522,7 @@ public class DomainTabGUI implements ActionListener {
             case TUESDAY, FRIDAY -> dayNumber = DAY_FILTER.TUESDAY_FRIDAY.stringToken;
             case WEDNESDAY, SATURDAY -> dayNumber =  DAY_FILTER.WEDNESDAY_SATURDAY.stringToken;
             default -> dayNumber = DAY_FILTER.SUNDAY_ALL.stringToken;
-        };
-        System.out.println("Current Day: "+dayNumber);
+        }
         return dayNumber;
     }
 }

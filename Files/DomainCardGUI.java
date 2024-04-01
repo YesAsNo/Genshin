@@ -1,8 +1,11 @@
 package Files;
 
+import static Files.DomainTabGUI.getAllCounterLabel;
 import static Files.DomainTabGUI.getDomainFarmedMapping;
+import static Files.DomainTabGUI.getDomainResourceType;
 import static Files.DomainTabGUI.getDomainResourceTypeMapping;
 import static Files.DomainTabGUI.getDomainTargetResourceType;
+import static Files.DomainTabGUI.getListedCounterLabel;
 import static Files.ToolData.generateResourceIconPath;
 
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -27,19 +30,15 @@ import java.util.Set;
 
 public class DomainCardGUI extends JFrame {
     private final DomainTabGUI.DOMAIN_THEME domainTheme;
-    private final String dName;
+    private final String domainName;
     private final Map<String, ImageIcon> matIcons;
-    private final JLabel allCounterLabel;
-    private final JLabel listedCounterLabel;
     private final JPanel mainPanel = new JPanel(new GridBagLayout());
 
 
-    public DomainCardGUI(String domainName, DomainTabGUI.DOMAIN_THEME domainTheme, Map<String, ImageIcon> matIcons, JLabel domainAllCounterLabel, JLabel domainListedCounterLabel) {
+    public DomainCardGUI(String domainName, DomainTabGUI.DOMAIN_THEME domainTheme, Map<String, ImageIcon> matIcons) {
         this.domainTheme = domainTheme;
-        dName = domainName;
+        this.domainName = domainName;
         this.matIcons = matIcons;
-        allCounterLabel = domainAllCounterLabel;
-        listedCounterLabel = domainListedCounterLabel;
         setTitle(domainName + " Overview");
         setContentPane(generateDomainCard());
         setDefaultCloseOperation(HIDE_ON_CLOSE);
@@ -52,8 +51,6 @@ public class DomainCardGUI extends JFrame {
     private JPanel generateDomainCard(){
         Map<String, List<String>> mapping = getDomainResourceTypeMapping(domainTheme);
         Map<String, Set<String>> farmedMapping = getDomainFarmedMapping(domainTheme);
-        System.out.println(mapping);
-        System.out.println(farmedMapping);
         JScrollPane mainPanelScrollPane = new JScrollPane();
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -68,7 +65,7 @@ public class DomainCardGUI extends JFrame {
         mainPanelScrollPane.setViewportView(mainScrollPaneViewport);
         JPanel titlePanel = new JPanel();
         titlePanel.setLayout(new GridBagLayout());
-        titlePanel.setBackground(new Color(-10301));
+        titlePanel.setBackground(new Color(domainTheme.panelBackgroundColor));
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -80,8 +77,8 @@ public class DomainCardGUI extends JFrame {
         titlePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
                 TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         JLabel domainNameLabel = new JLabel();
-        domainNameLabel.setForeground(new Color(-13494016));
-        domainNameLabel.setText(dName);
+        domainNameLabel.setForeground(new Color(domainTheme.panelForegroundColor));
+        domainNameLabel.setText(domainName);
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -90,7 +87,7 @@ public class DomainCardGUI extends JFrame {
         titlePanel.add(domainNameLabel, gbc);
         JPanel itemOverviewPanel = new JPanel();
         itemOverviewPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        itemOverviewPanel.setBackground(new Color(-10301));
+        itemOverviewPanel.setBackground(new Color(domainTheme.panelBackgroundColor));
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 3;
@@ -106,9 +103,8 @@ public class DomainCardGUI extends JFrame {
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null,
                         new Dimension(200, 200), null, 0, false));
-
+        System.out.println(farmedMapping);
         for (String domainMat : matIcons.keySet()){
-            System.out.println(domainMat);
             JPanel innerUnlistedPanel = new JPanel(new GridBagLayout());
             JPanel innerListedPanel = new JPanel(new GridBagLayout());
             JPanel dayTab = new JPanel();
@@ -116,7 +112,7 @@ public class DomainCardGUI extends JFrame {
             dayTab.setBackground(new Color(-1));
             itemOverviewTabbedPane.addTab("",matIcons.get(domainMat), dayTab);
             JLabel listedWeaponHeadline = new JLabel();
-            listedWeaponHeadline.setForeground(new Color(-13494016));
+            listedWeaponHeadline.setForeground(new Color(domainTheme.panelForegroundColor));
             if (getDomainTargetResourceType(domainTheme) == ToolData.RESOURCE_TYPE.WEAPON){
                 listedWeaponHeadline.setText("Listed weapons");
             }
@@ -140,7 +136,7 @@ public class DomainCardGUI extends JFrame {
             dayTab.add(innerListedPanel,gbc);
             if(domainTheme != DomainTabGUI.DOMAIN_THEME.ARTIFACT_DOMAIN_THEME) {
                 JLabel unlistedWeaponHeadline = new JLabel();
-                unlistedWeaponHeadline.setBackground(new Color(-13494016));
+                unlistedWeaponHeadline.setBackground(new Color(domainTheme.panelForegroundColor));
 
                 if (getDomainTargetResourceType(domainTheme) == ToolData.RESOURCE_TYPE.WEAPON) {
                     unlistedWeaponHeadline.setText("Other Weapons");
@@ -163,17 +159,22 @@ public class DomainCardGUI extends JFrame {
                 dayTab.add(innerUnlistedPanel, gbc);
             }
             int i = 0;
+            int k = 0;
             if (domainTheme != DomainTabGUI.DOMAIN_THEME.ARTIFACT_DOMAIN_THEME){
+
                 for(String farmedTargetItem : mapping.get(domainMat)) {
-                    if (farmedMapping.containsKey(domainMat) && farmedMapping.get(domainMat).contains(farmedTargetItem)){
-                        generateDomainItemLabel(farmedTargetItem,i,innerListedPanel).setIcon(
+
+                    if (farmedMapping.containsKey(farmedTargetItem) && !farmedMapping.get(farmedTargetItem).isEmpty()){
+                        generateDomainItemLabel(farmedTargetItem,k,innerListedPanel).setIcon(
                                 new ImageIcon(generateResourceIconPath(farmedTargetItem,getDomainTargetResourceType(domainTheme))));
+                        k++;
                     }
                     else{
                         generateDomainItemLabel(farmedTargetItem,i,innerUnlistedPanel).setIcon(
                                 new ImageIcon(generateResourceIconPath(farmedTargetItem,getDomainTargetResourceType(domainTheme))));
+                        i++;
                     }
-                    i++;
+
                 }
             }
             else{
@@ -191,12 +192,12 @@ public class DomainCardGUI extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.weightx = 1.0;
-        titlePanel.add(listedCounterLabel, gbc);
+        titlePanel.add(new JLabel(getListedCounterLabel(domainName,getDomainResourceType(domainTheme))), gbc);
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.weightx = 1.0;
-        titlePanel.add(allCounterLabel, gbc);
+        titlePanel.add(new JLabel(getAllCounterLabel(domainName,getDomainResourceType(domainTheme))), gbc);
         return mainPanel;
     }
     private JLabel generateDomainItemLabel(String item, int index,JPanel panel){
@@ -209,7 +210,7 @@ public class DomainCardGUI extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = index % 4;
         gbc.gridy = index / 4;
-        gbc.insets = new Insets(20, 20, 20, 20);
+        gbc.insets = new Insets(0, 20, 0, 20);
         panel.add(domainItemLabel, gbc);
         return domainItemLabel;
     }
