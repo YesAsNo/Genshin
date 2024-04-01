@@ -1,10 +1,6 @@
 package Files;
 
-import static Files.ToolData.RESOURCE_TYPE;
-import static Files.ToolData.generateResourceIconPath;
-import static Files.ToolData.getFlattenedData;
-import static Files.ToolData.lookUpWeaponCategoryForCharacter;
-import static Files.ToolData.lookUpWeapons;
+import static Files.ToolData.*;
 import static Files.ToolGUI.CHARACTER_LIMIT;
 import static Files.ToolGUI.FIVE_STAR_WEAPON_DELIMITER;
 import static Files.ToolGUI.FOUR_STAR_WEAPON_DELIMITER;
@@ -111,11 +107,7 @@ public class CharacterCardGUI extends JFrame {
 
     private void getNotesTextField(CharacterCard selectedCharacterCard, JPanel jpanel) {
         JTextField notesTextField = new JTextField();
-        Font emptyNotesFieldTextFieldFont =
-                $$$getFont$$$(Font.BOLD, 14, notesTextField.getFont());
-        if (emptyNotesFieldTextFieldFont != null) {
-            notesTextField.setFont(emptyNotesFieldTextFieldFont);
-        }
+        changeFont(notesTextField, AVAILABLE_FONTS.TEXT_FONT, 14.0F);
         notesTextField.setHorizontalAlignment(10);
         notesTextField.setInheritsPopupMenu(false);
         notesTextField.setMargin(new Insets(2, 6, 2, 6));
@@ -133,11 +125,7 @@ public class CharacterCardGUI extends JFrame {
         JComboBox<iconLabel> weaponSelectionBox = new JComboBox<>();
         weaponSelectionBox.setAutoscrolls(false);
         weaponSelectionBox.setEditable(false);
-        Font weaponSelectionBoxFont =
-                $$$getFont$$$(Font.BOLD, 14, weaponSelectionBox.getFont());
-        if (weaponSelectionBoxFont != null) {
-            weaponSelectionBox.setFont(weaponSelectionBoxFont);
-        }
+        changeFont(weaponSelectionBox, AVAILABLE_FONTS.HEADER_FONT, 14.0F);
         weaponSelectionBox.setInheritsPopupMenu(false);
         final WeaponSelectorComboBoxModel weaponSelectorComboBoxModel = new WeaponSelectorComboBoxModel();
         addAllowedWeapons(weaponSelectorComboBoxModel, characterCard.getCharacterName());
@@ -155,10 +143,8 @@ public class CharacterCardGUI extends JFrame {
     private JLabel getNameLabel(CharacterCard characterCard, JPanel jpanel, GridConstraints gc, ToolData.CHARACTER_CARD_DATA_FIELD dataField) {
         JLabel setNameLabel = new JLabel();
         setNameLabel.setAutoscrolls(true);
-        Font nameLabelFont = $$$getFont$$$(Font.BOLD, 18, setNameLabel.getFont());
-        if (nameLabelFont != null) {
-            setNameLabel.setFont(nameLabelFont);
-        }
+        changeFont(setNameLabel, AVAILABLE_FONTS.HEADER_FONT, 18.0F);
+
         if (dataField == ToolData.CHARACTER_CARD_DATA_FIELD.SET_ONE){
             setNameLabel.setText(characterCard.getArtifactSet1());
         }
@@ -181,10 +167,7 @@ public class CharacterCardGUI extends JFrame {
         setComboBox.setAutoscrolls(false);
         setComboBox.setEditable(false);
         setComboBox.setFocusable(false);
-        Font set1comboBoxFont = $$$getFont$$$(Font.BOLD, 14, setComboBox.getFont());
-        if (set1comboBoxFont != null) {
-            setComboBox.setFont(set1comboBoxFont);
-        }
+        changeFont(setComboBox, AVAILABLE_FONTS.HEADER_FONT, 14.0F);
         setComboBox.setInheritsPopupMenu(false);
         final DefaultComboBoxModel<String> defaultComboBoxModelForSet1Selector = new DefaultComboBoxModel<>();
         defaultComboBoxModelForSet1Selector.addElement(UNKNOWN_SET_MESSAGE);
@@ -302,11 +285,7 @@ public class CharacterCardGUI extends JFrame {
                                          GridConstraints gridConstraints,
                                          ToolData.CHARACTER_CARD_DATA_FIELD dataField) {
         JCheckBox listingCheckBox = new JCheckBox();
-        Font listingCheckBoxFont =
-                $$$getFont$$$(-1, 14, listingCheckBox.getFont());
-        if (listingCheckBoxFont != null) {
-            listingCheckBox.setFont(listingCheckBoxFont);
-        }
+        changeFont(listingCheckBox, AVAILABLE_FONTS.TEXT_FONT, 14.0F);
         listingCheckBox.setText(title);
         if (dataField == ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_SET_ONE){
             if (characterCard.getArtifactSet1Status()) {
@@ -345,11 +324,7 @@ public class CharacterCardGUI extends JFrame {
     }
     private void getDomainListingsLabel(JPanel jpanel) {
         JLabel domainListingsLabel = new JLabel();
-        Font domainListingsLabelFont =
-                $$$getFont$$$(Font.BOLD, 18, domainListingsLabel.getFont());
-        if (domainListingsLabelFont != null) {
-            domainListingsLabel.setFont(domainListingsLabelFont);
-        }
+        changeFont(domainListingsLabel, AVAILABLE_FONTS.HEADER_FONT, 18.0F);
         domainListingsLabel.setText("Set Information");
         jpanel.add(domainListingsLabel,
                 new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
@@ -361,6 +336,7 @@ public class CharacterCardGUI extends JFrame {
         saveButton.setBackground(new Color(-6039919));
         saveButton.setForeground(new Color(-394241));
         saveButton.setText("SAVE");
+        changeFont(saveButton, AVAILABLE_FONTS.HEADER_FONT, 12.0F);
         jpanel.add(saveButton,
                 new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
@@ -374,10 +350,7 @@ public class CharacterCardGUI extends JFrame {
         setDetailsTextArea.setFocusable(false);
         setDetailsTextArea.setLineWrap(true);
         setDetailsTextArea.setWrapStyleWord(true);
-        Font setDetailsTextAreaFont = $$$getFont$$$(-1, 12, setDetailsTextArea.getFont());
-        if (setDetailsTextAreaFont != null) {
-            setDetailsTextArea.setFont(setDetailsTextAreaFont);
-        }
+        changeFont(setDetailsTextArea, AVAILABLE_FONTS.TEXT_FONT, 12.0F);
         jpanel.add(setDetailsTextArea,
                 new GridConstraints(3, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW,

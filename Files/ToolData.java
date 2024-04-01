@@ -2,10 +2,12 @@ package Files;
 
 import static Files.ToolGUI.UNKNOWN_WEAPON_MESSAGE;
 import static Files.ToolGUI.UNKNOWN_WEAPON_PATH;
+import static java.awt.Font.BOLD;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
+import javax.swing.*;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.io.File;
@@ -118,6 +120,25 @@ public class ToolData {
             this.stringToken = stringToken;
         }
     }
+
+    public enum AVAILABLE_FONTS{
+        HEADER_FONT(fonts.get("SourceCodePro-Bold")),
+        TEXT_FONT(fonts.get("SourceCodePro-Light")),
+        CREATOR_FONT(fonts.get("SourceCodePro-Semibold")),
+        REGULAR_FONT(fonts.get("SourceCodePro-Regular")),
+        BLACK_FONT(fonts.get("SourceCodePro-Black"));
+
+        final public Font fontName;
+
+        AVAILABLE_FONTS(Font font) {
+            this.fontName = font;
+        }
+    }
+
+    public static void changeFont(JComponent jcomponent, AVAILABLE_FONTS desiredFont, float size){
+        jcomponent.setFont(desiredFont.fontName.deriveFont(size));
+    }
+
 
     public static List<String> getFlattenedData(flattenedDataCategory dc){
         return parsedFlattenedData.get(dc.stringToken);

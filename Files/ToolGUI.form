@@ -86,7 +86,7 @@
                               <editable value="false"/>
                               <enabled value="true"/>
                               <focusable value="false"/>
-                              <font name="Source Code Pro Semibold"/>
+                              <font/>
                               <foreground color="-11071434"/>
                               <margin top="30" left="20" bottom="10" right="10"/>
                               <selectionColor color="-9555638"/>
@@ -99,9 +99,9 @@
                             </constraints>
                             <properties>
                               <background color="-465419"/>
-                              <font name="Source Code Pro Black" size="20" style="1"/>
+                              <font/>
                               <foreground color="-11071434"/>
-                              <text value="✨ Creators ✨"/>
+                              <text value=". * Creators * ."/>
                             </properties>
                           </component>
                           <component id="ad949" class="javax.swing.JLabel" binding="devLinakoLabel">
@@ -110,7 +110,7 @@
                             </constraints>
                             <properties>
                               <background color="-465419"/>
-                              <font name="Source Code Pro Semibold" size="18"/>
+                              <font/>
                               <foreground color="-11071434"/>
                               <text value="Linako (yes.as.no)"/>
                             </properties>
@@ -121,7 +121,7 @@
                             </constraints>
                             <properties>
                               <background color="-465419"/>
-                              <font name="Source Code Pro Semibold" size="18"/>
+                              <font/>
                               <foreground color="-11071434"/>
                               <text value="precisi0n"/>
                             </properties>
@@ -146,9 +146,9 @@
                             </constraints>
                             <properties>
                               <background color="-465419"/>
-                              <font name="Source Code Pro Black" size="20" style="1"/>
+                              <font/>
                               <foreground color="-11071434"/>
-                              <text value="✨ Welcome to GDApp! ✨"/>
+                              <text value="° . * Welcome to GDApp! * . °"/>
                             </properties>
                           </component>
                           <grid id="bee24" binding="devBasicInfoSpacer" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -172,10 +172,10 @@
                               <background color="-465419"/>
                               <editable value="false"/>
                               <focusable value="false"/>
-                              <font name="Source Code Pro Semibold"/>
+                              <font/>
                               <foreground color="-11071434"/>
                               <margin top="30" left="20" bottom="10" right="10"/>
-                              <text value="This is a personal project to make our daily tasks a little bit more coordinated! Here's how to get started!&#10;&#10;-🔸✨ Character Tab ✨🔸-&#10;&#10;- Search by name, filter or type &quot;debug&quot; to see all characters&#10;- Fill in the desired information (2nd artifact set is optional)&#10;- Checkboxes exist for characters to show up in the domains tab. Unchecking will hide a character from its chosen materials, making it easier to tell who still needs those materials. For example, if a character is done with its talents, you should uncheck the character.&#10;&#10;-🔸✨ Weapon Tab ✨🔸-&#10;&#10;- Search by name, filter or type &quot;debug&quot; to see all weapons.&#10;- Only checkboxes appear. Checking a weapon will make it show up in farmed items in domains.&#10;&#10;-🔸✨ Domains Tab ✨🔸-&#10;&#10;- Search by name, filter or type &quot;debug&quot; to see all domains.&#10;- The chosen domain will show all characters/weapons checked in other tabs."/>
+                              <text value=""/>
                             </properties>
                           </component>
                         </children>
