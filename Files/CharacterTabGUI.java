@@ -148,7 +148,7 @@ public final class CharacterTabGUI implements ActionListener {
         userFieldInput = searchField.getText().toLowerCase();
         searchResultPanel.removeAll();
         searchScrollPane.updateUI();
-        for (String s : getFlattenedData(ToolData.flattenedDataCategory.CHARACTER)) {
+        for (String s : getFlattenedData(ToolData.RESOURCE_TYPE.CHARACTER)) {
             if (s.toLowerCase().contains(userFieldInput)) {
                 {
                     generateCharacterButton(s, matchedCount);

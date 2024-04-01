@@ -296,7 +296,7 @@ public class DomainTabGUI implements ActionListener {
             ImageIcon materialIcon = new ImageIcon(generateResourceIconPath(materialName, getDomainResourceType(dt)));
 
             if (dayFilter.equalsIgnoreCase(DAY_FILTER.SUNDAY_ALL.stringToken) ||getDomainResourceType(dt) == ToolData.RESOURCE_TYPE.WEEKLY_BOSS_MATERIAL
-                    || getDomainResourceType(dt) == ToolData.RESOURCE_TYPE.ARTIFACT|| dayToAvailableMaterialsMapping.get(dayFilter).contains(materialName)) {
+                    || getDomainResourceType(dt) == ToolData.RESOURCE_TYPE.ARTIFACT_SET || dayToAvailableMaterialsMapping.get(dayFilter).contains(materialName)) {
                 materialIconLabel.setIcon(materialIcon);
             }
             else{
@@ -397,7 +397,7 @@ public class DomainTabGUI implements ActionListener {
             case WEAPON_MATERIAL_THEME -> ToolData.RESOURCE_TYPE.WEAPON_MATERIAL;
             case TALENT_BOOK_THEME -> ToolData.RESOURCE_TYPE.TALENT_BOOK;
             case WEEKLY_BOSS_DOMAIN_THEME -> ToolData.RESOURCE_TYPE.WEEKLY_BOSS_MATERIAL;
-            case ARTIFACT_DOMAIN_THEME -> ToolData.RESOURCE_TYPE.ARTIFACT;
+            case ARTIFACT_DOMAIN_THEME -> ToolData.RESOURCE_TYPE.ARTIFACT_SET;
         };
     }
     public static Map<String, List<String>> getDomainResourceTypeMapping(DOMAIN_THEME dt){
@@ -410,7 +410,7 @@ public class DomainTabGUI implements ActionListener {
     }
     public static ToolData.RESOURCE_TYPE getDomainTargetResourceType(DOMAIN_THEME dt){
         return switch (dt){
-            case WEAPON_MATERIAL_THEME -> ToolData.RESOURCE_TYPE.WEAPON;
+            case WEAPON_MATERIAL_THEME -> ToolData.RESOURCE_TYPE.WEAPON_NAME;
             case TALENT_BOOK_THEME, WEEKLY_BOSS_DOMAIN_THEME, ARTIFACT_DOMAIN_THEME -> ToolData.RESOURCE_TYPE.CHARACTER;
         };
     }
@@ -433,8 +433,8 @@ public class DomainTabGUI implements ActionListener {
                 }
                 domainMaterialCategory = "weapons";
             }
-            case ARTIFACT -> {
-                counter = getFlattenedData(ToolData.flattenedDataCategory.CHARACTER).size();
+            case ARTIFACT_SET -> {
+                counter = getFlattenedData(ToolData.RESOURCE_TYPE.CHARACTER).size();
                 matchedCharacters.add("All characters");
                 domainMaterialCategory = "characters";
             }
@@ -473,7 +473,7 @@ public class DomainTabGUI implements ActionListener {
                 domainMaterialCategory = "weapons";
             }
             //TODO: Finish the remaining cases.
-            case ARTIFACT -> {
+            case ARTIFACT_SET -> {
                 Map<String,Set<String>> mapping = getFarmedMapping(ToolGUI.FARMED_DATATYPE.ARTIFACTS);
                 for (String setName : mapping.keySet()){
                     if (!mapping.get(setName).isEmpty() && getMapping(ARTIDOMAIN_ARTISET).get(domainName).contains(setName)){

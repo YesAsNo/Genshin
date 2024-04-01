@@ -15,7 +15,10 @@ public class UpdateTextAreaListener implements ActionListener {
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-        String item = (String) ((JComboBox<?>) e.getSource()).getSelectedItem();
+        assert e.getSource() instanceof JComboBox<?>;
+        JComboBox<?> src = (JComboBox<?>) e.getSource();
+        assert src.getSelectedItem() instanceof iconLabel;
+        String item = ((iconLabel) src.getSelectedItem()).getText();
         assert item != null;
         if (!item.equalsIgnoreCase(UNKNOWN_SET_MESSAGE)) {
             _textArea.setText(lookUpSetDescription(item));

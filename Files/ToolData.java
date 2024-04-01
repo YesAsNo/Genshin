@@ -1,13 +1,15 @@
 package Files;
 
+import static Files.ToolGUI.UNKNOWN_ARTIFACT;
+import static Files.ToolGUI.UNKNOWN_CHARACTER;
 import static Files.ToolGUI.UNKNOWN_WEAPON_MESSAGE;
 import static Files.ToolGUI.UNKNOWN_WEAPON_PATH;
-import static java.awt.Font.BOLD;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.io.File;
@@ -16,6 +18,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -41,19 +44,8 @@ public class ToolData {
         PATHS_TO_DATA_FILES.put("./Files/JSONs/Day_AvailableMaterials.json",false);
     }
     private static final Map<String,Map<String,List<String>>> parsedMappings = new TreeMap<>();
+    private static final Map<String,Map<String,ImageIcon>> parsedResourceIcons = new TreeMap<>();
     private static final Map<String,List<String>> parsedFlattenedData = new TreeMap<>();
-    public enum flattenedDataCategory {
-        ARTIFACT_SET("ArtifactSet"),
-        CHARACTER("Character"),
-        TALENT_BOOK("TalentBook"),
-        WEAPON_MATERIAL("WeaponMaterial"),
-        WEAPON_NAME("WeaponName"),
-        WEEKLY_BOSS_MATERIAL("WeeklyBossMaterial");
-        public final String stringToken;
-        flattenedDataCategory(String data) {
-            this.stringToken = data;
-        }
-    }
     public enum knownMappings{
         ARTIDOMAIN_ARTISET("ArtifactDomain_ArtifactSet"),
         ARTISET_ARTISETDESC("ArtifactSet_ArtifactSetDescription"),
@@ -78,12 +70,16 @@ public class ToolData {
         FOUR_STAR
     }
     public enum RESOURCE_TYPE {
-        WEAPON,
-        ARTIFACT,
-        WEAPON_MATERIAL,
-        CHARACTER,
-        TALENT_BOOK,
-        WEEKLY_BOSS_MATERIAL
+        WEAPON_NAME("WeaponName"),
+        ARTIFACT_SET("ArtifactSet"),
+        WEAPON_MATERIAL("WeaponMaterial"),
+        CHARACTER("Character"),
+        TALENT_BOOK("TalentBook"),
+        WEEKLY_BOSS_MATERIAL("WeeklyBossMaterial");
+        public final String stringToken;
+        RESOURCE_TYPE(String data) {
+            this.stringToken = data;
+        }
     }
     public enum CHARACTER_CARD_DATA_FIELD{
         NAME,
@@ -140,7 +136,7 @@ public class ToolData {
     }
 
 
-    public static List<String> getFlattenedData(flattenedDataCategory dc){
+    public static List<String> getFlattenedData(RESOURCE_TYPE dc){
         return parsedFlattenedData.get(dc.stringToken);
     }
     public static Map<String,List<String>> getMapping(knownMappings mapping){
@@ -201,7 +197,7 @@ public class ToolData {
     public static String generateResourceIconPath(String resourceName, RESOURCE_TYPE resourceType) {
         assert resourceName != null;
         return switch (resourceType){
-            case WEAPON -> {
+            case WEAPON_NAME -> {
                 if (resourceName.equalsIgnoreCase(UNKNOWN_WEAPON_MESSAGE))
                 {
                     yield UNKNOWN_WEAPON_PATH;
@@ -212,7 +208,7 @@ public class ToolData {
                     case FIVE_STAR -> "./Files/Images/Weapons/" + wi.getWeaponType() + "_5star/" + resourceName + ".png";
                 };
             }
-            case ARTIFACT -> "./Files/Images/Artifacts/" + resourceName + ".png";
+            case ARTIFACT_SET -> "./Files/Images/Artifacts/" + resourceName + ".png";
             case WEAPON_MATERIAL -> "./Files/Images/Weapon Materials/" + resourceName + ".png";
             case CHARACTER -> "./Files/Images/Characters/" + resourceName + ".png";
             case TALENT_BOOK -> "./Files/Images/Talent Materials/" + resourceName + ".png";
@@ -301,13 +297,31 @@ public class ToolData {
             }
         }
     }
-    public static Map<String,Font> getFonts(){
-        return fonts;
+    private static void parseResourceIcons(){
+        for (RESOURCE_TYPE data : RESOURCE_TYPE.values()){
+            parsedResourceIcons.put(data.stringToken,new LinkedHashMap<>());
+            if (data == RESOURCE_TYPE.ARTIFACT_SET){
+                parsedResourceIcons.get(data.stringToken).put(UNKNOWN_ARTIFACT,new ImageIcon(generateResourceIconPath(UNKNOWN_ARTIFACT,RESOURCE_TYPE.ARTIFACT_SET)));
+            }
+            else if (data == RESOURCE_TYPE.WEAPON_NAME){
+                parsedResourceIcons.get(data.stringToken).put(UNKNOWN_WEAPON_MESSAGE,new ImageIcon(generateResourceIconPath(UNKNOWN_WEAPON_MESSAGE,RESOURCE_TYPE.WEAPON_NAME)));
+            }
+            else if (data == RESOURCE_TYPE.CHARACTER){
+                parsedResourceIcons.get(data.stringToken).put(UNKNOWN_CHARACTER,new ImageIcon(generateResourceIconPath(UNKNOWN_CHARACTER,RESOURCE_TYPE.CHARACTER)));
+            }
+            for (String set : getFlattenedData(data)){
+                parsedResourceIcons.get(data.stringToken).put(set,new ImageIcon(generateResourceIconPath(set,RESOURCE_TYPE.ARTIFACT_SET)));
+            }
+        }
+        for (String val:parsedResourceIcons.keySet()){
+            System.out.println(val + " "+ parsedResourceIcons.get(val).size());
+        }
     }
     public static void main(String[] args) throws Exception {
 
         parseDataJsonFiles();
         parseFonts();
+        parseResourceIcons();
         new ToolGUI();
         //new Program();
 

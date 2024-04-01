@@ -39,8 +39,8 @@ public class UpdateLabelListener implements ActionListener {
             if (_checkBox.isSelected()){
                 _checkBox.setSelected(false);
             }
-            if (SELECTION_BOX_TYPE == RESOURCE_TYPE.ARTIFACT) {
-                icon = new ImageIcon(generateResourceIconPath(UNKNOWN_ARTIFACT, ToolData.RESOURCE_TYPE.ARTIFACT));
+            if (SELECTION_BOX_TYPE == RESOURCE_TYPE.ARTIFACT_SET) {
+                icon = new ImageIcon(generateResourceIconPath(UNKNOWN_ARTIFACT, ToolData.RESOURCE_TYPE.ARTIFACT_SET));
             }
             else {
                 icon = new ImageIcon(ToolGUI.UNKNOWN_WEAPON_PATH);
@@ -50,11 +50,11 @@ public class UpdateLabelListener implements ActionListener {
         {
             _NameLabel.setText(item);
             _checkBox.setEnabled(true);
-            if (SELECTION_BOX_TYPE == RESOURCE_TYPE.WEAPON) {
-                icon = new ImageIcon(generateResourceIconPath(item, ToolData.RESOURCE_TYPE.WEAPON));
+            if (SELECTION_BOX_TYPE == RESOURCE_TYPE.WEAPON_NAME) {
+                icon = new ImageIcon(generateResourceIconPath(item, ToolData.RESOURCE_TYPE.WEAPON_NAME));
             }
             else {
-                icon = new ImageIcon(generateResourceIconPath(item, RESOURCE_TYPE.ARTIFACT));
+                icon = new ImageIcon(generateResourceIconPath(item, RESOURCE_TYPE.ARTIFACT_SET));
             }
         }
         _IconLabel.setIcon(icon);

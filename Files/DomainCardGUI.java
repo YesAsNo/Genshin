@@ -113,7 +113,7 @@ public class DomainCardGUI extends JFrame {
             itemOverviewTabbedPane.addTab("",matIcons.get(domainMat), dayTab);
             JLabel listedWeaponHeadline = new JLabel();
             listedWeaponHeadline.setForeground(new Color(domainTheme.panelForegroundColor));
-            if (getDomainTargetResourceType(domainTheme) == ToolData.RESOURCE_TYPE.WEAPON){
+            if (getDomainTargetResourceType(domainTheme) == ToolData.RESOURCE_TYPE.WEAPON_NAME){
                 listedWeaponHeadline.setText("Listed weapons");
             }
             else{
@@ -138,7 +138,7 @@ public class DomainCardGUI extends JFrame {
                 JLabel unlistedWeaponHeadline = new JLabel();
                 unlistedWeaponHeadline.setBackground(new Color(domainTheme.panelForegroundColor));
 
-                if (getDomainTargetResourceType(domainTheme) == ToolData.RESOURCE_TYPE.WEAPON) {
+                if (getDomainTargetResourceType(domainTheme) == ToolData.RESOURCE_TYPE.WEAPON_NAME) {
                     unlistedWeaponHeadline.setText("Other Weapons");
                 } else {
                     unlistedWeaponHeadline.setText("Other Characters");

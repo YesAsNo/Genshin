@@ -73,7 +73,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         return mainPanel;
     }
     public static void parseWeaponsMap(){
-        for (String weapon: getFlattenedData(ToolData.flattenedDataCategory.WEAPON_NAME)){
+        for (String weapon: getFlattenedData(ToolData.RESOURCE_TYPE.WEAPON_NAME)){
             Map<String, Set<String>> mapping = getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS);
             if (mapping.containsKey(weapon)&& !mapping.get(weapon).isEmpty())
             {
@@ -155,7 +155,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         devWeaponTabScrollPane.updateUI();
         parseWeaponsMap();
         int matchedCount = 0;
-        for (String s : getFlattenedData(ToolData.flattenedDataCategory.WEAPON_NAME)) {
+        for (String s : getFlattenedData(ToolData.RESOURCE_TYPE.WEAPON_NAME)) {
             ToolData.WEAPON_FILTER_OPTIONS filter = ALL_OPTIONS_BY_STRING.get((String) devFilterComboBox.getSelectedItem());
             assert filter != null;
 
@@ -201,7 +201,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         JLabel devWeaponIcon = new JLabel();
         devWeaponIcon.setHorizontalAlignment(0);
         devWeaponIcon.setHorizontalTextPosition(0);
-        devWeaponIcon.setIcon(new ImageIcon(generateResourceIconPath(weaponName, ToolData.RESOURCE_TYPE.WEAPON)));
+        devWeaponIcon.setIcon(new ImageIcon(generateResourceIconPath(weaponName, ToolData.RESOURCE_TYPE.WEAPON_NAME)));
         devWeaponIcon.setText(formatString(weaponName));
         devWeaponIcon.setVerticalAlignment(0);
         devWeaponIcon.setVerticalTextPosition(3);
