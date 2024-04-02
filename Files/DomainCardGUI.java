@@ -6,7 +6,7 @@ import static Files.DomainTabGUI.getDomainResourceType;
 import static Files.DomainTabGUI.getDomainResourceTypeMapping;
 import static Files.DomainTabGUI.getDomainTargetResourceType;
 import static Files.DomainTabGUI.getListedCounterLabel;
-import static Files.ToolData.generateResourceIconPath;
+import static Files.ToolData.getResourceIcon;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -163,15 +163,14 @@ public class DomainCardGUI extends JFrame {
             if (domainTheme != DomainTabGUI.DOMAIN_THEME.ARTIFACT_DOMAIN_THEME){
 
                 for(String farmedTargetItem : mapping.get(domainMat)) {
-
+                    //Todo: add setIcon into the generate method.
                     if (farmedMapping.containsKey(farmedTargetItem) && !farmedMapping.get(farmedTargetItem).isEmpty()){
-                        generateDomainItemLabel(farmedTargetItem,k,innerListedPanel).setIcon(
-                                new ImageIcon(generateResourceIconPath(farmedTargetItem,getDomainTargetResourceType(domainTheme))));
+                        generateDomainItemLabel(farmedTargetItem,k,innerListedPanel).setIcon(getResourceIcon(farmedTargetItem,getDomainTargetResourceType(domainTheme)));
                         k++;
                     }
                     else{
                         generateDomainItemLabel(farmedTargetItem,i,innerUnlistedPanel).setIcon(
-                                new ImageIcon(generateResourceIconPath(farmedTargetItem,getDomainTargetResourceType(domainTheme))));
+                                getResourceIcon(farmedTargetItem,getDomainTargetResourceType(domainTheme)));
                         i++;
                     }
 
@@ -180,8 +179,7 @@ public class DomainCardGUI extends JFrame {
             else{
                 if (farmedMapping.containsKey(domainMat)) {
                     for (String farmedTargetItem : farmedMapping.get(domainMat)) {
-                        generateDomainItemLabel(farmedTargetItem, i, innerListedPanel).setIcon(new ImageIcon(
-                                generateResourceIconPath(farmedTargetItem, getDomainTargetResourceType(domainTheme))));
+                        generateDomainItemLabel(farmedTargetItem, i, innerListedPanel).setIcon(getResourceIcon(farmedTargetItem,getDomainTargetResourceType(domainTheme)));
                         i++;
                     }
                 }

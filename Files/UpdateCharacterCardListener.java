@@ -1,12 +1,13 @@
 package Files;
 
-import static Files.ToolGUI.UNKNOWN_SET_MESSAGE;
-import static Files.ToolGUI.UNKNOWN_WEAPON_MESSAGE;
+import static Files.ToolGUI.EMPTY_SET_SELECTOR;
+import static Files.ToolGUI.EMPTY_WEAPON_SELECTOR;
 import static javax.swing.DefaultButtonModel.SELECTED;
 
 import Files.ToolData.CHARACTER_CARD_DATA_FIELD;
 
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -20,11 +21,11 @@ public class UpdateCharacterCardListener implements ActionListener, ItemListener
         _changedData = changedData;
     }
     public void actionPerformed(ActionEvent e) {
-        String item = ((iconLabel) ((JComboBox<?>) e.getSource()).getSelectedItem()).getText();
+        String item = ((JLabel) ((JComboBox<?>) e.getSource()).getSelectedItem()).getText();
         assert item != null;
         switch(_changedData){
             case WEAPON:
-                if (item.equalsIgnoreCase(UNKNOWN_WEAPON_MESSAGE)) {
+                if (item.equalsIgnoreCase(EMPTY_WEAPON_SELECTOR)) {
                     _characterCard.setWeapon("");
                 } else {
                     _characterCard.setWeapon(item);
@@ -32,14 +33,14 @@ public class UpdateCharacterCardListener implements ActionListener, ItemListener
                 return;
             case NOTES:_characterCard.setCharacterNotes(item);return;
             case SET_ONE:
-                if (item.equalsIgnoreCase(UNKNOWN_SET_MESSAGE)) {
+                if (item.equalsIgnoreCase(EMPTY_SET_SELECTOR)) {
                 _characterCard.setArtifactSet1("");
                 } else {
                 _characterCard.setArtifactSet1(item);
                 }
                 return;
             case SET_TWO:
-                if (item.equalsIgnoreCase(UNKNOWN_SET_MESSAGE)) {
+                if (item.equalsIgnoreCase(EMPTY_SET_SELECTOR)) {
                 _characterCard.setArtifactSet2("");
                 } else {
                 _characterCard.setArtifactSet2(item);

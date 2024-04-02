@@ -271,15 +271,6 @@ public class Program extends JFrame implements ActionListener {
         characterButton.setOpaque(false);
         characterButton.setBorderPainted(false);
         characterButton.setContentAreaFilled(false);
-        /*characterButton.addActionListener(e -> {
-            if (_openTabs.add(characterName)) {
-                JPanel characterPage = generateCharacterPage(characterName, characterIcon);
-                devTabbedPane.addTab(characterName, characterPage);
-                devTabbedPane.setSelectedComponent(characterPage);
-            } else {
-                devTabbedPane.setSelectedIndex(devTabbedPane.indexOfTab(characterName));
-            }
-        });*/
         return characterButton;
     }
 

@@ -22,7 +22,6 @@ import javax.swing.JTextPane;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -41,17 +40,16 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 public class ToolGUI extends JFrame {
-
+    public static final int MAX_CHARACTERS_PER_LINE = 15;
+    public static final int CHARACTER_LIMIT = 150;
     public static final String NO_CHARACTERS_MATCH_MESSAGE = "No fighters >:(";
     public static final String UNKNOWN_CHARACTER = "unknown_character";
-    public static final int MAX_CHARACTERS_PER_LINE = 15;
-    public static final String UNKNOWN_SET_MESSAGE = "[ Empty Set Selector ]";
+    public static final String UNKNOWN_WEAPON = "unknown_weapon";
+    public static final String UNKNOWN_ARTIFACT = "unknown_artifact";
+    public static final String EMPTY_WEAPON_SELECTOR = "[ Empty Weapon Selector ]";
+    public static final String EMPTY_SET_SELECTOR = "[ Empty Set Selector ]";
     public static final String FOUR_STAR_WEAPON_DELIMITER = "[ 4-Star Weapons ]";
     public static final String FIVE_STAR_WEAPON_DELIMITER = "[ 5-Star Weapons ]";
-    public static final String UNKNOWN_ARTIFACT = "unknown_artifact";
-    public static final String UNKNOWN_WEAPON_MESSAGE = "[ Empty Weapon Selector ]";
-    public static final String UNKNOWN_WEAPON_PATH = "./Files/Images/Weapons/unknown_weapon.png";
-    public static final int CHARACTER_LIMIT = 150;
     public static final String WEAPON_SAVE_FILE_NAME = "saved_weapons.json";
     private JPanel mainPanel;
     private JTabbedPane mainTabbedPane;
@@ -93,18 +91,26 @@ public class ToolGUI extends JFrame {
         changeFont(devLinakoLabel, AVAILABLE_FONTS.CREATOR_FONT, 18.0F);
         changeFont(devUpdatesTextPane, AVAILABLE_FONTS.TEXT_FONT, 12.0F);
         changeFont(devInfoTextPane, AVAILABLE_FONTS.TEXT_FONT, 12.0F);
-        devInfoTextPane.setText(
-                "This is a personal project to make our daily tasks a little bit more coordinated! Here's how to get started!\n" +
-                        "\n" + "-\uD83D\uDD38✨ Character Tab ✨\uD83D\uDD38-\n" + "\n" + "- Search by name or filter\n" +
-                        "- Fill in the desired information (2nd artifact set is optional).\n" +
-                        "- Checkboxes exist for characters to show up in the domains tab. Unchecking will hide a character from its chosen materials, making it easier to tell who still needs those materials. For example, if a character is done with its talents, you should uncheck the character.\n" +
-                        "- DON'T FORGET TO SAVE\n" + "\n" + "-\uD83D\uDD38✨ Weapon Tab ✨\uD83D\uDD38-\n" + "\n" +
-                        "- Search by name or filter.\n" +
-                        "- Only checkboxes appear. Checking a weapon will make it show up in farmed items in domains.\n" +
-                        "- If a weapon is already listed through a character, it will be marked as \"Already Farmed\".\n" +
-                        "\n" + "-\uD83D\uDD38✨ Domains Tab ✨\uD83D\uDD38-\n" + "\n" +
-                        "- Search by filter or day. Results will be shown for today by default.\n" +
-                        "- The chosen domain will show all characters/weapons checked in other tabs.");
+        devInfoTextPane.setText("""
+                This is a personal project to make our daily tasks a little bit more coordinated! Here's how to get started!
+
+                -\uD83D\uDD38✨ Character Tab ✨\uD83D\uDD38-
+
+                - Search by name or filter
+                - Fill in the desired information (2nd artifact set is optional).
+                - Checkboxes exist for characters to show up in the domains tab. Unchecking will hide a character from its chosen materials, making it easier to tell who still needs those materials. For example, if a character is done with its talents, you should uncheck the character.
+                - DON'T FORGET TO SAVE
+
+                -\uD83D\uDD38✨ Weapon Tab ✨\uD83D\uDD38-
+
+                - Search by name or filter.
+                - Only checkboxes appear. Checking a weapon will make it show up in farmed items in domains.
+                - If a weapon is already listed through a character, it will be marked as "Already Farmed".
+
+                -\uD83D\uDD38✨ Domains Tab ✨\uD83D\uDD38-
+
+                - Search by filter or day. Results will be shown for today by default.
+                - The chosen domain will show all characters/weapons checked in other tabs.""");
 
         addTab("Characters", _characterTabGUI.getMainPanel());
         addTab("Weapons", _weaponsTabGUI.getMainPanel());
@@ -181,7 +187,6 @@ public class ToolGUI extends JFrame {
             for (File savedCard : savedCards) {
                 JsonReader reader = new JsonReader(new FileReader(savedCard));
                 CharacterCard card = gson.fromJson(reader, CharacterCard.class);
-                card.setCharacterIcon();
                 generatedCharacterCards.add(card);
 
             }
@@ -304,18 +309,6 @@ public class ToolGUI extends JFrame {
         gson.toJson(farmedWeapons, fd);
         fd.flush();
         fd.close();
-    }
-
-    /**
-     * Sets the hardcoded font for the specified component.
-     *
-     * @param c component whose font is to be changed
-     */
-    public void setFont(Component c) {
-        Font font = $$$getFont$$$("Source Code Pro Black", Font.BOLD, 16, c.getFont());
-        if (font != null) {
-            c.setFont(font);
-        }
     }
 
     /**

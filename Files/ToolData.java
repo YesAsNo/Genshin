@@ -2,8 +2,7 @@ package Files;
 
 import static Files.ToolGUI.UNKNOWN_ARTIFACT;
 import static Files.ToolGUI.UNKNOWN_CHARACTER;
-import static Files.ToolGUI.UNKNOWN_WEAPON_MESSAGE;
-import static Files.ToolGUI.UNKNOWN_WEAPON_PATH;
+import static Files.ToolGUI.UNKNOWN_WEAPON;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -12,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import java.awt.Font;
 import java.awt.FontFormatException;
+import java.awt.Image;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -27,6 +27,7 @@ public class ToolData {
     private static Map<String,String> artifactSetDescriptions = new TreeMap<>();
     private static final Map<String,Font> fonts = new TreeMap<>();
     public static final String SAVE_LOCATION = "./UserData/";
+    private static final String UNKNOWN_WEAPON_PATH = "./Files/Images/Weapons/unknown_weapon.png";
     public static final Map<String, Boolean> PATHS_TO_DATA_FILES;
     static {
         PATHS_TO_DATA_FILES = new TreeMap<>();
@@ -194,11 +195,11 @@ public class ToolData {
      * @param resourceType the type of the resource
      * @return character icon path
      */
-    public static String generateResourceIconPath(String resourceName, RESOURCE_TYPE resourceType) {
+    private static String generateResourceIconPath(String resourceName, RESOURCE_TYPE resourceType) {
         assert resourceName != null;
         return switch (resourceType){
             case WEAPON_NAME -> {
-                if (resourceName.equalsIgnoreCase(UNKNOWN_WEAPON_MESSAGE))
+                if (resourceName.equalsIgnoreCase(UNKNOWN_WEAPON))
                 {
                     yield UNKNOWN_WEAPON_PATH;
                 }
@@ -304,18 +305,24 @@ public class ToolData {
                 parsedResourceIcons.get(data.stringToken).put(UNKNOWN_ARTIFACT,new ImageIcon(generateResourceIconPath(UNKNOWN_ARTIFACT,RESOURCE_TYPE.ARTIFACT_SET)));
             }
             else if (data == RESOURCE_TYPE.WEAPON_NAME){
-                parsedResourceIcons.get(data.stringToken).put(UNKNOWN_WEAPON_MESSAGE,new ImageIcon(generateResourceIconPath(UNKNOWN_WEAPON_MESSAGE,RESOURCE_TYPE.WEAPON_NAME)));
+                parsedResourceIcons.get(data.stringToken).put(UNKNOWN_WEAPON,new ImageIcon(generateResourceIconPath(UNKNOWN_WEAPON,RESOURCE_TYPE.WEAPON_NAME)));
             }
             else if (data == RESOURCE_TYPE.CHARACTER){
                 parsedResourceIcons.get(data.stringToken).put(UNKNOWN_CHARACTER,new ImageIcon(generateResourceIconPath(UNKNOWN_CHARACTER,RESOURCE_TYPE.CHARACTER)));
             }
             for (String set : getFlattenedData(data)){
-                parsedResourceIcons.get(data.stringToken).put(set,new ImageIcon(generateResourceIconPath(set,RESOURCE_TYPE.ARTIFACT_SET)));
+                parsedResourceIcons.get(data.stringToken).put(set,new ImageIcon(generateResourceIconPath(set,data)));
             }
         }
-        for (String val:parsedResourceIcons.keySet()){
-            System.out.println(val + " "+ parsedResourceIcons.get(val).size());
-        }
+    }
+    public static ImageIcon getResourceIcon(String resourceName, RESOURCE_TYPE rt){
+        assert getFlattenedData(rt).contains(resourceName);
+        return parsedResourceIcons.get(rt.stringToken).get(resourceName);
+    }
+    public static ImageIcon getResizedResourceIcon(String resourceName, RESOURCE_TYPE rt, int size){
+        assert getFlattenedData(rt).contains(resourceName);
+        ImageIcon originalIcon = getResourceIcon(resourceName,rt);
+        return new ImageIcon(originalIcon.getImage().getScaledInstance(size,size,Image.SCALE_SMOOTH));
     }
     public static void main(String[] args) throws Exception {
 

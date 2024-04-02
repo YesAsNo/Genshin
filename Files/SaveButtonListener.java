@@ -29,7 +29,7 @@ public class SaveButtonListener implements ActionListener {
         JButton saveButton = (JButton) e.getSource();
         saveButton.setEnabled(false);
         Gson gson = new Gson();
-        if (_characterCard.getWeapon().equalsIgnoreCase(ToolGUI.UNKNOWN_WEAPON_MESSAGE))
+        if (_characterCard.getWeapon().equalsIgnoreCase(ToolGUI.EMPTY_WEAPON_SELECTOR))
         {
             _characterCard.setWeapon("");
             _characterCard.setWeaponStatus(false);
@@ -42,7 +42,7 @@ public class SaveButtonListener implements ActionListener {
             parseWeaponsMap();
 
         }
-        if (_characterCard.getArtifactSet1().equalsIgnoreCase(ToolGUI.UNKNOWN_SET_MESSAGE))
+        if (_characterCard.getArtifactSet1().equalsIgnoreCase(ToolGUI.EMPTY_SET_SELECTOR))
         {
             _characterCard.setArtifactSet1("");
             _characterCard.setArtifactSet1Status(false);
@@ -53,7 +53,7 @@ public class SaveButtonListener implements ActionListener {
                     _characterCard.getCharacterName(),
                     _characterCard.getArtifactSet1Status());
         }
-        if (_characterCard.getArtifactSet2().equalsIgnoreCase(ToolGUI.UNKNOWN_SET_MESSAGE))
+        if (_characterCard.getArtifactSet2().equalsIgnoreCase(ToolGUI.EMPTY_SET_SELECTOR))
         {
             _characterCard.setArtifactSet2("");
             _characterCard.setArtifactSet2Status(false);

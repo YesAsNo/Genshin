@@ -3,9 +3,9 @@ package Files;
 import static Files.CharacterCardGUI.$$$getFont$$$;
 import static Files.DomainTabGUI.DOMAIN_FILTER_OPTIONS.ALL_OPTIONS_BY_ENUM;
 import static Files.DomainTabGUI.DOMAIN_FILTER_OPTIONS.ALL_OPTIONS_BY_STRING;
-import static Files.ToolData.generateResourceIconPath;
 import static Files.ToolData.getFlattenedData;
 import static Files.ToolData.getMapping;
+import static Files.ToolData.getResourceIcon;
 import static Files.ToolData.getWeaponMaterialForWeapon;
 import static Files.ToolData.knownMappings.ARTIDOMAIN_ARTISET;
 import static Files.ToolData.knownMappings.DAY_AVAILABLEMATS;
@@ -293,7 +293,7 @@ public class DomainTabGUI implements ActionListener {
         for (String materialName : domainMaterials){
 
             JLabel materialIconLabel = new JLabel();
-            ImageIcon materialIcon = new ImageIcon(generateResourceIconPath(materialName, getDomainResourceType(dt)));
+            ImageIcon materialIcon = getResourceIcon(materialName, getDomainResourceType(dt));
 
             if (dayFilter.equalsIgnoreCase(DAY_FILTER.SUNDAY_ALL.stringToken) ||getDomainResourceType(dt) == ToolData.RESOURCE_TYPE.WEEKLY_BOSS_MATERIAL
                     || getDomainResourceType(dt) == ToolData.RESOURCE_TYPE.ARTIFACT_SET || dayToAvailableMaterialsMapping.get(dayFilter).contains(materialName)) {

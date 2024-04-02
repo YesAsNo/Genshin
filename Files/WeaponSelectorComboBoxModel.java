@@ -1,13 +1,14 @@
 package Files;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JLabel;
 
-public class WeaponSelectorComboBoxModel extends DefaultComboBoxModel<iconLabel> {
+public class WeaponSelectorComboBoxModel extends DefaultComboBoxModel<JLabel> {
     public WeaponSelectorComboBoxModel() {}
     @Override
     public void setSelectedItem(Object item) {
-        if (((iconLabel) item).getText().equalsIgnoreCase(ToolGUI.FIVE_STAR_WEAPON_DELIMITER)
-        || (((iconLabel) item).getText().equalsIgnoreCase(ToolGUI.FOUR_STAR_WEAPON_DELIMITER)))
+        if (((JLabel) item).getText().equalsIgnoreCase(ToolGUI.FIVE_STAR_WEAPON_DELIMITER)
+        || (((JLabel) item).getText().equalsIgnoreCase(ToolGUI.FOUR_STAR_WEAPON_DELIMITER)))
         {
             return;
         }

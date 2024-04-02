@@ -1,9 +1,10 @@
 package Files;
 
 import static Files.ToolData.lookUpSetDescription;
-import static Files.ToolGUI.UNKNOWN_SET_MESSAGE;
+import static Files.ToolGUI.EMPTY_SET_SELECTOR;
 
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,10 +18,10 @@ public class UpdateTextAreaListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         assert e.getSource() instanceof JComboBox<?>;
         JComboBox<?> src = (JComboBox<?>) e.getSource();
-        assert src.getSelectedItem() instanceof iconLabel;
-        String item = ((iconLabel) src.getSelectedItem()).getText();
+        assert src.getSelectedItem() instanceof JLabel;
+        String item = ((JLabel) src.getSelectedItem()).getText();
         assert item != null;
-        if (!item.equalsIgnoreCase(UNKNOWN_SET_MESSAGE)) {
+        if (!item.equalsIgnoreCase(EMPTY_SET_SELECTOR)) {
             _textArea.setText(lookUpSetDescription(item));
         }
         else{

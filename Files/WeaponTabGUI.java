@@ -3,8 +3,8 @@ package Files;
 import static Files.ToolData.WEAPON_FILTER_OPTIONS.ALL_OPTIONS_BY_ENUM;
 import static Files.ToolData.WEAPON_FILTER_OPTIONS.ALL_OPTIONS_BY_STRING;
 import static Files.ToolData.WEAPON_FILTER_OPTIONS.NO_FILTER;
-import static Files.ToolData.generateResourceIconPath;
 import static Files.ToolData.getFlattenedData;
+import static Files.ToolData.getResourceIcon;
 import static Files.ToolData.getWeaponMaterialForWeapon;
 import static Files.ToolData.lookUpWeaponRarityAndType;
 import static Files.ToolGUI.UNKNOWN_CHARACTER;
@@ -19,7 +19,6 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -201,7 +200,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         JLabel devWeaponIcon = new JLabel();
         devWeaponIcon.setHorizontalAlignment(0);
         devWeaponIcon.setHorizontalTextPosition(0);
-        devWeaponIcon.setIcon(new ImageIcon(generateResourceIconPath(weaponName, ToolData.RESOURCE_TYPE.WEAPON_NAME)));
+        devWeaponIcon.setIcon(getResourceIcon(weaponName, ToolData.RESOURCE_TYPE.WEAPON_NAME));
         devWeaponIcon.setText(formatString(weaponName));
         devWeaponIcon.setVerticalAlignment(0);
         devWeaponIcon.setVerticalTextPosition(3);
@@ -229,8 +228,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         JLabel devWepMaterialPreview = new JLabel();
         devWepMaterialPreview.setHorizontalAlignment(0);
         devWepMaterialPreview.setHorizontalTextPosition(0);
-        devWepMaterialPreview.setIcon(new ImageIcon(
-                generateResourceIconPath(getWeaponMaterialForWeapon(weaponName), ToolData.RESOURCE_TYPE.WEAPON_MATERIAL)));
+        devWepMaterialPreview.setIcon(getResourceIcon(getWeaponMaterialForWeapon(weaponName), ToolData.RESOURCE_TYPE.WEAPON_MATERIAL));
         devWepMaterialPreview.setText("");
         devWepMaterialPreview.setVerticalAlignment(0);
         devWepMaterialPreview.setVerticalTextPosition(3);

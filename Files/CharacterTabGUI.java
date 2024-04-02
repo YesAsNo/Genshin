@@ -1,8 +1,8 @@
 package Files;
 
-import static Files.CharacterCardGUI.$$$getFont$$$;
-import static Files.ToolData.generateResourceIconPath;
+import static Files.ToolData.changeFont;
 import static Files.ToolData.getFlattenedData;
+import static Files.ToolData.getResourceIcon;
 import static Files.ToolGUI.NO_CHARACTERS_MATCH_MESSAGE;
 import static Files.ToolGUI.UNKNOWN_CHARACTER;
 import static Files.ToolGUI.checkIfCharacterCardHasBeenGenerated;
@@ -17,7 +17,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -39,10 +38,7 @@ public final class CharacterTabGUI implements ActionListener {
         mainPanel.setBackground(new Color(-1));
         mainPanel.setEnabled(true);
         mainPanel.setFocusCycleRoot(false);
-        Font characterTabFont = $$$getFont$$$(-1, -1, mainPanel.getFont());
-        if (characterTabFont != null) {
-            mainPanel.setFont(characterTabFont);
-        }
+        changeFont(mainPanel, ToolData.AVAILABLE_FONTS.REGULAR_FONT,15.0F);
         mainPanel.setOpaque(true);
         mainPanel.setRequestFocusEnabled(true);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -66,11 +62,7 @@ public final class CharacterTabGUI implements ActionListener {
 
         searchField.addMouseListener(new SearchBarListener());
         searchField.setEnabled(true);
-        Font characterSelectorFieldFont =
-                $$$getFont$$$(Font.BOLD, 18, searchField.getFont());
-        if (characterSelectorFieldFont != null) {
-            searchField.setFont(characterSelectorFieldFont);
-        }
+        changeFont(searchField, ToolData.AVAILABLE_FONTS.BLACK_FONT,18.0F);
         searchField.setInheritsPopupMenu(false);
         searchField.setMaximumSize(new Dimension(240, 33));
         searchField.setMinimumSize(new Dimension(240, 33));
@@ -95,7 +87,7 @@ public final class CharacterTabGUI implements ActionListener {
      */
     private void generateCharacterButton(String characterName, int index) {
         if (characterName.equalsIgnoreCase(UNKNOWN_CHARACTER)) {
-            JLabel unknownCharacterLabel = new JLabel(generateResourceIconPath(UNKNOWN_CHARACTER, ToolData.RESOURCE_TYPE.CHARACTER));
+            JLabel unknownCharacterLabel = new JLabel(getResourceIcon(characterName, ToolData.RESOURCE_TYPE.CHARACTER));
             unknownCharacterLabel.setText(NO_CHARACTERS_MATCH_MESSAGE);
             unknownCharacterLabel.setVerticalTextPosition(SwingConstants.BOTTOM);
             unknownCharacterLabel.setHorizontalTextPosition(SwingConstants.CENTER);
