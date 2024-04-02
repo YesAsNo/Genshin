@@ -286,7 +286,7 @@ public class DomainTabGUI implements ActionListener {
                     gbc.fill = GridBagConstraints.BOTH;
                     gbc.insets = new Insets(5, 100, 5, 100);
                     domainsPanelOverview.add(
-                            generateDomainCard(dt, domainName, domainMapping.get(domainName), dayFilter), gbc);
+                            generateDomainCard(dt, domainName, dayFilter), gbc);
                 }
             }
         }
@@ -306,14 +306,13 @@ public class DomainTabGUI implements ActionListener {
     }
 
     // DOMAIN CARD
-    private JPanel generateDomainCard(DOMAIN_THEME dt, String domainName, List<String> domainMaterials, String dayFilter){
+    private JPanel generateDomainCard(DOMAIN_THEME dt, String domainName, String dayFilter){
         JPanel domainCard = new JPanel(new GridBagLayout());
-        Map<String,ImageIcon>iconList = new TreeMap<>();
         domainCard.setBackground(new Color(dt.panelBackgroundColor));
         domainCard.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
                 TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         int i = 0;
-        for (String materialName : domainMaterials){
+        for (String materialName : getDomainMapping(dt).get(domainName)){
 
             JLabel materialIconLabel = new JLabel();
             ImageIcon materialIcon = getResourceIcon(materialName, getDomainResourceType(dt));
@@ -327,7 +326,6 @@ public class DomainTabGUI implements ActionListener {
                 materialIconLabel.setIcon(materialIcon);
             }
             materialIconLabel.setToolTipText(materialName);
-            iconList.put(materialName, materialIcon);
             materialIconLabel.setText("");
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.gridx = 2 + i;
@@ -400,7 +398,7 @@ public class DomainTabGUI implements ActionListener {
         domainCard.addMouseListener(new MouseInputAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                new DomainCardGUI(domainName,dt,iconList);
+                new DomainCardGUI(domainName,dt);
             }
         });
         return domainCard;
@@ -421,7 +419,7 @@ public class DomainTabGUI implements ActionListener {
             case ARTIFACT_DOMAIN_THEME -> ToolData.RESOURCE_TYPE.ARTIFACT_SET;
         };
     }
-    public static Map<String, List<String>> getDomainResourceTypeMapping(DOMAIN_THEME dt){
+    public static Map<String, List<String>> getDomainTargetResourceMapping(DOMAIN_THEME dt){
         return switch (dt){
             case WEAPON_MATERIAL_THEME -> getMapping(WEPMAT_WEPNAME);
             case TALENT_BOOK_THEME -> getMapping(TALENTBOOK_CHAR);
@@ -489,7 +487,6 @@ public class DomainTabGUI implements ActionListener {
                         counter++;
                     }
                 }
-                System.out.println(counter);
                 domainMaterialCategory = "weapons";
             }
             //TODO: Finish the remaining cases.
@@ -497,7 +494,6 @@ public class DomainTabGUI implements ActionListener {
                 Set<String> mapping = getFarmedMapping(ToolGUI.FARMED_DATATYPE.ARTIFACTS);
                 for (String setName : mapping){
                     if (getMapping(ARTIDOMAIN_ARTISET).get(domainName).contains(setName)){
-                        System.out.println("1234");
                         counter += howManyAreFarmingThis(setName,ARTIFACT_SET);
                     }
                 }

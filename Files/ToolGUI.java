@@ -254,7 +254,7 @@ public class ToolGUI extends JFrame {
         return counter;
     }
 
-    public static Set<String> whoAreFarmingThis(String mat, ToolData.RESOURCE_TYPE rt) {
+    public static Set<String> whoIsFarmingThis(String mat, ToolData.RESOURCE_TYPE rt) {
         Set<String> characterSet = new TreeSet<>();
         for (CharacterCard characterCard : generatedCharacterCards) {
             switch (rt) {
