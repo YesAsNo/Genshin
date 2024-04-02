@@ -1,12 +1,9 @@
 package Files;
 
+import static Files.ToolData.*;
 import static Files.ToolData.WEAPON_FILTER_OPTIONS.ALL_OPTIONS_BY_ENUM;
 import static Files.ToolData.WEAPON_FILTER_OPTIONS.ALL_OPTIONS_BY_STRING;
 import static Files.ToolData.WEAPON_FILTER_OPTIONS.NO_FILTER;
-import static Files.ToolData.getFlattenedData;
-import static Files.ToolData.getResourceIcon;
-import static Files.ToolData.getWeaponMaterialForWeapon;
-import static Files.ToolData.lookUpWeaponRarityAndType;
 import static Files.ToolGUI.UNKNOWN_CHARACTER;
 import static Files.ToolGUI.formatString;
 import static Files.ToolGUI.getFarmedMapping;
@@ -171,6 +168,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
 
         }
         showMatchedAmountLabel.setText("Matches: "+ matchedCount);
+        changeFont(showMatchedAmountLabel, AVAILABLE_FONTS.BLACK_FONT, 12);
     }
     private boolean inputMatchesFilters(String input, String weapon, ToolData.WEAPON_FILTER_OPTIONS filter,SearchFlag flag){
         if(weapon.toLowerCase().contains(input.toLowerCase()) &&
@@ -191,23 +189,29 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         return weaponsMap;
     }
     public JPanel generateWeaponCard(String weaponName) {
+
+        // WEAPON CARD PANEL
         JPanel devWeaponCard = new JPanel();
         devWeaponCard.setLayout(new GridLayoutManager(2, 2, new Insets(5, 5, 5, 5), -1, -1));
         devWeaponCard.setBackground(new Color(-1));
-
         devWeaponCard.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
                 TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+
+        // WEAPON ICON AND NAME
         JLabel devWeaponIcon = new JLabel();
         devWeaponIcon.setHorizontalAlignment(0);
         devWeaponIcon.setHorizontalTextPosition(0);
         devWeaponIcon.setIcon(getResourceIcon(weaponName, ToolData.RESOURCE_TYPE.WEAPON_NAME));
         devWeaponIcon.setText(formatString(weaponName));
+        changeFont(devWeaponIcon, AVAILABLE_FONTS.BLACK_FONT, 12);
         devWeaponIcon.setVerticalAlignment(0);
         devWeaponIcon.setVerticalTextPosition(3);
         devWeaponCard.add(devWeaponIcon,
                 new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
                         false));
+
+        // WEAPON LISTING CHECK BOX
         JCheckBox devWepMatListingCheckbox = new JCheckBox();
         devWepMatListingCheckbox.setBackground(new Color(-1));
         Map<String,Set<String>> mapping = getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS);
@@ -219,12 +223,14 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         } else {
             devWepMatListingCheckbox.setText("List Weapon?");
         }
+        changeFont(devWepMatListingCheckbox, AVAILABLE_FONTS.TEXT_FONT, 12);
         devWepMatListingCheckbox.addItemListener(new WeaponTabGUIListener(weaponName));
-
         devWeaponCard.add(devWepMatListingCheckbox,
                 new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                         GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+
+        // WEAPON MATERIAL PREVIEW ICON
         JLabel devWepMaterialPreview = new JLabel();
         devWepMaterialPreview.setHorizontalAlignment(0);
         devWepMaterialPreview.setHorizontalTextPosition(0);
@@ -236,8 +242,11 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
                 new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
                         false));
+
+        // WEAPON TYPE LABEL
         JLabel devWepTypeLabel = new JLabel();
         devWepTypeLabel.setText("Type: " + lookUpWeaponRarityAndType(weaponName).getWeaponType());
+        changeFont(devWepTypeLabel, AVAILABLE_FONTS.TEXT_FONT, 12);
         devWeaponCard.add(devWepTypeLabel,
                 new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
@@ -247,6 +256,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
 
     private void setUpWeaponsPanel() {
 
+        // WEAPON PANEL
         GridBagConstraints gbc = new GridBagConstraints();
         JPanel overviewPanel = new JPanel(new GridBagLayout());
         gbc.gridx = 0;
@@ -257,6 +267,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         gbc.fill = GridBagConstraints.BOTH;
         mainPanel.add(overviewPanel, gbc);
 
+        // SCROLL PANE
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -268,13 +279,14 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         devWeaponTabScrollPane.setViewportView(devWeaponTabScrollPanePanel);
         devWeaponTabScrollPane.updateUI();
 
+        // SEARCH BAR
         devWeaponsTabSearchbar.setEnabled(true);
-
         devWeaponsTabSearchbar.setInheritsPopupMenu(false);
         devWeaponsTabSearchbar.setMaximumSize(new Dimension(240, 33));
         devWeaponsTabSearchbar.setMinimumSize(new Dimension(240, 33));
         devWeaponsTabSearchbar.setPreferredSize(new Dimension(240, 33));
         devWeaponsTabSearchbar.setText("Search by name!");
+        changeFont(devWeaponsTabSearchbar, AVAILABLE_FONTS.BLACK_FONT, 18);
         devWeaponsTabSearchbar.addMouseListener(new SearchBarListener());
         gbc = new GridBagConstraints();
         gbc.gridx = 3;
@@ -282,6 +294,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         gbc.anchor = GridBagConstraints.EAST;
         mainPanel.add(devWeaponsTabSearchbar, gbc);
 
+        // SEARCH BUTTON
         devWeaponTabSearchButton.setMinimumSize(new Dimension(50, 30));
         devWeaponTabSearchButton.setPreferredSize(new Dimension(50, 30));
         devWeaponTabSearchButton.setText("✓");
@@ -292,10 +305,12 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         gbc.anchor = GridBagConstraints.WEST;
         mainPanel.add(devWeaponTabSearchButton, gbc);
 
+        // SAVE BUTTON
         devSaveAllWeapons.setBackground(new Color(-6039919));
         devSaveAllWeapons.setForeground(new Color(-394241));
         devSaveAllWeapons.setPreferredSize(new Dimension(100,30));
         devSaveAllWeapons.setText("SAVE");
+        changeFont(devSaveAllWeapons, AVAILABLE_FONTS.BLACK_FONT, 12);
         devSaveAllWeapons.addActionListener(this);
         gbc = new GridBagConstraints();
         gbc.gridx = 6;
@@ -305,6 +320,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         gbc.insets = new Insets(0, 20, 0, 5);
         mainPanel.add(devSaveAllWeapons, gbc);
 
+        // FILTER COMBO BOX
         devFilterComboBox.setBackground(new Color(-2702645));
         devFilterComboBox.setEnabled(true);
         final DefaultComboBoxModel<String> defaultComboBoxModel1 = new DefaultComboBoxModel<>();
@@ -312,7 +328,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         for (ToolData.WEAPON_FILTER_OPTIONS options : ALL_OPTIONS_BY_ENUM.keySet()) {
             defaultComboBoxModel1.addElement(options.stringToken);
         }
-
+        changeFont(devFilterComboBox, AVAILABLE_FONTS.BLACK_FONT, 12);
         devFilterComboBox.setModel(defaultComboBoxModel1);
         devFilterComboBox.addItemListener(this);
         gbc = new GridBagConstraints();
@@ -322,6 +338,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         gbc.insets = new Insets(0, 5, 0, 5);
         mainPanel.add(devFilterComboBox, gbc);
 
+        // SHOW UNLISTED/LISTED COMBO BOX
         showListedCheckBox.setBackground(new Color(-2702645));
         showListedCheckBox.setForeground(new Color(-15072759));
         showListedCheckBox.setText("Show listed ");
@@ -334,6 +351,8 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         showUnlistedCheckBox.setBackground(new Color(-2702645));
         showUnlistedCheckBox.setForeground(new Color(-15072759));
         showUnlistedCheckBox.setText("Show unlisted ");
+        changeFont(showListedCheckBox, AVAILABLE_FONTS.BLACK_FONT, 12);
+        changeFont(showUnlistedCheckBox, AVAILABLE_FONTS.BLACK_FONT, 12);
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 0;
