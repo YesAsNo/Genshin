@@ -120,8 +120,9 @@ public class ToolGUI extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(1000, 600);
         setLocationRelativeTo(null);
-        setVisible(true);
+        setIconImage(new ImageIcon("./Files/Images/Icons/Program_Icon.png").getImage());
         setResizable(false);
+        setVisible(true);
     }
 
     /**
