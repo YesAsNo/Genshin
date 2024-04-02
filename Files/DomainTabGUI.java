@@ -3,10 +3,7 @@ package Files;
 import static Files.CharacterCardGUI.$$$getFont$$$;
 import static Files.DomainTabGUI.DOMAIN_FILTER_OPTIONS.ALL_OPTIONS_BY_ENUM;
 import static Files.DomainTabGUI.DOMAIN_FILTER_OPTIONS.ALL_OPTIONS_BY_STRING;
-import static Files.ToolData.getFlattenedData;
-import static Files.ToolData.getMapping;
-import static Files.ToolData.getResourceIcon;
-import static Files.ToolData.getWeaponMaterialForWeapon;
+import static Files.ToolData.*;
 import static Files.ToolData.knownMappings.ARTIDOMAIN_ARTISET;
 import static Files.ToolData.knownMappings.DAY_AVAILABLEMATS;
 import static Files.ToolData.knownMappings.TALENTBOOK_CHAR;
@@ -146,9 +143,11 @@ public class DomainTabGUI implements ActionListener {
     }
     public DomainTabGUI() {
 
+        // SHOW UNLISTED (ALL) BUTTON
         showAllButton.setBackground(new Color(-2702645));
         showAllButton.setForeground(new Color(-13236722));
         showAllButton.setText("Show all ");
+        changeFont(showAllButton, AVAILABLE_FONTS.BLACK_FONT, 12);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -156,9 +155,11 @@ public class DomainTabGUI implements ActionListener {
         gbc.insets = new Insets(0, 130, 0, 0);
         domainTab.add(showAllButton, gbc);
 
+        // SHOW LISTED BUTTON
         showListedButton.setBackground(new Color(-2702645));
         showListedButton.setForeground(new Color(-13236722));
         showListedButton.setText("Show listed ");
+        changeFont(showListedButton, AVAILABLE_FONTS.BLACK_FONT, 12);
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 0;
@@ -166,6 +167,7 @@ public class DomainTabGUI implements ActionListener {
         gbc.insets = new Insets(0, 5, 0, 5);
         domainTab.add(showListedButton, gbc);
 
+        // FILTER COMBO BOX
         filterBox.setBackground(new Color(-2702645));
         filterBox.setEnabled(true);
         final DefaultComboBoxModel<String> filterBoxModel = new DefaultComboBoxModel<>();
@@ -178,8 +180,11 @@ public class DomainTabGUI implements ActionListener {
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new Insets(0, 5, 0, 5);
+        changeFont(filterBox, AVAILABLE_FONTS.BLACK_FONT, 12);
         domainTab.add(filterBox, gbc);
         domainTab.setBackground(new Color(-1));
+
+        // DAY FILTER BUTTONS
         NavigableSet<DAY_FILTER> dayFilters = DAY_FILTER.ALL_OPTIONS_BY_ENUM.navigableKeySet();
         Iterator<DAY_FILTER> i = dayFilters.iterator();
         int c = 0;
@@ -192,10 +197,12 @@ public class DomainTabGUI implements ActionListener {
                 button.setBackground(new Color(-5275240));
                 button.setForeground(new Color(-1));
                 button.setToolTipText("(It is today)");
+                changeFont(button, AVAILABLE_FONTS.BLACK_FONT, 12);
             }
             else{
                 button.setBackground(new Color(-2702645));
                 button.setForeground(new Color(-13236722));
+                changeFont(button, AVAILABLE_FONTS.BLACK_FONT, 12);
             }
             gbc = new GridBagConstraints();
             gbc.gridx = 3 + c;
@@ -205,6 +212,8 @@ public class DomainTabGUI implements ActionListener {
             c++;
             domainTab.add(button,gbc);
         }
+
+        // DOMAINS TAB PANEL
         JPanel devDomainsTabPanel = new JPanel();
         devDomainsTabPanel.setLayout(new GridBagLayout());
         gbc.gridx = 0;
@@ -231,6 +240,8 @@ public class DomainTabGUI implements ActionListener {
         showAllButton.addActionListener(this);
         showListedButton.addActionListener(this);
     }
+
+    // ALL DAYS FILTER BUTTON
     private String getDayFilter(){
         for (Enumeration<AbstractButton> it = bg_dayFilter.getElements(); it.hasMoreElements();){
             AbstractButton button = it.nextElement();
@@ -283,6 +294,8 @@ public class DomainTabGUI implements ActionListener {
         }
         return false;
     }
+
+    // DOMAIN CARD
     private JPanel generateDomainCard(DOMAIN_THEME dt, String domainName, List<String> domainMaterials, String dayFilter){
         JPanel domainCard = new JPanel(new GridBagLayout());
         Map<String,ImageIcon>iconList = new TreeMap<>();
@@ -314,6 +327,8 @@ public class DomainTabGUI implements ActionListener {
             domainCard.add(materialIconLabel, gbc);
             i++;
         }
+
+        // DOMAIN INFO PANEL
         JPanel domainInfoPanel = new JPanel();
         domainInfoPanel.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
         domainInfoPanel.setAlignmentX(0.5f);
@@ -327,6 +342,7 @@ public class DomainTabGUI implements ActionListener {
         gbc.fill = GridBagConstraints.BOTH;
         domainCard.add(domainInfoPanel, gbc);
         JLabel domainNameLabel = new JLabel();
+        changeFont(domainNameLabel, AVAILABLE_FONTS.BLACK_FONT, 12);
         Font domainNameLabelFont = $$$getFont$$$( Font.BOLD, 18, domainNameLabel.getFont());
         if (domainNameLabelFont != null) {
             domainNameLabel.setFont(domainNameLabelFont);
