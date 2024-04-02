@@ -279,6 +279,15 @@ public class ToolData {
         }
         return "";
     }
+    public static String getWeeklyBossMatForCharacter(String characterName){
+        Map<String, List<String>> mapping = getMapping(knownMappings.WEEKLYBOSSMAT_CHAR);
+        for (String key:mapping.keySet()){
+            if (mapping.get(key).contains(characterName)){
+                return key;
+            }
+        }
+        return "";
+    }
     private static void parseFonts(){
         final String address = "./Files/Fonts/";
         File fd = new File(address);

@@ -5,9 +5,9 @@ import static Files.ToolData.SAVE_LOCATION;
 import static Files.ToolData.changeFont;
 import static Files.ToolData.getResourceIcon;
 import static Files.ToolData.getTalentBookForCharacter;
+import static Files.ToolData.getWeeklyBossMatForCharacter;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -35,9 +35,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 public class ToolGUI extends JFrame {
@@ -67,9 +65,9 @@ public class ToolGUI extends JFrame {
     private JPanel devBasicInfoSpacer;
     private JTextPane devInfoTextPane;
     private JPanel welcomeTab;
-    private static final Map<String, Set<String>> farmedWeapons = new TreeMap<>();
-    public static final Map<String, Set<String>> farmedArtifacts = new TreeMap<>();
-    public static final Map<String, Set<String>> farmedTalents = new TreeMap<>();
+    private static final TreeSet<String> farmedWeapons = new TreeSet<>();
+    public static final TreeSet<String> farmedArtifacts = new TreeSet<>();
+    public static final TreeSet<String> farmedTalents = new TreeSet<>();
     private static final List<CharacterCard> generatedCharacterCards = new ArrayList<>();
     private static final CharacterTabGUI _characterTabGUI = new CharacterTabGUI();
     private static final WeaponTabGUI _weaponsTabGUI = new WeaponTabGUI();
@@ -132,10 +130,7 @@ public class ToolGUI extends JFrame {
         //Place custom component creation code here
         mainPanel = new JPanel();
         readGeneratedCharacterCards();
-        parseCharacterWeapons();
         parseFarmedWeapons();
-        parseCharacterArtifacts();
-        parseCharacterTalents();
     }
 
     private void parseFarmedWeapons() {
@@ -146,10 +141,9 @@ public class ToolGUI extends JFrame {
         }
         try {
             JsonReader reader = new JsonReader(new FileReader(f));
-            TreeMap<String, Set<String>> map = gson.fromJson(reader, new TypeToken<TreeMap<String, Set<String>>>() {
-            }.getClass());
+            Set<String> map = gson.fromJson(reader, farmedWeapons.getClass());
             if (map != null) {
-                farmedWeapons.putAll(map);
+                farmedWeapons.addAll(map);
             }
         } catch (IOException ex) {
             System.out.println("The weapon save file failed to parse.");
@@ -164,7 +158,7 @@ public class ToolGUI extends JFrame {
         generatedCharacterCards.add(characterCard);
     }
 
-    public static Map<String, Set<String>> getFarmedMapping(FARMED_DATATYPE fd) {
+    public static Set<String> getFarmedMapping(FARMED_DATATYPE fd) {
         assert fd != null;
         return switch (fd) {
             case WEAPONS -> farmedWeapons;
@@ -190,31 +184,22 @@ public class ToolGUI extends JFrame {
                 CharacterCard card = gson.fromJson(reader, CharacterCard.class);
                 card.setCharacterIcon(getResourceIcon(card.getCharacterName(), ToolData.RESOURCE_TYPE.CHARACTER));
                 generatedCharacterCards.add(card);
-
+                if (card.getTalentStatus()) {
+                    farmedTalents.add(getTalentBookForCharacter(card.getCharacterName()));
+                    farmedTalents.add(getWeeklyBossMatForCharacter(card.getCharacterName()));
+                }
+                if (!card.getArtifactSet1().isEmpty() && card.getArtifactSet1Status()) {
+                    farmedArtifacts.add(card.getArtifactSet1());
+                }
+                if (!card.getArtifactSet2().isEmpty() && card.getArtifactSet2Status()) {
+                    farmedArtifacts.add(card.getArtifactSet2());
+                }
             }
+
         } catch (IOException e) {
             System.out.println("Could not read saved character cards.");
         }
-    }
 
-    /**
-     * Parses character weapons.
-     */
-    private void parseCharacterWeapons() {
-        for (CharacterCard characterCard : generatedCharacterCards) {
-            String charWeapon = characterCard.getWeapon();
-            if (!charWeapon.isEmpty() && characterCard.getWeaponStatus()) {
-                Set<String> keys = farmedWeapons.keySet();
-                if (keys.contains(charWeapon)) {
-                    farmedWeapons.get(charWeapon).add(characterCard.getCharacterName());
-                } else {
-                    Set<String> chars = new TreeSet<>();
-                    chars.add(characterCard.getCharacterName());
-                    farmedWeapons.put(charWeapon, chars);
-                }
-            }
-        }
-        System.out.println(farmedWeapons);
     }
 
     public static boolean isSomeoneFarmingForTheWeapon(String weapon) {
@@ -229,88 +214,103 @@ public class ToolGUI extends JFrame {
         return false;
     }
 
-    /**
-     * Parses character artifacts.
-     */
-    private void parseCharacterArtifacts() {
-        for (CharacterCard characterCard : generatedCharacterCards) {
-            String charArtifactSet1 = characterCard.getArtifactSet1();
-            String charArtifactSet2 = characterCard.getArtifactSet2();
-            if (!charArtifactSet1.isEmpty() && characterCard.getArtifactSet1Status()) {
-                Set<String> keys = farmedArtifacts.keySet();
-                if (keys.contains(charArtifactSet1)) {
-                    farmedArtifacts.get(charArtifactSet1).add(characterCard.getCharacterName());
-                } else {
-                    Set<String> chars = new TreeSet<>();
-                    chars.add(characterCard.getCharacterName());
-                    farmedArtifacts.put(charArtifactSet1, chars);
-                }
-            }
-            if (!charArtifactSet2.isEmpty() && characterCard.getArtifactSet2Status()) {
-                Set<String> keys = farmedArtifacts.keySet();
-                if (keys.contains(charArtifactSet2)) {
-                    farmedArtifacts.get(charArtifactSet2).add(characterCard.getCharacterName());
-                } else {
-                    Set<String> chars = new TreeSet<>();
-                    chars.add(characterCard.getCharacterName());
-                    farmedArtifacts.put(charArtifactSet2, chars);
-                }
+    public static Set<String> getAllFarmedWeapons() {
+        Set<String> weapons = new TreeSet<>();
+        for (CharacterCard card : generatedCharacterCards) {
+            if (!card.getWeapon().isEmpty() && card.getWeaponStatus()) {
+                weapons.add(card.getWeapon());
             }
         }
-        System.out.println(farmedArtifacts);
+        weapons.addAll(farmedWeapons);
+        return weapons;
     }
 
-    private void parseCharacterTalents() {
+    public static int howManyAreFarmingThis(String mat, ToolData.RESOURCE_TYPE rt) {
+        int counter = 0;
         for (CharacterCard characterCard : generatedCharacterCards) {
-            if (characterCard.getTalentStatus()) {
-                String charTalent = getTalentBookForCharacter(characterCard.getCharacterName());
-                Set<String> keys = farmedTalents.keySet();
-                if (keys.contains(charTalent)) {
-                    farmedTalents.get(charTalent).add(characterCard.getCharacterName());
-                } else {
-                    Set<String> chars = new TreeSet<>();
-                    chars.add(characterCard.getCharacterName());
-                    farmedTalents.put(charTalent, chars);
+            switch (rt) {
+                case TALENT_BOOK -> {
+                    if (characterCard.getTalentStatus() &&
+                            getTalentBookForCharacter(characterCard.getCharacterName()).equalsIgnoreCase(mat)) {
+                        counter++;
+                    }
                 }
+                case WEEKLY_BOSS_MATERIAL -> {
+                    if (characterCard.getTalentStatus() &&
+                            getWeeklyBossMatForCharacter(characterCard.getCharacterName()).equalsIgnoreCase(mat)) {
+                        counter++;
+                    }
+                }
+                case ARTIFACT_SET -> {
+                    if ((characterCard.getArtifactSet1Status() &&
+                            characterCard.getArtifactSet1().equalsIgnoreCase(mat)) || characterCard.getArtifactSet2Status() &&
+                            characterCard.getArtifactSet2().equalsIgnoreCase(mat)) {
+                        counter++;
+                    }
+                }
+                default -> throw new IllegalArgumentException("RESOURCE TYPE INVALID: " + rt.stringToken);
             }
         }
+        return counter;
+    }
+
+    public static Set<String> whoAreFarmingThis(String mat, ToolData.RESOURCE_TYPE rt) {
+        Set<String> characterSet = new TreeSet<>();
+        for (CharacterCard characterCard : generatedCharacterCards) {
+            switch (rt) {
+                case TALENT_BOOK -> {
+                    if (characterCard.getTalentStatus() &&
+                            getTalentBookForCharacter(characterCard.getCharacterName()).equalsIgnoreCase(mat)) {
+                        characterSet.add(characterCard.getCharacterName());
+                    }
+                }
+                case WEEKLY_BOSS_MATERIAL -> {
+                    if (characterCard.getTalentStatus() &&
+                            getWeeklyBossMatForCharacter(characterCard.getCharacterName()).equalsIgnoreCase(mat)) {
+                        characterSet.add(characterCard.getCharacterName());
+                    }
+                }
+                case ARTIFACT_SET -> {
+                    if ((characterCard.getArtifactSet1Status() &&
+                            characterCard.getArtifactSet1().equalsIgnoreCase(mat)) || characterCard.getArtifactSet2Status() &&
+                            characterCard.getArtifactSet2().equalsIgnoreCase(mat)) {
+                        characterSet.add(characterCard.getCharacterName());
+                    }
+                }
+                default -> throw new IllegalArgumentException("RESOURCE TYPE INVALID: " + rt.stringToken);
+            }
+        }
+        return characterSet;
     }
 
     /**
      * Updates the farmed map.
      *
      * @param farmedMap The map to update
-     * @param itemName  The name of the item that is farmed.
-     * @param charName  The name of the character that farms the item.
+     * @param itemName The name of the item that is farmed.
      * @param isFarming Flag that designates whether the character has started (true) or stopped (false) farming the item.
      */
-    public static void updateFarmedItemMap(Map<String, Set<String>> farmedMap, String itemName, String charName,
-                                           boolean isFarming) {
-        if (farmedMap.containsKey(itemName)) {
-            Set<String> charactersFarmingSet = farmedMap.get(itemName);
-            if (isFarming) {
-                charactersFarmingSet.add(charName);
-            } else {
-                charactersFarmingSet.remove(charName);
-            }
+    public static void updateFarmedItemMap(Set<String> farmedMap, String itemName, boolean isFarming) {
+
+        if (isFarming) {
+            farmedMap.add(itemName);
         } else {
-            if (isFarming) {
-                Set<String> charactersFarmingSet = new TreeSet<>();
-                charactersFarmingSet.add(charName);
-                farmedMap.put(itemName, charactersFarmingSet);
-            }
+            farmedMap.remove(itemName);
         }
     }
 
-    public static void serializeSave() throws IOException {
+    public static void serializeSave() {
         Gson gson = new Gson();
         File f = new File(SAVE_LOCATION + WEAPON_SAVE_FILE_NAME);
-
-        f.createNewFile();
-        FileWriter fd = new FileWriter(f);
-        gson.toJson(farmedWeapons, fd);
-        fd.flush();
-        fd.close();
+        try {
+            f.createNewFile();
+            FileWriter fd = new FileWriter(f);
+            gson.toJson(farmedWeapons, fd);
+            fd.flush();
+            fd.close();
+        } catch (IOException e) {
+            System.out.println("Failed to save weapons, please try again");
+        }
     }
 
     /**
@@ -397,16 +397,28 @@ public class ToolGUI extends JFrame {
         mainPanel.setBackground(new Color(-2702645));
         mainPanel.setEnabled(true);
         final Spacer spacer1 = new Spacer();
-        mainPanel.add(spacer1, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        mainPanel.add(spacer1,
+                new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1,
+                        GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         mainInformationPanel = new JPanel();
         mainInformationPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         mainInformationPanel.setBackground(new Color(-3689540));
-        mainPanel.add(mainInformationPanel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        mainPanel.add(mainInformationPanel,
+                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null,
+                        0, false));
         mainTabbedPane = new JTabbedPane();
         Font mainTabbedPaneFont = this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 20, mainTabbedPane.getFont());
-        if (mainTabbedPaneFont != null) mainTabbedPane.setFont(mainTabbedPaneFont);
+        if (mainTabbedPaneFont != null) {
+            mainTabbedPane.setFont(mainTabbedPaneFont);
+        }
         mainTabbedPane.setTabPlacement(1);
-        mainInformationPanel.add(mainTabbedPane, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(200, 200), null, 0, false));
+        mainInformationPanel.add(mainTabbedPane,
+                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null,
+                        new Dimension(200, 200), null, 0, false));
         welcomeTab = new JPanel();
         welcomeTab.setLayout(new GridBagLayout());
         mainTabbedPane.addTab("Welcome!", welcomeTab);
@@ -431,45 +443,71 @@ public class ToolGUI extends JFrame {
         Welcome_Barbara = new JLabel();
         Welcome_Barbara.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Aesthetics/Barbara_Hello.gif")));
         Welcome_Barbara.setText("");
-        devBasicInfoLeftPanel.add(Welcome_Barbara, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_NORTHWEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        devBasicInfoLeftPanel.add(Welcome_Barbara,
+                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_NORTHWEST, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
+                        false));
         devUpdatesTextPane = new JTextPane();
         devUpdatesTextPane.setBackground(new Color(-465419));
         devUpdatesTextPane.setEditable(false);
         devUpdatesTextPane.setEnabled(true);
         devUpdatesTextPane.setFocusable(false);
         Font devUpdatesTextPaneFont = this.$$$getFont$$$(null, -1, -1, devUpdatesTextPane.getFont());
-        if (devUpdatesTextPaneFont != null) devUpdatesTextPane.setFont(devUpdatesTextPaneFont);
+        if (devUpdatesTextPaneFont != null) {
+            devUpdatesTextPane.setFont(devUpdatesTextPaneFont);
+        }
         devUpdatesTextPane.setForeground(new Color(-11071434));
         devUpdatesTextPane.setMargin(new Insets(30, 20, 10, 10));
         devUpdatesTextPane.setSelectionColor(new Color(-9555638));
         devUpdatesTextPane.setText("For future updates contact one of us. Make sure to keep your save file!");
-        devBasicInfoLeftPanel.add(devUpdatesTextPane, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
+        devBasicInfoLeftPanel.add(devUpdatesTextPane,
+                new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL,
+                        GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null,
+                        new Dimension(150, 50), null, 0, false));
         devCreatorsLabel = new JLabel();
         devCreatorsLabel.setBackground(new Color(-465419));
         Font devCreatorsLabelFont = this.$$$getFont$$$(null, -1, -1, devCreatorsLabel.getFont());
-        if (devCreatorsLabelFont != null) devCreatorsLabel.setFont(devCreatorsLabelFont);
+        if (devCreatorsLabelFont != null) {
+            devCreatorsLabel.setFont(devCreatorsLabelFont);
+        }
         devCreatorsLabel.setForeground(new Color(-11071434));
         devCreatorsLabel.setText(". * Creators * .");
-        devBasicInfoLeftPanel.add(devCreatorsLabel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        devBasicInfoLeftPanel.add(devCreatorsLabel,
+                new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
+                        false));
         devLinakoLabel = new JLabel();
         devLinakoLabel.setBackground(new Color(-465419));
         Font devLinakoLabelFont = this.$$$getFont$$$(null, -1, -1, devLinakoLabel.getFont());
-        if (devLinakoLabelFont != null) devLinakoLabel.setFont(devLinakoLabelFont);
+        if (devLinakoLabelFont != null) {
+            devLinakoLabel.setFont(devLinakoLabelFont);
+        }
         devLinakoLabel.setForeground(new Color(-11071434));
         devLinakoLabel.setText("Linako (yes.as.no)");
-        devBasicInfoLeftPanel.add(devLinakoLabel, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        devBasicInfoLeftPanel.add(devLinakoLabel,
+                new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
+                        false));
         devPrecisi0nLabel = new JLabel();
         devPrecisi0nLabel.setBackground(new Color(-465419));
         Font devPrecisi0nLabelFont = this.$$$getFont$$$(null, -1, -1, devPrecisi0nLabel.getFont());
-        if (devPrecisi0nLabelFont != null) devPrecisi0nLabel.setFont(devPrecisi0nLabelFont);
+        if (devPrecisi0nLabelFont != null) {
+            devPrecisi0nLabel.setFont(devPrecisi0nLabelFont);
+        }
         devPrecisi0nLabel.setForeground(new Color(-11071434));
         devPrecisi0nLabel.setText("precisi0n");
-        devBasicInfoLeftPanel.add(devPrecisi0nLabel, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        devBasicInfoLeftPanel.add(devPrecisi0nLabel,
+                new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
+                        false));
         devBasicInfoRightPanel = new JPanel();
         devBasicInfoRightPanel.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
         devBasicInfoRightPanel.setBackground(new Color(-465419));
-        Font devBasicInfoRightPanelFont = this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 22, devBasicInfoRightPanel.getFont());
-        if (devBasicInfoRightPanelFont != null) devBasicInfoRightPanel.setFont(devBasicInfoRightPanelFont);
+        Font devBasicInfoRightPanelFont =
+                this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 22, devBasicInfoRightPanel.getFont());
+        if (devBasicInfoRightPanelFont != null) {
+            devBasicInfoRightPanel.setFont(devBasicInfoRightPanelFont);
+        }
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 0;
@@ -480,31 +518,45 @@ public class ToolGUI extends JFrame {
         devWelcomeLabel = new JLabel();
         devWelcomeLabel.setBackground(new Color(-465419));
         Font devWelcomeLabelFont = this.$$$getFont$$$(null, -1, -1, devWelcomeLabel.getFont());
-        if (devWelcomeLabelFont != null) devWelcomeLabel.setFont(devWelcomeLabelFont);
+        if (devWelcomeLabelFont != null) {
+            devWelcomeLabel.setFont(devWelcomeLabelFont);
+        }
         devWelcomeLabel.setForeground(new Color(-11071434));
         devWelcomeLabel.setText("° . * Welcome to GDApp! * . °");
-        devBasicInfoRightPanel.add(devWelcomeLabel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        devBasicInfoRightPanel.add(devWelcomeLabel,
+                new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
+                        false));
         devBasicInfoSpacer = new JPanel();
         devBasicInfoSpacer.setLayout(new GridLayoutManager(1, 1, new Insets(20, 0, 0, 0), -1, -1));
         devBasicInfoSpacer.setBackground(new Color(-465419));
-        devBasicInfoRightPanel.add(devBasicInfoSpacer, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        devBasicInfoRightPanel.add(devBasicInfoSpacer,
+                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null,
+                        0, false));
         devInfoTextPane = new JTextPane();
         devInfoTextPane.setBackground(new Color(-465419));
         devInfoTextPane.setEditable(false);
         devInfoTextPane.setFocusable(false);
         Font devInfoTextPaneFont = this.$$$getFont$$$(null, -1, -1, devInfoTextPane.getFont());
-        if (devInfoTextPaneFont != null) devInfoTextPane.setFont(devInfoTextPaneFont);
+        if (devInfoTextPaneFont != null) {
+            devInfoTextPane.setFont(devInfoTextPaneFont);
+        }
         devInfoTextPane.setForeground(new Color(-11071434));
         devInfoTextPane.setMargin(new Insets(30, 20, 10, 10));
         devInfoTextPane.setText("");
-        devBasicInfoRightPanel.add(devInfoTextPane, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
+        devBasicInfoRightPanel.add(devInfoTextPane,
+                new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                        GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null,
+                        new Dimension(150, 50), null, 0, false));
     }
 
-    /**
-     * @noinspection ALL
-     */
+    /** @noinspection ALL */
     private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
-        if (currentFont == null) return null;
+        if (currentFont == null) {
+            return null;
+        }
         String resultName;
         if (fontName == null) {
             resultName = currentFont.getName();
@@ -516,15 +568,15 @@ public class ToolGUI extends JFrame {
                 resultName = currentFont.getName();
             }
         }
-        Font font = new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
+        Font font = new Font(resultName, style >= 0 ? style : currentFont.getStyle(),
+                size >= 0 ? size : currentFont.getSize());
         boolean isMac = System.getProperty("os.name", "").toLowerCase(Locale.ENGLISH).startsWith("mac");
-        Font fontWithFallback = isMac ? new Font(font.getFamily(), font.getStyle(), font.getSize()) : new StyleContext().getFont(font.getFamily(), font.getStyle(), font.getSize());
+        Font fontWithFallback = isMac ? new Font(font.getFamily(), font.getStyle(), font.getSize()) :
+                new StyleContext().getFont(font.getFamily(), font.getStyle(), font.getSize());
         return fontWithFallback instanceof FontUIResource ? fontWithFallback : new FontUIResource(fontWithFallback);
     }
 
-    /**
-     * @noinspection ALL
-     */
+    /** @noinspection ALL */
     public JComponent $$$getRootComponent$$$() {
         return mainPanel;
     }

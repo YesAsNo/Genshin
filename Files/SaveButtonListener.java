@@ -35,12 +35,7 @@ public class SaveButtonListener implements ActionListener {
             _characterCard.setWeaponStatus(false);
         }
         else{
-            updateFarmedItemMap(getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS),
-                    _characterCard.getWeapon(),
-                    _characterCard.getCharacterName(),
-                    _characterCard.getWeaponStatus());
             parseWeaponsMap();
-
         }
         if (_characterCard.getArtifactSet1().equalsIgnoreCase(ToolGUI.EMPTY_SET_SELECTOR))
         {
@@ -50,7 +45,6 @@ public class SaveButtonListener implements ActionListener {
         else{
             updateFarmedItemMap(getFarmedMapping(ToolGUI.FARMED_DATATYPE.ARTIFACTS),
                     _characterCard.getArtifactSet1(),
-                    _characterCard.getCharacterName(),
                     _characterCard.getArtifactSet1Status());
         }
         if (_characterCard.getArtifactSet2().equalsIgnoreCase(ToolGUI.EMPTY_SET_SELECTOR))
@@ -61,12 +55,11 @@ public class SaveButtonListener implements ActionListener {
         else{
             updateFarmedItemMap(getFarmedMapping(ToolGUI.FARMED_DATATYPE.ARTIFACTS),
                     _characterCard.getArtifactSet2(),
-                    _characterCard.getCharacterName(),
                     _characterCard.getArtifactSet2Status());
         }
         if (_characterCard.getTalentStatus()){
             updateFarmedItemMap(getFarmedMapping(ToolGUI.FARMED_DATATYPE.TALENTS),
-                    getTalentBookForCharacter(_characterCard.getCharacterName()),_characterCard.getCharacterName(),true);
+                    getTalentBookForCharacter(_characterCard.getCharacterName()),true);
         }
 
         File f = new File(SAVE_LOCATION + _characterCard.getCharacterName());

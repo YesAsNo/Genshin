@@ -51,8 +51,9 @@ public class DomainCardGUI extends JFrame {
 
     private JPanel generateDomainCard(){
         Map<String, List<String>> mapping = getDomainResourceTypeMapping(domainTheme);
-        Map<String, Set<String>> farmedMapping = getDomainFarmedMapping(domainTheme);
+        Set<String> farmedMapping = getDomainFarmedMapping(domainTheme);
         JScrollPane mainPanelScrollPane = new JScrollPane();
+        System.out.println(farmedMapping);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -159,12 +160,16 @@ public class DomainCardGUI extends JFrame {
                 gbc.fill = GridBagConstraints.BOTH;
                 dayTab.add(innerUnlistedPanel, gbc);
             }
+
             int i = 0;
             int k = 0;
-            if (domainTheme != DomainTabGUI.DOMAIN_THEME.ARTIFACT_DOMAIN_THEME){
+            if (domainTheme != DomainTabGUI.DOMAIN_THEME.ARTIFACT_DOMAIN_THEME)
+            {
 
                 for(String farmedTargetItem : mapping.get(domainMat)) {
-                    if (farmedMapping.containsKey(farmedTargetItem) && !farmedMapping.get(farmedTargetItem).isEmpty()){
+                    System.out.println(farmedTargetItem);
+
+                    if (farmedMapping.contains(farmedTargetItem)){
                         generateDomainItemLabel(farmedTargetItem,k,innerListedPanel);
                         k++;
                     }
@@ -176,9 +181,9 @@ public class DomainCardGUI extends JFrame {
                 }
             }
             else{
-                if (farmedMapping.containsKey(domainMat)) {
-                    for (String farmedTargetItem : farmedMapping.get(domainMat)) {
-                        generateDomainItemLabel(farmedTargetItem, i, innerListedPanel).setIcon(getResourceIcon(farmedTargetItem,getDomainTargetResourceType(domainTheme)));
+                if (farmedMapping.contains(domainMat)) {
+                    for (String farmedTargetItem : farmedMapping) {
+                        generateDomainItemLabel(farmedTargetItem, i, innerListedPanel);
                         i++;
                     }
                 }
@@ -197,7 +202,7 @@ public class DomainCardGUI extends JFrame {
         titlePanel.add(new JLabel(getAllCounterLabel(domainName,getDomainResourceType(domainTheme))), gbc);
         return mainPanel;
     }
-    private JLabel generateDomainItemLabel(String item, int index,JPanel panel){
+    private void generateDomainItemLabel(String item, int index,JPanel panel){
         JLabel domainItemLabel = new JLabel();
         domainItemLabel.setHorizontalAlignment(0);
         domainItemLabel.setHorizontalTextPosition(0);
@@ -210,6 +215,5 @@ public class DomainCardGUI extends JFrame {
         gbc.insets = new Insets(0, 20, 0, 20);
         domainItemLabel.setIcon(getResourceIcon(item,getDomainTargetResourceType(domainTheme)));
         panel.add(domainItemLabel, gbc);
-        return domainItemLabel;
     }
 }
