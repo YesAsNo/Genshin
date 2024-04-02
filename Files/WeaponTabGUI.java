@@ -282,8 +282,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         gbc.anchor = GridBagConstraints.EAST;
         mainPanel.add(devWeaponsTabSearchbar, gbc);
 
-        devWeaponTabSearchButton.setMaximumSize(new Dimension(30, 30));
-        devWeaponTabSearchButton.setMinimumSize(new Dimension(30, 30));
+        devWeaponTabSearchButton.setMinimumSize(new Dimension(50, 30));
         devWeaponTabSearchButton.setPreferredSize(new Dimension(50, 30));
         devWeaponTabSearchButton.setText("✓");
         devWeaponTabSearchButton.addActionListener(this);
@@ -295,13 +294,14 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
 
         devSaveAllWeapons.setBackground(new Color(-6039919));
         devSaveAllWeapons.setForeground(new Color(-394241));
+        devSaveAllWeapons.setPreferredSize(new Dimension(100,30));
         devSaveAllWeapons.setText("SAVE");
         devSaveAllWeapons.addActionListener(this);
         gbc = new GridBagConstraints();
         gbc.gridx = 6;
         gbc.gridy = 0;
         gbc.weightx = 1.0;
-        gbc.anchor = GridBagConstraints.WEST;
+        gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new Insets(0, 20, 0, 5);
         mainPanel.add(devSaveAllWeapons, gbc);
 
@@ -314,6 +314,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         }
 
         devFilterComboBox.setModel(defaultComboBoxModel1);
+        devFilterComboBox.addItemListener(this);
         gbc = new GridBagConstraints();
         gbc.gridx = 2;
         gbc.gridy = 0;

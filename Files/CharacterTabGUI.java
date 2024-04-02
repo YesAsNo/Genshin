@@ -49,8 +49,7 @@ public final class CharacterTabGUI implements ActionListener {
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         mainPanel.add(searchResultPanel, gbc);
-        searchConfirmButton.setMaximumSize(new Dimension(30, 30));
-        searchConfirmButton.setMinimumSize(new Dimension(30, 30));
+        searchConfirmButton.setMinimumSize(new Dimension(50, 30));
         searchConfirmButton.setPreferredSize(new Dimension(50, 30));
         searchConfirmButton.setText("✓");
         searchConfirmButton.addActionListener(this);
