@@ -3,6 +3,7 @@ package Files;
 import static Files.ToolData.AVAILABLE_FONTS;
 import static Files.ToolData.SAVE_LOCATION;
 import static Files.ToolData.changeFont;
+import static Files.ToolData.getResourceIcon;
 import static Files.ToolData.getTalentBookForCharacter;
 
 import com.google.gson.Gson;
@@ -81,7 +82,6 @@ public class ToolGUI extends JFrame {
     /**
      * Constructor of the GUI class.
      */
-
     public ToolGUI() {
         $$$setupUI$$$();
         changeFont(mainTabbedPane, AVAILABLE_FONTS.HEADER_FONT, 20.0F);
@@ -187,6 +187,7 @@ public class ToolGUI extends JFrame {
             for (File savedCard : savedCards) {
                 JsonReader reader = new JsonReader(new FileReader(savedCard));
                 CharacterCard card = gson.fromJson(reader, CharacterCard.class);
+                card.setCharacterIcon(getResourceIcon(card.getCharacterName(), ToolData.RESOURCE_TYPE.CHARACTER));
                 generatedCharacterCards.add(card);
 
             }

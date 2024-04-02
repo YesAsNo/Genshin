@@ -1,13 +1,13 @@
 package Files;
 
+import static Files.ToolData.RESOURCE_TYPE.CHARACTER;
 import static Files.ToolData.getResourceIcon;
 
-import javax.swing.Icon;
-
+import javax.swing.ImageIcon;
 public class CharacterCard {
 
     private final String characterName;
-    private final transient Icon characterIcon;
+    private transient ImageIcon characterIcon;
     private String characterNotes;
     private String weapon;
     private boolean weaponStatus;
@@ -21,7 +21,7 @@ public class CharacterCard {
     public CharacterCard(String character_name) {
         assert character_name != null;
         this.characterName = character_name;
-        this.characterIcon = getResourceIcon(characterName, ToolData.RESOURCE_TYPE.CHARACTER);
+        this.characterIcon = getResourceIcon(characterName,CHARACTER);
         characterNotes="";
         weapon="";
         weaponStatus =false;
@@ -33,10 +33,15 @@ public class CharacterCard {
 
     }
     // Character Name
+    public void setCharacterIcon(ImageIcon icon){
+        if(characterIcon == null){
+            characterIcon = icon;
+        }
+    }
     public String getCharacterName() {
         return characterName;
     }
-    public Icon getCharacterIcon(){return characterIcon;}
+    public ImageIcon getCharacterIcon(){return characterIcon;}
 
     // Character Notes
     public String getCharacterNotes() {

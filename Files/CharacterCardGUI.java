@@ -41,22 +41,20 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 public class CharacterCardGUI extends JFrame {
-    private final Map<String, JLabel> weaponLabels = new LinkedHashMap<>();
-    private final Map<String, JLabel> artifactLabels = new LinkedHashMap<>();
     public CharacterCardGUI(CharacterCard characterCard){
         setTitle(characterCard.getCharacterName() + " Character Overview");
         setContentPane(generateCharacterPage(characterCard));
         setDefaultCloseOperation(HIDE_ON_CLOSE);
         setSize(1000, 600);
         setLocationRelativeTo(null);
-        setVisible(true);
         setResizable(false);
+        setIconImage(characterCard.getCharacterIcon().getImage());
+        setVisible(true);
+
 
     }
     /**
@@ -70,7 +68,7 @@ public class CharacterCardGUI extends JFrame {
         label.setText(EMPTY_WEAPON_SELECTOR);
         ImageIcon default_img = getResizedResourceIcon(UNKNOWN_WEAPON,RESOURCE_TYPE.WEAPON_NAME,20);
         label.setIcon(default_img);
-        weaponLabels.put(EMPTY_WEAPON_SELECTOR,label);
+        dcmb.addElement(label);
         for (ToolData.WEAPON_RARITY rarity: ToolData.WEAPON_RARITY.values()){
             String weaponType = lookUpWeaponCategoryForCharacter(charName);
             label = new JLabel();
@@ -79,17 +77,16 @@ public class CharacterCardGUI extends JFrame {
                 case FOUR_STAR -> label.setText(FOUR_STAR_WEAPON_DELIMITER);
             }
             label.setIcon(default_img);
-            weaponLabels.put(label.getText(),label);
+            dcmb.addElement(label);
             List<String> weapons = lookUpWeapons(rarity, weaponType);
             Collections.sort(weapons);
             for (String weapon: weapons){
                 label = new JLabel();
                 label.setIcon(getResizedResourceIcon(weapon,RESOURCE_TYPE.WEAPON_NAME,20));
                 label.setText(weapon);
-                weaponLabels.put(weapon,label);
+                dcmb.addElement(label);
             }
         }
-        dcmb.addAll(weaponLabels.values());
     }
     private JPanel getMiddleSelectorPanel(JPanel jpanel) {
         JPanel middleSelectorPanel = new JPanel();
@@ -136,8 +133,7 @@ public class CharacterCardGUI extends JFrame {
         addAllowedWeapons(weaponSelectorComboBoxModel, characterCard.getCharacterName());
         weaponSelectionBox.setModel(weaponSelectorComboBoxModel);
         weaponSelectionBox.setRenderer(new ComboBoxRenderer());
-        weaponSelectionBox.setSelectedItem(characterCard.getWeapon().isEmpty() ? weaponLabels.get(EMPTY_WEAPON_SELECTOR):
-                weaponLabels.get(characterCard.getWeapon()));
+        setSelection(weaponSelectionBox,characterCard.getWeapon());
         jpanel.add(weaponSelectionBox,
                 new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW,
@@ -179,28 +175,40 @@ public class CharacterCardGUI extends JFrame {
         JLabel label = new JLabel();
         label.setText(EMPTY_SET_SELECTOR);
         label.setIcon(getResizedResourceIcon(UNKNOWN_ARTIFACT,RESOURCE_TYPE.ARTIFACT_SET,20));
-        artifactLabels.put(UNKNOWN_ARTIFACT,label);
         setComboBoxModel.addElement(label);
         for (String artifactName: getFlattenedData(RESOURCE_TYPE.ARTIFACT_SET)){
             label = new JLabel();
             label.setText(artifactName);
             label.setIcon(getResizedResourceIcon(artifactName,RESOURCE_TYPE.ARTIFACT_SET,20));
-            artifactLabels.put(artifactName,label);
             setComboBoxModel.addElement(label);
         }
         setComboBox.setModel(setComboBoxModel);
         setComboBox.setRenderer(new ComboBoxRenderer());
         if (dataField == ToolData.CHARACTER_CARD_DATA_FIELD.SET_ONE){
-            setComboBox.setSelectedItem(
-                    characterCard.getArtifactSet1().isEmpty() ? artifactLabels.get(UNKNOWN_ARTIFACT) : artifactLabels.get(characterCard.getArtifactSet1()));
+            setSelection(setComboBox,characterCard.getArtifactSet1());
         }
         if (dataField == ToolData.CHARACTER_CARD_DATA_FIELD.SET_TWO){
-            setComboBox.setSelectedItem(
-                    characterCard.getArtifactSet2().isEmpty() ? artifactLabels.get(UNKNOWN_ARTIFACT) : artifactLabels.get(characterCard.getArtifactSet2()));
+            setSelection(setComboBox,characterCard.getArtifactSet2());
         }
 
         jpanel.add(setComboBox, gc);
         return setComboBox;
+    }
+    private void setSelection(JComboBox<JLabel> comboBox, String selectedItemName){
+        if (selectedItemName == null || selectedItemName.isEmpty()){
+            comboBox.setSelectedIndex(0);
+            return;
+        }
+        boolean found = false;
+        for (int i = 0; i < comboBox.getItemCount(); i++){
+            if (comboBox.getItemAt(i).getText().equalsIgnoreCase(selectedItemName)){
+                found = true;
+                comboBox.setSelectedIndex(i);
+            }
+        }
+        if (!found){
+            comboBox.setSelectedIndex(0);
+        }
     }
     private void generateSpacer(JPanel jpanel, GridLayoutManager gridLayoutManager, GridConstraints gridConstraints) {
         JPanel characterWeaponSpacer = new JPanel();
@@ -240,11 +248,10 @@ public class CharacterCardGUI extends JFrame {
         jpanel.add(charLabel, gbc);
     }
 
-    private javax.swing.JLabel getSetIcon(CharacterCard characterCard, JPanel jpanel, GridBagConstraints gbc) {
-        javax.swing.JLabel setIcon = new javax.swing.JLabel();
+    private JLabel getSetIcon(String savedArtifactSetName, JPanel jpanel, GridBagConstraints gbc) {
+        JLabel setIcon = new JLabel();
         setIcon.setHorizontalAlignment(4);
         setIcon.setHorizontalTextPosition(4);
-        String savedArtifactSetName = characterCard.getArtifactSet1();
         if (savedArtifactSetName.isEmpty()) {
             setIcon.setIcon(getResourceIcon(UNKNOWN_ARTIFACT,RESOURCE_TYPE.ARTIFACT_SET));
         } else {
@@ -427,9 +434,9 @@ public class CharacterCardGUI extends JFrame {
         gbc.weightx = 0.5;
         gbc.anchor = GridBagConstraints.NORTHEAST;
         gbc.insets = new Insets(5, 0, 0, 20);
-        javax.swing.JLabel set1Icon = getSetIcon(characterCard, templateTab, gbc);
+        javax.swing.JLabel set1Icon = getSetIcon(characterCard.getArtifactSet1(), templateTab, gbc);
         gbc.gridy ++;
-        javax.swing.JLabel set2Icon = getSetIcon(characterCard, templateTab, gbc);
+        javax.swing.JLabel set2Icon = getSetIcon(characterCard.getArtifactSet2(), templateTab, gbc);
 
         JPanel checkboxAndButtonPanel = getRightPanel(templateTab);
         JCheckBox artifactSet1ListingCheckBox = getListingCheckBox(characterCard, middleSelectorPanel,"Artifact Listing",

@@ -44,6 +44,7 @@ public class DomainCardGUI extends JFrame {
         setDefaultCloseOperation(HIDE_ON_CLOSE);
         setSize(1000, 600);
         setLocationRelativeTo(null);
+        setIconImage(new ImageIcon("./Files/Images/Icons/Emblem_Domains_pink.png").getImage());
         setVisible(true);
         setResizable(false);
     }
@@ -124,7 +125,7 @@ public class DomainCardGUI extends JFrame {
             gbc.gridx = 0;
             gbc.gridy = 0;
             gbc.weightx = 1.0;
-            gbc.weighty = 0.01;
+            gbc.weighty = 0.1;
             gbc.anchor = GridBagConstraints.NORTH;
             dayTab.add(listedWeaponHeadline, gbc);
 
@@ -163,14 +164,12 @@ public class DomainCardGUI extends JFrame {
             if (domainTheme != DomainTabGUI.DOMAIN_THEME.ARTIFACT_DOMAIN_THEME){
 
                 for(String farmedTargetItem : mapping.get(domainMat)) {
-                    //Todo: add setIcon into the generate method.
                     if (farmedMapping.containsKey(farmedTargetItem) && !farmedMapping.get(farmedTargetItem).isEmpty()){
-                        generateDomainItemLabel(farmedTargetItem,k,innerListedPanel).setIcon(getResourceIcon(farmedTargetItem,getDomainTargetResourceType(domainTheme)));
+                        generateDomainItemLabel(farmedTargetItem,k,innerListedPanel);
                         k++;
                     }
                     else{
-                        generateDomainItemLabel(farmedTargetItem,i,innerUnlistedPanel).setIcon(
-                                getResourceIcon(farmedTargetItem,getDomainTargetResourceType(domainTheme)));
+                        generateDomainItemLabel(farmedTargetItem,i,innerUnlistedPanel);
                         i++;
                     }
 
@@ -209,6 +208,7 @@ public class DomainCardGUI extends JFrame {
         gbc.gridx = index % 4;
         gbc.gridy = index / 4;
         gbc.insets = new Insets(0, 20, 0, 20);
+        domainItemLabel.setIcon(getResourceIcon(item,getDomainTargetResourceType(domainTheme)));
         panel.add(domainItemLabel, gbc);
         return domainItemLabel;
     }
