@@ -479,7 +479,7 @@ public class Program extends JFrame implements ActionListener {
         gbc.insets = new Insets(0, 5, 0, 0);
         devCharacterTab.add(devSearchField, gbc);
         final JComboBox comboBox1 = new JComboBox();
-        comboBox1.setBackground(new Color(-2702645));
+        comboBox1.setBackground(new Color(-2702646));
         comboBox1.setEnabled(true);
         Font comboBox1Font = this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, -1, comboBox1.getFont());
         if (comboBox1Font != null) comboBox1.setFont(comboBox1Font);
@@ -1371,6 +1371,7 @@ public class Program extends JFrame implements ActionListener {
         gbc.gridy = 0;
         gbc.weightx = 1.0;
         gbc.anchor = GridBagConstraints.NORTH;
+        gbc.insets = new Insets(0, 0, 3, 0);
         titlePanel.add(domainNameLabel, gbc);
         itemOverviewPanel = new JPanel();
         itemOverviewPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
@@ -1569,6 +1570,7 @@ public class Program extends JFrame implements ActionListener {
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.weightx = 1.0;
+        gbc.insets = new Insets(0, 0, 5, 0);
         titlePanel.add(allWeaponCounterLabel, gbc);
     }
 

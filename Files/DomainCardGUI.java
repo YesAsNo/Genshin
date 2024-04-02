@@ -6,6 +6,7 @@ import static Files.DomainTabGUI.getDomainResourceType;
 import static Files.DomainTabGUI.getDomainResourceTypeMapping;
 import static Files.DomainTabGUI.getDomainTargetResourceType;
 import static Files.DomainTabGUI.getListedCounterLabel;
+import static Files.ToolData.changeFont;
 import static Files.ToolData.getResourceIcon;
 
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -48,7 +49,7 @@ public class DomainCardGUI extends JFrame {
         setVisible(true);
         setResizable(false);
     }
-
+    // DOMAIN WINDOW
     private JPanel generateDomainCard(){
         Map<String, List<String>> mapping = getDomainResourceTypeMapping(domainTheme);
         Map<String, Set<String>> farmedMapping = getDomainFarmedMapping(domainTheme);
@@ -64,6 +65,8 @@ public class DomainCardGUI extends JFrame {
         mainScrollPaneViewport.setLayout(new GridBagLayout());
         mainScrollPaneViewport.setBackground(new Color(-465419));
         mainPanelScrollPane.setViewportView(mainScrollPaneViewport);
+
+        // TITLE PANEL
         JPanel titlePanel = new JPanel();
         titlePanel.setLayout(new GridBagLayout());
         titlePanel.setBackground(new Color(domainTheme.panelBackgroundColor));
@@ -77,15 +80,20 @@ public class DomainCardGUI extends JFrame {
         mainScrollPaneViewport.add(titlePanel, gbc);
         titlePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
                 TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+
+        // DOMAIN NAME
         JLabel domainNameLabel = new JLabel();
         domainNameLabel.setForeground(new Color(domainTheme.panelForegroundColor));
         domainNameLabel.setText(domainName);
+        changeFont(domainNameLabel, ToolData.AVAILABLE_FONTS.HEADER_FONT, 20);
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 1.0;
         gbc.anchor = GridBagConstraints.NORTH;
         titlePanel.add(domainNameLabel, gbc);
+
+        // OVERVIEW PANEL
         JPanel itemOverviewPanel = new JPanel();
         itemOverviewPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         itemOverviewPanel.setBackground(new Color(domainTheme.panelBackgroundColor));
@@ -120,6 +128,7 @@ public class DomainCardGUI extends JFrame {
             else{
                 listedWeaponHeadline.setText("Listed characters");
             }
+            changeFont(listedWeaponHeadline, ToolData.AVAILABLE_FONTS.HEADER_FONT, 15);
 
             gbc = new GridBagConstraints();
             gbc.gridx = 0;
@@ -144,6 +153,7 @@ public class DomainCardGUI extends JFrame {
                 } else {
                     unlistedWeaponHeadline.setText("Other Characters");
                 }
+                changeFont(unlistedWeaponHeadline, ToolData.AVAILABLE_FONTS.HEADER_FONT, 15);
                 gbc = new GridBagConstraints();
                 gbc.gridx = 0;
                 gbc.gridy = 2;
@@ -185,23 +195,32 @@ public class DomainCardGUI extends JFrame {
             }
         }
 
+        // DOMAIN LISTINGS INFO
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.weightx = 1.0;
-        titlePanel.add(new JLabel(getListedCounterLabel(domainName,getDomainResourceType(domainTheme))), gbc);
+        JLabel label = new JLabel(getListedCounterLabel(domainName,getDomainResourceType(domainTheme)));
+        changeFont(label, ToolData.AVAILABLE_FONTS.REGULAR_FONT, 12);
+        titlePanel.add(label, gbc);
+
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.weightx = 1.0;
-        titlePanel.add(new JLabel(getAllCounterLabel(domainName,getDomainResourceType(domainTheme))), gbc);
+        JLabel label2 = new JLabel(getAllCounterLabel(domainName,getDomainResourceType(domainTheme)));
+        changeFont(label2, ToolData.AVAILABLE_FONTS.REGULAR_FONT, 12);
+        titlePanel.add(label2, gbc);
         return mainPanel;
     }
+
+    // GENERATED WEAPONS/CHARACTERS
     private JLabel generateDomainItemLabel(String item, int index,JPanel panel){
         JLabel domainItemLabel = new JLabel();
         domainItemLabel.setHorizontalAlignment(0);
         domainItemLabel.setHorizontalTextPosition(0);
         domainItemLabel.setText(item);
+        changeFont(domainItemLabel, ToolData.AVAILABLE_FONTS.BLACK_FONT, 12);
         domainItemLabel.setVerticalAlignment(0);
         domainItemLabel.setVerticalTextPosition(3);
         GridBagConstraints gbc = new GridBagConstraints();

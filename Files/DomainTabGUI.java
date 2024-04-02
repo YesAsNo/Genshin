@@ -342,11 +342,7 @@ public class DomainTabGUI implements ActionListener {
         gbc.fill = GridBagConstraints.BOTH;
         domainCard.add(domainInfoPanel, gbc);
         JLabel domainNameLabel = new JLabel();
-        changeFont(domainNameLabel, AVAILABLE_FONTS.BLACK_FONT, 12);
-        Font domainNameLabelFont = $$$getFont$$$( Font.BOLD, 18, domainNameLabel.getFont());
-        if (domainNameLabelFont != null) {
-            domainNameLabel.setFont(domainNameLabelFont);
-        }
+        changeFont(domainNameLabel, AVAILABLE_FONTS.HEADER_FONT, 18);
         domainNameLabel.setForeground(new Color(dt.panelForegroundColor));
         domainNameLabel.setText(domainName);
         domainInfoPanel.add(domainNameLabel,
@@ -354,18 +350,17 @@ public class DomainTabGUI implements ActionListener {
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
                         false));
 
+        // CHARACTERS LISTED FOR THIS DOMAIN LABEL
         JLabel domainListedCounterLabel = new JLabel();
-        Font domainListedCounterLabelFont =
-                $$$getFont$$$(-1, 12, domainListedCounterLabel.getFont());
-        if (domainListedCounterLabelFont != null) {
-            domainListedCounterLabel.setFont(domainListedCounterLabelFont);
-        }
+        changeFont(domainListedCounterLabel, AVAILABLE_FONTS.TEXT_FONT, 16);
         domainListedCounterLabel.setForeground(new Color(dt.panelForegroundColor));
         domainListedCounterLabel.setText(getListedCounterLabel(domainName,getDomainResourceType(dt)));
         domainInfoPanel.add(domainListedCounterLabel,
                 new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
                         false));
+
+        // PANEL WITH ICON
         JPanel marginPanel = new JPanel();
         marginPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 5, 0, 5), -1, -1));
         marginPanel.setAlignmentX(0.5f);
