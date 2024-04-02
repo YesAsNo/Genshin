@@ -2,6 +2,7 @@ package Files;
 
 import static Files.ToolData.changeFont;
 import static Files.ToolData.getFlattenedData;
+import static Files.ToolData.getMapping;
 import static Files.ToolData.getResourceIcon;
 import static Files.ToolGUI.NO_CHARACTERS_MATCH_MESSAGE;
 import static Files.ToolGUI.UNKNOWN_CHARACTER;
@@ -9,7 +10,10 @@ import static Files.ToolGUI.checkIfCharacterCardHasBeenGenerated;
 import static Files.ToolGUI.formatString;
 import static Files.ToolGUI.getCharacterCard;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -20,19 +24,28 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.TreeMap;
 
 public final class CharacterTabGUI implements ActionListener {
 
     private final JPanel mainPanel = new JPanel(new GridBagLayout());
+    private static final String ALL_ELEMENTS = "All Elements";
     private final JPanel searchResultPanel = new JPanel(new GridBagLayout());
     private final JButton searchConfirmButton = new JButton();
     private final JTextField searchField = new JTextField();
     private final JScrollPane searchScrollPane = new JScrollPane();
+    private final Map<String, ImageIcon> elementIcons = new TreeMap<>();
+    private final JComboBox<JLabel> elementFilterBox = new JComboBox<>();
+    private final JLabel matchesLabel = new JLabel();
 
     public CharacterTabGUI(){
         mainPanel.setBackground(new Color(-1));
@@ -41,14 +54,50 @@ public final class CharacterTabGUI implements ActionListener {
         changeFont(mainPanel, ToolData.AVAILABLE_FONTS.REGULAR_FONT,15.0F);
         mainPanel.setOpaque(true);
         mainPanel.setRequestFocusEnabled(true);
+        parseElementIcons();
+
+        elementFilterBox.setBackground(new Color(-2702646));
+        elementFilterBox.setEnabled(true);
+        changeFont(elementFilterBox, ToolData.AVAILABLE_FONTS.BLACK_FONT,12);
+        final DefaultComboBoxModel<JLabel> elementFilterComboBoxModel = new DefaultComboBoxModel<>();
+        elementFilterComboBoxModel.addElement(new JLabel(ALL_ELEMENTS));
+        for (String element:elementIcons.keySet()){
+            JLabel elementLabel = new JLabel();
+            changeFont(elementLabel, ToolData.AVAILABLE_FONTS.BLACK_FONT,12);
+            elementLabel.setText(element);
+            elementLabel.setIcon(elementIcons.get(element));
+            elementFilterComboBoxModel.addElement(elementLabel);
+        }
+        elementFilterBox.setModel(elementFilterComboBoxModel);
+        elementFilterBox.setRenderer(new ComboBoxRenderer());
+        elementFilterBox.setSelectedIndex(0);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.EAST;
+        gbc.insets = new Insets(0, 255, 0, 5);
+        mainPanel.add(elementFilterBox, gbc);
+
+
+        changeFont(matchesLabel, ToolData.AVAILABLE_FONTS.BLACK_FONT,12);
+        matchesLabel.setForeground(new Color(-15072759));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 3;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(0, 5, 0, 5);
+        mainPanel.add(matchesLabel, gbc);
+
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.gridwidth = 3;
+        gbc.gridwidth = 4;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         mainPanel.add(searchResultPanel, gbc);
+
         searchConfirmButton.setMinimumSize(new Dimension(50, 30));
         searchConfirmButton.setPreferredSize(new Dimension(50, 30));
         searchConfirmButton.setText("✓");
@@ -71,7 +120,7 @@ public final class CharacterTabGUI implements ActionListener {
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.NORTHWEST;
-        gbc.insets = new Insets(0, 250, 0, 0);
+        gbc.insets = new Insets(0, 5, 0, 5);
         mainPanel.add(searchField, gbc);
     }
     public JPanel getMainPanel(){return mainPanel;}
@@ -97,6 +146,14 @@ public final class CharacterTabGUI implements ActionListener {
         JButton characterButton = getjButton(characterName);
         addCharacterButtonToSelectedCharacterPanel(characterButton, index);
 
+    }
+    private void parseElementIcons(){
+        final String iconFolderAddress = "./Files/Images/Icons";
+        final String [] elements = {"Anemo","Cryo","Dendro","Electro","Geo","Hydro","Pyro"};
+        for (String element : elements){
+            elementIcons.put(element, new ImageIcon(new ImageIcon(
+                    iconFolderAddress + "/Element_" + element + ".png").getImage().getScaledInstance(20,20,Image.SCALE_SMOOTH)));
+        }
     }
     /**
      * Creates a JButton for the specified character.
@@ -140,15 +197,34 @@ public final class CharacterTabGUI implements ActionListener {
         userFieldInput = searchField.getText().toLowerCase();
         searchResultPanel.removeAll();
         searchScrollPane.updateUI();
-        for (String s : getFlattenedData(ToolData.RESOURCE_TYPE.CHARACTER)) {
-            if (s.toLowerCase().contains(userFieldInput)) {
+        String element = ((JLabel) Objects.requireNonNull(elementFilterBox.getSelectedItem())).getText();
+        List<String> eligibleCharacters = new ArrayList<>();
+        //TODO: Add different icons and names for Traveler.
+        if (element.equalsIgnoreCase(ALL_ELEMENTS)){
+            eligibleCharacters.addAll(getFlattenedData(ToolData.RESOURCE_TYPE.CHARACTER));
+        }
+        else{
+            Map<String,List<String>> mapping = getMapping(ToolData.knownMappings.ELEM_CHAR);
+            for (String key : mapping.keySet()){
+                if (key.contains(element)){
+                    eligibleCharacters.addAll(mapping.get(key));
+                    break;
+                }
+            }
+            if (eligibleCharacters.isEmpty()){
+                eligibleCharacters.add("Traveler");
+            }
+        }
+
+        for (String s : eligibleCharacters) {
+            if (s.toLowerCase().contains(userFieldInput) ) {
                 {
                     generateCharacterButton(s, matchedCount);
                 }
                 matchedCount++;
-
             }
         }
+        matchesLabel.setText("Matches: " + matchedCount);
         if (matchedCount == 0) {
             generateCharacterButton(UNKNOWN_CHARACTER, matchedCount);
         } else {
@@ -156,13 +232,14 @@ public final class CharacterTabGUI implements ActionListener {
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.gridx = 0;
             gbc.gridy = 1;
-            gbc.gridwidth = 3;
+            gbc.gridwidth = 4;
             gbc.weightx = 1.0;
             gbc.weighty = 1.0;
             gbc.fill = GridBagConstraints.BOTH;
 
             mainPanel.add(searchScrollPane, gbc);
         }
+
     }
     /**
      * Verifies if a window for the specified character has already been opened.

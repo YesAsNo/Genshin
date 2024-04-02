@@ -14,6 +14,9 @@ public class ComboBoxRenderer extends JLabel implements ListCellRenderer<JLabel>
             if (value.getIcon() != null){
                 setIcon(value.getIcon());
             }
+            else{
+                setIcon(null);
+            }
             setText(value.getText());
         }
 
