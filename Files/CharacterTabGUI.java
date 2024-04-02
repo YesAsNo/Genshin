@@ -116,6 +116,7 @@ public final class CharacterTabGUI implements ActionListener {
         assert characterCard != null;
         characterButton.setIcon(characterCard.getCharacterIcon());
         characterButton.setText(formatString(characterName));
+        changeFont(characterButton, ToolData.AVAILABLE_FONTS.BLACK_FONT, 12);
         characterButton.setVerticalTextPosition(SwingConstants.BOTTOM);
         characterButton.setHorizontalTextPosition(SwingConstants.CENTER);
         characterButton.setOpaque(false);
