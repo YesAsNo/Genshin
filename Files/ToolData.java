@@ -23,11 +23,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * Main class of the application. Parses all static data from the json files, taken from the Genshin Fandom Wiki.
+ */
 public class ToolData {
     private static Map<String,String> artifactSetDescriptions = new TreeMap<>();
     private static final Map<String,Font> fonts = new TreeMap<>();
+    /**
+     * Save location of user data.
+     */
     public static final String SAVE_LOCATION = "./UserData/";
     private static final String UNKNOWN_WEAPON_PATH = "./Files/Images/Weapons/unknown_weapon.png";
+    /**
+     * Locations of all data json files.
+     */
     public static final Map<String, Boolean> PATHS_TO_DATA_FILES;
     static {
         PATHS_TO_DATA_FILES = new TreeMap<>();
@@ -47,19 +56,63 @@ public class ToolData {
     private static final Map<String,Map<String,List<String>>> parsedMappings = new TreeMap<>();
     private static final Map<String,Map<String,ImageIcon>> parsedResourceIcons = new TreeMap<>();
     private static final Map<String,List<String>> parsedFlattenedData = new TreeMap<>();
+
+    /**
+     * Enum that represents known mappings. All methods should use it instead of String values.
+     */
     public enum knownMappings{
+        /**
+         * Artifact Domain -> Artifact Set available there.
+         */
         ARTIDOMAIN_ARTISET("ArtifactDomain_ArtifactSet"),
+        /**
+         * Artifact Set -> Artifact Set Description.
+         */
         ARTISET_ARTISETDESC("ArtifactSet_ArtifactSetDescription"),
+        /**
+         * Day of the week -> Available materials on that day. Note it does not contain Sunday as all materials are available then.
+         */
         DAY_AVAILABLEMATS("Day_AvailableMaterials"),
+        /**
+         * Element -> All characters of that element.
+         */
         ELEM_CHAR("Element_Character"),
+        /**
+         * Talent Book Name -> All characters that need it for their talents.
+         */
         TALENTBOOK_CHAR("TalentBook_Character"),
+        /**
+         * Talent Domain Name -> All Talent Books available there.
+         */
         TALENTDOMAIN_TALENTBOOK("TalentDomain_TalentBook"),
+        /**
+         * Weapon Domain Name -> All Weapon Materials available there.
+         */
         WEPDOMAIN_WEPMAT("WeaponDomain_WeaponMaterial"),
+        /**
+         * Weapon Material Name -> All names of Weapons that need it for ascension.
+         */
         WEPMAT_WEPNAME("WeaponMaterial_WeaponName"),
+        /**
+         * Weapon Rarity and Type -> All weapons of that rarity and type.
+         * The keys are in the form of (Four/Five-Star *type*)
+         */
         WEPRARITYANDTYPE_WEPNAME("WeaponRarityAndType_WeaponName"),
+        /**
+         * Weapon Type -> All characters who can equip weapons of this type.
+         */
         WEPTYPE_CHAR("WeaponType_Character"),
+        /**
+         * Weekly Boss Material -> All Characters who can use it for their talents.
+         */
         WEEKLYBOSSMAT_CHAR("WeeklyBossMaterial_Character"),
+        /**
+         * Weekly Boss Domain -> All Weekly Boss Materials available there.
+         */
         WEEKLYDOMAIN_WEEKLYBOSSMAT("WeeklyDomain_WeeklyBossMaterial");
+        /**
+         * The string token used to look up the mapping.
+         */
         public final String stringToken;
         knownMappings(String data) {
             this.stringToken = data;

@@ -5,6 +5,9 @@ import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 import java.awt.Component;
 
+/**
+ * This class overwrites the default combobox renderer to support icons with text to be rendered inside comboboxes.
+ */
 public class ComboBoxRenderer extends JLabel implements ListCellRenderer<JLabel> {
 
     @Override

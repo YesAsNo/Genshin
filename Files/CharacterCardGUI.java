@@ -32,21 +32,28 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
-import javax.swing.plaf.FontUIResource;
-import javax.swing.text.StyleContext;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
+/**
+ * This class creates character cards with fields that allow you to customize the items equipped on the character.
+ */
 public class CharacterCardGUI extends JFrame {
+    /**
+     * Save button color.
+     */
     public static final int YES_CHANGES_SAVE_BUTTON_COLOR = 0xA3D691;
     private final JButton saveButton = new JButton();
+
+    /**
+     * Constructor of the class
+     * @param characterCard the character card that contains the required data to construct this GUI.
+     */
     public CharacterCardGUI(CharacterCard characterCard){
         setTitle(characterCard.getCharacterName() + " Character Overview");
         setContentPane(generateCharacterPage(characterCard));
@@ -482,23 +489,5 @@ public class CharacterCardGUI extends JFrame {
         set2ComboBox.addActionListener(new UpdateTextAreaListener(setDetailsTextArea));
 
         return templateTab;
-    }
-    public static Font $$$getFont$$$(int style, int size, Font currentFont) {
-        if (currentFont == null) {
-            return null;
-        }
-        String resultName;
-        Font testFont = new Font("Source Code Pro", Font.PLAIN, 10);
-        if (testFont.canDisplay('a') && testFont.canDisplay('1')) {
-            resultName = "Source Code Pro";
-        } else {
-            resultName = currentFont.getName();
-        }
-        Font font = new Font(resultName, style >= 0 ? style : currentFont.getStyle(),
-                size >= 0 ? size : currentFont.getSize());
-        boolean isMac = System.getProperty("os.name", "").toLowerCase(Locale.ENGLISH).startsWith("mac");
-        Font fontWithFallback = isMac ? new Font(font.getFamily(), font.getStyle(), font.getSize()) :
-                new StyleContext().getFont(font.getFamily(), font.getStyle(), font.getSize());
-        return fontWithFallback instanceof FontUIResource ? fontWithFallback : new FontUIResource(fontWithFallback);
     }
 }

@@ -1,6 +1,5 @@
 package Files;
 
-import static Files.CharacterCardGUI.$$$getFont$$$;
 import static Files.DomainTabGUI.DOMAIN_FILTER_OPTIONS.ALL_OPTIONS_BY_ENUM;
 import static Files.DomainTabGUI.DOMAIN_FILTER_OPTIONS.ALL_OPTIONS_BY_STRING;
 import static Files.ToolData.AVAILABLE_FONTS;
@@ -47,7 +46,6 @@ import javax.swing.JScrollPane;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -384,11 +382,7 @@ public class DomainTabGUI implements ActionListener {
         domainIconLabel.setAlignmentX(0.5f);
         domainIconLabel.setFocusTraversalPolicyProvider(false);
         domainIconLabel.setFocusable(false);
-        Font weaponMaterialDomainIconLabelFont =
-                $$$getFont$$$(Font.BOLD, 16, domainIconLabel.getFont());
-        if (weaponMaterialDomainIconLabelFont != null) {
-            domainIconLabel.setFont(weaponMaterialDomainIconLabelFont);
-        }
+        changeFont(domainIconLabel,AVAILABLE_FONTS.BLACK_FONT,16);
         domainIconLabel.setForeground(new Color(-1));
         domainIconLabel.setText(dt.marginSymbol);
         marginPanel.add(domainIconLabel,

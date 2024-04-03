@@ -16,9 +16,17 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * This class implements the save button listener, found in CharacterCardGUI.
+ * @link CharacterCardGUI
+ */
 public class SaveButtonListener implements ActionListener {
     private final CharacterCard _characterCard;
 
+    /**
+     * Constructor of the class.
+     * @param card character card
+     */
     public SaveButtonListener(CharacterCard card){
         _characterCard = card;
     }

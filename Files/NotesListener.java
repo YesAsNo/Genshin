@@ -4,9 +4,18 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 
+/**
+ * This class implements a document listener.
+ * Only used in character notes.
+ */
 public class NotesListener implements DocumentListener {
 
     private final CharacterCard _characterCard;
+
+    /**
+     * Constructor of the listener. Requires a character card.
+     * @param card the character card
+     */
     public NotesListener(CharacterCard card){
         _characterCard = card;
     }

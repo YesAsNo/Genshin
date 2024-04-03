@@ -30,12 +30,19 @@ import java.awt.Insets;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class constructs a domain card GUI (shown after clicking on a domain card).
+ */
 public class DomainCardGUI extends JFrame {
     private final DomainTabGUI.DOMAIN_THEME domainTheme;
     private final String domainName;
     private final JPanel mainPanel = new JPanel(new GridBagLayout());
 
-
+    /**
+     * Constructor of the class.
+     * @param domainName domain name
+     * @param domainTheme domain type. There are currently 4 types in the game
+     */
     public DomainCardGUI(String domainName, DomainTabGUI.DOMAIN_THEME domainTheme) {
         this.domainTheme = domainTheme;
         this.domainName = domainName;
@@ -48,7 +55,9 @@ public class DomainCardGUI extends JFrame {
         setVisible(true);
         setResizable(false);
     }
-    // DOMAIN WINDOW
+    /**
+     * Puts the info elements into the main panel.
+     */
     private JPanel generateDomainCard(){
 
         JScrollPane mainPanelScrollPane = new JScrollPane();

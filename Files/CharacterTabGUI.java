@@ -35,18 +35,23 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
 
+/**
+ * This class constructs the character tab GUI. (inside the main application window)
+ */
 public final class CharacterTabGUI implements ActionListener {
 
     private final JPanel mainPanel = new JPanel(new GridBagLayout());
     private static final String ALL_ELEMENTS = "All Elements";
     private final JPanel searchResultPanel = new JPanel(new GridBagLayout());
-    private final JButton searchConfirmButton = new JButton();
     private final JTextField searchField = new JTextField();
     private final JScrollPane searchScrollPane = new JScrollPane();
     private final Map<String, ImageIcon> elementIcons = new TreeMap<>();
     private final JComboBox<JLabel> elementFilterBox = new JComboBox<>();
     private final JLabel matchesLabel = new JLabel();
 
+    /**
+     * Constructor of the class.
+     */
     public CharacterTabGUI(){
         mainPanel.setBackground(new Color(-1));
         mainPanel.setEnabled(true);
@@ -98,6 +103,7 @@ public final class CharacterTabGUI implements ActionListener {
         gbc.fill = GridBagConstraints.BOTH;
         mainPanel.add(searchResultPanel, gbc);
 
+        JButton searchConfirmButton = new JButton();
         searchConfirmButton.setMinimumSize(new Dimension(50, 30));
         searchConfirmButton.setPreferredSize(new Dimension(50, 30));
         searchConfirmButton.setText("✓");
@@ -123,10 +129,12 @@ public final class CharacterTabGUI implements ActionListener {
         gbc.insets = new Insets(0, 5, 0, 5);
         mainPanel.add(searchField, gbc);
     }
+
+    /**
+     * Returns the main panel of this tab
+     * @return main panel
+     */
     public JPanel getMainPanel(){return mainPanel;}
-    public JButton getSearchConfirmButton(){
-        return searchConfirmButton;
-    }
     /**
      * Generates a character button for the character specified by name and the index of the match.
      *
