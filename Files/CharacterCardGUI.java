@@ -45,9 +45,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class CharacterCardGUI extends JFrame {
-    public static final int NO_CHANGES_SAVE_BUTTON_COLOR = 0xD6C2CB;
     public static final int YES_CHANGES_SAVE_BUTTON_COLOR = 0xA3D691;
-    private static final JButton saveButton = new JButton();
+    private final JButton saveButton = new JButton();
     public CharacterCardGUI(CharacterCard characterCard){
         setTitle(characterCard.getCharacterName() + " Character Overview");
         setContentPane(generateCharacterPage(characterCard));
@@ -333,7 +332,7 @@ public class CharacterCardGUI extends JFrame {
                         false));
     }
     private void getSaveButton(JPanel jpanel) {
-        saveButton.setBackground(new Color(NO_CHANGES_SAVE_BUTTON_COLOR));
+        saveButton.setBackground(new Color(YES_CHANGES_SAVE_BUTTON_COLOR));
         saveButton.setForeground(new Color(-394241));
         saveButton.setText("SAVE");
         changeFont(saveButton, AVAILABLE_FONTS.HEADER_FONT, 12.0F);
@@ -461,30 +460,28 @@ public class CharacterCardGUI extends JFrame {
                         GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false),
                 ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_WEAPON_MATERIALS);
         getDomainListingsLabel(checkboxAndButtonPanel);
-        artifactSet1ListingCheckBox.addItemListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_SET_ONE));
-        artifactSet2ListingCheckBox.addItemListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_SET_TWO));
+        artifactSet1ListingCheckBox.addItemListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_SET_ONE,saveButton ));
+        artifactSet2ListingCheckBox.addItemListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_SET_TWO,saveButton ));
         weaponMaterialListingCheckbox.addItemListener(new UpdateCharacterCardListener(characterCard,
-                ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_WEAPON_MATERIALS));
+                ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_WEAPON_MATERIALS,saveButton));
         talentListingCheckBox.addItemListener(new UpdateCharacterCardListener(characterCard,
-                ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_TALENT_MATERIALS));
+                ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_TALENT_MATERIALS,saveButton ));
         set1ComboBox.addActionListener(new UpdateLabelListener(set1NameLabel, set1Icon,artifactSet1ListingCheckBox, ToolData.RESOURCE_TYPE.ARTIFACT_SET));
         set2ComboBox.addActionListener(new UpdateLabelListener(set2NameLabel, set2Icon,artifactSet2ListingCheckBox, ToolData.RESOURCE_TYPE.ARTIFACT_SET));
-        set1ComboBox.addActionListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.SET_ONE));
-        set2ComboBox.addActionListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.SET_TWO));
+        set1ComboBox.addActionListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.SET_ONE,saveButton ));
+        set2ComboBox.addActionListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.SET_TWO,saveButton ));
         weaponSelectionBox.addActionListener(new UpdateLabelListener(weaponNameLabel, weaponJLabel,weaponMaterialListingCheckbox, ToolData.RESOURCE_TYPE.WEAPON_NAME));
-        weaponSelectionBox.addActionListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.WEAPON));
+        weaponSelectionBox.addActionListener(new UpdateCharacterCardListener(characterCard, ToolData.CHARACTER_CARD_DATA_FIELD.WEAPON, saveButton));
 
         getSaveButton(checkboxAndButtonPanel);
         JTextArea setDetailsTextArea = getSetDetailsTextArea(checkboxAndButtonPanel);
 
         saveButton.addActionListener(new SaveButtonListener(characterCard));
+        saveButton.setEnabled(false);
         set1ComboBox.addActionListener(new UpdateTextAreaListener(setDetailsTextArea));
         set2ComboBox.addActionListener(new UpdateTextAreaListener(setDetailsTextArea));
 
         return templateTab;
-    }
-    public static JButton getSaveButton(){
-        return saveButton;
     }
     public static Font $$$getFont$$$(int style, int size, Font currentFont) {
         if (currentFont == null) {
