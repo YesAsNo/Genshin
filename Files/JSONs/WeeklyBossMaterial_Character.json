@@ -1,9 +1,9 @@
 {
   "Dvalin's Plume": ["Bennett", "Diluc", "Jean"],
   "Dvalin's Claw": ["Lisa", "Noelle", "Razor", "Xiangling"],
-  "Dvalin's Sigh": ["Traveler", "Amber", "Beidou", "Chongyun"],
+  "Dvalin's Sigh": ["Traveler (Anemo)", "Traveler (Geo)", "Amber", "Beidou", "Chongyun"],
 
-  "Tail of Boreas": ["Traveler","Qiqi", "Venti", "Xingqiu"],
+  "Tail of Boreas": ["Traveler (Geo)","Qiqi", "Venti", "Xingqiu"],
   "Ring of Boreas": ["Barbara", "Keqing", "Klee", "Mona"],
   "Spirit Locket of Boreas": ["Fischl", "Kaeya", "Ningguang", "Sucrose"],
 
@@ -11,7 +11,7 @@
   "Shard of a Foul Legacy": ["Diona", "Hu Tao", "Tartaglia"],
   "Shadow of the Warrior": ["Ganyu", "Rosaria", "Xiao"],
 
-  "Dragon Lord's Crown": ["Traveler", "Yoimiya", "Eula"],
+  "Dragon Lord's Crown": ["Traveler (Electro)", "Yoimiya", "Eula"],
   "Bloodjade Branch": ["Dori", "Kamisato Ayaka", "Yanfei"],
   "Gilded Scale": ["Kaedehara Kazuha", "Sayu", "Yelan"],
 
@@ -19,7 +19,7 @@
   "Hellfire Butterfly": ["Sangonomiya Kokomi", "Shenhe", "Thoma"],
   "Ashen Heart": ["Arataki Itto", "Kujou Sara", "Yun Jin"],
 
-  "Mudra of the Malefic General": ["Traveler","Cyno", "Kamisato Ayato"],
+  "Mudra of the Malefic General": ["Traveler (Dendro)","Cyno", "Kamisato Ayato"],
   "Tears of the Calamitous God": ["Candace", "Collei", "Kuki Shinobu", "Nilou"],
   "The Meaning of Aeons": ["Heizou", "Tighnari", "Yae Miko"],
 
@@ -27,7 +27,7 @@
   "Mirror of Mushin": ["Alhaitham", "Layla", "Mika"],
   "Daka's Bell": ["Wanderer", "Yaoyao"],
 
-  "Worldspan Fern": ["Traveler","Baizhu, Freminet"],
+  "Worldspan Fern": ["Traveler (Hydro)","Baizhu, Freminet"],
   "Primordial Greenbloom": ["Kaveh", "Lyney", "Wriothesley"],
   "Everamber": ["Kirara", "Lynette", "Neuvillette"],
 

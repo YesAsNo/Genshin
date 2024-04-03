@@ -1,8 +1,9 @@
 {"Bow":["Aloy","Tartaglia","Ganyu","Lyney","Tighnari","Venti","Yelan","Yoimiya","Amber","Collei",
     "Diona","Faruzan","Fischl","Gorou","Kujou Sara"],
 
-  "Sword":["Traveler","Albedo","Alhaitham","Kamisato Ayaka","Kamisato Ayato","Furina","Jean","Kaedehara Kazuha",
-    "Keqing","Nilou", "Qiqi", "Bennett", "Kaeya", "Kirara", "Kuki Shinobu", "Layla", "Lynette", "Xingqiu", "Chiori"],
+  "Sword":["Traveler (Anemo)", "Traveler (Geo)", "Traveler (ELectro)", "Traveler (Dendro)", "Traveler (Hydro)",
+    "Albedo","Alhaitham","Kamisato Ayaka","Kamisato Ayato","Furina","Jean","Kaedehara Kazuha", "Keqing", "Nilou",
+    "Qiqi", "Bennett", "Kaeya", "Kirara", "Kuki Shinobu", "Layla", "Lynette", "Xingqiu", "Chiori"],
 
   "Claymore":["Gaming", "Dehya", "Diluc", "Eula", "Arataki Itto", "Navia", "Beidou", "Chongyun", "Dori",
     "Freminet", "Kaveh", "Noelle", "Razor", "Sayu", "Xinyan"],
