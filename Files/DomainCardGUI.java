@@ -1,7 +1,6 @@
 package Files;
 
 import static Files.DomainTabGUI.getAllCounterLabel;
-import static Files.DomainTabGUI.getDomainFarmedMapping;
 import static Files.DomainTabGUI.getDomainMapping;
 import static Files.DomainTabGUI.getDomainResourceType;
 import static Files.DomainTabGUI.getDomainTargetResourceMapping;
@@ -30,7 +29,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class DomainCardGUI extends JFrame {
     private final DomainTabGUI.DOMAIN_THEME domainTheme;
@@ -53,7 +51,6 @@ public class DomainCardGUI extends JFrame {
     // DOMAIN WINDOW
     private JPanel generateDomainCard(){
 
-        Set<String> farmedMapping = getDomainFarmedMapping(domainTheme);
         JScrollPane mainPanelScrollPane = new JScrollPane();
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -119,7 +116,7 @@ public class DomainCardGUI extends JFrame {
             JPanel dayTab = new JPanel();
             dayTab.setLayout(new GridBagLayout());
             dayTab.setBackground(new Color(-1));
-            itemOverviewTabbedPane.addTab("",getResourceIcon(domainMat,getDomainResourceType(domainTheme)), dayTab);
+            itemOverviewTabbedPane.addTab("",getResourceIcon(domainMat,getDomainResourceType(domainTheme)), dayTab, domainMat);
             JLabel listedWeaponHeadline = new JLabel();
             listedWeaponHeadline.setForeground(new Color(domainTheme.panelForegroundColor));
             if (getDomainTargetResourceType(domainTheme) == ToolData.RESOURCE_TYPE.WEAPON_NAME){
@@ -134,14 +131,12 @@ public class DomainCardGUI extends JFrame {
             gbc.gridx = 0;
             gbc.gridy = 0;
             gbc.weightx = 1.0;
-            gbc.weighty = 0.1;
             gbc.anchor = GridBagConstraints.NORTH;
             dayTab.add(listedWeaponHeadline, gbc);
 
             gbc.gridx = 0;
             gbc.gridy = 1;
             gbc.weightx = 1.0;
-            gbc.weighty = 1.0;
             gbc.fill = GridBagConstraints.BOTH;
             dayTab.add(innerListedPanel,gbc);
             if(domainTheme != DomainTabGUI.DOMAIN_THEME.ARTIFACT_DOMAIN_THEME) {
@@ -158,7 +153,6 @@ public class DomainCardGUI extends JFrame {
                 gbc.gridx = 0;
                 gbc.gridy = 2;
                 gbc.weightx = 1.0;
-                gbc.weighty = 0.1;
                 gbc.anchor = GridBagConstraints.NORTH;
                 dayTab.add(unlistedWeaponHeadline, gbc);
                 gbc = new GridBagConstraints();
