@@ -271,8 +271,14 @@ public class DomainCardGUI extends JFrame {
         domainItemLabel.setVerticalAlignment(SwingConstants.TOP);
         changeFont(domainItemLabel, ToolData.AVAILABLE_FONTS.TEXT_FONT, 12.0F);
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = index % 3;
-        gbc.gridy = index / 3;
+        if (domainTheme == DomainTabGUI.DOMAIN_THEME.ARTIFACT_DOMAIN_THEME) {
+            gbc.gridx = index % 3;
+            gbc.gridy = index / 3;
+        }
+        else {
+            gbc.gridx = index % 6;
+            gbc.gridy = index / 6;
+        }
         gbc.anchor = GridBagConstraints.NORTH;
         gbc.insets = new Insets(0, 5, 0, 5);
         domainItemLabel.setIcon(getResourceIcon(item,getDomainTargetResourceType(domainTheme)));
