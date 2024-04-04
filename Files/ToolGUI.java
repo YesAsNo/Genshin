@@ -151,7 +151,6 @@ public class ToolGUI extends JFrame {
         }
 
     }
-    //TODO: Move this to weaponTabGUI
 
     public void addTab(String title, JPanel jpanel) {
         mainTabbedPane.addTab(title, jpanel);
