@@ -25,7 +25,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.List;
 import java.util.Map;
 
@@ -235,37 +239,39 @@ public class DomainCardGUI extends JFrame {
 
 
     }
-    private String formatLabel(String characterName, String characterNotes, Font font){
+    private String formatLabel(String characterName, String characterNotes){
         final String HTML_BEGINNING = "<html><center>";
         final String HTML_END = "</center></html>";
         final String HTML_BREAK = "<br>";
-        StringBuilder formattedNotes = new StringBuilder("<font face=\"" + font + "\"<b>"+ characterName +"</b></font>"+ HTML_BREAK);
-        for (int i = 1; i < characterNotes.length(); i++){
+        StringBuilder formattedNotes = new StringBuilder(
+                "<b>" + characterName + "</b>");
+        for (int i = 0; i < characterNotes.length(); i++){
             if (i % 13 == 0){
                 formattedNotes.append(HTML_BREAK);
             }
             formattedNotes.append(characterNotes.charAt(i));
             }
+        System.out.println(formattedNotes);
         return HTML_BEGINNING + formattedNotes + HTML_END;
         }
     // GENERATED WEAPONS/CHARACTERS
 
     private void generateDomainItemLabel(String item, int index,JPanel panel){
         JLabel domainItemLabel = new JLabel();
-
+        changeFont(domainItemLabel, ToolData.AVAILABLE_FONTS.TEXT_FONT, 12.0F);
         if (getDomainResourceType(domainTheme) == ToolData.RESOURCE_TYPE.ARTIFACT_SET) {
             CharacterCard card = getCharacterCard(item);
             if (card != null && !card.getCharacterNotes().isEmpty()) {
-                domainItemLabel.setText(formatLabel(item, card.getCharacterNotes(), domainItemLabel.getFont()));
+                domainItemLabel.setText(formatLabel(item, card.getCharacterNotes()));
+                System.out.println(card.getCharacterNotes());
             } else {
-                domainItemLabel.setText(item);
+                domainItemLabel.setText(formatLabel(item,""));
             }
         }
         domainItemLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         domainItemLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
         domainItemLabel.setVerticalTextPosition(SwingConstants.CENTER);
         domainItemLabel.setVerticalAlignment(SwingConstants.TOP);
-        changeFont(domainItemLabel, ToolData.AVAILABLE_FONTS.TEXT_FONT, 12.0F);
         GridBagConstraints gbc = new GridBagConstraints();
         if (domainTheme == DomainTabGUI.DOMAIN_THEME.ARTIFACT_DOMAIN_THEME) {
             gbc.gridx = index % 3;
