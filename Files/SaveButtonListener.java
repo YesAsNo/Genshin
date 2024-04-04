@@ -1,10 +1,7 @@
 package Files;
 
 import static Files.ToolData.SAVE_LOCATION;
-import static Files.ToolData.getTalentBookForCharacter;
-import static Files.ToolGUI.getFarmedMapping;
 import static Files.ToolGUI.updateFarmedItemMap;
-import static Files.WeaponTabGUI.parseWeaponsMap;
 
 import com.google.gson.Gson;
 
@@ -43,7 +40,7 @@ public class SaveButtonListener implements ActionListener {
             _characterCard.setWeaponStatus(false);
         }
         else{
-            parseWeaponsMap();
+            updateFarmedItemMap(ToolGUI.FARMED_DATATYPE.WEAPONS);
         }
         if (_characterCard.getArtifactSet1().equalsIgnoreCase(ToolGUI.EMPTY_SET_SELECTOR))
         {
@@ -51,9 +48,7 @@ public class SaveButtonListener implements ActionListener {
             _characterCard.setArtifactSet1Status(false);
         }
         else{
-            updateFarmedItemMap(getFarmedMapping(ToolGUI.FARMED_DATATYPE.ARTIFACTS),
-                    _characterCard.getArtifactSet1(),
-                    _characterCard.getArtifactSet1Status());
+            updateFarmedItemMap(ToolGUI.FARMED_DATATYPE.ARTIFACTS);
         }
         if (_characterCard.getArtifactSet2().equalsIgnoreCase(ToolGUI.EMPTY_SET_SELECTOR))
         {
@@ -61,13 +56,10 @@ public class SaveButtonListener implements ActionListener {
             _characterCard.setArtifactSet2Status(false);
         }
         else{
-            updateFarmedItemMap(getFarmedMapping(ToolGUI.FARMED_DATATYPE.ARTIFACTS),
-                    _characterCard.getArtifactSet2(),
-                    _characterCard.getArtifactSet2Status());
+            updateFarmedItemMap(ToolGUI.FARMED_DATATYPE.ARTIFACTS);
         }
         if (_characterCard.getTalentStatus()){
-            updateFarmedItemMap(getFarmedMapping(ToolGUI.FARMED_DATATYPE.TALENTS),
-                    getTalentBookForCharacter(_characterCard.getCharacterName()),true);
+            updateFarmedItemMap(ToolGUI.FARMED_DATATYPE.TALENTS);
         }
 
         File f = new File(SAVE_LOCATION + _characterCard.getCharacterName());
