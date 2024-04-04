@@ -68,6 +68,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
 
     public WeaponTabGUI(){
         setUpWeaponsPanel();
+        parseWeaponsMap();
     }
 
     public JPanel getMainPanel() {
