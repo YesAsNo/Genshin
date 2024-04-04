@@ -106,56 +106,92 @@ public class ToolData {
          * Weekly Boss Material -> All Characters who can use it for their talents.
          */
         WEEKLYBOSSMAT_CHAR("WeeklyBossMaterial_Character"),
+
         /**
          * Weekly Boss Domain -> All Weekly Boss Materials available there.
          */
         WEEKLYDOMAIN_WEEKLYBOSSMAT("WeeklyDomain_WeeklyBossMaterial");
-        /**
-         * The string token used to look up the mapping.
-         */
+
+        /** The string token used to look up the mapping. */
         public final String stringToken;
         knownMappings(String data) {
             this.stringToken = data;
         }
     }
 
+    /** Enum that represents weapon rarities (FIVE and FOUR). It doesn't consider THREE_STAR. */
     public enum WEAPON_RARITY {
+        /** 5 Star rarity! */
         FIVE_STAR,
+
+        /** 4 Star rarity! */
         FOUR_STAR
     }
+
+    /** Resource type for JSONs and icons. */
     public enum RESOURCE_TYPE {
+        /** Weapon resource type (icon/JSON)*/
         WEAPON_NAME("WeaponName"),
+        /** Artifact set resource type (icon/JSON)*/
         ARTIFACT_SET("ArtifactSet"),
+        /** Weapon material resource type (icon/JSON)*/
         WEAPON_MATERIAL("WeaponMaterial"),
+        /** Character resource type (icon/JSON)*/
         CHARACTER("Character"),
+        /** Talent book resource type (icon/JSON)*/
         TALENT_BOOK("TalentBook"),
+        /** Weekly boss talent resource type (icon/JSON)*/
         WEEKLY_BOSS_MATERIAL("WeeklyBossMaterial");
+
+        /** The string token used to look up the mapping. */
         public final String stringToken;
         RESOURCE_TYPE(String data) {
             this.stringToken = data;
         }
     }
+
+    /** All the fields listed in the character card window. */
     public enum CHARACTER_CARD_DATA_FIELD{
+        /** Simply the chosen character's name. */
         NAME,
+        /** The chosen character's held weapon. */
         WEAPON,
+        /** The chosen character's artifact set 1. */
         SET_ONE,
+        /** The chosen character's artifact set 2. */
         SET_TWO,
+        /** The chosen character's notes field (desired stats, for example). */
         NOTES,
+        /** Whether the character is farming weapon materials for their weapon (check box). */
         FARMING_WEAPON_MATERIALS,
+        /** Whether the character is farming talent materials (both weekly boss and book materials) (check box) */
         FARMING_TALENT_MATERIALS,
+        /** Whether the character is farming the equipped artifact set 1 (not good enough?) */
         FARMING_SET_ONE,
+        /** Whether the character is farming the equipped artifact set 2 (not good enough?) */
         FARMING_SET_TWO
 
     }
-    public enum WEAPON_FILTER_OPTIONS{
+
+    /** Filter options for weapon tab's search. */
+    public enum WEAPON_FILTER_OPTIONS {
+        /** Search contains all objects */
         NO_FILTER("[ Filter ]"),
+        /** Search contains claymores only */
         CLAYMORE("Claymore"),
+        /** Search contains bows only */
         BOW("Bow"),
+        /** Search contains polearms only */
         POLEARM("Polearm"),
+        /** Search contains swords only */
         SWORD("Sword"),
+        /** Search contains catalysts only */
         CATALYST("Catalyst");
 
+        /** Mapping for weapon filter options (enum to String). */
         public static final Map<WEAPON_FILTER_OPTIONS, String> ALL_OPTIONS_BY_ENUM = new TreeMap<>();
+
+        /** Mapping for weapon filter options (String to enum). */
         public static final Map<String,WEAPON_FILTER_OPTIONS> ALL_OPTIONS_BY_STRING = new TreeMap<>();
 
         static {
@@ -165,17 +201,24 @@ public class ToolData {
             }
         }
 
+        /** The string token used to look up the mapping. */
         public final String stringToken;
         WEAPON_FILTER_OPTIONS(String stringToken) {
             this.stringToken = stringToken;
         }
     }
 
+    /** Fonts used in the entire program */
     public enum AVAILABLE_FONTS{
+        /** Bold font used in headers among the other things. */
         HEADER_FONT(fonts.get("SourceCodePro-Bold")),
+        /** Font used in paragraphs mostly. */
         TEXT_FONT(fonts.get("SourceCodePro-Light")),
+        /** Semibold font used in "Creators" text on the main page among other places. */
         CREATOR_FONT(fonts.get("SourceCodePro-Semibold")),
+        /** Simply default version of the font. */
         REGULAR_FONT(fonts.get("SourceCodePro-Regular")),
+        /** The boldest option of the font. */
         BLACK_FONT(fonts.get("SourceCodePro-Black"));
 
         final public Font fontName;
