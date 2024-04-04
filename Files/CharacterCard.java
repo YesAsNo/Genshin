@@ -3,6 +3,8 @@ package Files;
 import static Files.ToolData.RESOURCE_TYPE.CHARACTER;
 import static Files.ToolData.getResourceIcon;
 import static Files.ToolGUI.CHARACTER_LIMIT;
+import static Files.ToolGUI.EMPTY_SET_SELECTOR;
+import static Files.ToolGUI.EMPTY_WEAPON_SELECTOR;
 
 import javax.swing.ImageIcon;
 
@@ -95,7 +97,13 @@ public class CharacterCard {
      * @param weapon the new weapon name
      */
     public void setWeapon(String weapon) {
-        this.weapon = weapon;
+        if (weapon.equalsIgnoreCase(EMPTY_WEAPON_SELECTOR)){
+            this.weapon = "";
+        }
+        else{
+            this.weapon = weapon;
+        }
+
     }
 
     /**
@@ -127,7 +135,12 @@ public class CharacterCard {
      * @param artifactSet1 set name
      */
     public void setArtifactSet1(String artifactSet1) {
-        this.artifactSet1 = artifactSet1;
+        if (artifactSet1.equalsIgnoreCase(EMPTY_SET_SELECTOR)){
+            this.artifactSet1 = "";
+        }
+        else{
+            this.artifactSet1 = artifactSet1;
+        }
     }
 
     /**
@@ -158,7 +171,12 @@ public class CharacterCard {
      * @param artifactSet2 set name
      */
     public void setArtifactSet2(String artifactSet2) {
-        this.artifactSet2 = artifactSet2;
+        if (artifactSet2.equalsIgnoreCase(EMPTY_SET_SELECTOR)){
+            this.artifactSet2 = "";
+        }
+        else{
+            this.artifactSet2 = artifactSet2;
+        }
     }
     /**
      * Returns whether the artifact set 2 is farmed. Will be false if no set equipped.

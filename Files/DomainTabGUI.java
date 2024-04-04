@@ -19,9 +19,9 @@ import static Files.ToolData.knownMappings.WEEKLYBOSSMAT_CHAR;
 import static Files.ToolData.knownMappings.WEEKLYDOMAIN_WEEKLYBOSSMAT;
 import static Files.ToolData.knownMappings.WEPDOMAIN_WEPMAT;
 import static Files.ToolData.knownMappings.WEPMAT_WEPNAME;
-import static Files.ToolGUI.getAllFarmedWeapons;
 import static Files.ToolGUI.getFarmedMapping;
 import static Files.ToolGUI.howManyAreFarmingThis;
+import static Files.WeaponTabGUI.getUnassignedFarmedWeapons;
 import static java.util.Calendar.FRIDAY;
 import static java.util.Calendar.MONDAY;
 import static java.util.Calendar.SATURDAY;
@@ -290,7 +290,7 @@ public class DomainTabGUI implements ActionListener {
         }
     }
     public static boolean isSomethingFarmedInThisDomain(DOMAIN_THEME dt,String domainName){
-        Set<String> farmedMapping = getDomainFarmedMapping(dt);
+        Set<String> farmedMapping = getDomainFarmedList(dt);
         List<String> domainItems = getDomainMapping(dt).get(domainName);
         for (String item : farmedMapping){
             if (dt == DOMAIN_THEME.WEAPON_MATERIAL_THEME && domainItems.contains(getWeaponMaterialForWeapon(item))){
@@ -427,11 +427,35 @@ public class DomainTabGUI implements ActionListener {
             case TALENT_BOOK_THEME, WEEKLY_BOSS_DOMAIN_THEME, ARTIFACT_DOMAIN_THEME -> ToolData.RESOURCE_TYPE.CHARACTER;
         };
     }
-    public static Set<String> getDomainFarmedMapping(DOMAIN_THEME dt){
+    public static Set<String> getDomainFarmedList(DOMAIN_THEME dt){
         return switch(dt){
-            case WEAPON_MATERIAL_THEME -> getAllFarmedWeapons();
-            case TALENT_BOOK_THEME, WEEKLY_BOSS_DOMAIN_THEME -> getFarmedMapping(ToolGUI.FARMED_DATATYPE.TALENTS);
-            case ARTIFACT_DOMAIN_THEME -> getFarmedMapping(ToolGUI.FARMED_DATATYPE.ARTIFACTS);
+            case WEAPON_MATERIAL_THEME -> {
+                TreeSet<String> allFarmedWeapons = new TreeSet<>(getUnassignedFarmedWeapons());
+                for (String weapon: getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS).keySet()){
+                    if (!getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS).get(weapon).isEmpty()){
+                        allFarmedWeapons.add(weapon);
+                    }
+                }
+                yield allFarmedWeapons;
+            }
+            case TALENT_BOOK_THEME, WEEKLY_BOSS_DOMAIN_THEME -> {
+                TreeSet<String> allFarmedTalents = new TreeSet<>();
+                for (String talentResourceName : getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS).keySet()){
+                    if (!getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS).get(talentResourceName).isEmpty()){
+                        allFarmedTalents.add(talentResourceName);
+                    }
+                }
+                yield allFarmedTalents;
+            }
+            case ARTIFACT_DOMAIN_THEME -> {
+                TreeSet<String> allFarmedArtifacts = new TreeSet<>();
+                for (String artifactName : getFarmedMapping(ToolGUI.FARMED_DATATYPE.ARTIFACTS).keySet()){
+                    if (!getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS).get(artifactName).isEmpty()){
+                        allFarmedArtifacts.add(artifactName);
+                    }
+                }
+                yield allFarmedArtifacts;
+            }
         };
     }
     public static String getAllCounterLabel(String domainName,ToolData.RESOURCE_TYPE rt){
@@ -476,7 +500,7 @@ public class DomainTabGUI implements ActionListener {
         int counter = 0;
         switch(rt){
             case WEAPON_MATERIAL -> {
-                for (String weaponName: getAllFarmedWeapons()){
+                for (String weaponName: getDomainFarmedList(DOMAIN_THEME.WEAPON_MATERIAL_THEME)){
                     if (getMapping(WEPDOMAIN_WEPMAT).get(domainName).contains(getWeaponMaterialForWeapon(weaponName))){
                         counter++;
                     }
@@ -485,7 +509,7 @@ public class DomainTabGUI implements ActionListener {
             }
             //TODO: Finish the remaining cases.
             case ARTIFACT_SET -> {
-                Set<String> mapping = getFarmedMapping(ToolGUI.FARMED_DATATYPE.ARTIFACTS);
+                Set<String> mapping = getDomainFarmedList(DOMAIN_THEME.ARTIFACT_DOMAIN_THEME);
                 for (String setName : mapping){
                     if (getMapping(ARTIDOMAIN_ARTISET).get(domainName).contains(setName)){
                         counter += howManyAreFarmingThis(setName,ARTIFACT_SET);
@@ -494,7 +518,7 @@ public class DomainTabGUI implements ActionListener {
                 domainMaterialCategory = "characters";
             }
             case WEEKLY_BOSS_MATERIAL -> {
-                Set<String> mapping = getFarmedMapping(ToolGUI.FARMED_DATATYPE.TALENTS);
+                Set<String> mapping = getDomainFarmedList(DOMAIN_THEME.WEEKLY_BOSS_DOMAIN_THEME);
                 for (String materialName : mapping){
                     if (getMapping(WEEKLYDOMAIN_WEEKLYBOSSMAT).get(domainName).contains(materialName)){
                         counter += howManyAreFarmingThis(materialName,WEEKLY_BOSS_MATERIAL);
@@ -503,7 +527,7 @@ public class DomainTabGUI implements ActionListener {
                 domainMaterialCategory = "characters";
             }
             case TALENT_BOOK -> {
-                Set<String> mapping = getFarmedMapping(ToolGUI.FARMED_DATATYPE.TALENTS);
+                Set<String> mapping = getDomainFarmedList(DOMAIN_THEME.TALENT_BOOK_THEME);
                 for (String bookName : mapping){
                     if (getMapping(TALENTDOMAIN_TALENTBOOK).get(domainName).contains(bookName)){
                         counter += howManyAreFarmingThis(bookName,TALENT_BOOK);
