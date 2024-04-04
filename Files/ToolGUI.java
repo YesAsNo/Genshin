@@ -279,6 +279,10 @@ public class ToolGUI extends JFrame {
      */
     public static void updateFarmedItemMap(ToolData.CHARACTER_CARD_DATA_FIELD dataField, CharacterCard characterCard,
                                            boolean status, String item) {
+        if (item.isEmpty() || item.equalsIgnoreCase(EMPTY_SET_SELECTOR) ||
+                item.equalsIgnoreCase(EMPTY_WEAPON_SELECTOR)) {
+            return;
+        }
         Map<String, Set<String>> mapping;
         switch (dataField) {
             case WEAPON, FARMING_WEAPON_MATERIALS -> mapping = farmedWeapons;
