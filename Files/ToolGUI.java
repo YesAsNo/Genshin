@@ -212,11 +212,6 @@ public class ToolGUI extends JFrame {
         return !farmedWeapons.get(weapon).isEmpty();
     }
 
-    //T
-    public static Map<String, Set<String>> getAllFarmedWeapons() {
-        return farmedWeapons;
-    }
-
     public static int howManyAreFarmingThis(String mat, ToolData.RESOURCE_TYPE rt) {
         int counter = 0;
         for (CharacterCard characterCard : generatedCharacterCards) {
