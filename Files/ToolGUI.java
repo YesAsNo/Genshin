@@ -7,6 +7,7 @@ import static Files.ToolData.getFlattenedData;
 import static Files.ToolData.getResourceIcon;
 import static Files.ToolData.getTalentBookForCharacter;
 import static Files.ToolData.getWeeklyBossMatForCharacter;
+import static Files.WeaponTabGUI.getUnassignedFarmedWeapons;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -303,7 +304,7 @@ public class ToolGUI extends JFrame {
         try {
             f.createNewFile();
             FileWriter fd = new FileWriter(f);
-            gson.toJson(farmedWeapons, fd);
+            gson.toJson(getUnassignedFarmedWeapons(), fd);
             fd.flush();
             fd.close();
         } catch (IOException e) {
