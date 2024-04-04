@@ -243,8 +243,8 @@ public class DomainCardGUI extends JFrame {
         final String HTML_BEGINNING = "<html><center>";
         final String HTML_END = "</center></html>";
         final String HTML_BREAK = "<br>";
-        StringBuilder formattedNotes = new StringBuilder(characterName + HTML_BREAK);
-        for (int i = 0; i < characterNotes.length(); i++){
+        StringBuilder formattedNotes = new StringBuilder("<b>"+characterName +"</b>"+ HTML_BREAK);
+        for (int i = 1; i < characterNotes.length(); i++){
             if (i % MAX_CHARACTERS_PER_LINE == 0){
                 formattedNotes.append(HTML_BREAK);
             }
