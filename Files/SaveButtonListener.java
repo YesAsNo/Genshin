@@ -92,6 +92,5 @@ public class SaveButtonListener implements ActionListener {
         Timer timer = new Timer(1000,event->triggerButton.setText("SAVE"));
         timer.setRepeats(false);
         timer.start();
-        saveButton.setEnabled(true);
     }
 }

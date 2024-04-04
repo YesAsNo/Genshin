@@ -116,7 +116,7 @@ public class CharacterCardGUI extends JFrame {
         return middleSelectorPanel;
     }
 
-    private void getNotesTextField(CharacterCard selectedCharacterCard, JPanel jpanel) {
+    private JTextField getNotesTextField(CharacterCard selectedCharacterCard, JPanel jpanel) {
         JTextField notesTextField = new JTextField();
         changeFont(notesTextField, AVAILABLE_FONTS.TEXT_FONT, 14.0F);
         notesTextField.setHorizontalAlignment(10);
@@ -124,11 +124,12 @@ public class CharacterCardGUI extends JFrame {
         notesTextField.setMargin(new Insets(2, 6, 2, 6));
         notesTextField.setOpaque(true);
         notesTextField.setDocument(new NotesTextModel(CHARACTER_LIMIT, selectedCharacterCard.getCharacterNotes()));
-        notesTextField.getDocument().addDocumentListener(new NotesListener(selectedCharacterCard));
+
         jpanel.add(notesTextField,
                 new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL,
                         GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null,
                         new Dimension(50, -1), null, 0, false));
+        return notesTextField;
     }
 
 
@@ -374,7 +375,7 @@ public class CharacterCardGUI extends JFrame {
         assert characterCard != null;
         templateTab.setLayout(new GridBagLayout());
         JPanel middleSelectorPanel = getMiddleSelectorPanel(templateTab);
-        getNotesTextField(characterCard, middleSelectorPanel);
+        JTextField notesTextField = getNotesTextField(characterCard, middleSelectorPanel);
         getNameLabel(characterCard, middleSelectorPanel,
                 new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
                 GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1,
@@ -487,6 +488,7 @@ public class CharacterCardGUI extends JFrame {
         saveButton.setEnabled(false);
         set1ComboBox.addActionListener(new UpdateTextAreaListener(setDetailsTextArea));
         set2ComboBox.addActionListener(new UpdateTextAreaListener(setDetailsTextArea));
+        notesTextField.getDocument().addDocumentListener(new NotesListener(characterCard,saveButton));
 
         return templateTab;
     }

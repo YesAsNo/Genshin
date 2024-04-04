@@ -8,7 +8,9 @@ import static Files.DomainTabGUI.getDomainTargetResourceType;
 import static Files.DomainTabGUI.getListedCounterLabel;
 import static Files.ToolData.changeFont;
 import static Files.ToolData.getResourceIcon;
+import static Files.ToolGUI.MAX_CHARACTERS_PER_LINE;
 import static Files.ToolGUI.getAllFarmedWeapons;
+import static Files.ToolGUI.getCharacterCard;
 import static Files.ToolGUI.whoIsFarmingThis;
 
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -21,6 +23,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -146,6 +149,7 @@ public class DomainCardGUI extends JFrame {
             gbc.gridx = 0;
             gbc.gridy = 1;
             gbc.weightx = 1.0;
+            gbc.weighty = 0.5;
             gbc.fill = GridBagConstraints.BOTH;
             dayTab.add(innerListedPanel,gbc);
             if(domainTheme != DomainTabGUI.DOMAIN_THEME.ARTIFACT_DOMAIN_THEME) {
@@ -168,7 +172,7 @@ public class DomainCardGUI extends JFrame {
                 gbc.gridx = 0;
                 gbc.gridy = 3;
                 gbc.weightx = 1.0;
-                gbc.weighty = 1.0;
+                gbc.weighty = 0.5;
                 gbc.fill = GridBagConstraints.BOTH;
                 dayTab.add(innerUnlistedPanel, gbc);
             }
@@ -235,19 +239,41 @@ public class DomainCardGUI extends JFrame {
 
 
     }
+    private String formatLabel(String characterName, String characterNotes){
+        final String HTML_BEGINNING = "<html><center>";
+        final String HTML_END = "</center></html>";
+        final String HTML_BREAK = "<br>";
+        StringBuilder formattedNotes = new StringBuilder(characterName + HTML_BREAK);
+        for (int i = 0; i < characterNotes.length(); i++){
+            if (i % MAX_CHARACTERS_PER_LINE == 0){
+                formattedNotes.append(HTML_BREAK);
+            }
+            formattedNotes.append(characterNotes.charAt(i));
+            }
+        return HTML_BEGINNING + formattedNotes + HTML_END;
+        }
     // GENERATED WEAPONS/CHARACTERS
 
     private void generateDomainItemLabel(String item, int index,JPanel panel){
         JLabel domainItemLabel = new JLabel();
-        domainItemLabel.setHorizontalAlignment(0);
-        domainItemLabel.setHorizontalTextPosition(0);
-        domainItemLabel.setText(item);
-        changeFont(domainItemLabel, ToolData.AVAILABLE_FONTS.BLACK_FONT, 12);
-        domainItemLabel.setVerticalAlignment(0);
-        domainItemLabel.setVerticalTextPosition(3);
+
+        if (getDomainResourceType(domainTheme) == ToolData.RESOURCE_TYPE.ARTIFACT_SET) {
+            CharacterCard card = getCharacterCard(item);
+            if (card != null && !card.getCharacterNotes().isEmpty()) {
+                domainItemLabel.setText(formatLabel(item, card.getCharacterNotes()));
+            } else {
+                domainItemLabel.setText(item);
+            }
+        }
+        domainItemLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        domainItemLabel.setHorizontalTextPosition(SwingConstants.RIGHT);
+        domainItemLabel.setVerticalTextPosition(SwingConstants.CENTER);
+        domainItemLabel.setVerticalAlignment(SwingConstants.TOP);
+        changeFont(domainItemLabel, ToolData.AVAILABLE_FONTS.BLACK_FONT, 12.0F);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = index % 4;
         gbc.gridy = index / 4;
+        gbc.anchor = GridBagConstraints.NORTH;
         gbc.insets = new Insets(0, 20, 0, 20);
         domainItemLabel.setIcon(getResourceIcon(item,getDomainTargetResourceType(domainTheme)));
         panel.add(domainItemLabel, gbc);
