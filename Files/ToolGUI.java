@@ -7,7 +7,6 @@ import static Files.ToolData.getFlattenedData;
 import static Files.ToolData.getResourceIcon;
 import static Files.ToolData.getTalentBookForCharacter;
 import static Files.ToolData.getWeeklyBossMatForCharacter;
-import static Files.WeaponTabGUI.parseWeaponsMap;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
