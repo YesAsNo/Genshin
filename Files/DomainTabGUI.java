@@ -440,8 +440,8 @@ public class DomainTabGUI implements ActionListener {
             }
             case TALENT_BOOK_THEME, WEEKLY_BOSS_DOMAIN_THEME -> {
                 TreeSet<String> allFarmedTalents = new TreeSet<>();
-                for (String talentResourceName : getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS).keySet()){
-                    if (!getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS).get(talentResourceName).isEmpty()){
+                for (String talentResourceName : getFarmedMapping(ToolGUI.FARMED_DATATYPE.TALENTS).keySet()){
+                    if (!getFarmedMapping(ToolGUI.FARMED_DATATYPE.TALENTS).get(talentResourceName).isEmpty()){
                         allFarmedTalents.add(talentResourceName);
                     }
                 }
@@ -450,7 +450,7 @@ public class DomainTabGUI implements ActionListener {
             case ARTIFACT_DOMAIN_THEME -> {
                 TreeSet<String> allFarmedArtifacts = new TreeSet<>();
                 for (String artifactName : getFarmedMapping(ToolGUI.FARMED_DATATYPE.ARTIFACTS).keySet()){
-                    if (!getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS).get(artifactName).isEmpty()){
+                    if (!getFarmedMapping(ToolGUI.FARMED_DATATYPE.ARTIFACTS).get(artifactName).isEmpty()){
                         allFarmedArtifacts.add(artifactName);
                     }
                 }
