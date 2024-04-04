@@ -274,7 +274,7 @@ public class DomainCardGUI extends JFrame {
         gbc.gridx = index % 3;
         gbc.gridy = index / 3;
         gbc.anchor = GridBagConstraints.NORTH;
-        gbc.insets = new Insets(0, 5, 0, 10);
+        gbc.insets = new Insets(0, 5, 0, 5);
         domainItemLabel.setIcon(getResourceIcon(item,getDomainTargetResourceType(domainTheme)));
         panel.add(domainItemLabel, gbc);
     }
