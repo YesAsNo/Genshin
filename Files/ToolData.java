@@ -23,20 +23,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-/**
- * Main class of the application. Parses all static data from the json files, taken from the Genshin Fandom Wiki.
- */
+/** Main class of the application. Parses all static data from the json files, taken from the Genshin Fandom Wiki. */
 public class ToolData {
     private static Map<String,String> artifactSetDescriptions = new TreeMap<>();
     private static final Map<String,Font> fonts = new TreeMap<>();
-    /**
-     * Save location of user data.
-     */
+    /** Save location of user data. */
     public static final String SAVE_LOCATION = "./UserData/";
     private static final String UNKNOWN_WEAPON_PATH = "./Files/Images/Weapons/unknown_weapon.png";
-    /**
-     * Locations of all data json files.
-     */
+    /** Locations of all data json files. */
     public static final Map<String, Boolean> PATHS_TO_DATA_FILES;
     static {
         PATHS_TO_DATA_FILES = new TreeMap<>();
@@ -57,59 +51,35 @@ public class ToolData {
     private static final Map<String,Map<String,ImageIcon>> parsedResourceIcons = new TreeMap<>();
     private static final Map<String,List<String>> parsedFlattenedData = new TreeMap<>();
 
-    /**
-     * Enum that represents known mappings. All methods should use it instead of String values.
-     */
+    /** Enum that represents known mappings. All methods should use it instead of String values. */
     public enum knownMappings{
-        /**
-         * Artifact Domain -> Artifact Set available there.
-         */
+        /** Artifact Domain -> Artifact Set available there. */
         ARTIDOMAIN_ARTISET("ArtifactDomain_ArtifactSet"),
-        /**
-         * Artifact Set -> Artifact Set Description.
-         */
+        /** Artifact Set -> Artifact Set Description. */
         ARTISET_ARTISETDESC("ArtifactSet_ArtifactSetDescription"),
-        /**
-         * Day of the week -> Available materials on that day. Note it does not contain Sunday as all materials are available then.
-         */
+        /** Day of the week -> Available materials on that day. Note it does not contain Sunday as all materials are available then. */
         DAY_AVAILABLEMATS("Day_AvailableMaterials"),
-        /**
-         * Element -> All characters of that element.
-         */
+        /** Element -> All characters of that element. */
         ELEM_CHAR("Element_Character"),
-        /**
-         * Talent Book Name -> All characters that need it for their talents.
-         */
+        /** Talent Book Name -> All characters that need it for their talents. */
         TALENTBOOK_CHAR("TalentBook_Character"),
-        /**
-         * Talent Domain Name -> All Talent Books available there.
-         */
+        /** Talent Domain Name -> All Talent Books available there. */
         TALENTDOMAIN_TALENTBOOK("TalentDomain_TalentBook"),
-        /**
-         * Weapon Domain Name -> All Weapon Materials available there.
-         */
+        /** Weapon Domain Name -> All Weapon Materials available there. */
         WEPDOMAIN_WEPMAT("WeaponDomain_WeaponMaterial"),
-        /**
-         * Weapon Material Name -> All names of Weapons that need it for ascension.
-         */
+        /** Weapon Material Name -> All names of Weapons that need it for ascension. */
         WEPMAT_WEPNAME("WeaponMaterial_WeaponName"),
         /**
          * Weapon Rarity and Type -> All weapons of that rarity and type.
          * The keys are in the form of (Four/Five-Star *type*)
          */
         WEPRARITYANDTYPE_WEPNAME("WeaponRarityAndType_WeaponName"),
-        /**
-         * Weapon Type -> All characters who can equip weapons of this type.
-         */
+        /** Weapon Type -> All characters who can equip weapons of this type. */
         WEPTYPE_CHAR("WeaponType_Character"),
-        /**
-         * Weekly Boss Material -> All Characters who can use it for their talents.
-         */
+        /** Weekly Boss Material -> All Characters who can use it for their talents. */
         WEEKLYBOSSMAT_CHAR("WeeklyBossMaterial_Character"),
 
-        /**
-         * Weekly Boss Domain -> All Weekly Boss Materials available there.
-         */
+        /** Weekly Boss Domain -> All Weekly Boss Materials available there. */
         WEEKLYDOMAIN_WEEKLYBOSSMAT("WeeklyDomain_WeeklyBossMaterial");
 
         /** The string token used to look up the mapping. */
@@ -221,6 +191,7 @@ public class ToolData {
         /** The boldest option of the font. */
         BLACK_FONT(fonts.get("SourceCodePro-Black"));
 
+        /** String that contains the name of the font */
         final public Font fontName;
 
         AVAILABLE_FONTS(Font font) {
@@ -228,21 +199,49 @@ public class ToolData {
         }
     }
 
+    /**
+     * Method for changing the font of any JComponent
+     * @param jcomponent any component that needs their font changed.
+     * @param desiredFont any font from AVAILABLE_FONTS
+     * @param size of the desired font, duh!
+     */
     public static void changeFont(JComponent jcomponent, AVAILABLE_FONTS desiredFont, float size){
         jcomponent.setFont(desiredFont.fontName.deriveFont(size));
     }
 
-
-    public static List<String> getFlattenedData(RESOURCE_TYPE dc){
-        return parsedFlattenedData.get(dc.stringToken);
+    /**
+     * Get the list of desired resources (characters, weapons etc)
+     * @param rt (resource type)
+     * @return the list of desired resource type
+     */
+    public static List<String> getFlattenedData(RESOURCE_TYPE rt){
+        return parsedFlattenedData.get(rt.stringToken);
     }
+
+    /**
+     * Get a known data mapping
+     * @param mapping enum of the known mapping
+     * @return the mapping, duh!
+     */
     public static Map<String,List<String>> getMapping(knownMappings mapping){
         return parsedMappings.get(mapping.stringToken);
     }
+
+    /**
+     * Get the set description of desired artifact set.
+     * @param artifactSetName the desired artifact set (duh).
+     * @return set description of the desired artifact set.
+     */
     public static String getArtifactSetDescription(String artifactSetName){
         assert artifactSetDescriptions.containsKey(artifactSetName);
         return artifactSetDescriptions.get(artifactSetName);
     }
+
+    /**
+     * Get the materials needed for the desired weapon.
+     * @param weaponName name of the desired weapon.
+     * @return materials needed for the desired weapon.
+     */
     public static String getWeaponMaterialForWeapon(String weaponName){
         Map<String, List<String>> mapping = getMapping(knownMappings.WEPMAT_WEPNAME);
         for (String weaponMat: mapping.keySet()){
@@ -251,15 +250,6 @@ public class ToolData {
             }
         }
         return "";
-    }
-    /**
-     * Looks up a set description from the name.
-     *
-     * @param setName the name of the set
-     * @return the description of it as String.
-     */
-    public static String lookUpSetDescription(String setName) {
-        return getArtifactSetDescription(setName);
     }
     private static void parseDataJsonFiles() throws FileNotFoundException {
         Gson gson = new Gson();
@@ -286,7 +276,6 @@ public class ToolData {
     }
     /**
      * Generates a path to the specified resource.
-     *
      * @param resourceName the name of the resource
      * @param resourceType the type of the resource
      * @return character icon path
@@ -315,7 +304,6 @@ public class ToolData {
     }
     /**
      * Looks up what weapon category is assigned to the character, i.e. what type of weapons the character can wield.
-     *
      * @param charName the name of the character
      * @return the string that represents the category (one of five possibilities)
      */
@@ -351,7 +339,6 @@ public class ToolData {
     }
     /**
      * Looks up the rarity and type of specified weapon.
-     *
      * @param weaponName the weapon name
      * @return WeaponInfo object with rarity and type of the weapon.
      */
@@ -366,6 +353,12 @@ public class ToolData {
         }
         return new WeaponInfo("");
     }
+
+    /**
+     * Get the needed talent book materials for desired character.
+     * @param characterName desired character!
+     * @return the talent book materials the character needs.
+     */
     public static String getTalentBookForCharacter(String characterName){
         Map<String, List<String>> mapping = getMapping(knownMappings.TALENTBOOK_CHAR);
         for (String key:mapping.keySet()){
@@ -375,6 +368,12 @@ public class ToolData {
         }
         return "";
     }
+
+    /**
+     * Get the needed weekly boss materials for desired character.
+      * @param characterName desired character!
+     * @return the weekly boss materials the chosen character needs.
+     */
     public static String getWeeklyBossMatForCharacter(String characterName){
         Map<String, List<String>> mapping = getMapping(knownMappings.WEEKLYBOSSMAT_CHAR);
         for (String key:mapping.keySet()){
@@ -403,6 +402,7 @@ public class ToolData {
             }
         }
     }
+
     private static void parseResourceIcons(){
         for (RESOURCE_TYPE data : RESOURCE_TYPE.values()){
             parsedResourceIcons.put(data.stringToken,new LinkedHashMap<>());
@@ -420,15 +420,36 @@ public class ToolData {
             }
         }
     }
+
+    /**
+     * Get icon for the desired resource
+     * @param resourceName name of the resource (character/weapon/material etc)
+     * @param rt (resource type)
+     * @return the icon of the resource
+     */
     public static ImageIcon getResourceIcon(String resourceName, RESOURCE_TYPE rt){
         assert getFlattenedData(rt).contains(resourceName);
         return parsedResourceIcons.get(rt.stringToken).get(resourceName);
     }
+
+    /**
+     * Resize resource icon
+     * @param resourceName name of the desired resource
+     * @param rt (resource type)
+     * @param size desired size, duh!
+     * @return the resized new icon
+     */
     public static ImageIcon getResizedResourceIcon(String resourceName, RESOURCE_TYPE rt, int size){
         assert getFlattenedData(rt).contains(resourceName);
         ImageIcon originalIcon = getResourceIcon(resourceName,rt);
         return new ImageIcon(originalIcon.getImage().getScaledInstance(size,size,Image.SCALE_SMOOTH));
     }
+
+    /**
+     * Main method
+     * @param args Not used
+     * @throws Exception Exception!
+     */
     public static void main(String[] args) throws Exception {
 
         parseDataJsonFiles();

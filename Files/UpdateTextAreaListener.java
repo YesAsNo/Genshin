@@ -1,6 +1,6 @@
 package Files;
 
-import static Files.ToolData.lookUpSetDescription;
+import static Files.ToolData.getArtifactSetDescription;
 import static Files.ToolGUI.EMPTY_SET_SELECTOR;
 
 import javax.swing.JComboBox;
@@ -22,7 +22,7 @@ public class UpdateTextAreaListener implements ActionListener {
         String item = ((JLabel) src.getSelectedItem()).getText();
         assert item != null;
         if (!item.equalsIgnoreCase(EMPTY_SET_SELECTOR)) {
-            _textArea.setText(lookUpSetDescription(item));
+            _textArea.setText(getArtifactSetDescription(item));
         }
         else{
             _textArea.setText("");
