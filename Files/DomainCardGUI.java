@@ -8,10 +8,10 @@ import static Files.DomainTabGUI.getDomainTargetResourceType;
 import static Files.DomainTabGUI.getListedCounterLabel;
 import static Files.ToolData.changeFont;
 import static Files.ToolData.getResourceIcon;
-import static Files.ToolGUI.MAX_CHARACTERS_PER_LINE;
-import static Files.ToolGUI.getAllFarmedWeapons;
 import static Files.ToolGUI.getCharacterCard;
+import static Files.ToolGUI.isSomeoneFarmingForTheWeapon;
 import static Files.ToolGUI.whoIsFarmingThis;
+import static Files.WeaponTabGUI.getUnassignedFarmedWeapons;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -188,7 +188,7 @@ public class DomainCardGUI extends JFrame {
                 }
                 case WEAPON_MATERIAL -> {
                     for (String eligibleWeapon : getEligibleItems(domainMat)){
-                        if (getAllFarmedWeapons().contains(eligibleWeapon)){
+                        if (isSomeoneFarmingForTheWeapon(eligibleWeapon)|| getUnassignedFarmedWeapons().contains(eligibleWeapon)){
                             generateDomainItemLabel(eligibleWeapon,i,innerListedPanel);
                             i++;
                         }

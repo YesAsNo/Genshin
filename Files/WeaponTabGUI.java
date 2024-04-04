@@ -1,6 +1,7 @@
 package Files;
 
 import static Files.ToolData.AVAILABLE_FONTS;
+import static Files.ToolData.SAVE_LOCATION;
 import static Files.ToolData.WEAPON_FILTER_OPTIONS.ALL_OPTIONS_BY_ENUM;
 import static Files.ToolData.WEAPON_FILTER_OPTIONS.ALL_OPTIONS_BY_STRING;
 import static Files.ToolData.WEAPON_FILTER_OPTIONS.NO_FILTER;
@@ -9,11 +10,13 @@ import static Files.ToolData.getFlattenedData;
 import static Files.ToolData.getResourceIcon;
 import static Files.ToolData.getWeaponMaterialForWeapon;
 import static Files.ToolData.lookUpWeaponRarityAndType;
+import static Files.ToolGUI.WEAPON_SAVE_FILE_NAME;
 import static Files.ToolGUI.formatString;
-import static Files.ToolGUI.getFarmedMapping;
 import static Files.ToolGUI.isSomeoneFarmingForTheWeapon;
 import static Files.ToolGUI.serializeSave;
 
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 
@@ -36,11 +39,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class WeaponTabGUI implements ItemListener, ActionListener {
 
@@ -53,17 +58,12 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
     private final JCheckBox showUnlistedCheckBox = new JCheckBox();
     private final JLabel showMatchedAmountLabel = new JLabel();
     private static final JComboBox<String> devFilterComboBox = new JComboBox<>();
-    private static final Map<String, LISTED_STATUS> farmedWeaponsMap = new TreeMap<>();
+    private static final Set<String> unassignedFarmedWeapons = new TreeSet<>();
     private static final List<JCheckBox> allCheckboxes = new ArrayList<>();
     public enum SEARCH_FLAG {
         ALL,
         LISTED_ONLY,
         UNLISTED_ONLY
-    }
-    public enum LISTED_STATUS{
-        UNLISTED,
-        LISTED_GENERALLY,
-        LISTED_FOR_CHARACTER
     }
 
     public WeaponTabGUI(){
@@ -74,19 +74,22 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         return mainPanel;
     }
     public static void parseWeaponsMap(){
-        Set<String> mapping = getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS);
-        for (String weapon: getFlattenedData(ToolData.RESOURCE_TYPE.WEAPON_NAME)){
-            if (mapping.contains(weapon)){
-                farmedWeaponsMap.put(weapon,LISTED_STATUS.LISTED_GENERALLY);
+        Gson gson = new Gson();
+        File f = new File(SAVE_LOCATION + WEAPON_SAVE_FILE_NAME);
+        if (!f.exists()) {
+            return;
+        }
+        try {
+            JsonReader reader = new JsonReader(new FileReader(f));
+            Set<String> map = gson.fromJson(reader, unassignedFarmedWeapons.getClass());
+            if (map != null) {
+                unassignedFarmedWeapons.addAll(map);
             }
-            else if (isSomeoneFarmingForTheWeapon(weapon)){
-                farmedWeaponsMap.put(weapon,LISTED_STATUS.LISTED_FOR_CHARACTER);
-            }
-            else{
-                farmedWeaponsMap.put(weapon,LISTED_STATUS.UNLISTED);
-            }
+        } catch (IOException ex) {
+            System.out.println("The weapon save file failed to parse.");
         }
     }
+
     public static void setAllCheckboxesEnabled(boolean flag){
         for (JCheckBox checkBox:allCheckboxes){
             checkBox.setEnabled(flag);
@@ -119,19 +122,11 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         triggerButton.setEnabled(true);
     }
     public static void saveAllWeapons() {
-
-        for(String weapon : farmedWeaponsMap.keySet()){
-            if (farmedWeaponsMap.get(weapon) == LISTED_STATUS.LISTED_GENERALLY){
-                getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS).add(weapon);
-            }
-            if (farmedWeaponsMap.get(weapon) == LISTED_STATUS.UNLISTED) {
-                getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS).remove(weapon);
-            }
-            //The third case was handled in the SaveButtonListener.
-        }
         serializeSave();
     }
-
+    public static Set<String> getUnassignedFarmedWeapons(){
+        return unassignedFarmedWeapons;
+    }
     private void parseSearch(SEARCH_FLAG flag) {
         String userFieldInput = devWeaponsTabSearchbar.getText().toLowerCase();
         devWeaponTabScrollPanePanel.removeAll();
@@ -162,19 +157,16 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         if(weapon.toLowerCase().contains(input.toLowerCase()) &&
                 (lookUpWeaponRarityAndType(weapon).getWeaponType().equalsIgnoreCase(filter.stringToken)||
                         filter == NO_FILTER)){
-            if(farmedWeaponsMap.get(weapon) != LISTED_STATUS.UNLISTED && flag == SEARCH_FLAG.LISTED_ONLY){
+            boolean isTheWeaponListed = isSomeoneFarmingForTheWeapon(weapon)|| unassignedFarmedWeapons.contains(weapon);
+            if(isTheWeaponListed && flag == SEARCH_FLAG.LISTED_ONLY){
                 return true;
             }
-            if(farmedWeaponsMap.get(weapon) == LISTED_STATUS.UNLISTED && flag == SEARCH_FLAG.UNLISTED_ONLY){
+            if(!isTheWeaponListed && flag == SEARCH_FLAG.UNLISTED_ONLY){
                 return true;
             }
             return flag == SEARCH_FLAG.ALL;
         }
         return false;
-    }
-
-    public static Map<String,LISTED_STATUS>getFarmingMap(){
-        return farmedWeaponsMap;
     }
     public JPanel generateWeaponCard(String weaponName) {
 
@@ -203,19 +195,16 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         JCheckBox devWepMatListingCheckbox = new JCheckBox();
         devWepMatListingCheckbox.setBackground(new Color(-1));
         allCheckboxes.add(devWepMatListingCheckbox);
-        assert getFarmingMap().containsKey(weaponName);
-        LISTED_STATUS status = getFarmingMap().get(weaponName);
-        if (status == LISTED_STATUS.LISTED_FOR_CHARACTER){
+        if (isSomeoneFarmingForTheWeapon(weaponName)){
             devWepMatListingCheckbox.setSelected(true);
             devWepMatListingCheckbox.setEnabled(false);
             devWepMatListingCheckbox.setText("Already Farmed");
         }
         else
         {
-            devWepMatListingCheckbox.setSelected(status == LISTED_STATUS.LISTED_GENERALLY);
+            devWepMatListingCheckbox.setSelected(unassignedFarmedWeapons.contains(weaponName));
             devWepMatListingCheckbox.setText("List weapon?");
-        }
-        changeFont(devWepMatListingCheckbox, AVAILABLE_FONTS.TEXT_FONT, 12);
+        }        changeFont(devWepMatListingCheckbox, AVAILABLE_FONTS.TEXT_FONT, 12);
         devWepMatListingCheckbox.addItemListener(new WeaponTabGUIListener(weaponName));
         devWeaponCard.add(devWepMatListingCheckbox,
                 new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,

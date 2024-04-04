@@ -1,6 +1,6 @@
 package Files;
 
-import static Files.WeaponTabGUI.getFarmingMap;
+import static Files.WeaponTabGUI.getUnassignedFarmedWeapons;
 import static Files.WeaponTabGUI.saveAllWeapons;
 import static Files.WeaponTabGUI.setAllCheckboxesEnabled;
 
@@ -18,10 +18,10 @@ public class WeaponTabGUIListener implements ItemListener {
         JCheckBox source = (JCheckBox) e.getSource();
         setAllCheckboxesEnabled(false);
         if (source.isSelected()){
-            getFarmingMap().put(weaponName, WeaponTabGUI.LISTED_STATUS.LISTED_GENERALLY);
+            getUnassignedFarmedWeapons().add(weaponName);
         }
         else{
-            getFarmingMap().put(weaponName, WeaponTabGUI.LISTED_STATUS.UNLISTED);
+            getUnassignedFarmedWeapons().remove(weaponName);
         }
         saveAllWeapons();
         setAllCheckboxesEnabled(true);

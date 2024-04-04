@@ -1,7 +1,6 @@
 package Files;
 
 import static Files.ToolData.SAVE_LOCATION;
-import static Files.ToolGUI.updateFarmedItemMap;
 
 import com.google.gson.Gson;
 
@@ -34,34 +33,6 @@ public class SaveButtonListener implements ActionListener {
         JButton saveButton = (JButton) e.getSource();
         saveButton.setEnabled(false);
         Gson gson = new Gson();
-        if (_characterCard.getWeapon().equalsIgnoreCase(ToolGUI.EMPTY_WEAPON_SELECTOR))
-        {
-            _characterCard.setWeapon("");
-            _characterCard.setWeaponStatus(false);
-        }
-        else{
-            updateFarmedItemMap(ToolGUI.FARMED_DATATYPE.WEAPONS);
-        }
-        if (_characterCard.getArtifactSet1().equalsIgnoreCase(ToolGUI.EMPTY_SET_SELECTOR))
-        {
-            _characterCard.setArtifactSet1("");
-            _characterCard.setArtifactSet1Status(false);
-        }
-        else{
-            updateFarmedItemMap(ToolGUI.FARMED_DATATYPE.ARTIFACTS);
-        }
-        if (_characterCard.getArtifactSet2().equalsIgnoreCase(ToolGUI.EMPTY_SET_SELECTOR))
-        {
-            _characterCard.setArtifactSet2("");
-            _characterCard.setArtifactSet2Status(false);
-        }
-        else{
-            updateFarmedItemMap(ToolGUI.FARMED_DATATYPE.ARTIFACTS);
-        }
-        if (_characterCard.getTalentStatus()){
-            updateFarmedItemMap(ToolGUI.FARMED_DATATYPE.TALENTS);
-        }
-
         File f = new File(SAVE_LOCATION + _characterCard.getCharacterName());
         JButton triggerButton = (JButton) e.getSource();
         try{
