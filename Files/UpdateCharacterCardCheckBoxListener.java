@@ -28,11 +28,11 @@ public class UpdateCharacterCardCheckBoxListener implements ItemListener {
         switch(_changedData){
             case FARMING_SET_ONE:
                 _characterCard.setArtifactSet1Status(currentStatus);
-                updateFarmedItemMap(_changedData,_characterCard,currentStatus,_characterCard.getArtifactSet1());
+                updateFarmedItemMap(CHARACTER_CARD_DATA_FIELD.SET_ONE,_characterCard,currentStatus,_characterCard.getArtifactSet1());
                 return;
             case FARMING_SET_TWO:
                 _characterCard.setArtifactSet2Status(currentStatus);
-                updateFarmedItemMap(_changedData,_characterCard,currentStatus,_characterCard.getArtifactSet2());
+                updateFarmedItemMap(CHARACTER_CARD_DATA_FIELD.SET_TWO,_characterCard,currentStatus,_characterCard.getArtifactSet2());
                 return;
             case FARMING_TALENT_MATERIALS:
                 _characterCard.setTalentStatus(currentStatus);
