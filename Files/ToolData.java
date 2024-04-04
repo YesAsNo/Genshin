@@ -289,12 +289,12 @@ public class ToolData {
         return null;
     }
 
-     /* Grabs all weapons based on their rarity and type.
-     *
-     * @param WEAPONRarity rarity of the weapon
-     * @param weaponType type of the weapon
-     * @return list of the weapons with the specified rarity.
-     */
+     /**
+      * Grabs all weapons based on their rarity and type.
+      * @param WEAPONRarity rarity of the weapon
+      * @param weaponType type of the weapon
+      * @return list of the weapons with the specified rarity.
+      */
     public static List<String> lookUpWeapons(WEAPON_RARITY WEAPONRarity, String weaponType) {
 
         final String FOUR_STAR_WEAPON_KEY = "Four-Star " + weaponType;
