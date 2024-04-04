@@ -25,11 +25,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
@@ -239,11 +235,11 @@ public class DomainCardGUI extends JFrame {
 
 
     }
-    private String formatLabel(String characterName, String characterNotes){
+    private String formatLabel(String characterName, String characterNotes, Font font){
         final String HTML_BEGINNING = "<html><center>";
         final String HTML_END = "</center></html>";
         final String HTML_BREAK = "<br>";
-        StringBuilder formattedNotes = new StringBuilder("<b>"+characterName +"</b>"+ HTML_BREAK);
+        StringBuilder formattedNotes = new StringBuilder("<font face=\"" + font + "\"<b>"+ characterName +"</b></font>"+ HTML_BREAK);
         for (int i = 1; i < characterNotes.length(); i++){
             if (i % 13 == 0){
                 formattedNotes.append(HTML_BREAK);
@@ -260,7 +256,7 @@ public class DomainCardGUI extends JFrame {
         if (getDomainResourceType(domainTheme) == ToolData.RESOURCE_TYPE.ARTIFACT_SET) {
             CharacterCard card = getCharacterCard(item);
             if (card != null && !card.getCharacterNotes().isEmpty()) {
-                domainItemLabel.setText(formatLabel(item, card.getCharacterNotes()));
+                domainItemLabel.setText(formatLabel(item, card.getCharacterNotes(), domainItemLabel.getFont()));
             } else {
                 domainItemLabel.setText(item);
             }
