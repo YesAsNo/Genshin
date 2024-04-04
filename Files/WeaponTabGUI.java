@@ -90,11 +90,6 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         }
     }
 
-    public static void setAllCheckboxesEnabled(boolean flag){
-        for (JCheckBox checkBox:allCheckboxes){
-            checkBox.setEnabled(flag);
-        }
-    }
     @Override
     public void itemStateChanged(ItemEvent e) {
         showListedCheckBox.setEnabled(false);

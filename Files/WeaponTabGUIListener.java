@@ -2,7 +2,6 @@ package Files;
 
 import static Files.WeaponTabGUI.getUnassignedFarmedWeapons;
 import static Files.WeaponTabGUI.saveAllWeapons;
-import static Files.WeaponTabGUI.setAllCheckboxesEnabled;
 
 import javax.swing.JCheckBox;
 import java.awt.event.ItemEvent;
@@ -16,7 +15,7 @@ public class WeaponTabGUIListener implements ItemListener {
     @Override
     public void itemStateChanged(ItemEvent e) {
         JCheckBox source = (JCheckBox) e.getSource();
-        setAllCheckboxesEnabled(false);
+        source.setEnabled(false);
         if (source.isSelected()){
             getUnassignedFarmedWeapons().add(weaponName);
         }
@@ -24,6 +23,6 @@ public class WeaponTabGUIListener implements ItemListener {
             getUnassignedFarmedWeapons().remove(weaponName);
         }
         saveAllWeapons();
-        setAllCheckboxesEnabled(true);
+        source.setEnabled(true);
     }
 }
