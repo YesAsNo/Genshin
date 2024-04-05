@@ -156,11 +156,11 @@ public final class CharacterTabGUI implements ActionListener {
 
     }
     private void parseElementIcons(){
-        final String iconFolderAddress = "./Files/Images/Icons";
+        final String iconFolderAddress = "/Files/Images/Icons";
         final String [] elements = {"Anemo","Cryo","Dendro","Electro","Geo","Hydro","Pyro"};
         for (String element : elements){
-            elementIcons.put(element, new ImageIcon(new ImageIcon(
-                    iconFolderAddress + "/Element_" + element + ".png").getImage().getScaledInstance(20,20,Image.SCALE_SMOOTH)));
+            elementIcons.put(element, new ImageIcon(new ImageIcon(Objects.requireNonNull(
+                    ToolData.class.getResource(iconFolderAddress + "/Element_" + element + ".png"))).getImage().getScaledInstance(20,20,Image.SCALE_SMOOTH)));
         }
     }
     /**

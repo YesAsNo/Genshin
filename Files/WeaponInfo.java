@@ -1,5 +1,6 @@
 package Files;
-import Files.ToolData.*;
+
+import Files.ToolData.WEAPON_RARITY;
 public class WeaponInfo {
 
     private final WEAPON_RARITY weaponRarity;

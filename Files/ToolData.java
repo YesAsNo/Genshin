@@ -12,10 +12,11 @@ import javax.swing.JComponent;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Image;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -29,23 +30,23 @@ public class ToolData {
     private static final Map<String,Font> fonts = new TreeMap<>();
     /** Save location of user data. */
     public static final String SAVE_LOCATION = "./UserData/";
-    private static final String UNKNOWN_WEAPON_PATH = "./Files/Images/Weapons/unknown_weapon.png";
+    private static final String UNKNOWN_WEAPON_PATH = "/Files/Images/Weapons/unknown_weapon.png";
     /** Locations of all data json files. */
     public static final Map<String, Boolean> PATHS_TO_DATA_FILES;
     static {
         PATHS_TO_DATA_FILES = new TreeMap<>();
-        PATHS_TO_DATA_FILES.put("./Files/JSONs/Element_Character.json",true);
-        PATHS_TO_DATA_FILES.put("./Files/JSONs/WeeklyBossMaterial_Character.json",false);
-        PATHS_TO_DATA_FILES.put("./Files/JSONs/TalentBook_Character.json",false);
-        PATHS_TO_DATA_FILES.put("./Files/JSONs/ArtifactDomain_ArtifactSet.json",true);
-        PATHS_TO_DATA_FILES.put("./Files/JSONs/WeaponType_Character.json",false);
-        PATHS_TO_DATA_FILES.put("./Files/JSONs/TalentDomain_TalentBook.json",true);
-        PATHS_TO_DATA_FILES.put("./Files/JSONs/WeaponDomain_WeaponMaterial.json",true);
-        PATHS_TO_DATA_FILES.put("./Files/JSONs/WeeklyDomain_WeeklyBossMaterial.json",true);
-        PATHS_TO_DATA_FILES.put("./Files/JSONs/WeaponMaterial_WeaponName.json",true);
-        PATHS_TO_DATA_FILES.put("./Files/JSONs/ArtifactSet_ArtifactSetDescription.json",false);
-        PATHS_TO_DATA_FILES.put("./Files/JSONs/WeaponRarityAndType_WeaponName.json",false);
-        PATHS_TO_DATA_FILES.put("./Files/JSONs/Day_AvailableMaterials.json",false);
+        PATHS_TO_DATA_FILES.put("/Files/JSONs/Element_Character.json",true);
+        PATHS_TO_DATA_FILES.put("/Files/JSONs/WeeklyBossMaterial_Character.json",false);
+        PATHS_TO_DATA_FILES.put("/Files/JSONs/TalentBook_Character.json",false);
+        PATHS_TO_DATA_FILES.put("/Files/JSONs/ArtifactDomain_ArtifactSet.json",true);
+        PATHS_TO_DATA_FILES.put("/Files/JSONs/WeaponType_Character.json",false);
+        PATHS_TO_DATA_FILES.put("/Files/JSONs/TalentDomain_TalentBook.json",true);
+        PATHS_TO_DATA_FILES.put("/Files/JSONs/WeaponDomain_WeaponMaterial.json",true);
+        PATHS_TO_DATA_FILES.put("/Files/JSONs/WeeklyDomain_WeeklyBossMaterial.json",true);
+        PATHS_TO_DATA_FILES.put("/Files/JSONs/WeaponMaterial_WeaponName.json",true);
+        PATHS_TO_DATA_FILES.put("/Files/JSONs/ArtifactSet_ArtifactSetDescription.json",false);
+        PATHS_TO_DATA_FILES.put("/Files/JSONs/WeaponRarityAndType_WeaponName.json",false);
+        PATHS_TO_DATA_FILES.put("/Files/JSONs/Day_AvailableMaterials.json",false);
     }
     private static final Map<String,Map<String,List<String>>> parsedMappings = new TreeMap<>();
     private static final Map<String,Map<String,ImageIcon>> parsedResourceIcons = new TreeMap<>();
@@ -177,7 +178,7 @@ public class ToolData {
             this.stringToken = stringToken;
         }
     }
-
+    public static String[] fontPaths = {"SourceCodePro-Bold","SourceCodePro-Light","SourceCodePro-Semibold","SourceCodePro-Regular","SourceCodePro-Black"};
     /** Fonts used in the entire program */
     public enum AVAILABLE_FONTS{
         /** Bold font used in headers among the other things. */
@@ -251,10 +252,13 @@ public class ToolData {
         }
         return "";
     }
-    private static void parseDataJsonFiles() throws FileNotFoundException {
+    private static void parseDataJsonFiles() throws IOException {
         Gson gson = new Gson();
+
         for (String path : PATHS_TO_DATA_FILES.keySet()){
-            JsonReader reader = new JsonReader(new FileReader(path));
+            URL url = ToolData.class.getResource(path);
+            assert url != null;
+            JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(url.openStream())));
             String categoryName = (String) path.subSequence(path.lastIndexOf('/') + 1,path.lastIndexOf("."));
             if (categoryName.equalsIgnoreCase(knownMappings.ARTISET_ARTISETDESC.stringToken)){
                 artifactSetDescriptions = gson.fromJson(reader,artifactSetDescriptions.getClass());
@@ -280,27 +284,30 @@ public class ToolData {
      * @param resourceType the type of the resource
      * @return character icon path
      */
-    private static String generateResourceIconPath(String resourceName, RESOURCE_TYPE resourceType) {
+    private static URL generateResourceIconPath(String resourceName, RESOURCE_TYPE resourceType) {
         assert resourceName != null;
-        return switch (resourceType){
+        String path = "";
+        switch (resourceType){
             case WEAPON_NAME -> {
                 if (resourceName.equalsIgnoreCase(UNKNOWN_WEAPON))
                 {
-                    yield UNKNOWN_WEAPON_PATH;
+                    path = UNKNOWN_WEAPON_PATH;
+                    break;
                 }
                 WeaponInfo wi = lookUpWeaponRarityAndType(resourceName);
-                yield switch (wi.getRarity()) {
-                    case FOUR_STAR -> "./Files/Images/Weapons/" + wi.getWeaponType() + "_4star/" + resourceName + ".png";
-                    case FIVE_STAR -> "./Files/Images/Weapons/" + wi.getWeaponType() + "_5star/" + resourceName + ".png";
-                };
+                switch (wi.getRarity()) {
+                    case FOUR_STAR -> path = "/Files/Images/Weapons/" + wi.getWeaponType() + "_4star/" + resourceName + ".png";
+                    case FIVE_STAR -> path = "/Files/Images/Weapons/" + wi.getWeaponType() + "_5star/" + resourceName + ".png";
+                }
             }
-            case ARTIFACT_SET -> "./Files/Images/Artifacts/" + resourceName + ".png";
-            case WEAPON_MATERIAL -> "./Files/Images/Weapon Materials/" + resourceName + ".png";
-            case CHARACTER -> "./Files/Images/Characters/" + resourceName + ".png";
-            case TALENT_BOOK -> "./Files/Images/Talent Materials/" + resourceName + ".png";
-            case WEEKLY_BOSS_MATERIAL -> "./Files/Images/Weekly Bosses/" + resourceName + ".png";
-        };
+            case ARTIFACT_SET -> path = "/Files/Images/Artifacts/" + resourceName + ".png";
+            case WEAPON_MATERIAL -> path = "/Files/Images/Weapon Materials/" + resourceName + ".png";
+            case CHARACTER -> path = "/Files/Images/Characters/" + resourceName + ".png";
+            case TALENT_BOOK -> path = "/Files/Images/Talent Materials/" + resourceName + ".png";
+            case WEEKLY_BOSS_MATERIAL -> path = "/Files/Images/Weekly Bosses/" + resourceName + ".png";
+        }
 
+        return ToolData.class.getResource(path);
     }
     /**
      * Looks up what weapon category is assigned to the character, i.e. what type of weapons the character can wield.
@@ -384,21 +391,17 @@ public class ToolData {
         return "";
     }
     private static void parseFonts(){
-        final String address = "./Files/Fonts/";
-        File fd = new File(address);
-        File[] fontFiles = fd.listFiles();
-
-        if (fontFiles != null) {
-            for (File fontFile : fontFiles) {
-                try {
-                    String fontName = (String)fontFile.getPath().subSequence(fontFile.getPath().lastIndexOf('\\') + 1,fontFile.getPath().lastIndexOf('.'));
-                    fonts.put(fontName, Font.createFont(Font.TRUETYPE_FONT, fontFile));
-                } catch (IOException e) {
-                    System.out.println("Failed to parse font: " + fontFile.getAbsolutePath());
-                } catch (FontFormatException e) {
-                    System.out.println(
-                            e.getMessage() + fontFile.getAbsolutePath());
-                }
+        for (String fontName : fontPaths){
+            URL address = ToolData.class.getResource("/Files/Fonts/"+fontName+".ttf");
+            try {
+                assert address != null;
+                Font f = Font.createFont(Font.TRUETYPE_FONT,address.openStream());
+                fonts.put(fontName,f);
+            } catch (FontFormatException e) {
+                System.out.println("Failed to parse font: " + fontName);
+            } catch (IOException e) {
+                System.out.println(
+                        e.getMessage() + fontName);
             }
         }
     }
@@ -415,8 +418,8 @@ public class ToolData {
             else if (data == RESOURCE_TYPE.CHARACTER){
                 parsedResourceIcons.get(data.stringToken).put(UNKNOWN_CHARACTER,new ImageIcon(generateResourceIconPath(UNKNOWN_CHARACTER,RESOURCE_TYPE.CHARACTER)));
             }
-            for (String set : getFlattenedData(data)){
-                parsedResourceIcons.get(data.stringToken).put(set,new ImageIcon(generateResourceIconPath(set,data)));
+            for (String item : getFlattenedData(data)){
+                parsedResourceIcons.get(data.stringToken).put(item,new ImageIcon(generateResourceIconPath(item,data)));
             }
         }
     }
@@ -444,7 +447,22 @@ public class ToolData {
         ImageIcon originalIcon = getResourceIcon(resourceName,rt);
         return new ImageIcon(originalIcon.getImage().getScaledInstance(size,size,Image.SCALE_SMOOTH));
     }
+    private static void getResourceFiles()throws IOException{
+        List<String> filenames = new ArrayList<>();
 
+        try (
+                InputStream in = ToolData.class.getResourceAsStream("/Files/Fonts");
+                BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
+            String resource;
+
+            while ((resource = br.readLine()) != null) {
+                filenames.add(resource);
+            }
+        }
+
+        System.out.println(filenames);
+
+    }
     /**
      * Main method
      * @param args Not used
@@ -452,6 +470,7 @@ public class ToolData {
      */
     public static void main(String[] args) throws Exception {
 
+        getResourceFiles();
         parseDataJsonFiles();
         parseFonts();
         parseResourceIcons();
