@@ -447,21 +447,12 @@ public class ToolData {
         ImageIcon originalIcon = getResourceIcon(resourceName,rt);
         return new ImageIcon(originalIcon.getImage().getScaledInstance(size,size,Image.SCALE_SMOOTH));
     }
-    private static void getResourceFiles()throws IOException{
-        List<String> filenames = new ArrayList<>();
-
-        try (
-                InputStream in = ToolData.class.getResourceAsStream("/Files/Fonts");
-                BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
-            String resource;
-
-            while ((resource = br.readLine()) != null) {
-                filenames.add(resource);
-            }
-        }
-
-        System.out.println(filenames);
-
+    private static InputStream getResourceAsStream(String resource){
+        final InputStream in = getContextClassLoader().getResourceAsStream(resource);
+        return in == null? ToolData.class.getResourceAsStream(resource):in;
+    }
+    private static ClassLoader getContextClassLoader(){
+        return Thread.currentThread().getContextClassLoader();
     }
     /**
      * Main method
@@ -470,7 +461,6 @@ public class ToolData {
      */
     public static void main(String[] args) throws Exception {
 
-        getResourceFiles();
         parseDataJsonFiles();
         parseFonts();
         parseResourceIcons();
