@@ -291,7 +291,6 @@ public final class CharacterTabGUI implements ActionListener {
      */
     private void addCharacterButtonToSelectedCharacterPanel(JButton charButton, int index) {
         GridBagConstraints gbc = new GridBagConstraints();
-        System.out.println(index);
         gbc.gridx = index % 6;
         gbc.gridy = index / 6;
         searchResultPanel.add(charButton, gbc);

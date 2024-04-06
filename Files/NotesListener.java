@@ -40,6 +40,6 @@ public class NotesListener implements DocumentListener {
 
     @Override
     public void changedUpdate(DocumentEvent e) {
-        System.out.println("THERE WAS A CHANGE!!!!!!!ALARM!!!!!!!!!");
+        System.out.println("THERE WAS A CHANGE!!!!!!! ALARM!!!!!!!!!");
     }
 }

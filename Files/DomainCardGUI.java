@@ -32,6 +32,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * This class constructs a domain card GUI (shown after clicking on a domain card).
@@ -54,7 +55,7 @@ public class DomainCardGUI extends JFrame {
         setDefaultCloseOperation(HIDE_ON_CLOSE);
         setSize(1000, 600);
         setLocationRelativeTo(null);
-        setIconImage(new ImageIcon("./Files/Images/Icons/Emblem_Domains_pink.png").getImage());
+        setIconImage(new ImageIcon(Objects.requireNonNull(DomainCardGUI.class.getResource("/Files/Images/Icons/Emblem_Domains_pink.png"))).getImage());
         setVisible(true);
         setResizable(false);
     }
@@ -248,7 +249,6 @@ public class DomainCardGUI extends JFrame {
             }
             formattedNotes.append(characterNotes.charAt(i));
             }
-        System.out.println(formattedNotes);
         return HTML_BEGINNING + formattedNotes + HTML_END;
         }
     // GENERATED WEAPONS/CHARACTERS
@@ -260,7 +260,6 @@ public class DomainCardGUI extends JFrame {
             CharacterCard card = getCharacterCard(item);
             if (card != null && !card.getCharacterNotes().isEmpty()) {
                 domainItemLabel.setText(formatLabel(item, card.getCharacterNotes()));
-                System.out.println(card.getCharacterNotes());
             } else {
                 domainItemLabel.setText(formatLabel(item,""));
             }

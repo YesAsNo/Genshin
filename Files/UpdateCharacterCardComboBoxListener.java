@@ -23,14 +23,12 @@ public class UpdateCharacterCardComboBoxListener implements ItemListener {
         _saveButton.setEnabled(true);
         String item = ((JLabel)e.getItem()).getText();
         if (e.getStateChange() == ItemEvent.DESELECTED && !item.equalsIgnoreCase(EMPTY_SET_SELECTOR)){
-            System.out.println(item);
             if (_changedData == ToolData.CHARACTER_CARD_DATA_FIELD.WEAPON || _changedData == ToolData.CHARACTER_CARD_DATA_FIELD.SET_ONE || _changedData  ==
                     ToolData.CHARACTER_CARD_DATA_FIELD.SET_TWO){
                 updateFarmedItemMap(_changedData,_characterCard,false,item);
             }
         }
         if (e.getStateChange() == ItemEvent.SELECTED){
-            System.out.println(item);
             switch(_changedData){
                 case WEAPON: _characterCard.setWeapon(item);updateFarmedItemMap(_changedData,_characterCard,_characterCard.getWeaponStatus(),item);return;
                 case NOTES:_characterCard.setCharacterNotes(item);return;
