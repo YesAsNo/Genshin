@@ -65,7 +65,7 @@ import java.util.TreeSet;
 
 public class DomainTabGUI implements ActionListener {
     private final JPanel domainTab = new JPanel(new GridBagLayout());
-    private final JComboBox<String> filterBox = new JComboBox<>();
+    private final JComboBox<JLabel> filterBox = new JComboBox<>();
     private final JPanel domainsPanelOverview = new JPanel(new GridBagLayout());
     private final Map<String, List<String>> dayToAvailableMaterialsMapping = getMapping(DAY_AVAILABLEMATS);
     private static final JRadioButton wedSatButton = new JRadioButton();
@@ -90,7 +90,8 @@ public class DomainTabGUI implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        DOMAIN_FILTER_OPTIONS option = ALL_OPTIONS_BY_STRING.get((String)filterBox.getSelectedItem());
+        JLabel label = (JLabel) filterBox.getSelectedItem();
+        DOMAIN_FILTER_OPTIONS option = ALL_OPTIONS_BY_STRING.get(label.getText());
         parseFilter(option,getDayFilter(),showAllButton.isSelected());
     }
     public enum DAY_FILTER{
@@ -150,7 +151,6 @@ public class DomainTabGUI implements ActionListener {
         }
     }
     public DomainTabGUI() {
-
         // SHOW UNLISTED (ALL) BUTTON
         showAllButton.setBackground(new Color(-2702645));
         showAllButton.setForeground(new Color(-13236722));
@@ -178,11 +178,16 @@ public class DomainTabGUI implements ActionListener {
         // FILTER COMBO BOX
         filterBox.setBackground(new Color(-2702645));
         filterBox.setEnabled(true);
-        final DefaultComboBoxModel<String> filterBoxModel = new DefaultComboBoxModel<>();
-        filterBoxModel.addAll(ALL_OPTIONS_BY_ENUM.values());
-        filterBoxModel.setSelectedItem(DOMAIN_FILTER_OPTIONS.NO_FILTER.stringToken);
+        final DefaultComboBoxModel<JLabel> filterBoxModel = new DefaultComboBoxModel<>();
+        for (DOMAIN_FILTER_OPTIONS option : ALL_OPTIONS_BY_ENUM.keySet()){
+            JLabel label = new JLabel();
+            label.setText(option.stringToken);
+            filterBoxModel.addElement(label);
+        }
         filterBox.setModel(filterBoxModel);
+        filterBox.setSelectedIndex(0);
         filterBox.addActionListener(this);
+        filterBox.setRenderer(new ComboBoxRenderer(filterBox));
         gbc = new GridBagConstraints();
         gbc.gridx = 2;
         gbc.gridy = 0;

@@ -205,7 +205,8 @@ public final class CharacterTabGUI implements ActionListener {
         userFieldInput = searchField.getText().toLowerCase();
         searchResultPanel.removeAll();
         searchScrollPane.updateUI();
-        String element = ((JLabel) Objects.requireNonNull(elementFilterBox.getSelectedItem())).getText();
+        JLabel label = (JLabel) elementFilterBox.getSelectedItem();
+        String element = label.getText();
         List<String> eligibleCharacters = new ArrayList<>();
         //TODO: Add different icons and names for Traveler.
         if (element.equalsIgnoreCase(ALL_ELEMENTS)){
@@ -290,8 +291,9 @@ public final class CharacterTabGUI implements ActionListener {
      */
     private void addCharacterButtonToSelectedCharacterPanel(JButton charButton, int index) {
         GridBagConstraints gbc = new GridBagConstraints();
+        System.out.println(index);
         gbc.gridx = index % 6;
-        gbc.gridy = (index - gbc.gridx) / 6;
+        gbc.gridy = index / 6;
         searchResultPanel.add(charButton, gbc);
         searchResultPanel.updateUI();
 
