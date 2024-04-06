@@ -57,7 +57,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
     private final JCheckBox showListedCheckBox = new JCheckBox();
     private final JCheckBox showUnlistedCheckBox = new JCheckBox();
     private final JLabel showMatchedAmountLabel = new JLabel();
-    private static final JComboBox<String> devFilterComboBox = new JComboBox<>();
+    private static final JComboBox<JLabel> devFilterComboBox = new JComboBox<>();
     private static final Set<String> unassignedFarmedWeapons = new TreeSet<>();
     private static final List<JCheckBox> allCheckboxes = new ArrayList<>();
     public enum SEARCH_FLAG {
@@ -130,7 +130,8 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         parseWeaponsMap();
         int matchedCount = 0;
         for (String s : getFlattenedData(ToolData.RESOURCE_TYPE.WEAPON_NAME)) {
-            ToolData.WEAPON_FILTER_OPTIONS filter = ALL_OPTIONS_BY_STRING.get((String) devFilterComboBox.getSelectedItem());
+            JLabel label = (JLabel) devFilterComboBox.getSelectedItem();
+            ToolData.WEAPON_FILTER_OPTIONS filter = ALL_OPTIONS_BY_STRING.get(label.getText());
             assert filter != null;
 
             if (inputMatchesFilters(userFieldInput,s,filter,flag)) {
@@ -285,14 +286,17 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         // FILTER COMBO BOX
         devFilterComboBox.setBackground(new Color(-2702645));
         devFilterComboBox.setEnabled(true);
-        final DefaultComboBoxModel<String> defaultComboBoxModel1 = new DefaultComboBoxModel<>();
+        final DefaultComboBoxModel<JLabel> weaponFilterComboBoxModel = new DefaultComboBoxModel<>();
 
         for (ToolData.WEAPON_FILTER_OPTIONS options : ALL_OPTIONS_BY_ENUM.keySet()) {
-            defaultComboBoxModel1.addElement(options.stringToken);
+            JLabel label = new JLabel();
+            label.setText(options.stringToken);
+            weaponFilterComboBoxModel.addElement(label);
         }
         changeFont(devFilterComboBox, AVAILABLE_FONTS.BLACK_FONT, 12);
-        devFilterComboBox.setModel(defaultComboBoxModel1);
+        devFilterComboBox.setModel(weaponFilterComboBoxModel);
         devFilterComboBox.addItemListener(this);
+        devFilterComboBox.setRenderer(new ComboBoxRenderer(devFilterComboBox));
         gbc = new GridBagConstraints();
         gbc.gridx = 2;
         gbc.gridy = 0;

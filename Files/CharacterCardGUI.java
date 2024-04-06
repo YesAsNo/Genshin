@@ -142,7 +142,7 @@ public class CharacterCardGUI extends JFrame {
         final WeaponSelectorComboBoxModel weaponSelectorComboBoxModel = new WeaponSelectorComboBoxModel();
         addAllowedWeapons(weaponSelectorComboBoxModel, characterCard.getCharacterName());
         weaponSelectionBox.setModel(weaponSelectorComboBoxModel);
-        weaponSelectionBox.setRenderer(new ComboBoxRenderer());
+        weaponSelectionBox.setRenderer(new ComboBoxRenderer(weaponSelectionBox));
         setSelection(weaponSelectionBox,characterCard.getWeapon());
         jpanel.add(weaponSelectionBox,
                 new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
@@ -193,7 +193,7 @@ public class CharacterCardGUI extends JFrame {
             setComboBoxModel.addElement(label);
         }
         setComboBox.setModel(setComboBoxModel);
-        setComboBox.setRenderer(new ComboBoxRenderer());
+        setComboBox.setRenderer(new ComboBoxRenderer(setComboBox));
         if (dataField == ToolData.CHARACTER_CARD_DATA_FIELD.SET_ONE){
             setSelection(setComboBox,characterCard.getArtifactSet1());
         }

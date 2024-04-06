@@ -235,9 +235,6 @@ public class DomainCardGUI extends JFrame {
     private List<String> getEligibleItems(String material){
         Map<String, List<String>> targetResourceMapping = getDomainTargetResourceMapping(domainTheme);
         return targetResourceMapping.get(material);
-
-
-
     }
     private String formatLabel(String characterName, String characterNotes){
         final String HTML_BEGINNING = "<html><center>";
