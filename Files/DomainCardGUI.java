@@ -181,13 +181,14 @@ public class DomainCardGUI extends JFrame {
             int i = 0;
             int k = 0;
             switch (getDomainResourceType(domainTheme)){
-                case ARTIFACT_SET -> {
+                case ARTIFACT_SET: {
                     for (String charName : whoIsFarmingThis(domainMat,getDomainResourceType(domainTheme))){
                         generateDomainItemLabel(charName,i,innerListedPanel);
                         i++;
                     }
+                    break;
                 }
-                case WEAPON_MATERIAL -> {
+                case WEAPON_MATERIAL: {
                     for (String eligibleWeapon : getEligibleItems(domainMat)){
                         if (isSomeoneFarmingForTheWeapon(eligibleWeapon)|| getUnassignedFarmedWeapons().contains(eligibleWeapon)){
                             generateDomainItemLabel(eligibleWeapon,i,innerListedPanel);
@@ -198,8 +199,9 @@ public class DomainCardGUI extends JFrame {
                             k++;
                         }
                     }
+                    break;
                 }
-                case WEEKLY_BOSS_MATERIAL,TALENT_BOOK -> {
+                case WEEKLY_BOSS_MATERIAL: case TALENT_BOOK: {
                     for (String eligibleCharacter : getEligibleItems(domainMat)){
                         if (whoIsFarmingThis(domainMat,getDomainResourceType(domainTheme)).contains(eligibleCharacter)){
                             generateDomainItemLabel(eligibleCharacter,i,innerListedPanel);
@@ -211,6 +213,7 @@ public class DomainCardGUI extends JFrame {
                             }
                     }
                 }
+                break;
             }
 
         }

@@ -286,28 +286,26 @@ public class ToolData {
      */
     private static URL generateResourceIconPath(String resourceName, RESOURCE_TYPE resourceType) {
         assert resourceName != null;
-        String path = "";
         switch (resourceType){
-            case WEAPON_NAME -> {
+            case WEAPON_NAME: {
                 if (resourceName.equalsIgnoreCase(UNKNOWN_WEAPON))
                 {
-                    path = UNKNOWN_WEAPON_PATH;
-                    break;
+                    return ToolData.class.getResource(UNKNOWN_WEAPON_PATH);
+
                 }
                 WeaponInfo wi = lookUpWeaponRarityAndType(resourceName);
                 switch (wi.getRarity()) {
-                    case FOUR_STAR -> path = "/Files/Images/Weapons/" + wi.getWeaponType() + "_4star/" + resourceName + ".png";
-                    case FIVE_STAR -> path = "/Files/Images/Weapons/" + wi.getWeaponType() + "_5star/" + resourceName + ".png";
+                    case FOUR_STAR: return ToolData.class.getResource("/Files/Images/Weapons/" + wi.getWeaponType() + "_4star/" + resourceName + ".png");
+                    case FIVE_STAR: return ToolData.class.getResource("/Files/Images/Weapons/" + wi.getWeaponType() + "_5star/" + resourceName + ".png");
                 }
             }
-            case ARTIFACT_SET -> path = "/Files/Images/Artifacts/" + resourceName + ".png";
-            case WEAPON_MATERIAL -> path = "/Files/Images/Weapon Materials/" + resourceName + ".png";
-            case CHARACTER -> path = "/Files/Images/Characters/" + resourceName + ".png";
-            case TALENT_BOOK -> path = "/Files/Images/Talent Materials/" + resourceName + ".png";
-            case WEEKLY_BOSS_MATERIAL -> path = "/Files/Images/Weekly Bosses/" + resourceName + ".png";
+            case ARTIFACT_SET: return ToolData.class.getResource("/Files/Images/Artifacts/" + resourceName + ".png");
+            case WEAPON_MATERIAL: return ToolData.class.getResource("/Files/Images/Weapon Materials/" + resourceName + ".png");
+            case CHARACTER: return ToolData.class.getResource("/Files/Images/Characters/" + resourceName + ".png");
+            case TALENT_BOOK: return ToolData.class.getResource("/Files/Images/Talent Materials/" + resourceName + ".png");
+            case WEEKLY_BOSS_MATERIAL: return ToolData.class.getResource("/Files/Images/Weekly Bosses/" + resourceName + ".png");
         }
-
-        return ToolData.class.getResource(path);
+        return null;
     }
     /**
      * Looks up what weapon category is assigned to the character, i.e. what type of weapons the character can wield.
@@ -339,10 +337,11 @@ public class ToolData {
         final String FIVE_STAR_WEAPON_KEY = "Five-Star " + weaponType;
         Map<String, List<String>> weaponMapping = getMapping(knownMappings.WEPRARITYANDTYPE_WEPNAME);
 
-        return switch (WEAPONRarity) {
-            case FOUR_STAR -> weaponMapping.get(FOUR_STAR_WEAPON_KEY);
-            case FIVE_STAR -> weaponMapping.get(FIVE_STAR_WEAPON_KEY);
-        };
+        switch (WEAPONRarity) {
+            case FOUR_STAR: return weaponMapping.get(FOUR_STAR_WEAPON_KEY);
+            case FIVE_STAR: return weaponMapping.get(FIVE_STAR_WEAPON_KEY);
+        }
+        return null;
     }
     /**
      * Looks up the rarity and type of specified weapon.

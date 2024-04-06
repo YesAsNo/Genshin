@@ -82,8 +82,12 @@ public class CharacterCardGUI extends JFrame {
             String weaponType = lookUpWeaponCategoryForCharacter(charName);
             label = new JLabel();
             switch(rarity){
-                case FIVE_STAR -> label.setText(FIVE_STAR_WEAPON_DELIMITER);
-                case FOUR_STAR -> label.setText(FOUR_STAR_WEAPON_DELIMITER);
+                case FIVE_STAR:
+                    label.setText(FIVE_STAR_WEAPON_DELIMITER);
+                    break;
+                case FOUR_STAR:
+                    label.setText(FOUR_STAR_WEAPON_DELIMITER);
+                    break;
             }
             label.setIcon(default_img);
             dcmb.addElement(label);

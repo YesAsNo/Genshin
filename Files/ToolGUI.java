@@ -87,26 +87,7 @@ public class ToolGUI extends JFrame {
         changeFont(devLinakoLabel, AVAILABLE_FONTS.CREATOR_FONT, 18.0F);
         changeFont(devUpdatesTextPane, AVAILABLE_FONTS.TEXT_FONT, 12.0F);
         changeFont(devInfoTextPane, AVAILABLE_FONTS.TEXT_FONT, 12.0F);
-        devInfoTextPane.setText("""
-                This is a personal project to make our daily tasks a little bit more coordinated! Here's how to get started!
-
-                -\uD83D\uDD38✨ Character Tab ✨\uD83D\uDD38-
-
-                - Search by name or filter
-                - Fill in the desired information (2nd artifact set is optional).
-                - Checkboxes exist for characters to show up in the domains tab. Unchecking will hide a character from its chosen materials, making it easier to tell who still needs those materials. For example, if a character is done with its talents, you should uncheck the character.
-                - DON'T FORGET TO SAVE
-
-                -\uD83D\uDD38✨ Weapon Tab ✨\uD83D\uDD38-
-
-                - Search by name or filter.
-                - Only checkboxes appear. Checking a weapon will make it show up in farmed items in domains.
-                - If a weapon is already listed through a character, it will be marked as "Already Farmed".
-
-                -\uD83D\uDD38✨ Domains Tab ✨\uD83D\uDD38-
-
-                - Search by filter or day. Results will be shown for today by default.
-                - The chosen domain will show all characters/weapons checked in other tabs.""");
+        devInfoTextPane.setText("This is a personal project to make our daily tasks a little bit more coordinated! Here's how to get started!\n\n -\uD83D\uDD38✨ Character Tab ✨\uD83D\uDD38-\n- Search by name or filter\n- Fill in the desired information (2nd artifact set is optional).\n- Checkboxes exist for characters to show up in the domains tab. Unchecking will hide a character from its chosen materials, making it easier to tell who still needs those materials. For example, if a character is done with its talents, you should uncheck the character.\n- DON'T FORGET TO SAVE\n\n\uD83D\uDD38✨ Weapon Tab ✨\uD83D\uDD38-\n Search by name or filter.\n- Only checkboxes appear. Checking a weapon will make it show up in farmed items in domains.\n- If a weapon is already listed through a character, it will be marked as \"Already Farmed\".\n\n-\uD83D\uDD38✨ Domains Tab ✨\uD83D\uDD38-\n- Search by filter or day. Results will be shown for today by default.\n- The chosen domain will show all characters/weapons checked in other tabs.");
 
         addTab("Characters", _characterTabGUI.getMainPanel());
         addTab("Weapons", _weaponsTabGUI.getMainPanel());
@@ -156,11 +137,16 @@ public class ToolGUI extends JFrame {
 
     public static TreeMap<String, Set<String>> getFarmedMapping(FARMED_DATATYPE fd) {
         assert fd != null;
-        return switch (fd) {
-            case WEAPONS -> farmedWeapons;
-            case ARTIFACTS -> farmedArtifacts;
-            case TALENTS -> farmedTalents;
-        };
+        switch (fd) {
+            case WEAPONS:
+                return farmedWeapons;
+            case ARTIFACTS:
+                return farmedArtifacts;
+            case TALENTS:
+                return farmedTalents;
+        }
+        ;
+        return null;
     }
 
     /**
@@ -214,26 +200,30 @@ public class ToolGUI extends JFrame {
         int counter = 0;
         for (CharacterCard characterCard : generatedCharacterCards) {
             switch (rt) {
-                case TALENT_BOOK -> {
+                case TALENT_BOOK: {
                     if (characterCard.getTalentStatus() &&
                             getTalentBookForCharacter(characterCard.getCharacterName()).equalsIgnoreCase(mat)) {
                         counter++;
                     }
+                    break;
                 }
-                case WEEKLY_BOSS_MATERIAL -> {
+                case WEEKLY_BOSS_MATERIAL: {
                     if (characterCard.getTalentStatus() &&
                             getWeeklyBossMatForCharacter(characterCard.getCharacterName()).equalsIgnoreCase(mat)) {
                         counter++;
                     }
+                    break;
                 }
-                case ARTIFACT_SET -> {
+                case ARTIFACT_SET: {
                     if ((characterCard.getArtifactSet1Status() &&
                             characterCard.getArtifactSet1().equalsIgnoreCase(mat)) || characterCard.getArtifactSet2Status() &&
                             characterCard.getArtifactSet2().equalsIgnoreCase(mat)) {
                         counter++;
                     }
+                    break;
                 }
-                default -> throw new IllegalArgumentException("RESOURCE TYPE INVALID: " + rt.stringToken);
+                default:
+                    throw new IllegalArgumentException("RESOURCE TYPE INVALID: " + rt.stringToken);
             }
         }
         return counter;
@@ -243,26 +233,30 @@ public class ToolGUI extends JFrame {
         Set<String> characterSet = new TreeSet<>();
         for (CharacterCard characterCard : generatedCharacterCards) {
             switch (rt) {
-                case TALENT_BOOK -> {
+                case TALENT_BOOK: {
                     if (characterCard.getTalentStatus() &&
                             getTalentBookForCharacter(characterCard.getCharacterName()).equalsIgnoreCase(mat)) {
                         characterSet.add(characterCard.getCharacterName());
                     }
+                    break;
                 }
-                case WEEKLY_BOSS_MATERIAL -> {
+                case WEEKLY_BOSS_MATERIAL: {
                     if (characterCard.getTalentStatus() &&
                             getWeeklyBossMatForCharacter(characterCard.getCharacterName()).equalsIgnoreCase(mat)) {
                         characterSet.add(characterCard.getCharacterName());
                     }
+                    break;
                 }
-                case ARTIFACT_SET -> {
+                case ARTIFACT_SET: {
                     if ((characterCard.getArtifactSet1Status() &&
                             characterCard.getArtifactSet1().equalsIgnoreCase(mat)) || characterCard.getArtifactSet2Status() &&
                             characterCard.getArtifactSet2().equalsIgnoreCase(mat)) {
                         characterSet.add(characterCard.getCharacterName());
                     }
+                    break;
                 }
-                default -> throw new IllegalArgumentException("RESOURCE TYPE INVALID: " + rt.stringToken);
+                default:
+                    throw new IllegalArgumentException("RESOURCE TYPE INVALID: " + rt.stringToken);
             }
         }
         return characterSet;
@@ -283,10 +277,19 @@ public class ToolGUI extends JFrame {
         }
         Map<String, Set<String>> mapping;
         switch (dataField) {
-            case WEAPON, FARMING_WEAPON_MATERIALS -> mapping = farmedWeapons;
-            case SET_ONE, SET_TWO -> mapping = farmedArtifacts;
-            case FARMING_TALENT_MATERIALS -> mapping = farmedTalents;
-            default -> throw new IllegalArgumentException("This datafield cannot be farmed " + dataField);
+            case WEAPON:
+            case FARMING_WEAPON_MATERIALS:
+                mapping = farmedWeapons;
+                break;
+            case SET_ONE:
+            case SET_TWO:
+                mapping = farmedArtifacts;
+                break;
+            case FARMING_TALENT_MATERIALS:
+                mapping = farmedTalents;
+                break;
+            default:
+                throw new IllegalArgumentException("This datafield cannot be farmed " + dataField);
         }
         if (status) {
             mapping.get(item).add(characterCard.getCharacterName());

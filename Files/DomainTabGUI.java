@@ -52,16 +52,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.NavigableSet;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
 
 public class DomainTabGUI implements ActionListener {
     private final JPanel domainTab = new JPanel(new GridBagLayout());
@@ -269,11 +260,21 @@ public class DomainTabGUI implements ActionListener {
         List<DOMAIN_THEME> filteredThemes = new ArrayList<>();
         assert filter != null;
         switch(filter){
-            case TALENT -> filteredThemes.add(DOMAIN_THEME.TALENT_BOOK_THEME);
-            case ARTIFACT -> filteredThemes.add(DOMAIN_THEME.ARTIFACT_DOMAIN_THEME);
-            case WEAPON_MAT -> filteredThemes.add(DOMAIN_THEME.WEAPON_MATERIAL_THEME);
-            case WEEKLY -> filteredThemes.add(DOMAIN_THEME.WEEKLY_BOSS_DOMAIN_THEME);
-            case NO_FILTER -> filteredThemes.addAll(List.of(DOMAIN_THEME.values()));
+            case TALENT:
+                filteredThemes.add(DOMAIN_THEME.TALENT_BOOK_THEME);
+                break;
+            case ARTIFACT:
+                filteredThemes.add(DOMAIN_THEME.ARTIFACT_DOMAIN_THEME);
+                break;
+            case WEAPON_MAT:
+                filteredThemes.add(DOMAIN_THEME.WEAPON_MATERIAL_THEME);
+                break;
+            case WEEKLY:
+                filteredThemes.add(DOMAIN_THEME.WEEKLY_BOSS_DOMAIN_THEME);
+                break;
+            case NO_FILTER:
+                Collections.addAll(filteredThemes, DOMAIN_THEME.values());
+                break;
         }
         domainsPanelOverview.removeAll();
         domainsPanelOverview.updateUI();
@@ -403,65 +404,70 @@ public class DomainTabGUI implements ActionListener {
         return domainCard;
     }
     public static Map<String, List<String>> getDomainMapping(DOMAIN_THEME dt){
-        return switch(dt){
-            case WEAPON_MATERIAL_THEME -> getMapping(WEPDOMAIN_WEPMAT);
-            case TALENT_BOOK_THEME -> getMapping(TALENTDOMAIN_TALENTBOOK);
-            case WEEKLY_BOSS_DOMAIN_THEME -> getMapping(WEEKLYDOMAIN_WEEKLYBOSSMAT);
-            case ARTIFACT_DOMAIN_THEME -> getMapping(ARTIDOMAIN_ARTISET);
-        };
+        switch(dt){
+            case WEAPON_MATERIAL_THEME: return getMapping(WEPDOMAIN_WEPMAT);
+            case TALENT_BOOK_THEME: return getMapping(TALENTDOMAIN_TALENTBOOK);
+            case WEEKLY_BOSS_DOMAIN_THEME: return getMapping(WEEKLYDOMAIN_WEEKLYBOSSMAT);
+            case ARTIFACT_DOMAIN_THEME: return getMapping(ARTIDOMAIN_ARTISET);
+        }
+        return null;
     }
     public static ToolData.RESOURCE_TYPE getDomainResourceType(DOMAIN_THEME dt){
-        return switch(dt){
-            case WEAPON_MATERIAL_THEME -> ToolData.RESOURCE_TYPE.WEAPON_MATERIAL;
-            case TALENT_BOOK_THEME -> ToolData.RESOURCE_TYPE.TALENT_BOOK;
-            case WEEKLY_BOSS_DOMAIN_THEME -> WEEKLY_BOSS_MATERIAL;
-            case ARTIFACT_DOMAIN_THEME -> ToolData.RESOURCE_TYPE.ARTIFACT_SET;
-        };
+        switch(dt){
+            case WEAPON_MATERIAL_THEME: return ToolData.RESOURCE_TYPE.WEAPON_MATERIAL;
+            case TALENT_BOOK_THEME: return ToolData.RESOURCE_TYPE.TALENT_BOOK;
+            case WEEKLY_BOSS_DOMAIN_THEME: return WEEKLY_BOSS_MATERIAL;
+            case ARTIFACT_DOMAIN_THEME: return ToolData.RESOURCE_TYPE.ARTIFACT_SET;
+        }
+        return null;
     }
     public static Map<String, List<String>> getDomainTargetResourceMapping(DOMAIN_THEME dt){
-        return switch (dt){
-            case WEAPON_MATERIAL_THEME -> getMapping(WEPMAT_WEPNAME);
-            case TALENT_BOOK_THEME -> getMapping(TALENTBOOK_CHAR);
-            case WEEKLY_BOSS_DOMAIN_THEME -> getMapping(WEEKLYBOSSMAT_CHAR);
-            case ARTIFACT_DOMAIN_THEME -> getMapping(ARTIDOMAIN_ARTISET);
+        switch (dt){
+            case WEAPON_MATERIAL_THEME: return getMapping(WEPMAT_WEPNAME);
+            case TALENT_BOOK_THEME: return getMapping(TALENTBOOK_CHAR);
+            case WEEKLY_BOSS_DOMAIN_THEME: return getMapping(WEEKLYBOSSMAT_CHAR);
+            case ARTIFACT_DOMAIN_THEME: return getMapping(ARTIDOMAIN_ARTISET);
         };
+        return null;
     }
     public static ToolData.RESOURCE_TYPE getDomainTargetResourceType(DOMAIN_THEME dt){
-        return switch (dt){
-            case WEAPON_MATERIAL_THEME -> ToolData.RESOURCE_TYPE.WEAPON_NAME;
-            case TALENT_BOOK_THEME, WEEKLY_BOSS_DOMAIN_THEME, ARTIFACT_DOMAIN_THEME -> ToolData.RESOURCE_TYPE.CHARACTER;
-        };
+        switch (dt){
+            case WEAPON_MATERIAL_THEME: return ToolData.RESOURCE_TYPE.WEAPON_NAME;
+            case TALENT_BOOK_THEME: case WEEKLY_BOSS_DOMAIN_THEME: case ARTIFACT_DOMAIN_THEME: return ToolData.RESOURCE_TYPE.CHARACTER;
+        }
+        return null;
     }
     public static Set<String> getDomainFarmedList(DOMAIN_THEME dt){
-        return switch(dt){
-            case WEAPON_MATERIAL_THEME -> {
+        switch(dt){
+            case WEAPON_MATERIAL_THEME: {
                 TreeSet<String> allFarmedWeapons = new TreeSet<>(getUnassignedFarmedWeapons());
                 for (String weapon: getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS).keySet()){
                     if (!getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS).get(weapon).isEmpty()){
                         allFarmedWeapons.add(weapon);
                     }
                 }
-                yield allFarmedWeapons;
+                return allFarmedWeapons;
             }
-            case TALENT_BOOK_THEME, WEEKLY_BOSS_DOMAIN_THEME -> {
+            case TALENT_BOOK_THEME: case WEEKLY_BOSS_DOMAIN_THEME: {
                 TreeSet<String> allFarmedTalents = new TreeSet<>();
                 for (String talentResourceName : getFarmedMapping(ToolGUI.FARMED_DATATYPE.TALENTS).keySet()){
                     if (!getFarmedMapping(ToolGUI.FARMED_DATATYPE.TALENTS).get(talentResourceName).isEmpty()){
                         allFarmedTalents.add(talentResourceName);
                     }
                 }
-                yield allFarmedTalents;
+                return allFarmedTalents;
             }
-            case ARTIFACT_DOMAIN_THEME -> {
+            case ARTIFACT_DOMAIN_THEME: {
                 TreeSet<String> allFarmedArtifacts = new TreeSet<>();
                 for (String artifactName : getFarmedMapping(ToolGUI.FARMED_DATATYPE.ARTIFACTS).keySet()){
                     if (!getFarmedMapping(ToolGUI.FARMED_DATATYPE.ARTIFACTS).get(artifactName).isEmpty()){
                         allFarmedArtifacts.add(artifactName);
                     }
                 }
-                yield allFarmedArtifacts;
+                return allFarmedArtifacts;
             }
-        };
+        }
+        return null;
     }
     public static String getAllCounterLabel(String domainName,ToolData.RESOURCE_TYPE rt){
         String labelText;
@@ -469,30 +475,34 @@ public class DomainTabGUI implements ActionListener {
         Set<String> matchedCharacters = new TreeSet<>();
         int counter = 0;
         switch(rt){
-            case WEAPON_MATERIAL -> {
+            case WEAPON_MATERIAL: {
                 for (String matName: getMapping(WEPDOMAIN_WEPMAT).get(domainName)){
                     matchedCharacters.addAll(getMapping(WEPMAT_WEPNAME).get(matName));
                 }
                 domainMaterialCategory = "weapons";
+                break;
             }
-            case ARTIFACT_SET -> {
+            case ARTIFACT_SET: {
                 counter = getFlattenedData(ToolData.RESOURCE_TYPE.CHARACTER).size();
                 matchedCharacters.add("All characters");
                 domainMaterialCategory = "characters";
+                break;
             }
-            case WEEKLY_BOSS_MATERIAL -> {
+            case WEEKLY_BOSS_MATERIAL: {
                 for (String matName: getMapping(WEEKLYDOMAIN_WEEKLYBOSSMAT).get(domainName)){
                     matchedCharacters.addAll(getMapping(WEEKLYBOSSMAT_CHAR).get(matName));
                 }
                 domainMaterialCategory = "characters";
+                break;
             }
-            case TALENT_BOOK -> {
+            case TALENT_BOOK: {
                 for (String matName: getMapping(TALENTDOMAIN_TALENTBOOK).get(domainName)){
                     matchedCharacters.addAll(getMapping(TALENTBOOK_CHAR).get(matName));
                 }
                 domainMaterialCategory = "characters";
+                break;
             }
-            default -> {}
+            default: {}
         }
         labelText = "<html>" + "All" + " " + domainMaterialCategory + " " + "that need it: " + "<u>"
                 + (counter == 0 ? matchedCharacters.size() : counter ) + "</u>" + "</html>";
@@ -504,16 +514,16 @@ public class DomainTabGUI implements ActionListener {
         String domainMaterialCategory = "";
         int counter = 0;
         switch(rt){
-            case WEAPON_MATERIAL -> {
+            case WEAPON_MATERIAL: {
                 for (String weaponName: getDomainFarmedList(DOMAIN_THEME.WEAPON_MATERIAL_THEME)){
                     if (getMapping(WEPDOMAIN_WEPMAT).get(domainName).contains(getWeaponMaterialForWeapon(weaponName))){
                         counter++;
                     }
                 }
                 domainMaterialCategory = "weapons";
+                break;
             }
-            //TODO: Finish the remaining cases.
-            case ARTIFACT_SET -> {
+            case ARTIFACT_SET: {
                 Set<String> mapping = getDomainFarmedList(DOMAIN_THEME.ARTIFACT_DOMAIN_THEME);
                 for (String setName : mapping){
                     if (getMapping(ARTIDOMAIN_ARTISET).get(domainName).contains(setName)){
@@ -521,8 +531,9 @@ public class DomainTabGUI implements ActionListener {
                     }
                 }
                 domainMaterialCategory = "characters";
+                break;
             }
-            case WEEKLY_BOSS_MATERIAL -> {
+            case WEEKLY_BOSS_MATERIAL: {
                 Set<String> mapping = getDomainFarmedList(DOMAIN_THEME.WEEKLY_BOSS_DOMAIN_THEME);
                 for (String materialName : mapping){
                     if (getMapping(WEEKLYDOMAIN_WEEKLYBOSSMAT).get(domainName).contains(materialName)){
@@ -530,8 +541,9 @@ public class DomainTabGUI implements ActionListener {
                     }
                 }
                 domainMaterialCategory = "characters";
+                break;
             }
-            case TALENT_BOOK -> {
+            case TALENT_BOOK: {
                 Set<String> mapping = getDomainFarmedList(DOMAIN_THEME.TALENT_BOOK_THEME);
                 for (String bookName : mapping){
                     if (getMapping(TALENTDOMAIN_TALENTBOOK).get(domainName).contains(bookName)){
@@ -539,8 +551,9 @@ public class DomainTabGUI implements ActionListener {
                     }
                 }
                 domainMaterialCategory = "characters";
+                break;
             }
-            default -> {}
+            default: {}
         }
         labelText = "<html>" + "Listed" + " " + domainMaterialCategory + " " + "that need it: " + "<u>"
                 + counter + "</u>" + "</html>";
@@ -556,13 +569,11 @@ public class DomainTabGUI implements ActionListener {
         if (currentHour < 4){
             currentDay = (currentDay - 1) % 7;
         }
-        String dayNumber;
         switch (currentDay) {
-            case MONDAY, THURSDAY -> dayNumber = DAY_FILTER.MONDAY_THURSDAY.stringToken;
-            case TUESDAY, FRIDAY -> dayNumber = DAY_FILTER.TUESDAY_FRIDAY.stringToken;
-            case WEDNESDAY, SATURDAY -> dayNumber =  DAY_FILTER.WEDNESDAY_SATURDAY.stringToken;
-            default -> dayNumber = DAY_FILTER.SUNDAY_ALL.stringToken;
+            case MONDAY: case THURSDAY: return DAY_FILTER.MONDAY_THURSDAY.stringToken;
+            case TUESDAY: case FRIDAY: return DAY_FILTER.TUESDAY_FRIDAY.stringToken;
+            case WEDNESDAY: case SATURDAY: return DAY_FILTER.WEDNESDAY_SATURDAY.stringToken;
+            default: return DAY_FILTER.SUNDAY_ALL.stringToken;
         }
-        return dayNumber;
     }
 }
