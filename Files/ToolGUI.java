@@ -150,7 +150,6 @@ public class ToolGUI extends JFrame {
         for (String weaponName : getFlattenedData(ToolData.RESOURCE_TYPE.WEAPON_NAME)) {
             farmedWeapons.put(weaponName, new TreeSet<>());
         }
-
     }
 
     public void addTab(String title, JPanel jpanel) {
@@ -211,6 +210,10 @@ public class ToolGUI extends JFrame {
 
     public static boolean isSomeoneFarmingForTheWeapon(String weapon) {
         return !farmedWeapons.get(weapon).isEmpty();
+    }
+
+    public static boolean isThisAWeapon(String name) {
+        return getFlattenedData(ToolData.RESOURCE_TYPE.WEAPON_NAME).contains(name);
     }
 
     public static int howManyAreFarmingThis(String mat, ToolData.RESOURCE_TYPE rt) {

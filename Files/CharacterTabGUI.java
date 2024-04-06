@@ -74,7 +74,7 @@ public final class CharacterTabGUI implements ActionListener {
             elementFilterComboBoxModel.addElement(elementLabel);
         }
         elementFilterBox.setModel(elementFilterComboBoxModel);
-        elementFilterBox.setRenderer(new ComboBoxRenderer());
+        elementFilterBox.setRenderer(new ComboBoxRenderer(elementFilterBox));
         elementFilterBox.setSelectedIndex(0);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;

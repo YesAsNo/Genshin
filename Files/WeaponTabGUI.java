@@ -285,13 +285,13 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         // FILTER COMBO BOX
         devFilterComboBox.setBackground(new Color(-2702645));
         devFilterComboBox.setEnabled(true);
-        final DefaultComboBoxModel<String> defaultComboBoxModel1 = new DefaultComboBoxModel<>();
+        final DefaultComboBoxModel<String> weaponFilterComboBoxModel = new DefaultComboBoxModel<>();
 
         for (ToolData.WEAPON_FILTER_OPTIONS options : ALL_OPTIONS_BY_ENUM.keySet()) {
-            defaultComboBoxModel1.addElement(options.stringToken);
+            weaponFilterComboBoxModel.addElement(options.stringToken);
         }
         changeFont(devFilterComboBox, AVAILABLE_FONTS.BLACK_FONT, 12);
-        devFilterComboBox.setModel(defaultComboBoxModel1);
+        devFilterComboBox.setModel(weaponFilterComboBoxModel);
         devFilterComboBox.addItemListener(this);
         gbc = new GridBagConstraints();
         gbc.gridx = 2;
