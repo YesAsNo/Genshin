@@ -123,7 +123,7 @@ public class DomainCardGUI extends JFrame {
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null,
                         new Dimension(200, 200), null, 0, false));
-        for (String domainMat : getDomainMapping(domainTheme).get(domainName)){
+        for (String domainMat : Objects.requireNonNull(getDomainMapping(domainTheme)).get(domainName)){
             JPanel innerUnlistedPanel = new JPanel(new GridBagLayout());
             JPanel innerListedPanel = new JPanel(new GridBagLayout());
             JPanel dayTab = new JPanel();
@@ -180,7 +180,7 @@ public class DomainCardGUI extends JFrame {
 
             int i = 0;
             int k = 0;
-            switch (getDomainResourceType(domainTheme)){
+            switch (Objects.requireNonNull(getDomainResourceType(domainTheme))){
                 case ARTIFACT_SET: {
                     for (String charName : whoIsFarmingThis(domainMat,getDomainResourceType(domainTheme))){
                         generateDomainItemLabel(charName,i,innerListedPanel);
@@ -223,6 +223,7 @@ public class DomainCardGUI extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.weightx = 1.0;
+        assert getDomainResourceType(domainTheme) != null;
         JLabel label = new JLabel(getListedCounterLabel(domainName,getDomainResourceType(domainTheme)));
         changeFont(label, ToolData.AVAILABLE_FONTS.REGULAR_FONT, 12);
         titlePanel.add(label, gbc);
@@ -231,6 +232,7 @@ public class DomainCardGUI extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.weightx = 1.0;
+        assert getDomainResourceType(domainTheme) != null;
         JLabel label2 = new JLabel(getAllCounterLabel(domainName,getDomainResourceType(domainTheme)));
         changeFont(label2, ToolData.AVAILABLE_FONTS.REGULAR_FONT, 12);
         titlePanel.add(label2, gbc);

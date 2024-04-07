@@ -14,7 +14,6 @@ import java.awt.FontFormatException;
 import java.awt.Image;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
@@ -178,6 +177,10 @@ public class ToolData {
             this.stringToken = stringToken;
         }
     }
+
+    /**
+     * Used font names.
+     */
     public static String[] fontPaths = {"SourceCodePro-Bold","SourceCodePro-Light","SourceCodePro-Semibold","SourceCodePro-Regular","SourceCodePro-Black"};
     /** Fonts used in the entire program */
     public enum AVAILABLE_FONTS{
@@ -305,7 +308,7 @@ public class ToolData {
             case TALENT_BOOK: return ToolData.class.getResource("/Files/Images/Talent Materials/" + resourceName + ".png");
             case WEEKLY_BOSS_MATERIAL: return ToolData.class.getResource("/Files/Images/Weekly Bosses/" + resourceName + ".png");
         }
-        return null;
+        throw new IllegalArgumentException();
     }
     /**
      * Looks up what weapon category is assigned to the character, i.e. what type of weapons the character can wield.
@@ -446,17 +449,11 @@ public class ToolData {
         ImageIcon originalIcon = getResourceIcon(resourceName,rt);
         return new ImageIcon(originalIcon.getImage().getScaledInstance(size,size,Image.SCALE_SMOOTH));
     }
-    private static InputStream getResourceAsStream(String resource){
-        final InputStream in = getContextClassLoader().getResourceAsStream(resource);
-        return in == null? ToolData.class.getResourceAsStream(resource):in;
-    }
-    private static ClassLoader getContextClassLoader(){
-        return Thread.currentThread().getContextClassLoader();
-    }
+
     /**
      * Main method
-     * @param args Not used
-     * @throws Exception Exception!
+     * @param args unused
+     * @throws Exception thrown exception.
      */
     public static void main(String[] args) throws Exception {
 

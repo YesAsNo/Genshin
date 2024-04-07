@@ -206,9 +206,9 @@ public final class CharacterTabGUI implements ActionListener {
         searchResultPanel.removeAll();
         searchScrollPane.updateUI();
         JLabel label = (JLabel) elementFilterBox.getSelectedItem();
+        assert label != null;
         String element = label.getText();
         List<String> eligibleCharacters = new ArrayList<>();
-        //TODO: Add different icons and names for Traveler.
         if (element.equalsIgnoreCase(ALL_ELEMENTS)){
             eligibleCharacters.addAll(getFlattenedData(ToolData.RESOURCE_TYPE.CHARACTER));
         }

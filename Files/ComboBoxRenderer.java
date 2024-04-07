@@ -16,10 +16,14 @@ import java.awt.Component;
  */
 public class ComboBoxRenderer extends JLabel implements ListCellRenderer<JLabel> {
     private final Color _selectedColor = new Color(0x848484);
-    private JPanel panel;
-    private JLabel jlabel;
+    private final JLabel jlabel;
+
+    /**
+     * Constructor of the renderer class.
+     * @param comboBox the combobox which needs this renderer.
+     */
     public ComboBoxRenderer(JComboBox<JLabel> comboBox) {
-        panel = new JPanel();
+        JPanel panel = new JPanel();
         panel.add(this);
         jlabel = new JLabel();
         jlabel.setOpaque(false);

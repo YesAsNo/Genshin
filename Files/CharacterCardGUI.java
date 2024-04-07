@@ -92,6 +92,7 @@ public class CharacterCardGUI extends JFrame {
             label.setIcon(default_img);
             dcmb.addElement(label);
             List<String> weapons = lookUpWeapons(rarity, weaponType);
+            assert weapons != null;
             Collections.sort(weapons);
             for (String weapon: weapons){
                 label = new JLabel();

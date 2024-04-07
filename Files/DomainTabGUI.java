@@ -52,8 +52,22 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.NavigableSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
+/**
+ * This class constructs the domain tab GUI, available from the Domains tab in the main application.
+ */
 public class DomainTabGUI implements ActionListener {
     private final JPanel domainTab = new JPanel(new GridBagLayout());
     private final JComboBox<JLabel> filterBox = new JComboBox<>();
@@ -85,15 +99,38 @@ public class DomainTabGUI implements ActionListener {
         DOMAIN_FILTER_OPTIONS option = ALL_OPTIONS_BY_STRING.get(label.getText());
         parseFilter(option,getDayFilter(),showAllButton.isSelected());
     }
+
+    /**
+     * Enum for Day filter.
+     */
     public enum DAY_FILTER{
+        /**
+         * Monday/Thursday only
+         */
         MONDAY_THURSDAY("Mon/Thu"),
+        /**
+         * Tuesday/Friday only
+         */
         TUESDAY_FRIDAY("Tues/Fri"),
+        /**
+         * Wednesday/Saturday only
+         */
         WEDNESDAY_SATURDAY("Wed/Sat"),
+        /**
+         * Sunday only. (On Sunday, every domain and every material within can be farmed)
+         */
         SUNDAY_ALL("All");
+        /**
+         * The string token for the respective enum value.
+         */
         public final String stringToken;
         DAY_FILTER(String token){
             stringToken = token;
         }
+
+        /**
+         * Map containing all enum values, mapped to the respective string values.
+         */
         public static final TreeMap<DAY_FILTER, String> ALL_OPTIONS_BY_ENUM = new TreeMap<>();
         static {
             for (DAY_FILTER v : DAY_FILTER.values()){
@@ -103,14 +140,42 @@ public class DomainTabGUI implements ActionListener {
 
 
     }
+
+    /**
+     * Enum containing different domain themes. There are four domain types available ingame, represented by the enums.
+     */
     public enum DOMAIN_THEME {
+        /**
+         * Weapon material domain theme.
+         */
         WEAPON_MATERIAL_THEME(-10301,-13494016,-26768,"\uD83D\uDD2A"),
+        /**
+         * Talent book domain theme.
+         */
         TALENT_BOOK_THEME(-1068,-14541824,-10640,"\uD83D\uDCD4"),
+        /**
+         * Weekly boss domain theme.
+         */
         WEEKLY_BOSS_DOMAIN_THEME(-11811,-13236722,-36698,"\uD83D\uDC09"),
+        /**
+         * Artifact domain theme.
+         */
         ARTIFACT_DOMAIN_THEME(-2756865,-16575201,-9382145,"\uD83D\uDC51");
+        /**
+         * Panel background color for a theme.
+         */
         public final int panelBackgroundColor;
+        /**
+         * Panel foreground color for a theme.
+         */
         public final int panelForegroundColor;
+        /**
+         * Margin panel background color.
+         */
         public final int marginBackgroundColor;
+        /**
+         * Margin panel symbol.
+         */
         public final String marginSymbol;
         DOMAIN_THEME(int bgColor, int fgColor, int marginBgColor, String symbol){
             this.panelBackgroundColor = bgColor;
@@ -119,14 +184,38 @@ public class DomainTabGUI implements ActionListener {
             this.marginSymbol = symbol;
         }
     }
-    public enum DOMAIN_FILTER_OPTIONS{
-        NO_FILTER("All Domains"),
-        ARTIFACT("Artifact"),
-        TALENT("Talent Book"),
-        WEEKLY("Weekly Boss Material"),
-        WEAPON_MAT("Weapon Material");
 
+    /**
+     * Enum representing domain filter options.
+     */
+    public enum DOMAIN_FILTER_OPTIONS{
+        /**
+         * All domains
+         */
+        NO_FILTER("All Domains"),
+        /**
+         * Artifact domains only
+         */
+        ARTIFACT("Artifact"),
+        /**
+         * Talent book domains only
+         */
+        TALENT("Talent Book"),
+        /**
+         * Weekly boss domains only
+         */
+        WEEKLY("Weekly Boss Material"),
+        /**
+         * Weapon material domains only
+         */
+        WEAPON_MAT("Weapon Material");
+        /**
+         * Mapping containing all filter options, mapped to their string tokens.
+         */
         public static final Map<DOMAIN_FILTER_OPTIONS, String> ALL_OPTIONS_BY_ENUM = new TreeMap<>();
+        /**
+         * Mapping containing all filter options, mapped to their enums
+         */
         public static final Map<String, DOMAIN_FILTER_OPTIONS> ALL_OPTIONS_BY_STRING = new TreeMap<>();
 
         static {
@@ -136,11 +225,18 @@ public class DomainTabGUI implements ActionListener {
             }
         }
 
+        /**
+         * The string token for every enum
+         */
         public final String stringToken;
         DOMAIN_FILTER_OPTIONS(String stringToken) {
             this.stringToken = stringToken;
         }
     }
+
+    /**
+     * Constructor of the class.
+     */
     public DomainTabGUI() {
         // SHOW UNLISTED (ALL) BUTTON
         showAllButton.setBackground(new Color(-2702645));
@@ -245,7 +341,6 @@ public class DomainTabGUI implements ActionListener {
         showListedButton.addActionListener(this);
     }
 
-    // ALL DAYS FILTER BUTTON
     private String getDayFilter(){
         for (Enumeration<AbstractButton> it = bg_dayFilter.getElements(); it.hasMoreElements();){
             AbstractButton button = it.nextElement();
@@ -295,9 +390,16 @@ public class DomainTabGUI implements ActionListener {
             }
         }
     }
+
+    /**
+     * Returns whether something is farmed in this domain.
+     * @param dt domain type identified by the theme.
+     * @param domainName domain name
+     * @return true if something is farmed, false if not.
+     */
     public static boolean isSomethingFarmedInThisDomain(DOMAIN_THEME dt,String domainName){
         Set<String> farmedMapping = getDomainFarmedList(dt);
-        List<String> domainItems = getDomainMapping(dt).get(domainName);
+        List<String> domainItems = Objects.requireNonNull(getDomainMapping(dt)).get(domainName);
         for (String item : farmedMapping){
             if (dt == DOMAIN_THEME.WEAPON_MATERIAL_THEME && domainItems.contains(getWeaponMaterialForWeapon(item))){
                 return true;
@@ -309,7 +411,6 @@ public class DomainTabGUI implements ActionListener {
         return false;
     }
 
-    // DOMAIN CARD
     private JPanel generateDomainCard(DOMAIN_THEME dt, String domainName, String dayFilter){
         JPanel domainCard = new JPanel(new GridBagLayout());
         domainCard.setBackground(new Color(dt.panelBackgroundColor));
@@ -403,6 +504,12 @@ public class DomainTabGUI implements ActionListener {
         });
         return domainCard;
     }
+
+    /**
+     * Returns the general mapping of a domain (All domains of this type -> All materials farmed in every domain of this type)
+     * @param dt domain theme
+     * @return the mapping
+     */
     public static Map<String, List<String>> getDomainMapping(DOMAIN_THEME dt){
         switch(dt){
             case WEAPON_MATERIAL_THEME: return getMapping(WEPDOMAIN_WEPMAT);
@@ -410,8 +517,14 @@ public class DomainTabGUI implements ActionListener {
             case WEEKLY_BOSS_DOMAIN_THEME: return getMapping(WEEKLYDOMAIN_WEEKLYBOSSMAT);
             case ARTIFACT_DOMAIN_THEME: return getMapping(ARTIDOMAIN_ARTISET);
         }
-        return null;
+        throw new IllegalArgumentException();
     }
+
+    /**
+     * Returns the TYPE of the resources farmed in this domain.
+     * @param dt domain theme
+     * @return respective resource type
+     */
     public static ToolData.RESOURCE_TYPE getDomainResourceType(DOMAIN_THEME dt){
         switch(dt){
             case WEAPON_MATERIAL_THEME: return ToolData.RESOURCE_TYPE.WEAPON_MATERIAL;
@@ -419,8 +532,14 @@ public class DomainTabGUI implements ActionListener {
             case WEEKLY_BOSS_DOMAIN_THEME: return WEEKLY_BOSS_MATERIAL;
             case ARTIFACT_DOMAIN_THEME: return ToolData.RESOURCE_TYPE.ARTIFACT_SET;
         }
-        return null;
+        throw new IllegalArgumentException();
     }
+
+    /**
+     * Returns the mapping for the "beneficiary" of the farmed resources. E.g. if it's a weapon material domain, returns the weapon material mapping.
+     * @param dt domain theme
+     * @return the target resource mapping
+     */
     public static Map<String, List<String>> getDomainTargetResourceMapping(DOMAIN_THEME dt){
         switch (dt){
             case WEAPON_MATERIAL_THEME: return getMapping(WEPMAT_WEPNAME);
@@ -428,15 +547,27 @@ public class DomainTabGUI implements ActionListener {
             case WEEKLY_BOSS_DOMAIN_THEME: return getMapping(WEEKLYBOSSMAT_CHAR);
             case ARTIFACT_DOMAIN_THEME: return getMapping(ARTIDOMAIN_ARTISET);
         };
-        return null;
+        throw new IllegalArgumentException();
     }
+
+    /**
+     * Returns the type of the "benecifiary" of the farmed resoruces. For weapon materials, these are the weapons, and for everything else, these are characters.
+     * @param dt domain theme
+     * @return the target resource type.
+     */
     public static ToolData.RESOURCE_TYPE getDomainTargetResourceType(DOMAIN_THEME dt){
         switch (dt){
             case WEAPON_MATERIAL_THEME: return ToolData.RESOURCE_TYPE.WEAPON_NAME;
             case TALENT_BOOK_THEME: case WEEKLY_BOSS_DOMAIN_THEME: case ARTIFACT_DOMAIN_THEME: return ToolData.RESOURCE_TYPE.CHARACTER;
         }
-        return null;
+        throw new IllegalArgumentException();
     }
+
+    /**
+     * Returns a set of items farmed in all domains of this type.
+     * @param dt domain theme
+     * @return set of items
+     */
     public static Set<String> getDomainFarmedList(DOMAIN_THEME dt){
         switch(dt){
             case WEAPON_MATERIAL_THEME: {
@@ -467,8 +598,15 @@ public class DomainTabGUI implements ActionListener {
                 return allFarmedArtifacts;
             }
         }
-        return null;
+        throw new IllegalArgumentException();
     }
+
+    /**
+     * Returns a counter label text that tells how many "benefactors" are there per domain.
+     * @param domainName domain name
+     * @param rt resource type
+     * @return the text
+     */
     public static String getAllCounterLabel(String domainName,ToolData.RESOURCE_TYPE rt){
         String labelText;
         String domainMaterialCategory = "";
@@ -502,7 +640,6 @@ public class DomainTabGUI implements ActionListener {
                 domainMaterialCategory = "characters";
                 break;
             }
-            default: {}
         }
         labelText = "<html>" + "All" + " " + domainMaterialCategory + " " + "that need it: " + "<u>"
                 + (counter == 0 ? matchedCharacters.size() : counter ) + "</u>" + "</html>";
