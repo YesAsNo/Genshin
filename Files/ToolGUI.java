@@ -313,7 +313,8 @@ public class ToolGUI extends JFrame {
                 case ARTIFACT_SET: {
                     if ((characterCard.getArtifactSet1Status() &&
                             characterCard.getArtifactSet1().equalsIgnoreCase(mat)) ||
-                            characterCard.getArtifactSet2Status() && characterCard.getArtifactSet2().equalsIgnoreCase(mat)) {
+                            characterCard.getArtifactSet2Status() &&
+                                    characterCard.getArtifactSet2().equalsIgnoreCase(mat)) {
                         counter++;
                     }
                     break;
