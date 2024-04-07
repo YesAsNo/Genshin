@@ -1,12 +1,13 @@
 package Files;
 
+import static Files.ToolData.AVAILABLE_FONTS;
 import static Files.ToolData.SAVE_LOCATION;
-import static Files.ToolData.artifactSetDescriptionsMap;
-import static Files.ToolData.artifactsFlattened;
-import static Files.ToolData.characterWeaponsMap;
-import static Files.ToolData.charactersFlattened;
-import static Files.ToolData.weaponsRaritiesMap;
-import Files.ToolData.RARITY;
+import static Files.ToolData.changeFont;
+import static Files.ToolData.getFlattenedData;
+import static Files.ToolData.getResourceIcon;
+import static Files.ToolData.getTalentBookForCharacter;
+import static Files.ToolData.getWeeklyBossMatForCharacter;
+import static Files.WeaponTabGUI.getUnassignedFarmedWeapons;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -14,282 +15,409 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 
-import javax.swing.BorderFactory;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.border.TitledBorder;
+import javax.swing.JTextPane;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.File;
-
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
-public class ToolGUI extends JFrame implements ActionListener {
-
+/**
+ * This class generates the main application window.
+ */
+public class ToolGUI extends JFrame {
+    /**
+     * If a label text exceeds this length, it will be formatted using HTML tags.
+     */
+    public static final int MAX_CHARACTERS_PER_LINE = 15;
+    /**
+     * Character limit for Notes text area.
+     */
+    public static final int CHARACTER_LIMIT = 50;
+    /**
+     * This message appears if no characters match the search parameters.
+     */
     public static final String NO_CHARACTERS_MATCH_MESSAGE = "No fighters >:(";
-    public static final String UNKNOWN_CHARACTER_PLACEHOLDER_NAME = "unknown_character";
-    public static final int MAX_CHARACTERS_PER_LINE = 12;
-    public static final String TOOLTIP_FOR_LABELS_WITHOUT_ICON = "Here will be the chosen set name shown";
-    public static final String TOOLTIP_FOR_LABELS_WITH_ICON = "Here will be the chosen set icon shown";
-    public static final String TOOLTIP_FOR_WEAPON_NAME_LABEL = "Here will be the chosen weapon name shown";
-    public static final String TOOLTIP_FOR_WEAPON_ICON_LABEL = "Here will be the chosen weapon icon shown";
-    public static final String UNKNOWN_SET_MESSAGE = "[ Empty Set Selector ]";
-    public static final String FOUR_STAR_WEAPON_DELIMITER = "[ 4-Star Weapons ]";
-    public static final String FIVE_STAR_WEAPON_DELIMITER = "[ 5-Star Weapons ]";
+    /**
+     * Used to generate the label when no characters match the search parameters.
+     */
+    public static final String UNKNOWN_CHARACTER = "unknown_character";
+    /**
+     * Used to generate the icon of an unselected weapon, mostly in CharacterCardGUI.
+     */
+    public static final String UNKNOWN_WEAPON = "unknown_weapon";
+    /**
+     * Used to generate the icon of an unselected artifact set, mostly in CharacterGUI.
+     */
     public static final String UNKNOWN_ARTIFACT = "unknown_artifact";
-    public static final String UNKNOWN_WEAPON_MESSAGE = "[ Empty Weapon Selector ]";
-    public static final String CLOSE_TEXT = "CLOSE";
-    public static final int CHARACTER_LIMIT = 150;
-
-    private JPanel panel1;
-    private JLabel titleLabel;
-    private JTabbedPane characterTabPane;
+    /**
+     * Weapon selector default option
+     */
+    public static final String EMPTY_WEAPON_SELECTOR = "[ Empty Weapon Selector ]";
+    /**
+     * Artifact set selector default option
+     */
+    public static final String EMPTY_SET_SELECTOR = "[ Empty Set Selector ]";
+    /**
+     * Weapon selector 4-star weapon delimiter. Cannot be selected
+     */
+    public static final String FOUR_STAR_WEAPON_DELIMITER = "[ 4-Star Weapons ]";
+    /**
+     * Weapon selector 5-star weapon delimiter. Cannot be selected
+     */
+    public static final String FIVE_STAR_WEAPON_DELIMITER = "[ 5-Star Weapons ]";
+    /**
+     * Weapon save file name.
+     */
+    public static final String WEAPON_SAVE_FILE_NAME = "saved_weapons.json";
+    private JPanel mainPanel;
+    private JTabbedPane mainTabbedPane;
     private JPanel mainInformationPanel;
-    private JPanel characterTab;
-    private JPanel artifactsTab;
-    private JTextField characterSelectorField;
-    private JButton searchConfirmButton;
-    private JPanel selectedCharacterPanel;
-    private JScrollPane scrollPane1;
+    private JPanel devBasicInfoPanel;
+    private JPanel devBasicInfoLeftPanel;
+    private JLabel Welcome_Barbara;
+    private JTextPane devUpdatesTextPane;
+    private JLabel devCreatorsLabel;
+    private JLabel devLinakoLabel;
+    private JLabel devPrecisi0nLabel;
+    private JPanel devBasicInfoRightPanel;
+    private JLabel devWelcomeLabel;
+    private JPanel devBasicInfoSpacer;
+    private JTextPane devInfoTextPane;
+    private JPanel welcomeTab;
+    /**
+     * This mapping contains all farmed weapons from all saved characters. Note that weapons unassigned to characters are not put into this mapping.
+     */
+    public static final TreeMap<String, Set<String>> farmedWeapons = new TreeMap<>();
+    /**
+     * This mapping contains all farmed artifact sets from all saved characters.
+     */
+    public static final TreeMap<String, Set<String>> farmedArtifacts = new TreeMap<>();
+    /**
+     * This mapping contains all farmed talent book names and weekly boss materials.
+     */
+    public static final TreeMap<String, Set<String>> farmedTalents = new TreeMap<>();
     private static final List<CharacterCard> generatedCharacterCards = new ArrayList<>();
+    private static final CharacterTabGUI _characterTabGUI = new CharacterTabGUI();
+    private static final WeaponTabGUI _weaponsTabGUI = new WeaponTabGUI();
+    private static final DomainTabGUI __DOMAIN_TAB_GUI = new DomainTabGUI();
+
+    /**
+     * This enum is primarily used to return one of the farmed mappings.
+     */
+    public enum FARMED_DATATYPE {
+        /**
+         * Weapon map enum
+         */
+        WEAPONS,
+        /**
+         * Artifact map enum
+         */
+        ARTIFACTS,
+        /**
+         * Talent material (and weekly talent material) map enum
+         */
+        TALENTS
+    }
 
     /**
      * Constructor of the GUI class.
      */
-
     public ToolGUI() {
         $$$setupUI$$$();
-        setContentPane(panel1);
-        setTitle("Genshin Domain App!");
+        changeFont(mainTabbedPane, AVAILABLE_FONTS.HEADER_FONT, 20.0F);
+        changeFont(devWelcomeLabel, AVAILABLE_FONTS.HEADER_FONT, 20.0F);
+        changeFont(devCreatorsLabel, AVAILABLE_FONTS.HEADER_FONT, 20.0F);
+        changeFont(devPrecisi0nLabel, AVAILABLE_FONTS.CREATOR_FONT, 18.0F);
+        changeFont(devLinakoLabel, AVAILABLE_FONTS.CREATOR_FONT, 18.0F);
+        changeFont(devUpdatesTextPane, AVAILABLE_FONTS.TEXT_FONT, 12.0F);
+        changeFont(devInfoTextPane, AVAILABLE_FONTS.TEXT_FONT, 12.0F);
+        devInfoTextPane.setText(
+                "This is a personal project to make our daily tasks a little bit more coordinated! Here's how to get started!\n\n -\uD83D\uDD38✨ Character Tab ✨\uD83D\uDD38-\n- Search by name or filter\n- Fill in the desired information (2nd artifact set is optional).\n- Checkboxes exist for characters to show up in the domains tab. Unchecking will hide a character from its chosen materials, making it easier to tell who still needs those materials. For example, if a character is done with its talents, you should uncheck the character.\n- DON'T FORGET TO SAVE\n\n\uD83D\uDD38✨ Weapon Tab ✨\uD83D\uDD38-\n Search by name or filter.\n- Only checkboxes appear. Checking a weapon will make it show up in farmed items in domains.\n- If a weapon is already listed through a character, it will be marked as \"Already Farmed\".\n\n-\uD83D\uDD38✨ Domains Tab ✨\uD83D\uDD38-\n- Search by filter or day. Results will be shown for today by default.\n- The chosen domain will show all characters/weapons checked in other tabs.");
+
+        addTab("Characters", _characterTabGUI.getMainPanel());
+        addTab("Weapons", _weaponsTabGUI.getMainPanel());
+        addTab("Domains", __DOMAIN_TAB_GUI.getMainPanel());
+        setContentPane(mainPanel);
+        setTitle("Genshin Domain App v.1.0");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(1000, 600);
         setLocationRelativeTo(null);
-        setVisible(true);
+        setIconImage(new ImageIcon(Objects.requireNonNull(ToolGUI.class.getResource("/Files/Images/Icons/Program_Icon_Barbara.png"))).getImage());
         setResizable(false);
+        setVisible(true);
     }
 
     /**
      * Creates a few custom UI components by hand.
      */
     private void createUIComponents() {
-        // TODO: place custom component creation code here
-        selectedCharacterPanel = new JPanel(new GridBagLayout());
-        scrollPane1 = new JScrollPane();
-        panel1 = new JPanel();
-        searchConfirmButton = new JButton("✓");
-        searchConfirmButton.addActionListener(this);
-        characterSelectorField = new JTextField();
-        characterSelectorField.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                characterSelectorField.setText("");
-            }
-        });
+        //Place custom component creation code here
+        mainPanel = new JPanel();
+        initialiseFarmedArrays();
         readGeneratedCharacterCards();
+    }
+
+    private void initialiseFarmedArrays() {
+        for (String talentBook : getFlattenedData(ToolData.RESOURCE_TYPE.TALENT_BOOK)) {
+            farmedTalents.put(talentBook, new TreeSet<>());
+        }
+        for (String weeklyMat : getFlattenedData(ToolData.RESOURCE_TYPE.WEEKLY_BOSS_MATERIAL)) {
+            farmedTalents.put(weeklyMat, new TreeSet<>());
+        }
+        for (String artifactSet : getFlattenedData(ToolData.RESOURCE_TYPE.ARTIFACT_SET)) {
+            farmedArtifacts.put(artifactSet, new TreeSet<>());
+        }
+        for (String weaponName : getFlattenedData(ToolData.RESOURCE_TYPE.WEAPON_NAME)) {
+            farmedWeapons.put(weaponName, new TreeSet<>());
+        }
+    }
+
+    private void addTab(String title, JPanel jpanel) {
+        mainTabbedPane.addTab(title, jpanel);
+    }
+
+    /**
+     * Only used in CharacterTabGUI to add a newly generated CharacterCard to the collection.
+     *
+     * @param characterCard character card
+     */
+    public static void addCharacterCard(CharacterCard characterCard) {
+        generatedCharacterCards.add(characterCard);
+    }
+
+    /**
+     * Returns one of the farmed maps.
+     *
+     * @param fd the enum corresponding to the farmed mapping.
+     * @return the corresponding farmed mapping.
+     */
+    public static TreeMap<String, Set<String>> getFarmedMapping(FARMED_DATATYPE fd) {
+        assert fd != null;
+        switch (fd) {
+            case WEAPONS:
+                return farmedWeapons;
+            case ARTIFACTS:
+                return farmedArtifacts;
+            case TALENTS:
+                return farmedTalents;
+        }
+        throw new IllegalArgumentException();
     }
 
     /**
      * Reads character cards that have been saved in previous sessions.
      */
-    void readGeneratedCharacterCards() {
+    private void readGeneratedCharacterCards() {
         File f_dir = new File(SAVE_LOCATION);
         if (f_dir.mkdir()) {
             return;
         }
-        File[] savedCards = f_dir.listFiles();
+        File[] savedCards = f_dir.listFiles(pathname -> !pathname.getAbsolutePath().contains(WEAPON_SAVE_FILE_NAME));
         assert savedCards != null;
         Gson gson = new Gson();
+
         try {
             for (File savedCard : savedCards) {
                 JsonReader reader = new JsonReader(new FileReader(savedCard));
                 CharacterCard card = gson.fromJson(reader, CharacterCard.class);
+                card.setCharacterIcon(getResourceIcon(card.getCharacterName(), ToolData.RESOURCE_TYPE.CHARACTER));
                 generatedCharacterCards.add(card);
-
+                if (card.getTalentStatus()) {
+                    farmedTalents.get(getTalentBookForCharacter(card.getCharacterName())).add(card.getCharacterName());
+                    farmedTalents.get(getWeeklyBossMatForCharacter(card.getCharacterName())).add(card.getCharacterName());
+                }
+                if (!card.getArtifactSet1().isEmpty() && card.getArtifactSet1Status()) {
+                    farmedArtifacts.get(card.getArtifactSet1()).add(card.getCharacterName());
+                }
+                if (!card.getArtifactSet2().isEmpty() && card.getArtifactSet2Status()) {
+                    farmedArtifacts.get(card.getArtifactSet2()).add(card.getCharacterName());
+                }
+                if (!card.getWeapon().isEmpty() && card.getWeaponStatus()) {
+                    farmedWeapons.get(card.getWeapon()).add(card.getCharacterName());
+                }
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Could not read saved character cards.");
         }
+
     }
 
     /**
-     * Listener for the searchConfirmButton.
+     * Returns whether a weapon has been listed for one of the characters.
      *
-     * @param e the event to be processed
+     * @param weapon weapon name
+     * @return true, if the weapon was listed for one of the characters.
      */
-    public void actionPerformed(ActionEvent e) {
+    public static boolean isSomeoneFarmingForTheWeapon(String weapon) {
+        return !farmedWeapons.get(weapon).isEmpty();
+    }
 
-        String userFieldInput = characterSelectorField.getText().toLowerCase();
-        boolean matched = false;
-        int matchedCount = 0;
-        selectedCharacterPanel.removeAll();
+    /**
+     * Just a helper method that determines whether the given input is a weapon name.
+     *
+     * @param name the given input
+     * @return whether the input is a weapon name.
+     */
+    public static boolean isThisAWeapon(String name) {
+        return getFlattenedData(ToolData.RESOURCE_TYPE.WEAPON_NAME).contains(name);
+    }
 
-        for (String s : charactersFlattened) {
-            if (s.toLowerCase().contains(userFieldInput)) {
-                matched = true;
-                if (!userFieldInput.isEmpty()) {
-                    generateCharacterButton(s, matchedCount);
+    /**
+     * Primarily used for farmed labels in DomainCardGUI.
+     *
+     * @param mat the farmed material
+     * @param rt the resource type of that material
+     * @return counter of characters who are farming this material.
+     */
+    public static int howManyAreFarmingThis(String mat, ToolData.RESOURCE_TYPE rt) {
+        int counter = 0;
+        for (CharacterCard characterCard : generatedCharacterCards) {
+            switch (rt) {
+                case TALENT_BOOK: {
+                    if (characterCard.getTalentStatus() &&
+                            getTalentBookForCharacter(characterCard.getCharacterName()).equalsIgnoreCase(mat)) {
+                        counter++;
+                    }
+                    break;
                 }
-                matchedCount++;
-
+                case WEEKLY_BOSS_MATERIAL: {
+                    if (characterCard.getTalentStatus() &&
+                            getWeeklyBossMatForCharacter(characterCard.getCharacterName()).equalsIgnoreCase(mat)) {
+                        counter++;
+                    }
+                    break;
+                }
+                case ARTIFACT_SET: {
+                    if ((characterCard.getArtifactSet1Status() &&
+                            characterCard.getArtifactSet1().equalsIgnoreCase(mat)) ||
+                            characterCard.getArtifactSet2Status() &&
+                                    characterCard.getArtifactSet2().equalsIgnoreCase(mat)) {
+                        counter++;
+                    }
+                    break;
+                }
+                default:
+                    throw new IllegalArgumentException("RESOURCE TYPE INVALID: " + rt.stringToken);
             }
         }
-        if (!matched || userFieldInput.isEmpty()) {
-            generateCharacterButton(UNKNOWN_CHARACTER_PLACEHOLDER_NAME, matchedCount);
-        } else {
-            scrollPane1.setViewportView(selectedCharacterPanel);
-            GridBagConstraints gbc = new GridBagConstraints();
-            gbc.gridx = 0;
-            gbc.gridy = 1;
-            gbc.gridwidth = 3;
-            gbc.weightx = 1.0;
-            gbc.weighty = 1.0;
-            gbc.fill = GridBagConstraints.BOTH;
-            scrollPane1.updateUI();
-            characterTab.add(scrollPane1, gbc);
-
-        }
-
+        return counter;
     }
 
     /**
-     * Generates a character button for the character specified by name and the index of the match.
+     * Primarily used for farmed labels in DomainCardGUI.
      *
-     * @param characterName the name of the character
-     * @param index which character by count it is
+     * @param mat the farmed material
+     * @param rt the resource type of that material
+     * @return set of characters who are farming this material.
      */
-    private void generateCharacterButton(String characterName, int index) {
-        String characterIconPath = generateCharacterIconPath(characterName);
-        Icon characterIcon = new ImageIcon(characterIconPath);
-        if (characterName.equalsIgnoreCase(UNKNOWN_CHARACTER_PLACEHOLDER_NAME)) {
-            JLabel unknownCharacterLabel = new JLabel(characterIcon);
-            unknownCharacterLabel.setText(NO_CHARACTERS_MATCH_MESSAGE);
-            unknownCharacterLabel.setVerticalTextPosition(SwingConstants.BOTTOM);
-            unknownCharacterLabel.setHorizontalTextPosition(SwingConstants.CENTER);
-            setFont(unknownCharacterLabel);
-            selectedCharacterPanel.add(unknownCharacterLabel);
-            selectedCharacterPanel.updateUI();
+    public static Set<String> whoIsFarmingThis(String mat, ToolData.RESOURCE_TYPE rt) {
+        Set<String> characterSet = new TreeSet<>();
+        for (CharacterCard characterCard : generatedCharacterCards) {
+            switch (rt) {
+                case TALENT_BOOK: {
+                    if (characterCard.getTalentStatus() &&
+                            getTalentBookForCharacter(characterCard.getCharacterName()).equalsIgnoreCase(mat)) {
+                        characterSet.add(characterCard.getCharacterName());
+                    }
+                    break;
+                }
+                case WEEKLY_BOSS_MATERIAL: {
+                    if (characterCard.getTalentStatus() &&
+                            getWeeklyBossMatForCharacter(characterCard.getCharacterName()).equalsIgnoreCase(mat)) {
+                        characterSet.add(characterCard.getCharacterName());
+                    }
+                    break;
+                }
+                case ARTIFACT_SET: {
+                    if ((characterCard.getArtifactSet1Status() &&
+                            characterCard.getArtifactSet1().equalsIgnoreCase(mat)) || characterCard.getArtifactSet2Status() &&
+                            characterCard.getArtifactSet2().equalsIgnoreCase(mat)) {
+                        characterSet.add(characterCard.getCharacterName());
+                    }
+                    break;
+                }
+                default:
+                    throw new IllegalArgumentException("RESOURCE TYPE INVALID: " + rt.stringToken);
+            }
+        }
+        return characterSet;
+    }
+
+    /**
+     * Updates the farmed map.
+     *
+     * @param dataField what field has been updated
+     * @param characterCard what character card has been updated
+     * @param status whether the character has started farming the item or not
+     * @param item the item that has been either removed or assigned to the character card.
+     */
+    public static void updateFarmedItemMap(ToolData.CHARACTER_CARD_DATA_FIELD dataField, CharacterCard characterCard,
+                                           boolean status, String item) {
+        if (item.isEmpty() || item.equalsIgnoreCase(EMPTY_SET_SELECTOR) ||
+                item.equalsIgnoreCase(EMPTY_WEAPON_SELECTOR)) {
             return;
         }
-        JButton characterButton = getjButton(characterName, characterIcon);
-
-        addCharacterButtonToSelectedCharacterPanel(characterButton, index);
-
-    }
-
-    /**
-     * Sets the hardcoded font for the specified component.
-     *
-     * @param c component whose font is to be changed
-     */
-    private void setFont(Component c) {
-        Font font = this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 16, characterTabPane.getFont());
-        if (font != null) {
-            c.setFont(font);
+        Map<String, Set<String>> mapping;
+        switch (dataField) {
+            case WEAPON:
+            case FARMING_WEAPON_MATERIALS:
+                mapping = farmedWeapons;
+                break;
+            case SET_ONE:
+            case SET_TWO:
+                mapping = farmedArtifacts;
+                break;
+            case FARMING_TALENT_MATERIALS:
+                mapping = farmedTalents;
+                break;
+            default:
+                throw new IllegalArgumentException("This datafield cannot be farmed " + dataField);
         }
-    }
-
-    /**
-     * Creates a JButton for the specified character.
-     *
-     * @param characterName the name of the character
-     * @param characterIcon the icon of the character
-     * @return JButton for the character.
-     */
-    private JButton getjButton(String characterName, Icon characterIcon) {
-        JButton characterButton = new JButton();
-
-        characterButton.setIcon(characterIcon);
-        if (characterName.length() > MAX_CHARACTERS_PER_LINE) {
-            characterButton.setText(removeWhitespace(characterName));
+        if (status) {
+            mapping.get(item).add(characterCard.getCharacterName());
         } else {
-            characterButton.setText(characterName);
+            mapping.get(item).remove(characterCard.getCharacterName());
         }
-        characterButton.setVerticalTextPosition(SwingConstants.BOTTOM);
-        characterButton.setHorizontalTextPosition(SwingConstants.CENTER);
-        setFont(characterButton);
-        characterButton.setOpaque(false);
-        characterButton.setBorderPainted(false);
-        characterButton.setContentAreaFilled(false);
-        characterButton.addActionListener(e -> {
-            if (!checkIfCharacterCardHasBeenGenerated(characterName)) {
-                generatedCharacterCards.add(new CharacterCard(characterName));
-            }
-            if (!isTabAlreadyOpen(characterTabPane, characterName)) {
-                JPanel characterPage = generateCharacterPage(characterName, characterIcon);
-                characterTabPane.addTab(characterName, characterPage);
-                characterTabPane.setSelectedComponent(characterPage);
-            } else {
-                characterTabPane.setSelectedIndex(characterTabPane.indexOfTab(characterName));
-            }
-        });
-
-        return characterButton;
     }
 
     /**
-     * Verifies if a tab for the specified character already exists in the tabbed pane.
-     *
-     * @param tp the tabbed pane
-     * @param charName the specified character
-     * @return true if the tab exists, otherwise false.
+     * Saves the unassigned weapons into a json file.
      */
-
-    public boolean isTabAlreadyOpen(JTabbedPane tp, String charName) {
-        for (int i = 0; i < tp.getTabCount(); i++) {
-            if (tp.getTitleAt(i).equalsIgnoreCase(charName)) {
-                return true;
-            }
+    public static void serializeSave() {
+        Gson gson = new Gson();
+        File f = new File(SAVE_LOCATION + WEAPON_SAVE_FILE_NAME);
+        try {
+            f.createNewFile();
+            FileWriter fd = new FileWriter(f);
+            gson.toJson(getUnassignedFarmedWeapons(), fd);
+            fd.flush();
+            fd.close();
+        } catch (IOException e) {
+            System.out.println("Failed to save weapons, please try again");
         }
-        return false;
-    }
-
-    /**
-     * Generates a path to the character icon.
-     *
-     * @param charName the character name whose icon path is to be returned
-     * @return character icon path
-     */
-    public static String generateCharacterIconPath(String charName) {
-        return "./Files/Images/Characters/" + charName + ".png";
-    }
-
-    /**
-     * Generates a path to the artifact icon.
-     *
-     * @param artifactName the artifact set name whose icon is to be returned
-     * @return artifact set icon path
-     */
-    public static String generateArtifactIconPath(String artifactName) {
-        return "./Files/Images/Artifacts/" + artifactName + ".png";
     }
 
     /**
@@ -300,6 +428,9 @@ public class ToolGUI extends JFrame implements ActionListener {
      */
 
     public static boolean checkIfCharacterCardHasBeenGenerated(String charName) {
+        if (generatedCharacterCards.isEmpty()) {
+            return false;
+        }
         for (CharacterCard generatedCharacterCard : generatedCharacterCards) {
             if (generatedCharacterCard.getCharacterName().equalsIgnoreCase(charName)) {
                 return true;
@@ -324,529 +455,40 @@ public class ToolGUI extends JFrame implements ActionListener {
     }
 
     /**
-     * Adds a character button to the selected character panel (after triggering actionPerformed)
-     *
-     * @param charButton the button to add
-     * @param index the index of the match
-     */
-    private void addCharacterButtonToSelectedCharacterPanel(JButton charButton, int index) {
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = index % 6;
-        gbc.gridy = (index - gbc.gridx) / 6;
-        selectedCharacterPanel.add(charButton, gbc);
-        selectedCharacterPanel.updateUI();
-
-    }
-
-    /**
      * Removes whitespace from the name of the character, adds line break in its place and centers the name.
      *
      * @param name the character name to be changed
      * @return edited string
      */
-    public String removeWhitespace(String name) {
-        return "<html><center>" + name.replace(" ", "<br>") + "</center></html>";
-
-    }
-
-    /**
-     * Looks up what weapon category is assigned to the character, i.e. what type of weapons the character can wield.
-     *
-     * @param charName the name of the character
-     * @return the string that represents the category (one of five possibilities)
-     */
-
-    public String lookUpWeaponCategoryForCharacter(String charName) {
-        for (String key : characterWeaponsMap.keySet()) {
-            List<String> weapons = characterWeaponsMap.get(key);
-            if (weapons.contains(charName)) {
-                return key;
-            }
-
+    public static String formatString(String name) {
+        final String HTML_BEGINNING = "<html><center>";
+        final String HTML_END = "</center></html>";
+        final String HTML_BREAK = "<br>";
+        if (name.length() <= MAX_CHARACTERS_PER_LINE) {
+            return HTML_BEGINNING + name + HTML_BREAK + " " + HTML_END;
         }
-        return null;
-    }
+        List<Integer> whiteSpaceIndices = new ArrayList<>();
 
-    /**
-     * Grabs all weapons based on their rarity and type.
-     *
-     * @param rarity rarity of the weapon
-     * @param weaponType type of the weapon
-     * @return list of the weapons with the specified rarity.
-     */
-    public static List<String> lookUpWeapons(RARITY rarity, String weaponType) {
-
-        final String FOUR_STAR_WEAPON_KEY = "Four-Star " + weaponType;
-        final String FIVE_STAR_WEAPON_KEY = "Five-Star " + weaponType;
-
-        return switch (rarity) {
-            case FOUR_STAR -> weaponsRaritiesMap.get(FOUR_STAR_WEAPON_KEY);
-            case FIVE_STAR -> weaponsRaritiesMap.get(FIVE_STAR_WEAPON_KEY);
-        };
-    }
-
-    /**
-     * Looks up the rarity and type of specified weapon.
-     *
-     * @param weaponName the weapon name
-     * @return WeaponInfo object with rarity and type of the weapon.
-     */
-    public static WeaponInfo lookUpWeaponRarityAndType(String weaponName) {
-        for (String key : weaponsRaritiesMap.keySet()) {
-            List<String> weapons = weaponsRaritiesMap.get(key);
-            if (weapons.contains(weaponName)) {
-                return new WeaponInfo(key);
+        int whiteSpaceIndex = name.indexOf(' ');
+        while (whiteSpaceIndex >= 0) {
+            whiteSpaceIndices.add(whiteSpaceIndex);
+            if (whiteSpaceIndex + 1 >= name.length()) {
+                break;
+            } else {
+                whiteSpaceIndex = name.indexOf(' ', whiteSpaceIndex + 1);
             }
         }
-        return new WeaponInfo("");
-    }
-
-    /**
-     * Looks up a set description from the name.
-     *
-     * @param setName the name of the set
-     * @return the description of it as String.
-     */
-    public static String lookUpSetDescription(String setName) {
-        return artifactSetDescriptionsMap.get(setName);
-    }
-
-    /**
-     * Adds allowed weapons (that is, wieldable by the specified character) to the list of options in the weapon combobox.
-     *
-     * @param dcmb weapon selector combo box model used by the combo box
-     * @param charName character name
-     */
-    private void addAllowedWeapons(WeaponSelectorComboBoxModel dcmb, String charName) {
-        dcmb.addElement(UNKNOWN_WEAPON_MESSAGE);
-        String weaponType = lookUpWeaponCategoryForCharacter(charName);
-        dcmb.addElement(FOUR_STAR_WEAPON_DELIMITER);
-        dcmb.addAll(lookUpWeapons(RARITY.FOUR_STAR, weaponType));
-        dcmb.addElement(FIVE_STAR_WEAPON_DELIMITER);
-        dcmb.addAll(lookUpWeapons(RARITY.FIVE_STAR, weaponType));
-    }
-
-    /**
-     * Generates a path to the weapon icon. Necessary parameter information can be acquired by first executing lookUpWeaponRarityAndType method.
-     *
-     * @param weaponName the name of the weapon
-     * @param weaponType the type of the weapon
-     * @param rarity the rarity of the weapon
-     * @return the address of the icon for the weapon
-     */
-    public static String generateWeaponPath(String weaponName, String weaponType, RARITY rarity) {
-        return switch (rarity) {
-            case FOUR_STAR -> "./Files/Images/Weapons/" + weaponType + "_4star/" + weaponName + ".png";
-            case FIVE_STAR -> "./Files/Images/Weapons/" + weaponType + "_5star/" + weaponName + ".png";
-        };
-    }
-
-    /**
-     * Generates a path to the weapon icon for the "unknown weapon" placeholder
-     *
-     * @return the path
-     */
-
-    public static String generateWeaponPath() {
-        return "./Files/Images/Weapons/unknown_weapon.png";
-    }
-
-    /**
-     * Generates a character page (in the tabbed pane).
-     *
-     * @param charName the character name
-     * @param charIcon the character icon
-     * @return the JPanel that is the character page.
-     */
-    private JPanel generateCharacterPage(String charName, Icon charIcon) {
-        JPanel templateTab = new JPanel();
-        CharacterCard selectedCharacterCard = getCharacterCard(charName);
-        assert selectedCharacterCard != null;
-        templateTab.setLayout(new GridBagLayout());
-        JPanel middleSelectorPanel = new JPanel();
-        middleSelectorPanel.setLayout(new GridLayoutManager(13, 1, new Insets(5, 5, 5, 5), -1, -1));
-        middleSelectorPanel.setAlignmentY(0.5f);
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.gridheight = 5;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        gbc.anchor = GridBagConstraints.NORTH;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(22, 0, 0, 0);
-        templateTab.add(middleSelectorPanel, gbc);
-        middleSelectorPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
-                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
-
-        JTextField notesTextField = new JTextField();
-        Font emptyNotesFieldTextFieldFont =
-                this.$$$getFont$$$("Source Code Pro", Font.BOLD, 14, notesTextField.getFont());
-        if (emptyNotesFieldTextFieldFont != null) {
-            notesTextField.setFont(emptyNotesFieldTextFieldFont);
-        }
-        notesTextField.setHorizontalAlignment(10);
-        notesTextField.setInheritsPopupMenu(false);
-        notesTextField.setMargin(new Insets(2, 6, 2, 6));
-        notesTextField.setOpaque(true);
-        notesTextField.setDocument(new NotesTextModel(CHARACTER_LIMIT, selectedCharacterCard.getCharacterNotes()));
-        notesTextField.getDocument().addDocumentListener(new NotesListener(selectedCharacterCard));
-        middleSelectorPanel.add(notesTextField,
-                new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL,
-                        GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null,
-                        new Dimension(50, -1), null, 0, false));
-
-        JLabel characterNameLabel = new JLabel();
-        characterNameLabel.setAutoscrolls(true);
-        Font characterNameLabelFont =
-                this.$$$getFont$$$("Source Code Pro", Font.BOLD, 18, characterNameLabel.getFont());
-        if (characterNameLabelFont != null) {
-            characterNameLabel.setFont(characterNameLabelFont);
-        }
-        characterNameLabel.setText(charName);
-        middleSelectorPanel.add(characterNameLabel,
-                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
-                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1,
-                        false));
-
-        JComboBox<String> weaponSelectionBox = new JComboBox<>();
-        weaponSelectionBox.setAutoscrolls(false);
-        weaponSelectionBox.setEditable(false);
-        Font weaponSelectionBoxFont =
-                this.$$$getFont$$$("Source Code Pro", Font.BOLD, 14, weaponSelectionBox.getFont());
-        if (weaponSelectionBoxFont != null) {
-            weaponSelectionBox.setFont(weaponSelectionBoxFont);
-        }
-        weaponSelectionBox.setInheritsPopupMenu(false);
-        final WeaponSelectorComboBoxModel weaponSelectorComboBoxModel = new WeaponSelectorComboBoxModel();
-        addAllowedWeapons(weaponSelectorComboBoxModel, charName);
-        weaponSelectionBox.setModel(weaponSelectorComboBoxModel);
-        weaponSelectionBox.setSelectedItem(selectedCharacterCard.getWeapon().isEmpty() ? UNKNOWN_WEAPON_MESSAGE :
-                selectedCharacterCard.getWeapon());
-        middleSelectorPanel.add(weaponSelectionBox,
-                new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW,
-                        GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-
-        JLabel weaponNameLabel = new JLabel();
-        weaponNameLabel.setAutoscrolls(true);
-        Font weaponNameLabelFont = this.$$$getFont$$$("Source Code Pro", Font.BOLD, 18, weaponNameLabel.getFont());
-        if (weaponNameLabelFont != null) {
-            weaponNameLabel.setFont(weaponNameLabelFont);
-        }
-        weaponNameLabel.setText(selectedCharacterCard.getWeapon());
-        middleSelectorPanel.add(weaponNameLabel,
-                new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
-                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 1,
-                        false));
-
-        JLabel set1NameLabel = new JLabel();
-        set1NameLabel.setAlignmentY(0.5f);
-        set1NameLabel.setAutoscrolls(true);
-        set1NameLabel.setDoubleBuffered(false);
-        Font set1NameLabelFont = this.$$$getFont$$$("Source Code Pro", Font.BOLD, 18, set1NameLabel.getFont());
-        if (set1NameLabelFont != null) {
-            set1NameLabel.setFont(set1NameLabelFont);
-        }
-        set1NameLabel.setHorizontalAlignment(10);
-        set1NameLabel.setHorizontalTextPosition(11);
-        set1NameLabel.setInheritsPopupMenu(true);
-        set1NameLabel.setText(
-                selectedCharacterCard.getArtifactSet1().isEmpty() ? "" : selectedCharacterCard.getArtifactSet1());
-        set1NameLabel.setVerticalAlignment(0);
-        set1NameLabel.setVerticalTextPosition(0);
-        set1NameLabel.setToolTipText(TOOLTIP_FOR_LABELS_WITHOUT_ICON);
-        middleSelectorPanel.add(set1NameLabel,
-                new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
-                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null,
-                        new Dimension(177, 23), null, 1, false));
-
-        JComboBox<String> set1ComboBox = new JComboBox<>();
-        set1ComboBox.setAutoscrolls(false);
-        set1ComboBox.setEditable(false);
-        set1ComboBox.setFocusable(false);
-        Font set1comboBoxFont = this.$$$getFont$$$("Source Code Pro", Font.BOLD, 14, set1ComboBox.getFont());
-        if (set1comboBoxFont != null) {
-            set1ComboBox.setFont(set1comboBoxFont);
-        }
-        set1ComboBox.setInheritsPopupMenu(false);
-        final DefaultComboBoxModel<String> defaultComboBoxModelForSet1Selector = new DefaultComboBoxModel<>();
-        defaultComboBoxModelForSet1Selector.addElement(UNKNOWN_SET_MESSAGE);
-        defaultComboBoxModelForSet1Selector.addAll(artifactsFlattened);
-        set1ComboBox.setModel(defaultComboBoxModelForSet1Selector);
-        set1ComboBox.setSelectedItem(selectedCharacterCard.getArtifactSet1().isEmpty() ? UNKNOWN_SET_MESSAGE :
-                selectedCharacterCard.getArtifactSet1());
-        middleSelectorPanel.add(set1ComboBox,
-                new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW,
-                        GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-
-        JComboBox<String> set2ComboBox = new JComboBox<>();
-        set2ComboBox.setAutoscrolls(false);
-        set2ComboBox.setEditable(false);
-        set2ComboBox.setFocusable(false);
-        Font set2ComboBoxFont = this.$$$getFont$$$("Source Code Pro", Font.BOLD, 14, set2ComboBox.getFont());
-        if (set2ComboBoxFont != null) {
-            set2ComboBox.setFont(set2ComboBoxFont);
-        }
-        set2ComboBox.setInheritsPopupMenu(false);
-        final DefaultComboBoxModel<String> defaultComboBoxModelForSet2Selector = new DefaultComboBoxModel<>();
-        defaultComboBoxModelForSet2Selector.addElement(UNKNOWN_SET_MESSAGE);
-        defaultComboBoxModelForSet2Selector.addAll(artifactsFlattened);
-        set2ComboBox.setModel(defaultComboBoxModelForSet2Selector);
-        set2ComboBox.setSelectedItem(selectedCharacterCard.getArtifactSet2().isEmpty() ? UNKNOWN_SET_MESSAGE :
-                selectedCharacterCard.getArtifactSet2());
-        middleSelectorPanel.add(set2ComboBox,
-                new GridConstraints(11, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW,
-                        GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-
-        JLabel set2NameLabel = new JLabel();
-        set2NameLabel.setAutoscrolls(true);
-        Font set2NameLabelFont = this.$$$getFont$$$("Source Code Pro", Font.BOLD, 18, set2NameLabel.getFont());
-        if (set2NameLabelFont != null) {
-            set2NameLabel.setFont(set2NameLabelFont);
-        }
-        set2NameLabel.setToolTipText(TOOLTIP_FOR_LABELS_WITHOUT_ICON);
-        set2NameLabel.setText(selectedCharacterCard.getArtifactSet2());
-        middleSelectorPanel.add(set2NameLabel,
-                new GridConstraints(10, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
-                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null,
-                        new Dimension(177, 23), null, 1, false));
-
-        JButton addAnotherSetButton = new JButton();
-        addAnotherSetButton.setText("Add another set?");
-        middleSelectorPanel.add(addAnotherSetButton,
-                new GridConstraints(8, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-                        GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-
-        JPanel characterWeaponSpacer = new JPanel();
-        characterWeaponSpacer.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 40, 0), -1, -1));
-        middleSelectorPanel.add(characterWeaponSpacer,
-                new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null,
-                        0, false));
-
-        JPanel weaponSet1Spacer = new JPanel();
-        weaponSet1Spacer.setLayout(new GridLayoutManager(1, 1, new Insets(48, 0, 0, 0), -1, -1));
-        middleSelectorPanel.add(weaponSet1Spacer,
-                new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null,
-                        0, false));
-
-        JPanel secondSetSpacer = new JPanel();
-        secondSetSpacer.setLayout(new GridLayoutManager(1, 1, new Insets(15, 0, 0, 0), -1, -1));
-        middleSelectorPanel.add(secondSetSpacer,
-                new GridConstraints(9, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null,
-                        0, false));
-
-        JPanel bottomSpacer = new JPanel();
-        bottomSpacer.setLayout(new GridLayoutManager(1, 1, new Insets(40, 0, 0, 0), -1, -1));
-        middleSelectorPanel.add(bottomSpacer,
-                new GridConstraints(12, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null,
-                        0, false));
-
-        JLabel weaponIcon = new JLabel();
-        weaponIcon.setHorizontalAlignment(4);
-        weaponIcon.setHorizontalTextPosition(4);
-        String savedWeaponName = selectedCharacterCard.getWeapon();
-        if (savedWeaponName.isEmpty()) {
-            weaponIcon.setIcon(new ImageIcon(generateWeaponPath()));
+        if (whiteSpaceIndices.isEmpty()) {
+            return name;
+        } else if (whiteSpaceIndices.size() == 1) {
+            return HTML_BEGINNING + name.replace(" ", HTML_BREAK) + HTML_END;
         } else {
-            WeaponInfo weaponInfo = lookUpWeaponRarityAndType(savedWeaponName);
-            weaponIcon.setIcon(new ImageIcon(generateWeaponPath(savedWeaponName, weaponInfo.getWeaponType(), weaponInfo.getRarity())));
+            int chosenIndex = whiteSpaceIndices.get(whiteSpaceIndices.size() / 2);
+            String namePart1 = name.substring(0, chosenIndex);
+            String namePart2 = name.substring(chosenIndex + 1);
+            return HTML_BEGINNING + namePart1 + HTML_BREAK + namePart2 + HTML_END;
         }
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.weightx = 0.5;
-        gbc.anchor = GridBagConstraints.NORTHEAST;
-        gbc.insets = new Insets(0, 0, 0, 20);
-        templateTab.add(weaponIcon, gbc);
-        weaponSelectionBox.addActionListener(new UpdateLabelListener(weaponNameLabel, weaponIcon, ToolData.SELECTION_BOX_TYPE.WEAPON));
-        weaponSelectionBox.addActionListener(new UpdateCharacterCardListener(selectedCharacterCard, ToolData.CHARACTER_CARD_DATA_FIELD.WEAPON));
-        weaponNameLabel.setToolTipText(TOOLTIP_FOR_WEAPON_NAME_LABEL);
-        weaponIcon.setToolTipText(TOOLTIP_FOR_WEAPON_ICON_LABEL);
 
-        JLabel charLabel = new JLabel();
-        charLabel.setIcon(charIcon);
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridheight = 2;
-        gbc.anchor = GridBagConstraints.SOUTHEAST;
-        gbc.insets = new Insets(20, 0, 5, 20);
-        templateTab.add(charLabel, gbc);
-
-        JLabel set1Icon = new JLabel();
-        set1Icon.setToolTipText(TOOLTIP_FOR_LABELS_WITH_ICON);
-        set1Icon.setHorizontalAlignment(4);
-        set1Icon.setHorizontalTextPosition(4);
-        String savedArtifactSet1Name = selectedCharacterCard.getArtifactSet1();
-        if (savedArtifactSet1Name.isEmpty()) {
-            set1Icon.setIcon(new ImageIcon(generateArtifactIconPath(UNKNOWN_ARTIFACT)));
-        } else {
-            set1Icon.setIcon(new ImageIcon(generateArtifactIconPath(savedArtifactSet1Name)));
-        }
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        gbc.weightx = 0.5;
-        gbc.anchor = GridBagConstraints.NORTHEAST;
-        gbc.insets = new Insets(5, 0, 0, 20);
-        templateTab.add(set1Icon, gbc);
-
-        JLabel set2Icon = new JLabel();
-        set2Icon.setToolTipText(TOOLTIP_FOR_LABELS_WITH_ICON);
-        set2Icon.setHorizontalAlignment(4);
-        set2Icon.setHorizontalTextPosition(4);
-        String savedArtifactSet2Name = selectedCharacterCard.getArtifactSet2();
-        if (savedArtifactSet2Name.isEmpty()) {
-            set2Icon.setIcon(new ImageIcon(generateArtifactIconPath(UNKNOWN_ARTIFACT)));
-        } else {
-            set2Icon.setIcon(new ImageIcon(generateArtifactIconPath(savedArtifactSet2Name)));
-        }
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        gbc.weightx = 0.5;
-        gbc.anchor = GridBagConstraints.NORTHEAST;
-        gbc.insets = new Insets(5, 0, 0, 20);
-        templateTab.add(set2Icon, gbc);
-
-        set1ComboBox.addActionListener(new UpdateLabelListener(set1NameLabel, set1Icon, ToolData.SELECTION_BOX_TYPE.ARTIFACT));
-        set2ComboBox.addActionListener(new UpdateLabelListener(set2NameLabel, set2Icon, ToolData.SELECTION_BOX_TYPE.ARTIFACT));
-        set1ComboBox.addActionListener(new UpdateCharacterCardListener(selectedCharacterCard, ToolData.CHARACTER_CARD_DATA_FIELD.SET_ONE));
-        set2ComboBox.addActionListener(new UpdateCharacterCardListener(selectedCharacterCard, ToolData.CHARACTER_CARD_DATA_FIELD.SET_TWO));
-
-        JPanel checkboxAndButtonPanel = new JPanel();
-        checkboxAndButtonPanel.setLayout(new GridLayoutManager(6, 2, new Insets(3, 3, 3, 3), -1, -1));
-        gbc = new GridBagConstraints();
-        gbc.gridx = 2;
-        gbc.gridy = 0;
-        gbc.gridheight = 5;
-        gbc.weighty = 1.0;
-        gbc.anchor = GridBagConstraints.NORTH;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(22, 0, 0, 100);
-        templateTab.add(checkboxAndButtonPanel, gbc);
-        checkboxAndButtonPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
-                TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
-
-        JCheckBox artifactListingCheckBox = new JCheckBox();
-        Font artifactListingCheckBoxFont =
-                this.$$$getFont$$$("Source Code Pro", -1, 14, artifactListingCheckBox.getFont());
-        if (artifactListingCheckBoxFont != null) {
-            artifactListingCheckBox.setFont(artifactListingCheckBoxFont);
-        }
-        artifactListingCheckBox.setText("Artifact Listing");
-        artifactListingCheckBox.addItemListener(new UpdateCharacterCardListener(selectedCharacterCard,
-                ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_SET_ONE));
-        artifactListingCheckBox.addItemListener(new UpdateCharacterCardListener(selectedCharacterCard,
-                ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_SET_TWO));
-        if (selectedCharacterCard.getArtifactSet1Status() || selectedCharacterCard.getArtifactSet2Status()) {
-            artifactListingCheckBox.doClick();
-        }
-        checkboxAndButtonPanel.add(artifactListingCheckBox,
-                new GridConstraints(2, 0, 1, 2, GridConstraints.ANCHOR_SOUTHWEST, GridConstraints.FILL_NONE,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-                        GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-
-        JCheckBox talentListingCheckBox = new JCheckBox();
-        Font talentListingCheckBoxFont = this.$$$getFont$$$("Source Code Pro", -1, 14, talentListingCheckBox.getFont());
-        if (talentListingCheckBoxFont != null) {
-            talentListingCheckBox.setFont(talentListingCheckBoxFont);
-        }
-        talentListingCheckBox.setText("Talent Listing");
-        talentListingCheckBox.addItemListener(new UpdateCharacterCardListener(selectedCharacterCard,
-                ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_TALENT_MATERIALS));
-        if (selectedCharacterCard.getTalentStatus()) {
-            talentListingCheckBox.doClick();
-        }
-        checkboxAndButtonPanel.add(talentListingCheckBox,
-                new GridConstraints(3, 0, 1, 2, GridConstraints.ANCHOR_NORTHWEST, GridConstraints.FILL_NONE,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-                        GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-
-        JLabel domainListingsLabel = new JLabel();
-        Font domainListingsLabelFont =
-                this.$$$getFont$$$("Source Code Pro", Font.BOLD, 18, domainListingsLabel.getFont());
-        if (domainListingsLabelFont != null) {
-            domainListingsLabel.setFont(domainListingsLabelFont);
-        }
-        domainListingsLabel.setText("Domain listings");
-        checkboxAndButtonPanel.add(domainListingsLabel,
-                new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
-                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
-                        false));
-
-        JCheckBox weaponMaterialListingCheckbox = new JCheckBox();
-        Font weaponMaterialListingCheckboxFont =
-                this.$$$getFont$$$("Source Code Pro", -1, 14, weaponMaterialListingCheckbox.getFont());
-        if (weaponMaterialListingCheckboxFont != null) {
-            weaponMaterialListingCheckbox.setFont(weaponMaterialListingCheckboxFont);
-        }
-        weaponMaterialListingCheckbox.setText("Weapon Material Listing");
-        weaponMaterialListingCheckbox.addItemListener(new UpdateCharacterCardListener(selectedCharacterCard,
-                ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_WEAPON_MATERIALS));
-        if (selectedCharacterCard.getWeaponStatus()) {
-            weaponMaterialListingCheckbox.doClick();
-        }
-        checkboxAndButtonPanel.add(weaponMaterialListingCheckbox,
-                new GridConstraints(4, 0, 1, 2, GridConstraints.ANCHOR_SOUTHWEST, GridConstraints.FILL_NONE,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-                        GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-
-        JButton closeButton = new JButton();
-        closeButton.setBackground(new Color(-2725532));
-        Font closeButtonFont = this.$$$getFont$$$("Source Code Pro", Font.BOLD, -1, closeButton.getFont());
-        if (closeButtonFont != null) {
-            closeButton.setFont(closeButtonFont);
-        }
-        closeButton.setForeground(new Color(-6427));
-        closeButton.setHideActionText(false);
-        closeButton.setText(CLOSE_TEXT);
-        closeButton.addActionListener(new CloseButtonListener(characterTabPane));
-        checkboxAndButtonPanel.add(closeButton,
-                new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-                        GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-
-        JButton saveButton = new JButton();
-        saveButton.setBackground(new Color(-6039919));
-        saveButton.setForeground(new Color(-394241));
-        saveButton.setText("SAVE");
-        saveButton.addActionListener(new SaveButtonListener(selectedCharacterCard));
-        checkboxAndButtonPanel.add(saveButton,
-                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
-                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-                        GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-
-        JTextArea setDetailsTextArea = new JTextArea();
-        setDetailsTextArea.setEditable(false);
-        setDetailsTextArea.setFocusable(false);
-        setDetailsTextArea.setLineWrap(true);
-        setDetailsTextArea.setWrapStyleWord(true);
-        Font setDetailsTextAreaFont = this.$$$getFont$$$("Source Code Pro", -1, 12, setDetailsTextArea.getFont());
-        if (setDetailsTextAreaFont != null) {
-            setDetailsTextArea.setFont(setDetailsTextAreaFont);
-        }
-        setDetailsTextArea.setText("[ Set Details ]");
-        checkboxAndButtonPanel.add(setDetailsTextArea,
-                new GridConstraints(5, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
-                        GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW,
-                        new Dimension(150, 280), new Dimension(150, 280), null, 0, false));
-        set1ComboBox.addActionListener(new UpdateTextAreaListener(setDetailsTextArea));
-        set2ComboBox.addActionListener(new UpdateTextAreaListener(setDetailsTextArea));
-
-        return templateTab;
     }
 
     /**
@@ -858,93 +500,163 @@ public class ToolGUI extends JFrame implements ActionListener {
      */
     private void $$$setupUI$$$() {
         createUIComponents();
-        panel1.setLayout(new GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), -1, -1));
-        panel1.setBackground(new Color(-2702645));
-        panel1.setEnabled(true);
+        mainPanel.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
+        mainPanel.setBackground(new Color(-2702645));
+        mainPanel.setEnabled(true);
         final Spacer spacer1 = new Spacer();
-        panel1.add(spacer1,
-                new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1,
+        mainPanel.add(spacer1,
+                new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1,
                         GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
-        titleLabel = new JLabel();
-        Font titleLabelFont = this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 20, titleLabel.getFont());
-        if (titleLabelFont != null) {
-            titleLabel.setFont(titleLabelFont);
-        }
-        titleLabel.setForeground(new Color(-14940151));
-        titleLabel.setText("Genshin Domain Application");
-        panel1.add(titleLabel, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
-                GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         mainInformationPanel = new JPanel();
         mainInformationPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        mainInformationPanel.setBackground(new Color(-3689540));
-        panel1.add(mainInformationPanel,
-                new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+        mainInformationPanel.setBackground(new Color(-468502));
+        mainPanel.add(mainInformationPanel,
+                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null,
                         0, false));
-        characterTabPane = new JTabbedPane();
-        Font characterTabPaneFont =
-                this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 20, characterTabPane.getFont());
-        if (characterTabPaneFont != null) {
-            characterTabPane.setFont(characterTabPaneFont);
+        mainTabbedPane = new JTabbedPane();
+        Font mainTabbedPaneFont = this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 20, mainTabbedPane.getFont());
+        if (mainTabbedPaneFont != null) {
+            mainTabbedPane.setFont(mainTabbedPaneFont);
         }
-        characterTabPane.setTabPlacement(1);
-        mainInformationPanel.add(characterTabPane,
+        mainTabbedPane.setTabPlacement(1);
+        mainInformationPanel.add(mainTabbedPane,
                 new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null,
                         new Dimension(200, 200), null, 0, false));
-        characterTab = new JPanel();
-        characterTab.setLayout(new GridBagLayout());
-        characterTab.setBackground(new Color(-1));
-        characterTab.setEnabled(true);
-        characterTab.setFocusCycleRoot(false);
-        Font characterTabFont = this.$$$getFont$$$(null, -1, -1, characterTab.getFont());
-        if (characterTabFont != null) {
-            characterTab.setFont(characterTabFont);
-        }
-        characterTab.setOpaque(true);
-        characterTab.setRequestFocusEnabled(true);
-        characterTabPane.addTab("Characters", characterTab);
+        welcomeTab = new JPanel();
+        welcomeTab.setLayout(new GridBagLayout());
+        mainTabbedPane.addTab("Welcome!", welcomeTab);
+        devBasicInfoPanel = new JPanel();
+        devBasicInfoPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc;
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.gridwidth = 3;
+        gbc.gridy = 0;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
-        characterTab.add(selectedCharacterPanel, gbc);
-        searchConfirmButton.setMaximumSize(new Dimension(30, 30));
-        searchConfirmButton.setMinimumSize(new Dimension(30, 30));
-        searchConfirmButton.setPreferredSize(new Dimension(50, 30));
-        searchConfirmButton.setText("✓");
+        welcomeTab.add(devBasicInfoPanel, gbc);
+        devBasicInfoLeftPanel = new JPanel();
+        devBasicInfoLeftPanel.setLayout(new GridLayoutManager(5, 1, new Insets(0, 0, 0, 0), -1, -1));
+        devBasicInfoLeftPanel.setBackground(new Color(-465419));
         gbc = new GridBagConstraints();
-        gbc.gridx = 2;
+        gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.WEST;
-        characterTab.add(searchConfirmButton, gbc);
-        characterSelectorField.setEnabled(true);
-        Font characterSelectorFieldFont =
-                this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 18, characterSelectorField.getFont());
-        if (characterSelectorFieldFont != null) {
-            characterSelectorField.setFont(characterSelectorFieldFont);
+        gbc.fill = GridBagConstraints.BOTH;
+        devBasicInfoPanel.add(devBasicInfoLeftPanel, gbc);
+        Welcome_Barbara = new JLabel();
+        Welcome_Barbara.setIcon(new ImageIcon(getClass().getResource("/Files/Images/Aesthetics/Barbara_Hello.gif")));
+        Welcome_Barbara.setText("");
+        devBasicInfoLeftPanel.add(Welcome_Barbara,
+                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_NORTHWEST, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
+                        false));
+        devUpdatesTextPane = new JTextPane();
+        devUpdatesTextPane.setBackground(new Color(-465419));
+        devUpdatesTextPane.setEditable(false);
+        devUpdatesTextPane.setEnabled(true);
+        devUpdatesTextPane.setFocusable(false);
+        Font devUpdatesTextPaneFont = this.$$$getFont$$$(null, -1, -1, devUpdatesTextPane.getFont());
+        if (devUpdatesTextPaneFont != null) {
+            devUpdatesTextPane.setFont(devUpdatesTextPaneFont);
         }
-        characterSelectorField.setInheritsPopupMenu(false);
-        characterSelectorField.setMaximumSize(new Dimension(240, 33));
-        characterSelectorField.setMinimumSize(new Dimension(240, 33));
-        characterSelectorField.setPreferredSize(new Dimension(240, 33));
-        characterSelectorField.setText("Choose your fighter!");
+        devUpdatesTextPane.setForeground(new Color(-11071434));
+        devUpdatesTextPane.setMargin(new Insets(30, 20, 10, 10));
+        devUpdatesTextPane.setSelectionColor(new Color(-9555638));
+        devUpdatesTextPane.setText("For future updates contact one of us. Make sure to keep your save file!");
+        devBasicInfoLeftPanel.add(devUpdatesTextPane,
+                new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL,
+                        GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null,
+                        new Dimension(150, 50), null, 0, false));
+        devCreatorsLabel = new JLabel();
+        devCreatorsLabel.setBackground(new Color(-465419));
+        Font devCreatorsLabelFont = this.$$$getFont$$$(null, -1, -1, devCreatorsLabel.getFont());
+        if (devCreatorsLabelFont != null) {
+            devCreatorsLabel.setFont(devCreatorsLabelFont);
+        }
+        devCreatorsLabel.setForeground(new Color(-11071434));
+        devCreatorsLabel.setText(". * Creators * .");
+        devBasicInfoLeftPanel.add(devCreatorsLabel,
+                new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
+                        false));
+        devLinakoLabel = new JLabel();
+        devLinakoLabel.setBackground(new Color(-465419));
+        Font devLinakoLabelFont = this.$$$getFont$$$(null, -1, -1, devLinakoLabel.getFont());
+        if (devLinakoLabelFont != null) {
+            devLinakoLabel.setFont(devLinakoLabelFont);
+        }
+        devLinakoLabel.setForeground(new Color(-11071434));
+        devLinakoLabel.setText("Linako (yes.as.no)");
+        devBasicInfoLeftPanel.add(devLinakoLabel,
+                new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
+                        false));
+        devPrecisi0nLabel = new JLabel();
+        devPrecisi0nLabel.setBackground(new Color(-465419));
+        Font devPrecisi0nLabelFont = this.$$$getFont$$$(null, -1, -1, devPrecisi0nLabel.getFont());
+        if (devPrecisi0nLabelFont != null) {
+            devPrecisi0nLabel.setFont(devPrecisi0nLabelFont);
+        }
+        devPrecisi0nLabel.setForeground(new Color(-11071434));
+        devPrecisi0nLabel.setText("precisi0n");
+        devBasicInfoLeftPanel.add(devPrecisi0nLabel,
+                new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
+                        false));
+        devBasicInfoRightPanel = new JPanel();
+        devBasicInfoRightPanel.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
+        devBasicInfoRightPanel.setBackground(new Color(-465419));
+        Font devBasicInfoRightPanelFont =
+                this.$$$getFont$$$("Source Code Pro Black", Font.BOLD, 22, devBasicInfoRightPanel.getFont());
+        if (devBasicInfoRightPanelFont != null) {
+            devBasicInfoRightPanel.setFont(devBasicInfoRightPanelFont);
+        }
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        gbc.insets = new Insets(0, 250, 0, 0);
-        characterTab.add(characterSelectorField, gbc);
-        artifactsTab = new JPanel();
-        artifactsTab.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        artifactsTab.setBackground(new Color(-1));
-        characterTabPane.addTab("Artifacts", artifactsTab);
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        devBasicInfoPanel.add(devBasicInfoRightPanel, gbc);
+        devWelcomeLabel = new JLabel();
+        devWelcomeLabel.setBackground(new Color(-465419));
+        Font devWelcomeLabelFont = this.$$$getFont$$$(null, -1, -1, devWelcomeLabel.getFont());
+        if (devWelcomeLabelFont != null) {
+            devWelcomeLabel.setFont(devWelcomeLabelFont);
+        }
+        devWelcomeLabel.setForeground(new Color(-11071434));
+        devWelcomeLabel.setText("° . * Welcome to GDApp! * . °");
+        devBasicInfoRightPanel.add(devWelcomeLabel,
+                new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
+                        GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
+                        false));
+        devBasicInfoSpacer = new JPanel();
+        devBasicInfoSpacer.setLayout(new GridLayoutManager(1, 1, new Insets(20, 0, 0, 0), -1, -1));
+        devBasicInfoSpacer.setBackground(new Color(-465419));
+        devBasicInfoRightPanel.add(devBasicInfoSpacer,
+                new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                        GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null,
+                        0, false));
+        devInfoTextPane = new JTextPane();
+        devInfoTextPane.setBackground(new Color(-465419));
+        devInfoTextPane.setEditable(false);
+        devInfoTextPane.setFocusable(false);
+        Font devInfoTextPaneFont = this.$$$getFont$$$(null, -1, -1, devInfoTextPane.getFont());
+        if (devInfoTextPaneFont != null) {
+            devInfoTextPane.setFont(devInfoTextPaneFont);
+        }
+        devInfoTextPane.setForeground(new Color(-11071434));
+        devInfoTextPane.setMargin(new Insets(30, 20, 10, 10));
+        devInfoTextPane.setText("");
+        devBasicInfoRightPanel.add(devInfoTextPane,
+                new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                        GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null,
+                        new Dimension(150, 50), null, 0, false));
     }
 
     /** @noinspection ALL */
@@ -973,7 +685,7 @@ public class ToolGUI extends JFrame implements ActionListener {
 
     /** @noinspection ALL */
     public JComponent $$$getRootComponent$$$() {
-        return panel1;
+        return mainPanel;
     }
 
 }

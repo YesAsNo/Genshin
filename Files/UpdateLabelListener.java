@@ -1,54 +1,74 @@
 package Files;
 
-import static Files.ToolGUI.UNKNOWN_SET_MESSAGE;
-import static Files.ToolGUI.UNKNOWN_WEAPON_MESSAGE;
-import static Files.ToolGUI.generateArtifactIconPath;
-import static Files.ToolGUI.lookUpWeaponRarityAndType;
+import static Files.ToolData.RESOURCE_TYPE;
+import static Files.ToolData.getResourceIcon;
+import static Files.ToolGUI.EMPTY_SET_SELECTOR;
+import static Files.ToolGUI.EMPTY_WEAPON_SELECTOR;
+import static Files.ToolGUI.UNKNOWN_ARTIFACT;
+import static Files.ToolGUI.UNKNOWN_WEAPON;
 
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Objects;
 
-
+/**
+ * This class updates the labels that show either the icon or the name based on the selection made in a combobox.
+ * Used in CharacterCard.java
+ */
 public class UpdateLabelListener implements ActionListener {
-    private final JLabel _IconLabel;
-    private final JLabel _NameLabel;
-    private final ToolData.SELECTION_BOX_TYPE _SELECTIONBOXTYPE;
+    private final javax.swing.JLabel _JLabel;
+    private final javax.swing.JLabel _NameLabel;
+    private final JCheckBox _checkBox;
+    private final ToolData.RESOURCE_TYPE SELECTION_BOX_TYPE;
 
-    public UpdateLabelListener(JLabel nameLabel , JLabel iconLabel, ToolData.SELECTION_BOX_TYPE SELECTION_BOX_TYPE){
+    /**
+     * Constructor of the class.
+     * @param nameLabel the label that shows the selected item name
+     * @param iconLabel the label that shows the selected item icon
+     * @param checkBox the checkbox that lists the item
+     * @param RESOURCE_TYPE the resource type of the item
+     */
+    public UpdateLabelListener(javax.swing.JLabel nameLabel , javax.swing.JLabel iconLabel, JCheckBox checkBox, ToolData.RESOURCE_TYPE RESOURCE_TYPE){
         _NameLabel = nameLabel;
-        _IconLabel = iconLabel;
-        _SELECTIONBOXTYPE = SELECTION_BOX_TYPE;
+        _JLabel = iconLabel;
+        _checkBox = checkBox;
+        SELECTION_BOX_TYPE = RESOURCE_TYPE;
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-        String item = (String) ((JComboBox<?>) e.getSource()).getSelectedItem();
+        String item = ((JLabel) Objects.requireNonNull(((JComboBox<?>) e.getSource()).getSelectedItem())).getText();
         assert item != null;
         ImageIcon icon;
-        if (item.equalsIgnoreCase(UNKNOWN_SET_MESSAGE) || item.equalsIgnoreCase(UNKNOWN_WEAPON_MESSAGE))
+        if (item.equalsIgnoreCase(EMPTY_SET_SELECTOR) || item.equalsIgnoreCase(EMPTY_WEAPON_SELECTOR))
         {
 
             _NameLabel.setText("");
-            if (_SELECTIONBOXTYPE == ToolData.SELECTION_BOX_TYPE.ARTIFACT) {
-                icon = new ImageIcon(generateArtifactIconPath(ToolGUI.UNKNOWN_ARTIFACT));
+            _checkBox.setEnabled(false);
+            if (_checkBox.isSelected()){
+                _checkBox.setSelected(false);
+            }
+            if (SELECTION_BOX_TYPE == RESOURCE_TYPE.ARTIFACT_SET) {
+                icon = getResourceIcon(UNKNOWN_ARTIFACT, ToolData.RESOURCE_TYPE.ARTIFACT_SET);
             }
             else {
-                icon = new ImageIcon(ToolGUI.generateWeaponPath());
+                icon = getResourceIcon(UNKNOWN_WEAPON,RESOURCE_TYPE.WEAPON_NAME);
             }
         }
         else
         {
             _NameLabel.setText(item);
-            if (_SELECTIONBOXTYPE == ToolData.SELECTION_BOX_TYPE.WEAPON) {
-                WeaponInfo weaponInfo = lookUpWeaponRarityAndType(item);
-                icon = new ImageIcon(ToolGUI.generateWeaponPath(item, weaponInfo.getWeaponType(), weaponInfo.getRarity()));
+            _checkBox.setEnabled(true);
+            if (SELECTION_BOX_TYPE == RESOURCE_TYPE.WEAPON_NAME) {
+                icon = getResourceIcon(item, ToolData.RESOURCE_TYPE.WEAPON_NAME);
             }
             else {
-                icon = new ImageIcon(generateArtifactIconPath(item));
+                icon = getResourceIcon(item, RESOURCE_TYPE.ARTIFACT_SET);
             }
         }
-        _IconLabel.setIcon(icon);
+        _JLabel.setIcon(icon);
     }
 }

@@ -4,6 +4,9 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
+/**
+ * This class represents the text model used in character notes. Capped length of the notes is 150 characters.
+ */
 public class NotesTextModel extends PlainDocument {
     private final int limit;
 

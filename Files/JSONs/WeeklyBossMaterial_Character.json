@@ -1,0 +1,37 @@
+{
+  "Dvalin's Plume": ["Bennett", "Diluc", "Jean"],
+  "Dvalin's Claw": ["Lisa", "Noelle", "Razor", "Xiangling"],
+  "Dvalin's Sigh": ["Traveler (Anemo)", "Traveler (Geo)", "Amber", "Beidou", "Chongyun"],
+
+  "Tail of Boreas": ["Traveler (Geo)","Qiqi", "Venti", "Xingqiu"],
+  "Ring of Boreas": ["Barbara", "Keqing", "Klee", "Mona"],
+  "Spirit Locket of Boreas": ["Fischl", "Kaeya", "Ningguang", "Sucrose"],
+
+  "Tusk of Monoceros Caeli": ["Albedo", "Xinyan", "Zhongli"],
+  "Shard of a Foul Legacy": ["Diona", "Hu Tao", "Tartaglia"],
+  "Shadow of the Warrior": ["Ganyu", "Rosaria", "Xiao"],
+
+  "Dragon Lord's Crown": ["Traveler (Electro)", "Yoimiya", "Eula"],
+  "Bloodjade Branch": ["Dori", "Kamisato Ayaka", "Yanfei"],
+  "Gilded Scale": ["Kaedehara Kazuha", "Sayu", "Yelan"],
+
+  "Molten Moment": ["Aloy", "Gorou", "Raiden Shogun"],
+  "Hellfire Butterfly": ["Sangonomiya Kokomi", "Shenhe", "Thoma"],
+  "Ashen Heart": ["Arataki Itto", "Kujou Sara", "Yun Jin"],
+
+  "Mudra of the Malefic General": ["Traveler (Dendro)","Cyno", "Kamisato Ayato"],
+  "Tears of the Calamitous God": ["Candace", "Collei", "Kuki Shinobu", "Nilou"],
+  "The Meaning of Aeons": ["Heizou", "Tighnari", "Yae Miko"],
+
+  "Puppet Strings": ["Dehya", "Faruzan", "Nahida"],
+  "Mirror of Mushin": ["Alhaitham", "Layla", "Mika"],
+  "Daka's Bell": ["Wanderer", "Yaoyao"],
+
+  "Worldspan Fern": ["Traveler (Hydro)","Baizhu, Freminet"],
+  "Primordial Greenbloom": ["Kaveh", "Lyney", "Wriothesley"],
+  "Everamber": ["Kirara", "Lynette", "Neuvillette"],
+
+  "Lightless Silk String": ["Charlotte", "Chiori", "Navia"],
+  "Lightless Eye of the Maelstrom": ["Chevreuse", "Xianyun"],
+  "Lightless Mass": ["Furina", "Gaming"]
+}
