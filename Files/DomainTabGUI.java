@@ -573,6 +573,7 @@ public class DomainTabGUI implements ActionListener {
             case WEAPON_MATERIAL_THEME: {
                 TreeSet<String> allFarmedWeapons = new TreeSet<>(getUnassignedFarmedWeapons());
                 for (String weapon: getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS).keySet()){
+                    assert getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS) != null;
                     if (!getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS).get(weapon).isEmpty()){
                         allFarmedWeapons.add(weapon);
                     }
@@ -603,6 +604,7 @@ public class DomainTabGUI implements ActionListener {
 
     /**
      * Returns a counter label text that tells how many "benefactors" are there per domain.
+     * E.g. for a talent domain: how many characters exist in the game that require talent books from the given domain
      * @param domainName domain name
      * @param rt resource type
      * @return the text
@@ -646,6 +648,13 @@ public class DomainTabGUI implements ActionListener {
         return labelText;
 
     }
+    /**
+     * Returns a counter label text that tells how many listed "benefactors" are there per domain.
+     * E.g. for a talent domain: how many characters are currently farming talents from that domain.
+     * @param domainName domain name
+     * @param rt resource type
+     * @return the text
+     */
     public static String getListedCounterLabel(String domainName, ToolData.RESOURCE_TYPE rt){
         String labelText;
         String domainMaterialCategory = "";
@@ -696,9 +705,19 @@ public class DomainTabGUI implements ActionListener {
                 + counter + "</u>" + "</html>";
         return labelText;
     }
+
+    /**
+     * Retrieves the main panel. Only used in ToolGUI.
+     * @return main panel
+     */
     public JPanel getMainPanel(){
         return domainTab;
     }
+
+    /**
+     * Returns a day filter string token based on the current system day.
+     * @return day filter string.
+     */
     public static String getDayFilterToken() {
         Calendar currentTime = Calendar.getInstance();
         int currentHour = currentTime.get(Calendar.HOUR_OF_DAY);

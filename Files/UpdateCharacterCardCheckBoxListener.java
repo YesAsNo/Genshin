@@ -11,10 +11,20 @@ import javax.swing.JCheckBox;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+/**
+ * This class serves as the listener for checkboxes generated in CharacterCard.java
+ */
 public class UpdateCharacterCardCheckBoxListener implements ItemListener {
     private final CharacterCard _characterCard;
     private final CHARACTER_CARD_DATA_FIELD _changedData;
     private final JButton _saveButton;
+
+    /**
+     * Constructor of the class
+     * @param characterCard the character card where the checkbox is located
+     * @param changedData the changed data type in the card
+     * @param saveButton implementation side effect. Will set the button to active once a change has been made.
+     */
     public UpdateCharacterCardCheckBoxListener(CharacterCard characterCard, CHARACTER_CARD_DATA_FIELD changedData,
                                        JButton saveButton){
         _characterCard = characterCard;

@@ -13,7 +13,6 @@ import static Files.ToolData.lookUpWeaponRarityAndType;
 import static Files.ToolGUI.WEAPON_SAVE_FILE_NAME;
 import static Files.ToolGUI.formatString;
 import static Files.ToolGUI.isSomeoneFarmingForTheWeapon;
-import static Files.ToolGUI.serializeSave;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -42,10 +41,12 @@ import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+
+/**
+ * This class generates the weapon tab of the main application window.
+ */
 
 public class WeaponTabGUI implements ItemListener, ActionListener {
 
@@ -59,22 +60,42 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
     private final JLabel showMatchedAmountLabel = new JLabel();
     private static final JComboBox<JLabel> devFilterComboBox = new JComboBox<>();
     private static final Set<String> unassignedFarmedWeapons = new TreeSet<>();
-    private static final List<JCheckBox> allCheckboxes = new ArrayList<>();
+
+    /**
+     * Search flag enum.
+     */
     public enum SEARCH_FLAG {
+        /**
+         * All weapons
+         */
         ALL,
+        /**
+         * Listed weapons only
+         */
         LISTED_ONLY,
+        /**
+         * Unlisted weapons only
+         */
         UNLISTED_ONLY
     }
 
+    /**
+     * Constructor of the class.
+     */
     public WeaponTabGUI(){
         setUpWeaponsPanel();
         parseWeaponsMap();
     }
 
+    /**
+     * Returns the main panel. Only used in ToolGUI.java
+     * @return main panel
+     */
     public JPanel getMainPanel() {
         return mainPanel;
     }
-    public static void parseWeaponsMap(){
+
+    private static void parseWeaponsMap(){
         Gson gson = new Gson();
         File f = new File(SAVE_LOCATION + WEAPON_SAVE_FILE_NAME);
         if (!f.exists()) {
@@ -99,7 +120,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         showListedCheckBox.setEnabled(true);
         showUnlistedCheckBox.setEnabled(true);
     }
-    public SEARCH_FLAG getSearchFlag(){
+    private SEARCH_FLAG getSearchFlag(){
         if (showListedCheckBox.isSelected() && !showUnlistedCheckBox.isSelected()){
             return SEARCH_FLAG.LISTED_ONLY;
         }
@@ -117,9 +138,12 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         parseSearch(getSearchFlag());
         triggerButton.setEnabled(true);
     }
-    public static void saveAllWeapons() {
-        serializeSave();
-    }
+
+    /**
+     * Returns the mapping that contains all weapons which are listed on this tab only.
+     * Note it is saved separately from character cards.
+     * @return set of all weapons
+     */
     public static Set<String> getUnassignedFarmedWeapons(){
         return unassignedFarmedWeapons;
     }
@@ -131,6 +155,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         int matchedCount = 0;
         for (String s : getFlattenedData(ToolData.RESOURCE_TYPE.WEAPON_NAME)) {
             JLabel label = (JLabel) devFilterComboBox.getSelectedItem();
+            assert label != null;
             ToolData.WEAPON_FILTER_OPTIONS filter = ALL_OPTIONS_BY_STRING.get(label.getText());
             assert filter != null;
 
@@ -165,7 +190,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         }
         return false;
     }
-    public JPanel generateWeaponCard(String weaponName) {
+    private JPanel generateWeaponCard(String weaponName) {
 
         // WEAPON CARD PANEL
         JPanel devWeaponCard = new JPanel();
@@ -191,7 +216,6 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         // WEAPON LISTING CHECK BOX
         JCheckBox devWepMatListingCheckbox = new JCheckBox();
         devWepMatListingCheckbox.setBackground(new Color(-1));
-        allCheckboxes.add(devWepMatListingCheckbox);
         if (isSomeoneFarmingForTheWeapon(weaponName)){
             devWepMatListingCheckbox.setSelected(true);
             devWepMatListingCheckbox.setEnabled(false);

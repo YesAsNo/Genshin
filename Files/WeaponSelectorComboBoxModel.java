@@ -3,6 +3,9 @@ package Files;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 
+/**
+ * This class prevents selection of four and five-star weapon delimiters in the weapon selector comboboxes in CharacterCard.java
+ */
 public class WeaponSelectorComboBoxModel extends DefaultComboBoxModel<JLabel> {
     @Override
     public void setSelectedItem(Object item) {

@@ -1,14 +1,22 @@
 package Files;
 
+import static Files.ToolGUI.serializeSave;
 import static Files.WeaponTabGUI.getUnassignedFarmedWeapons;
-import static Files.WeaponTabGUI.saveAllWeapons;
 
 import javax.swing.JCheckBox;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+/**
+ * This class is the listener for all checkboxes in WeaponTabGUI.java
+ */
 public class WeaponTabGUIListener implements ItemListener {
     private final String weaponName;
+
+    /**
+     * Constructor of the class
+     * @param name the name of the weapon
+     */
     public WeaponTabGUIListener(String name){
         weaponName = name;
     }
@@ -22,7 +30,7 @@ public class WeaponTabGUIListener implements ItemListener {
         else{
             getUnassignedFarmedWeapons().remove(weaponName);
         }
-        saveAllWeapons();
+        serializeSave();
         source.setEnabled(true);
     }
 }

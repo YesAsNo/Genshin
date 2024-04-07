@@ -223,7 +223,7 @@ public class ToolGUI extends JFrame {
             case TALENTS:
                 return farmedTalents;
         }
-        return null;
+        throw new IllegalArgumentException();
     }
 
     /**

@@ -15,15 +15,26 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Objects;
 
+/**
+ * This class updates the labels that show either the icon or the name based on the selection made in a combobox.
+ * Used in CharacterCard.java
+ */
 public class UpdateLabelListener implements ActionListener {
     private final javax.swing.JLabel _JLabel;
     private final javax.swing.JLabel _NameLabel;
     private final JCheckBox _checkBox;
     private final ToolData.RESOURCE_TYPE SELECTION_BOX_TYPE;
 
-    public UpdateLabelListener(javax.swing.JLabel nameLabel , javax.swing.JLabel jLabel, JCheckBox checkBox, ToolData.RESOURCE_TYPE RESOURCE_TYPE){
+    /**
+     * Constructor of the class.
+     * @param nameLabel the label that shows the selected item name
+     * @param iconLabel the label that shows the selected item icon
+     * @param checkBox the checkbox that lists the item
+     * @param RESOURCE_TYPE the resource type of the item
+     */
+    public UpdateLabelListener(javax.swing.JLabel nameLabel , javax.swing.JLabel iconLabel, JCheckBox checkBox, ToolData.RESOURCE_TYPE RESOURCE_TYPE){
         _NameLabel = nameLabel;
-        _JLabel = jLabel;
+        _JLabel = iconLabel;
         _checkBox = checkBox;
         SELECTION_BOX_TYPE = RESOURCE_TYPE;
     }
