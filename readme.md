@@ -34,5 +34,5 @@ a checkbox that lists it, and a label with its type.
 
 - Pavel K. (precisi0n) - code
 - Sanna J. (YesAsNo) - UI design, custom icon, code
-- HOYOVERSE - game assets (icons)
+- HOYOVERSE - game assets
 
