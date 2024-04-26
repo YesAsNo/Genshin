@@ -4,6 +4,7 @@ import static Files.ToolData.AVAILABLE_FONTS;
 import static Files.ToolData.SAVE_LOCATION;
 import static Files.ToolData.changeFont;
 import static Files.ToolGUI.WEAPON_SAVE_FILE_NAME;
+import static Files.ToolGUI.formatString;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -15,6 +16,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -135,7 +138,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         devWeaponTabScrollPane.updateUI();
         parseWeaponsMap();
         int matchedCount = 0;
-        /*for (String s : getFlattenedData(ToolData.RESOURCE_TYPE.WEAPON_NAME)) {
+        for (String s : getFlattenedData(ToolData.RESOURCE_TYPE.WEAPON_NAME)) {
             JLabel label = (JLabel) devFilterComboBox.getSelectedItem();
             assert label != null;
             ToolData.WEAPON_FILTER_OPTIONS filter = ALL_OPTIONS_BY_STRING.get(label.getText());
@@ -152,13 +155,13 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
                 matchedCount++;
             }
 
-        }*/
+        }
         showMatchedAmountLabel.setText("Matches: "+ matchedCount);
         changeFont(showMatchedAmountLabel, AVAILABLE_FONTS.BLACK_FONT, 12);
     }
     private boolean inputMatchesFilters(String input, String weapon, ToolData.WEAPON_TYPE filter,
                                         SEARCH_FLAG flag){
-        /*if(weapon.toLowerCase().contains(input.toLowerCase()) &&
+        if(weapon.toLowerCase().contains(input.toLowerCase()) &&
                 (lookUpWeaponRarityAndType(weapon).getWeaponType().equalsIgnoreCase(filter.stringToken)||
                         filter == NO_FILTER)){
             boolean isTheWeaponListed = isSomeoneFarmingForTheWeapon(weapon)|| unassignedFarmedWeapons.contains(weapon);
@@ -172,7 +175,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         }
         return false;
     }*/
-    /*private JPanel generateWeaponCard(String weaponName) {
+    private JPanel generateWeaponCard(String weaponName) {
 
         // WEAPON CARD PANEL
         JPanel devWeaponCard = new JPanel();
