@@ -28,7 +28,7 @@ public class ToolData {
     private static final Map<String,String> artifactSetDescriptions = new TreeMap<>();
     private static final List<Character> characters = new ArrayList<>();
     private static final List<Domain> domains = new ArrayList<>();
-    private static final List<Weapon> weapons = new ArrayList<>();
+    public static final List<Weapon> weapons = new ArrayList<>();
     private static final Map<String,ImageIcon> placeholderIcons = new TreeMap<>();
 
     /** Enum that represents known mappings. All methods should use it instead of String values. */
@@ -273,6 +273,14 @@ public class ToolData {
         }
         throw new IllegalArgumentException(name + "is not a character name");
     }
+    public static Weapon getWeapon(String name){
+        for (Weapon weapon:weapons){
+            if (weapon.name.equalsIgnoreCase(name)){
+                return weapon;
+            }
+        }
+        throw new IllegalArgumentException(name + "is not a weapon name");
+    }
     public static List<Weapon> lookUpWeapons(WEAPON_RARITY rarity, WEAPON_TYPE type){
         List<Weapon> filtered = new ArrayList<>();
         for (Weapon weapon : weapons){
@@ -311,6 +319,7 @@ public class ToolData {
         assert placeholderIcons.containsKey(key);
         return placeholderIcons.get(key);
     }
+
     /**
      * Main method
      * @param args unused

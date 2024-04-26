@@ -2,9 +2,10 @@ package Files;
 
 import static Files.ToolData.AVAILABLE_FONTS;
 import static Files.ToolData.SAVE_LOCATION;
+import static Files.ToolData.WEAPON_TYPE.ALL_OPTIONS_BY_STRING;
+import static Files.ToolData.WEAPON_TYPE.NO_FILTER;
 import static Files.ToolData.changeFont;
-import static Files.ToolGUI.WEAPON_SAVE_FILE_NAME;
-import static Files.ToolGUI.formatString;
+import static Files.ToolGUI.*;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -50,7 +51,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
     private final JCheckBox showUnlistedCheckBox = new JCheckBox();
     private final JLabel showMatchedAmountLabel = new JLabel();
     private static final JComboBox<JLabel> devFilterComboBox = new JComboBox<>();
-    private static final Set<String> unassignedFarmedWeapons = new TreeSet<>();
+    private static final Set<Weapon> unassignedFarmedWeapons = new TreeSet<>();
 
     /**
      * Search flag enum.
@@ -144,19 +145,19 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         devWeaponTabScrollPane.updateUI();
         parseWeaponsMap();
         int matchedCount = 0;
-        for (String s : getFlattenedData(ToolData.RESOURCE_TYPE.WEAPON_NAME)) {
+        for (Weapon weapon : ToolData.weapons) {
             JLabel label = (JLabel) devFilterComboBox.getSelectedItem();
             assert label != null;
-            ToolData.WEAPON_FILTER_OPTIONS filter = ALL_OPTIONS_BY_STRING.get(label.getText());
+            ToolData.WEAPON_TYPE filter = ALL_OPTIONS_BY_STRING.get(label.getText());
             assert filter != null;
 
-            if (inputMatchesFilters(userFieldInput,s,filter,flag)) {
+            if (inputMatchesFilters(userFieldInput,weapon,filter,flag)) {
                 GridBagConstraints gbc = new GridBagConstraints();
                 gbc.gridx = matchedCount % 3;
                 gbc.gridy = (matchedCount - gbc.gridx) / 3;
                 gbc.anchor = GridBagConstraints.NORTH;
                 gbc.insets = new Insets(10, 10, 10, 10);
-                devWeaponTabScrollPanePanel.add(generateWeaponCard(s), gbc);
+                devWeaponTabScrollPanePanel.add(generateWeaponCard(weapon), gbc);
 
                 matchedCount++;
             }
@@ -165,10 +166,10 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         showMatchedAmountLabel.setText("Matches: "+ matchedCount);
         changeFont(showMatchedAmountLabel, AVAILABLE_FONTS.BLACK_FONT, 12);
     }
-    private boolean inputMatchesFilters(String input, String weapon, ToolData.WEAPON_TYPE filter,
+    private boolean inputMatchesFilters(String input, Weapon weapon, ToolData.WEAPON_TYPE filter,
                                         SEARCH_FLAG flag){
-        if(weapon.toLowerCase().contains(input.toLowerCase()) &&
-                (lookUpWeaponRarityAndType(weapon).getWeaponType().equalsIgnoreCase(filter.stringToken)||
+        if(weapon.name.toLowerCase().contains(input.toLowerCase()) &&
+                (weapon.type.equalsIgnoreCase(filter.stringToken)||
                         filter == NO_FILTER)){
             boolean isTheWeaponListed = isSomeoneFarmingForTheWeapon(weapon)|| unassignedFarmedWeapons.contains(weapon);
             if(isTheWeaponListed && flag == SEARCH_FLAG.LISTED_ONLY){
@@ -180,7 +181,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
             return flag == SEARCH_FLAG.ALL;
         }
         return false;
-    }*/
+    }
     private JPanel generateWeaponCard(String weaponName) {
 
         // WEAPON CARD PANEL

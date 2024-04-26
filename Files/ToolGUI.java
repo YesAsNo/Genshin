@@ -267,7 +267,7 @@ public class ToolGUI extends JFrame {
      * @param weapon weapon name
      * @return true, if the weapon was listed for one of the characters.
      */
-    public static boolean isSomeoneFarmingForTheWeapon(String weapon) {
+    public static boolean isSomeoneFarmingForTheWeapon(Weapon weapon) {
         return !farmedWeapons.get(weapon).isEmpty();
     }
 
