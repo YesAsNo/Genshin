@@ -265,6 +265,14 @@ public class ToolData {
             }
         }
     }
+    public static Character getCharacter(String name){
+        for (Character character:characters){
+            if (character.name.equalsIgnoreCase(name)){
+                return character;
+            }
+        }
+        throw new IllegalArgumentException(name + "is not a character name");
+    }
     public static List<Weapon> lookUpWeapons(WEAPON_RARITY rarity, WEAPON_TYPE type){
         List<Weapon> filtered = new ArrayList<>();
         for (Weapon weapon : weapons){

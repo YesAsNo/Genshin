@@ -3,6 +3,7 @@ package Files;
 import static Files.ToolData.AVAILABLE_FONTS;
 import static Files.ToolData.RESOURCE_TYPE;
 import static Files.ToolData.changeFont;
+import static Files.ToolData.getCharacter;
 import static Files.ToolData.getPlaceholderIcon;
 import static Files.ToolData.getResizedResourceIcon;
 import static Files.ToolData.lookUpWeapons;
@@ -141,7 +142,7 @@ public class CharacterCardGUI extends JFrame {
         changeFont(weaponSelectionBox, AVAILABLE_FONTS.HEADER_FONT, 14.0F);
         weaponSelectionBox.setInheritsPopupMenu(false);
         final WeaponSelectorComboBoxModel weaponSelectorComboBoxModel = new WeaponSelectorComboBoxModel();
-        addAllowedWeapons(weaponSelectorComboBoxModel, characterListing.getCharacterName());
+        addAllowedWeapons(weaponSelectorComboBoxModel, getCharacter(characterListing.getCharacterName()));
         weaponSelectionBox.setModel(weaponSelectorComboBoxModel);
         weaponSelectionBox.setRenderer(new ComboBoxRenderer(weaponSelectionBox));
         setSelection(weaponSelectionBox, characterListing.getWeapon());
