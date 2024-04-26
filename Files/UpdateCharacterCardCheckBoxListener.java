@@ -15,19 +15,19 @@ import java.awt.event.ItemListener;
  * This class serves as the listener for checkboxes generated in CharacterCard.java
  */
 public class UpdateCharacterCardCheckBoxListener implements ItemListener {
-    private final CharacterCard _characterCard;
+    private final CharacterListing _characterListing;
     private final CHARACTER_CARD_DATA_FIELD _changedData;
     private final JButton _saveButton;
 
     /**
      * Constructor of the class
-     * @param characterCard the character card where the checkbox is located
+     * @param characterListing the character card where the checkbox is located
      * @param changedData the changed data type in the card
      * @param saveButton implementation side effect. Will set the button to active once a change has been made.
      */
-    public UpdateCharacterCardCheckBoxListener(CharacterCard characterCard, CHARACTER_CARD_DATA_FIELD changedData,
-                                       JButton saveButton){
-        _characterCard = characterCard;
+    public UpdateCharacterCardCheckBoxListener(CharacterListing characterListing, CHARACTER_CARD_DATA_FIELD changedData,
+                                               JButton saveButton){
+        _characterListing = characterListing;
         _changedData = changedData;
         _saveButton = saveButton;
     }
@@ -37,21 +37,25 @@ public class UpdateCharacterCardCheckBoxListener implements ItemListener {
         _saveButton.setEnabled(true);
         switch(_changedData){
             case FARMING_SET_ONE:
-                _characterCard.setArtifactSet1Status(currentStatus);
-                updateFarmedItemMap(CHARACTER_CARD_DATA_FIELD.SET_ONE,_characterCard,currentStatus,_characterCard.getArtifactSet1());
+                _characterListing.setArtifactSet1Status(currentStatus);
+                updateFarmedItemMap(CHARACTER_CARD_DATA_FIELD.SET_ONE, _characterListing,currentStatus,
+                        _characterListing.getArtifactSet1());
                 return;
             case FARMING_SET_TWO:
-                _characterCard.setArtifactSet2Status(currentStatus);
-                updateFarmedItemMap(CHARACTER_CARD_DATA_FIELD.SET_TWO,_characterCard,currentStatus,_characterCard.getArtifactSet2());
+                _characterListing.setArtifactSet2Status(currentStatus);
+                updateFarmedItemMap(CHARACTER_CARD_DATA_FIELD.SET_TWO, _characterListing,currentStatus,
+                        _characterListing.getArtifactSet2());
                 return;
             case FARMING_TALENT_MATERIALS:
-                _characterCard.setTalentStatus(currentStatus);
-                updateFarmedItemMap(_changedData,_characterCard,currentStatus,getTalentBookForCharacter(_characterCard.getCharacterName()));
-                updateFarmedItemMap(_changedData,_characterCard,currentStatus,getWeeklyBossMatForCharacter(_characterCard.getCharacterName()));
+                _characterListing.setTalentStatus(currentStatus);
+                updateFarmedItemMap(_changedData,
+                        _characterListing,currentStatus,getTalentBookForCharacter(_characterListing.getCharacterName()));
+                updateFarmedItemMap(_changedData,
+                        _characterListing,currentStatus,getWeeklyBossMatForCharacter(_characterListing.getCharacterName()));
                 return;
             case FARMING_WEAPON_MATERIALS:
-                _characterCard.setWeaponStatus(currentStatus);
-                updateFarmedItemMap(_changedData,_characterCard,currentStatus,_characterCard.getWeapon());
+                _characterListing.setWeaponStatus(currentStatus);
+                updateFarmedItemMap(_changedData, _characterListing,currentStatus, _characterListing.getWeapon());
                 return;
             default:
         }

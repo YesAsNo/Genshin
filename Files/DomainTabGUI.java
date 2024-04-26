@@ -7,10 +7,10 @@ import static Files.ToolData.RESOURCE_TYPE.ARTIFACT_SET;
 import static Files.ToolData.RESOURCE_TYPE.TALENT_BOOK;
 import static Files.ToolData.RESOURCE_TYPE.WEEKLY_BOSS_MATERIAL;
 import static Files.ToolData.changeFont;
+import static Files.ToolData.getAscensionMaterialForWeapon;
 import static Files.ToolData.getFlattenedData;
 import static Files.ToolData.getMapping;
 import static Files.ToolData.getResourceIcon;
-import static Files.ToolData.getWeaponMaterialForWeapon;
 import static Files.ToolData.knownMappings.ARTIDOMAIN_ARTISET;
 import static Files.ToolData.knownMappings.DAY_AVAILABLEMATS;
 import static Files.ToolData.knownMappings.TALENTBOOK_CHAR;
@@ -401,7 +401,7 @@ public class DomainTabGUI implements ActionListener {
         Set<String> farmedMapping = getDomainFarmedList(dt);
         List<String> domainItems = Objects.requireNonNull(getDomainMapping(dt)).get(domainName);
         for (String item : farmedMapping){
-            if (dt == DOMAIN_THEME.WEAPON_MATERIAL_THEME && domainItems.contains(getWeaponMaterialForWeapon(item))){
+            if (dt == DOMAIN_THEME.WEAPON_MATERIAL_THEME && domainItems.contains(getAscensionMaterialForWeapon(item))){
                 return true;
             }
             else if (domainItems.contains(item)){
@@ -662,7 +662,7 @@ public class DomainTabGUI implements ActionListener {
         switch(rt){
             case WEAPON_MATERIAL: {
                 for (String weaponName: getDomainFarmedList(DOMAIN_THEME.WEAPON_MATERIAL_THEME)){
-                    if (getMapping(WEPDOMAIN_WEPMAT).get(domainName).contains(getWeaponMaterialForWeapon(weaponName))){
+                    if (getMapping(WEPDOMAIN_WEPMAT).get(domainName).contains(getAscensionMaterialForWeapon(weaponName))){
                         counter++;
                     }
                 }

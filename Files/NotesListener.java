@@ -11,7 +11,7 @@ import javax.swing.text.BadLocationException;
  */
 public class NotesListener implements DocumentListener {
 
-    private final CharacterCard _characterCard;
+    private final CharacterListing _characterListing;
     private final JButton _button;
 
     /**
@@ -19,15 +19,15 @@ public class NotesListener implements DocumentListener {
      * @param card the character card
      * @param button save button
      */
-    public NotesListener(CharacterCard card, JButton button){
-        _characterCard = card;
+    public NotesListener(CharacterListing card, JButton button){
+        _characterListing = card;
         _button = button;
     }
     @Override
     public void insertUpdate(DocumentEvent e) {
         _button.setEnabled(true);
         try {
-            _characterCard.setCharacterNotes(e.getDocument().getText(0,e.getDocument().getLength()));
+            _characterListing.setCharacterNotes(e.getDocument().getText(0,e.getDocument().getLength()));
         } catch (BadLocationException ex) {
             throw new RuntimeException(ex);
         }

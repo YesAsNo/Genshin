@@ -171,15 +171,15 @@ public final class CharacterTabGUI implements ActionListener {
      */
     private JButton getjButton(String characterName) {
         JButton characterButton = new JButton();
-        CharacterCard characterCard;
+        CharacterListing characterListing;
         if (!checkIfCharacterCardHasBeenGenerated(characterName)) {
-            characterCard = new CharacterCard(characterName);
-            ToolGUI.addCharacterCard(characterCard);
+            characterListing = new CharacterListing(characterName);
+            ToolGUI.addCharacterCard(characterListing);
         } else {
-            characterCard = getCharacterCard(characterName);
+            characterListing = getCharacterCard(characterName);
         }
-        assert characterCard != null;
-        characterButton.setIcon(characterCard.getCharacterIcon());
+        assert characterListing != null;
+        characterButton.setIcon(characterListing.getCharacterIcon());
         characterButton.setText(formatString(characterName));
         changeFont(characterButton, ToolData.AVAILABLE_FONTS.BLACK_FONT, 12);
         characterButton.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -191,7 +191,7 @@ public final class CharacterTabGUI implements ActionListener {
             if (isWindowAlreadyOpen(characterName)) {
                 Objects.requireNonNull(getOpenWindow(characterName)).setVisible(true);
             } else {
-                new CharacterCardGUI(characterCard);
+                new CharacterCardGUI(characterListing);
             }
         });
 

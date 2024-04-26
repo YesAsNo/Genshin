@@ -1,0 +1,890 @@
+[
+  {
+    "name": "A Thousand Floating Dreams",
+    "rarity": "5-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Oasis Garden\u0027s"
+  },
+  {
+    "name": "Akuoumaru",
+    "rarity": "4-Star",
+    "type": "Claymore",
+    "ascensionMaterial": "All Branch of a Distant Sea"
+  },
+  {
+    "name": "Alley Hunter",
+    "rarity": "4-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Dandelion Gladiator"
+  },
+  {
+    "name": "Amenoma Kageuchi",
+    "rarity": "4-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Branch of a Distant Sea"
+  },
+  {
+    "name": "Amos\u0027 Bow",
+    "rarity": "5-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Dandelion Gladiator"
+  },
+  {
+    "name": "Aqua Simulacra",
+    "rarity": "5-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Guyun"
+  },
+  {
+    "name": "Aquila Favonia",
+    "rarity": "5-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Decarabian\u0027s"
+  },
+  {
+    "name": "Ballad of the Boundless Blue",
+    "rarity": "4-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Boreal Wolf\u0027s"
+  },
+  {
+    "name": "Ballad of the Fjords",
+    "rarity": "4-Star",
+    "type": "Polearm",
+    "ascensionMaterial": "All Goblet of the Pristine Sea"
+  },
+  {
+    "name": "Beacon of the Reed Sea",
+    "rarity": "5-Star",
+    "type": "Claymore",
+    "ascensionMaterial": "All Scorching Might"
+  },
+  {
+    "name": "Blackcliff Agate",
+    "rarity": "4-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Guyun"
+  },
+  {
+    "name": "Blackcliff Longsword",
+    "rarity": "4-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Guyun"
+  },
+  {
+    "name": "Blackcliff Pole",
+    "rarity": "4-Star",
+    "type": "Polearm",
+    "ascensionMaterial": "All Mist Veiled Elixir"
+  },
+  {
+    "name": "Blackcliff Slasher",
+    "rarity": "4-Star",
+    "type": "Claymore",
+    "ascensionMaterial": "All Mist Veiled Elixir"
+  },
+  {
+    "name": "Blackcliff Warbow",
+    "rarity": "4-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Guyun"
+  },
+  {
+    "name": "Calamity Queller",
+    "rarity": "5-Star",
+    "type": "Polearm",
+    "ascensionMaterial": "All Mist Veiled Elixir"
+  },
+  {
+    "name": "Cashflow Supervision",
+    "rarity": "5-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Goblet of the Pristine Sea"
+  },
+  {
+    "name": "Cinnabar Spindle",
+    "rarity": "4-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Decarabian\u0027s"
+  },
+  {
+    "name": "Compound Bow",
+    "rarity": "4-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Aerosiderite"
+  },
+  {
+    "name": "Crane\u0027s Echoing Call",
+    "rarity": "5-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Mist Veiled Elixir"
+  },
+  {
+    "name": "Crescent Pike",
+    "rarity": "4-Star",
+    "type": "Polearm",
+    "ascensionMaterial": "All Guyun"
+  },
+  {
+    "name": "Crimson Moon\u0027s Semblance",
+    "rarity": "5-Star",
+    "type": "Polearm",
+    "ascensionMaterial": "All Goblet of the Pristine Sea"
+  },
+  {
+    "name": "Deathmatch",
+    "rarity": "4-Star",
+    "type": "Polearm",
+    "ascensionMaterial": "All Boreal Wolf\u0027s"
+  },
+  {
+    "name": "Dialogues of the Desert Sages",
+    "rarity": "4-Star",
+    "type": "Polearm",
+    "ascensionMaterial": "All Talisman of the Forest Dew"
+  },
+  {
+    "name": "Dodoco Tales",
+    "rarity": "4-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Boreal Wolf\u0027s"
+  },
+  {
+    "name": "Dragon\u0027s Bane",
+    "rarity": "4-Star",
+    "type": "Polearm",
+    "ascensionMaterial": "All Mist Veiled Elixir"
+  },
+  {
+    "name": "Dragonspine Spear",
+    "rarity": "4-Star",
+    "type": "Polearm",
+    "ascensionMaterial": "All Boreal Wolf\u0027s"
+  },
+  {
+    "name": "Elegy for the End",
+    "rarity": "5-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Boreal Wolf\u0027s"
+  },
+  {
+    "name": "End of the Line",
+    "rarity": "4-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Scorching Might"
+  },
+  {
+    "name": "Engulfing Lightning",
+    "rarity": "5-Star",
+    "type": "Polearm",
+    "ascensionMaterial": "All Masks"
+  },
+  {
+    "name": "Everlasting Moonglow",
+    "rarity": "5-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Branch of a Distant Sea"
+  },
+  {
+    "name": "Eye of Perception",
+    "rarity": "4-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Mist Veiled Elixir"
+  },
+  {
+    "name": "Fading Twilight",
+    "rarity": "4-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Aerosiderite"
+  },
+  {
+    "name": "Favonius Codex",
+    "rarity": "4-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Decarabian\u0027s"
+  },
+  {
+    "name": "Favonius Greatsword",
+    "rarity": "4-Star",
+    "type": "Claymore",
+    "ascensionMaterial": "All Dandelion Gladiator"
+  },
+  {
+    "name": "Favonius Lance",
+    "rarity": "4-Star",
+    "type": "Polearm",
+    "ascensionMaterial": "All Dandelion Gladiator"
+  },
+  {
+    "name": "Favonius Sword",
+    "rarity": "4-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Decarabian\u0027s"
+  },
+  {
+    "name": "Favonius Warbow",
+    "rarity": "4-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Dandelion Gladiator"
+  },
+  {
+    "name": "Festering Desire",
+    "rarity": "4-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Dandelion Gladiator"
+  },
+  {
+    "name": "Finale of the Deep",
+    "rarity": "4-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Pure Sacred Dewdrop"
+  },
+  {
+    "name": "Fleuve Cendre Ferryman",
+    "rarity": "4-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Ancient Chord"
+  },
+  {
+    "name": "Flowing Purity",
+    "rarity": "4-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Pure Sacred Dewdrop"
+  },
+  {
+    "name": "Forest Regalia",
+    "rarity": "4-Star",
+    "type": "Claymore",
+    "ascensionMaterial": "All Talisman of the Forest Dew"
+  },
+  {
+    "name": "Freedom-Sworn",
+    "rarity": "5-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Dandelion Gladiator"
+  },
+  {
+    "name": "Frostbearer",
+    "rarity": "4-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Dandelion Gladiator"
+  },
+  {
+    "name": "Fruit of Fulfillment",
+    "rarity": "4-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Oasis Garden\u0027s"
+  },
+  {
+    "name": "Hakushin Ring",
+    "rarity": "4-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Branch of a Distant Sea"
+  },
+  {
+    "name": "Hamayumi",
+    "rarity": "4-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Narukami\u0027s"
+  },
+  {
+    "name": "Haran Geppaku Futsu",
+    "rarity": "5-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Narukami\u0027s"
+  },
+  {
+    "name": "Hunter\u0027s Path",
+    "rarity": "5-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Scorching Might"
+  },
+  {
+    "name": "Ibis Piercer",
+    "rarity": "4-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Talisman of the Forest Dew"
+  },
+  {
+    "name": "Iron Sting",
+    "rarity": "4-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Aerosiderite"
+  },
+  {
+    "name": "Jadefall\u0027s Splendor",
+    "rarity": "5-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Guyun"
+  },
+  {
+    "name": "Kagotsurube Isshin",
+    "rarity": "4-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Masks"
+  },
+  {
+    "name": "Kagura\u0027s Verity",
+    "rarity": "5-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Masks"
+  },
+  {
+    "name": "Katsuragikiri Nagamasa",
+    "rarity": "4-Star",
+    "type": "Claymore",
+    "ascensionMaterial": "All Narukami\u0027s"
+  },
+  {
+    "name": "Key of Khaj-Nisut",
+    "rarity": "5-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Talisman of the Forest Dew"
+  },
+  {
+    "name": "King\u0027s Squire",
+    "rarity": "4-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Scorching Might"
+  },
+  {
+    "name": "Kitain Cross Spear",
+    "rarity": "4-Star",
+    "type": "Polearm",
+    "ascensionMaterial": "All Masks"
+  },
+  {
+    "name": "Light of Foliar Incision",
+    "rarity": "5-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Talisman of the Forest Dew"
+  },
+  {
+    "name": "Lion\u0027s Roar",
+    "rarity": "4-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Guyun"
+  },
+  {
+    "name": "Lithic Blade",
+    "rarity": "4-Star",
+    "type": "Claymore",
+    "ascensionMaterial": "All Guyun"
+  },
+  {
+    "name": "Lithic Spear",
+    "rarity": "4-Star",
+    "type": "Polearm",
+    "ascensionMaterial": "All Aerosiderite"
+  },
+  {
+    "name": "Lost Prayer to the Sacred Winds",
+    "rarity": "5-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Dandelion Gladiator"
+  },
+  {
+    "name": "Luxurious Sea-Lord",
+    "rarity": "4-Star",
+    "type": "Claymore",
+    "ascensionMaterial": "All Aerosiderite"
+  },
+  {
+    "name": "Mailed Flower",
+    "rarity": "4-Star",
+    "type": "Claymore",
+    "ascensionMaterial": "All Dandelion Gladiator"
+  },
+  {
+    "name": "Makhaira Aquamarine",
+    "rarity": "4-Star",
+    "type": "Claymore",
+    "ascensionMaterial": "All Scorching Might"
+  },
+  {
+    "name": "Mappa Mare",
+    "rarity": "4-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Aerosiderite"
+  },
+  {
+    "name": "Memory of Dust",
+    "rarity": "5-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Aerosiderite"
+  },
+  {
+    "name": "Missive Windspear",
+    "rarity": "4-Star",
+    "type": "Polearm",
+    "ascensionMaterial": "All Boreal Wolf\u0027s"
+  },
+  {
+    "name": "Mistsplitter Reforged",
+    "rarity": "5-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Branch of a Distant Sea"
+  },
+  {
+    "name": "Mitternachts Waltz",
+    "rarity": "4-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Decarabian\u0027s"
+  },
+  {
+    "name": "Moonpiercer",
+    "rarity": "4-Star",
+    "type": "Polearm",
+    "ascensionMaterial": "All Oasis Garden\u0027s"
+  },
+  {
+    "name": "Mouun\u0027s Moon",
+    "rarity": "4-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Narukami\u0027s"
+  },
+  {
+    "name": "Oathsworn Eye",
+    "rarity": "4-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Branch of a Distant Sea"
+  },
+  {
+    "name": "Polar Star",
+    "rarity": "5-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Masks"
+  },
+  {
+    "name": "Portable Power Saw",
+    "rarity": "4-Star",
+    "type": "Claymore",
+    "ascensionMaterial": "All Goblet of the Pristine Sea"
+  },
+  {
+    "name": "Predator",
+    "rarity": "4-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Narukami\u0027s"
+  },
+  {
+    "name": "Primordial Jade Cutter",
+    "rarity": "5-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Mist Veiled Elixir"
+  },
+  {
+    "name": "Primordial Jade Winged-Spear",
+    "rarity": "5-Star",
+    "type": "Polearm",
+    "ascensionMaterial": "All Guyun"
+  },
+  {
+    "name": "Prospector\u0027s Drill",
+    "rarity": "4-Star",
+    "type": "Polearm",
+    "ascensionMaterial": "All Ancient Chord"
+  },
+  {
+    "name": "Prototype Amber",
+    "rarity": "4-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Mist Veiled Elixir"
+  },
+  {
+    "name": "Prototype Archaic",
+    "rarity": "4-Star",
+    "type": "Claymore",
+    "ascensionMaterial": "All Aerosiderite"
+  },
+  {
+    "name": "Prototype Crescent",
+    "rarity": "4-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Mist Veiled Elixir"
+  },
+  {
+    "name": "Prototype Rancour",
+    "rarity": "4-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Mist Veiled Elixir"
+  },
+  {
+    "name": "Prototype Starglitter",
+    "rarity": "4-Star",
+    "type": "Polearm",
+    "ascensionMaterial": "All Aerosiderite"
+  },
+  {
+    "name": "Rainslasher",
+    "rarity": "4-Star",
+    "type": "Claymore",
+    "ascensionMaterial": "All Mist Veiled Elixir"
+  },
+  {
+    "name": "Range Gauge",
+    "rarity": "4-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Ancient Chord"
+  },
+  {
+    "name": "Redhorn Stonethresher",
+    "rarity": "5-Star",
+    "type": "Claymore",
+    "ascensionMaterial": "All Narukami\u0027s"
+  },
+  {
+    "name": "Rightful Reward",
+    "rarity": "4-Star",
+    "type": "Polearm",
+    "ascensionMaterial": "All Goblet of the Pristine Sea"
+  },
+  {
+    "name": "Royal Bow",
+    "rarity": "4-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Dandelion Gladiator"
+  },
+  {
+    "name": "Royal Greatsword",
+    "rarity": "4-Star",
+    "type": "Claymore",
+    "ascensionMaterial": "All Dandelion Gladiator"
+  },
+  {
+    "name": "Royal Grimoire",
+    "rarity": "4-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Decarabian\u0027s"
+  },
+  {
+    "name": "Royal Longsword",
+    "rarity": "4-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Decarabian\u0027s"
+  },
+  {
+    "name": "Royal Spear",
+    "rarity": "4-Star",
+    "type": "Polearm",
+    "ascensionMaterial": "All Mist Veiled Elixir"
+  },
+  {
+    "name": "Rust",
+    "rarity": "4-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Guyun"
+  },
+  {
+    "name": "Sacrificial Bow",
+    "rarity": "4-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Boreal Wolf\u0027s"
+  },
+  {
+    "name": "Sacrificial Fragments",
+    "rarity": "4-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Dandelion Gladiator"
+  },
+  {
+    "name": "Sacrificial Greatsword",
+    "rarity": "4-Star",
+    "type": "Claymore",
+    "ascensionMaterial": "All Boreal Wolf\u0027s"
+  },
+  {
+    "name": "Sacrificial Jade",
+    "rarity": "4-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Guyun"
+  },
+  {
+    "name": "Sacrificial Sword",
+    "rarity": "4-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Dandelion Gladiator"
+  },
+  {
+    "name": "Sapwood Blade",
+    "rarity": "4-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Talisman of the Forest Dew"
+  },
+  {
+    "name": "Scion of the Blazing Sun",
+    "rarity": "4-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Scorching Might"
+  },
+  {
+    "name": "Serpent Spine",
+    "rarity": "4-Star",
+    "type": "Claymore",
+    "ascensionMaterial": "All Aerosiderite"
+  },
+  {
+    "name": "Skyward Atlas",
+    "rarity": "5-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Boreal Wolf\u0027s"
+  },
+  {
+    "name": "Skyward Blade",
+    "rarity": "5-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Boreal Wolf\u0027s"
+  },
+  {
+    "name": "Skyward Harp",
+    "rarity": "5-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Boreal Wolf\u0027s"
+  },
+  {
+    "name": "Skyward Pride",
+    "rarity": "5-Star",
+    "type": "Claymore",
+    "ascensionMaterial": "All Boreal Wolf\u0027s"
+  },
+  {
+    "name": "Skyward Spine",
+    "rarity": "5-Star",
+    "type": "Polearm",
+    "ascensionMaterial": "All Dandelion Gladiator"
+  },
+  {
+    "name": "Snow-Tombed Starsilver",
+    "rarity": "4-Star",
+    "type": "Claymore",
+    "ascensionMaterial": "All Decarabian\u0027s"
+  },
+  {
+    "name": "Solar Pearl",
+    "rarity": "4-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Guyun"
+  },
+  {
+    "name": "Song of Broken Pines",
+    "rarity": "5-Star",
+    "type": "Claymore",
+    "ascensionMaterial": "All Decarabian\u0027s"
+  },
+  {
+    "name": "Song of Stillness",
+    "rarity": "4-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Ancient Chord"
+  },
+  {
+    "name": "Splendor of Tranquil Waters",
+    "rarity": "5-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Pure Sacred Dewdrop"
+  },
+  {
+    "name": "Staff of Homa",
+    "rarity": "5-Star",
+    "type": "Polearm",
+    "ascensionMaterial": "All Aerosiderite"
+  },
+  {
+    "name": "Staff of the Scarlet Sands",
+    "rarity": "5-Star",
+    "type": "Polearm",
+    "ascensionMaterial": "All Oasis Garden\u0027s"
+  },
+  {
+    "name": "Summit Shaper",
+    "rarity": "5-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Guyun"
+  },
+  {
+    "name": "Sword of Descension",
+    "rarity": "4-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Boreal Wolf\u0027s"
+  },
+  {
+    "name": "Sword of Narzissenkreuz",
+    "rarity": "4-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Ancient Chord"
+  },
+  {
+    "name": "Talking Stick",
+    "rarity": "4-Star",
+    "type": "Claymore",
+    "ascensionMaterial": "All Oasis Garden\u0027s"
+  },
+  {
+    "name": "The Alley Flash",
+    "rarity": "4-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Decarabian\u0027s"
+  },
+  {
+    "name": "The Bell",
+    "rarity": "4-Star",
+    "type": "Claymore",
+    "ascensionMaterial": "All Decarabian\u0027s"
+  },
+  {
+    "name": "The Black Sword",
+    "rarity": "4-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Boreal Wolf\u0027s"
+  },
+  {
+    "name": "The Catch",
+    "rarity": "4-Star",
+    "type": "Polearm",
+    "ascensionMaterial": "All Masks"
+  },
+  {
+    "name": "The Dockhand\u0027s Assistant",
+    "rarity": "4-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Pure Sacred Dewdrop"
+  },
+  {
+    "name": "The First Great Magic",
+    "rarity": "5-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Ancient Chord"
+  },
+  {
+    "name": "The Flute",
+    "rarity": "4-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Boreal Wolf\u0027s"
+  },
+  {
+    "name": "The Stringless",
+    "rarity": "4-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Decarabian\u0027s"
+  },
+  {
+    "name": "The Unforged",
+    "rarity": "5-Star",
+    "type": "Claymore",
+    "ascensionMaterial": "All Mist Veiled Elixir"
+  },
+  {
+    "name": "The Viridescent Hunt",
+    "rarity": "4-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Decarabian\u0027s"
+  },
+  {
+    "name": "The Widsith",
+    "rarity": "4-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Boreal Wolf\u0027s"
+  },
+  {
+    "name": "Thundering Pulse",
+    "rarity": "5-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Narukami\u0027s"
+  },
+  {
+    "name": "Tidal Shadow",
+    "rarity": "4-Star",
+    "type": "Claymore",
+    "ascensionMaterial": "All Goblet of the Pristine Sea"
+  },
+  {
+    "name": "Tome of the Eternal Flow",
+    "rarity": "5-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Pure Sacred Dewdrop"
+  },
+  {
+    "name": "Toukabou Shigure",
+    "rarity": "4-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Narukami\u0027s"
+  },
+  {
+    "name": "Tulaytullah\u0027s Remembrance",
+    "rarity": "5-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Scorching Might"
+  },
+  {
+    "name": "Ultimate Overlord\u0027s Mega Magic Sword",
+    "rarity": "4-Star",
+    "type": "Claymore",
+    "ascensionMaterial": "All Goblet of the Pristine Sea"
+  },
+  {
+    "name": "Uraku Misugiri",
+    "rarity": "5-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Branch of a Distant Sea"
+  },
+  {
+    "name": "Verdict",
+    "rarity": "5-Star",
+    "type": "Claymore",
+    "ascensionMaterial": "All Ancient Chord"
+  },
+  {
+    "name": "Vortex Vanquisher",
+    "rarity": "5-Star",
+    "type": "Polearm",
+    "ascensionMaterial": "All Aerosiderite"
+  },
+  {
+    "name": "Wandering Evenstar",
+    "rarity": "4-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Oasis Garden\u0027s"
+  },
+  {
+    "name": "Wavebreaker\u0027s Fin",
+    "rarity": "4-Star",
+    "type": "Polearm",
+    "ascensionMaterial": "All Masks"
+  },
+  {
+    "name": "Whiteblind",
+    "rarity": "4-Star",
+    "type": "Claymore",
+    "ascensionMaterial": "All Guyun"
+  },
+  {
+    "name": "Windblume Ode",
+    "rarity": "4-Star",
+    "type": "Bow",
+    "ascensionMaterial": "All Dandelion Gladiator"
+  },
+  {
+    "name": "Wine and Song",
+    "rarity": "4-Star",
+    "type": "Catalyst",
+    "ascensionMaterial": "All Boreal Wolf\u0027s"
+  },
+  {
+    "name": "Wolf\u0027s Gravestone",
+    "rarity": "5-Star",
+    "type": "Claymore",
+    "ascensionMaterial": "All Dandelion Gladiator"
+  },
+  {
+    "name": "Wolf-Fang",
+    "rarity": "4-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Decarabian\u0027s"
+  },
+  {
+    "name": "Xiphos\u0027 Moonlight",
+    "rarity": "4-Star",
+    "type": "Sword",
+    "ascensionMaterial": "All Talisman of the Forest Dew"
+  }
+]

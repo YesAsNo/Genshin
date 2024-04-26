@@ -17,14 +17,14 @@ import java.io.IOException;
  * @link CharacterCardGUI
  */
 public class SaveButtonListener implements ActionListener {
-    private final CharacterCard _characterCard;
+    private final CharacterListing _characterListing;
 
     /**
      * Constructor of the class.
      * @param card character card
      */
-    public SaveButtonListener(CharacterCard card){
-        _characterCard = card;
+    public SaveButtonListener(CharacterListing card){
+        _characterListing = card;
     }
 
     @Override
@@ -33,12 +33,12 @@ public class SaveButtonListener implements ActionListener {
         JButton saveButton = (JButton) e.getSource();
         saveButton.setEnabled(false);
         Gson gson = new Gson();
-        File f = new File(SAVE_LOCATION + _characterCard.getCharacterName());
+        File f = new File(SAVE_LOCATION + _characterListing.getCharacterName());
         JButton triggerButton = (JButton) e.getSource();
         try{
             f.createNewFile();
             FileWriter fd = new FileWriter(f);
-            gson.toJson(_characterCard,fd);
+            gson.toJson(_characterListing,fd);
             fd.flush();
             fd.close();
             Timer timer = new Timer(0, event->triggerButton.setText("SUCCESS"));
@@ -47,7 +47,7 @@ public class SaveButtonListener implements ActionListener {
             }
         catch (IOException ex)
             {
-                System.out.println("Failed to save character details for character " +_characterCard.getCharacterName());
+                System.out.println("Failed to save character details for character " + _characterListing.getCharacterName());
                 Timer timer = new Timer(0,event->triggerButton.setText("FAIL"));
                 timer.setRepeats(false);
                 timer.start();

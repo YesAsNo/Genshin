@@ -1,0 +1,731 @@
+[
+  {
+    "name": "Cecilia Garden",
+    "type": "Weapon Material",
+    "materials": [
+      {
+        "name": "All Decarabian\u0027s",
+        "type": "Weapon Material",
+        "availability": "Mon/Thu"
+      },
+      {
+        "name": "All Boreal Wolf\u0027s",
+        "type": "Weapon Material",
+        "availability": "Tues/Fri"
+      },
+      {
+        "name": "All Dandelion Gladiator",
+        "type": "Weapon Material",
+        "availability": "Wed/Sat"
+      }
+    ],
+    "availableEveryDay": false
+  },
+  {
+    "name": "Court of Flowing Sand",
+    "type": "Weapon Material",
+    "materials": [
+      {
+        "name": "All Branch of a Distant Sea",
+        "type": "Weapon Material",
+        "availability": "Mon/Thu"
+      },
+      {
+        "name": "All Narukami\u0027s",
+        "type": "Weapon Material",
+        "availability": "Tues/Fri"
+      },
+      {
+        "name": "All Masks",
+        "type": "Weapon Material",
+        "availability": "Wed/Sat"
+      }
+    ],
+    "availableEveryDay": false
+  },
+  {
+    "name": "Echoes of the Deep Tides",
+    "type": "Weapon Material",
+    "materials": [
+      {
+        "name": "All Ancient Chord",
+        "type": "Weapon Material",
+        "availability": "Mon/Thu"
+      },
+      {
+        "name": "All Pure Sacred Dewdrop",
+        "type": "Weapon Material",
+        "availability": "Tues/Fri"
+      },
+      {
+        "name": "All Goblet of the Pristine Sea",
+        "type": "Weapon Material",
+        "availability": "Wed/Sat"
+      }
+    ],
+    "availableEveryDay": false
+  },
+  {
+    "name": "Hidden Palace of Lianshan Formula",
+    "type": "Weapon Material",
+    "materials": [
+      {
+        "name": "All Guyun",
+        "type": "Weapon Material",
+        "availability": "Mon/Thu"
+      },
+      {
+        "name": "All Mist Veiled Elixir",
+        "type": "Weapon Material",
+        "availability": "Tues/Fri"
+      },
+      {
+        "name": "All Aerosiderite",
+        "type": "Weapon Material",
+        "availability": "Wed/Sat"
+      }
+    ],
+    "availableEveryDay": false
+  },
+  {
+    "name": "Tower of Abject Pride",
+    "type": "Weapon Material",
+    "materials": [
+      {
+        "name": "All Talisman of the Forest Dew",
+        "type": "Weapon Material",
+        "availability": "Mon/Thu"
+      },
+      {
+        "name": "All Oasis Garden\u0027s",
+        "type": "Weapon Material",
+        "availability": "Tues/Fri"
+      },
+      {
+        "name": "All Scorching Might",
+        "type": "Weapon Material",
+        "availability": "Wed/Sat"
+      }
+    ],
+    "availableEveryDay": false
+  },
+  {
+    "name": "Bosses",
+    "type": "Artifact",
+    "materials": [
+      {
+        "name": "Gladiator\u0027s Finale",
+        "type": "Artifact",
+        "availability": "All"
+      },
+      {
+        "name": "Wanderer\u0027s Troupe",
+        "type": "Artifact",
+        "availability": "All"
+      }
+    ],
+    "availableEveryDay": true
+  },
+  {
+    "name": "City of Gold",
+    "type": "Artifact",
+    "materials": [
+      {
+        "name": "Desert Pavilion Chronicle",
+        "type": "Artifact",
+        "availability": "All"
+      },
+      {
+        "name": "Flower of Paradise Lost",
+        "type": "Artifact",
+        "availability": "All"
+      }
+    ],
+    "availableEveryDay": true
+  },
+  {
+    "name": "Clear Pool and Mountain Cavern",
+    "type": "Artifact",
+    "materials": [
+      {
+        "name": "Noblesse Oblige",
+        "type": "Artifact",
+        "availability": "All"
+      },
+      {
+        "name": "Bloodstained Chivalry",
+        "type": "Artifact",
+        "availability": "All"
+      }
+    ],
+    "availableEveryDay": true
+  },
+  {
+    "name": "Denouement of Sin",
+    "type": "Artifact",
+    "materials": [
+      {
+        "name": "Marechaussee Hunter",
+        "type": "Artifact",
+        "availability": "All"
+      },
+      {
+        "name": "Golden Troupe",
+        "type": "Artifact",
+        "availability": "All"
+      }
+    ],
+    "availableEveryDay": true
+  },
+  {
+    "name": "Domain of Guyun",
+    "type": "Artifact",
+    "materials": [
+      {
+        "name": "Archaic Petra",
+        "type": "Artifact",
+        "availability": "All"
+      },
+      {
+        "name": "Retracing Bolide",
+        "type": "Artifact",
+        "availability": "All"
+      }
+    ],
+    "availableEveryDay": true
+  },
+  {
+    "name": "Faded Theater",
+    "type": "Artifact",
+    "materials": [
+      {
+        "name": "Fragment of Harmonic Whimsy",
+        "type": "Artifact",
+        "availability": "All"
+      },
+      {
+        "name": "Unfinished Reverie",
+        "type": "Artifact",
+        "availability": "All"
+      }
+    ],
+    "availableEveryDay": true
+  },
+  {
+    "name": "Hidden Palace of Zhou Formula",
+    "type": "Artifact",
+    "materials": [
+      {
+        "name": "Lavawalker",
+        "type": "Artifact",
+        "availability": "All"
+      },
+      {
+        "name": "Crimson Witch of Flames",
+        "type": "Artifact",
+        "availability": "All"
+      }
+    ],
+    "availableEveryDay": true
+  },
+  {
+    "name": "Midsummer Courtyard",
+    "type": "Artifact",
+    "materials": [
+      {
+        "name": "Thundersoother",
+        "type": "Artifact",
+        "availability": "All"
+      },
+      {
+        "name": "Thundering Fury",
+        "type": "Artifact",
+        "availability": "All"
+      }
+    ],
+    "availableEveryDay": true
+  },
+  {
+    "name": "Molten Iron Fortress",
+    "type": "Artifact",
+    "materials": [
+      {
+        "name": "Nymph\u0027s Dream",
+        "type": "Artifact",
+        "availability": "All"
+      },
+      {
+        "name": "Vourukasha\u0027s Glow",
+        "type": "Artifact",
+        "availability": "All"
+      }
+    ],
+    "availableEveryDay": true
+  },
+  {
+    "name": "Momiji-Dyed Court",
+    "type": "Artifact",
+    "materials": [
+      {
+        "name": "Shimenawa\u0027s Reminiscence",
+        "type": "Artifact",
+        "availability": "All"
+      },
+      {
+        "name": "Emblem of Severed Fate",
+        "type": "Artifact",
+        "availability": "All"
+      }
+    ],
+    "availableEveryDay": true
+  },
+  {
+    "name": "Peak of Vindagnyr",
+    "type": "Artifact",
+    "materials": [
+      {
+        "name": "Blizzard Strayer",
+        "type": "Artifact",
+        "availability": "All"
+      },
+      {
+        "name": "Heart of Depth",
+        "type": "Artifact",
+        "availability": "All"
+      }
+    ],
+    "availableEveryDay": true
+  },
+  {
+    "name": "Ridge Watch",
+    "type": "Artifact",
+    "materials": [
+      {
+        "name": "Tenacity of the Millelith",
+        "type": "Artifact",
+        "availability": "All"
+      },
+      {
+        "name": "Pale Flame",
+        "type": "Artifact",
+        "availability": "All"
+      }
+    ],
+    "availableEveryDay": true
+  },
+  {
+    "name": "Slumbering Court",
+    "type": "Artifact",
+    "materials": [
+      {
+        "name": "Husk of Opulent Dreams",
+        "type": "Artifact",
+        "availability": "All"
+      },
+      {
+        "name": "Ocean-Hued Clam",
+        "type": "Artifact",
+        "availability": "All"
+      }
+    ],
+    "availableEveryDay": true
+  },
+  {
+    "name": "Spire of Solitary Enlightenment",
+    "type": "Artifact",
+    "materials": [
+      {
+        "name": "Deepwood Memories",
+        "type": "Artifact",
+        "availability": "All"
+      },
+      {
+        "name": "Gilded Dreams",
+        "type": "Artifact",
+        "availability": "All"
+      }
+    ],
+    "availableEveryDay": true
+  },
+  {
+    "name": "The Lost Valley",
+    "type": "Artifact",
+    "materials": [
+      {
+        "name": "Vermillion Hereafter",
+        "type": "Artifact",
+        "availability": "All"
+      },
+      {
+        "name": "Echoes of an Offering",
+        "type": "Artifact",
+        "availability": "All"
+      }
+    ],
+    "availableEveryDay": true
+  },
+  {
+    "name": "Valley of Remembrance",
+    "type": "Artifact",
+    "materials": [
+      {
+        "name": "Maiden Beloved",
+        "type": "Artifact",
+        "availability": "All"
+      },
+      {
+        "name": "Viridescent Venerer",
+        "type": "Artifact",
+        "availability": "All"
+      }
+    ],
+    "availableEveryDay": true
+  },
+  {
+    "name": "Waterfall Wen",
+    "type": "Artifact",
+    "materials": [
+      {
+        "name": "Song of Days Past",
+        "type": "Artifact",
+        "availability": "All"
+      },
+      {
+        "name": "Nighttime Whispers in the Echoing Woods",
+        "type": "Artifact",
+        "availability": "All"
+      }
+    ],
+    "availableEveryDay": true
+  },
+  {
+    "name": "Forsaken Rift",
+    "type": "Talent Book",
+    "materials": [
+      {
+        "name": "Freedom",
+        "type": "Talent Book",
+        "availability": "Mon/Thu"
+      },
+      {
+        "name": "Resistance",
+        "type": "Talent Book",
+        "availability": "Tues/Fri"
+      },
+      {
+        "name": "Ballad",
+        "type": "Talent Book",
+        "availability": "Wed/Sat"
+      }
+    ],
+    "availableEveryDay": false
+  },
+  {
+    "name": "Pale Forgotten Glory",
+    "type": "Talent Book",
+    "materials": [
+      {
+        "name": "Equity",
+        "type": "Talent Book",
+        "availability": "Mon/Thu"
+      },
+      {
+        "name": "Justice",
+        "type": "Talent Book",
+        "availability": "Tues/Fri"
+      },
+      {
+        "name": "Order",
+        "type": "Talent Book",
+        "availability": "Wed/Sat"
+      }
+    ],
+    "availableEveryDay": false
+  },
+  {
+    "name": "Steeple of Ignorance",
+    "type": "Talent Book",
+    "materials": [
+      {
+        "name": "Admonition",
+        "type": "Talent Book",
+        "availability": "Mon/Thu"
+      },
+      {
+        "name": "Ingenuity",
+        "type": "Talent Book",
+        "availability": "Tues/Fri"
+      },
+      {
+        "name": "Praxis",
+        "type": "Talent Book",
+        "availability": "Wed/Sat"
+      }
+    ],
+    "availableEveryDay": false
+  },
+  {
+    "name": "Taishan Mansion",
+    "type": "Talent Book",
+    "materials": [
+      {
+        "name": "Prosperity",
+        "type": "Talent Book",
+        "availability": "Mon/Thu"
+      },
+      {
+        "name": "Diligence",
+        "type": "Talent Book",
+        "availability": "Tues/Fri"
+      },
+      {
+        "name": "Gold",
+        "type": "Talent Book",
+        "availability": "Wed/Sat"
+      }
+    ],
+    "availableEveryDay": false
+  },
+  {
+    "name": "Violet Court",
+    "type": "Talent Book",
+    "materials": [
+      {
+        "name": "Transience",
+        "type": "Talent Book",
+        "availability": "Mon/Thu"
+      },
+      {
+        "name": "Elegance",
+        "type": "Talent Book",
+        "availability": "Tues/Fri"
+      },
+      {
+        "name": "Light",
+        "type": "Talent Book",
+        "availability": "Wed/Sat"
+      }
+    ],
+    "availableEveryDay": false
+  },
+  {
+    "name": "All-Devouring Narwhal",
+    "type": "Weekly Boss Material",
+    "materials": [
+      {
+        "name": "Lightless Mass",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      },
+      {
+        "name": "Lightless Eye of the Maelstrom",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      },
+      {
+        "name": "Lightless Silk String",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      }
+    ],
+    "availableEveryDay": true
+  },
+  {
+    "name": "Azhdaha",
+    "type": "Weekly Boss Material",
+    "materials": [
+      {
+        "name": "Dragon Lord\u0027s Crown",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      },
+      {
+        "name": "Gilded Scale",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      },
+      {
+        "name": "Bloodjade Branch",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      }
+    ],
+    "availableEveryDay": true
+  },
+  {
+    "name": "Childe",
+    "type": "Weekly Boss Material",
+    "materials": [
+      {
+        "name": "Tusk of Monoceros Caeli",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      },
+      {
+        "name": "Shard of a Foul Legacy",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      },
+      {
+        "name": "Shadow of the Warrior",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      }
+    ],
+    "availableEveryDay": true
+  },
+  {
+    "name": "Guardian of Apep\u0027s Oasis",
+    "type": "Weekly Boss Material",
+    "materials": [
+      {
+        "name": "Everamber",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      },
+      {
+        "name": "Primordial Greenbloom",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      },
+      {
+        "name": "Worldspan Fern",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      }
+    ],
+    "availableEveryDay": true
+  },
+  {
+    "name": "La Signora",
+    "type": "Weekly Boss Material",
+    "materials": [
+      {
+        "name": "Ashen Heart",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      },
+      {
+        "name": "Hellfire Butterfly",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      },
+      {
+        "name": "Molten Moment",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      }
+    ],
+    "availableEveryDay": true
+  },
+  {
+    "name": "Lupus Boreas",
+    "type": "Weekly Boss Material",
+    "materials": [
+      {
+        "name": "Tail of Boreas",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      },
+      {
+        "name": "Ring of Boreas",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      },
+      {
+        "name": "Spirit Locket of Boreas",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      }
+    ],
+    "availableEveryDay": true
+  },
+  {
+    "name": "Raiden Shogun",
+    "type": "Weekly Boss Material",
+    "materials": [
+      {
+        "name": "Mudra of the Malefic General",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      },
+      {
+        "name": "Tears of the Calamitous God",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      },
+      {
+        "name": "The Meaning of Aeons",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      }
+    ],
+    "availableEveryDay": true
+  },
+  {
+    "name": "Scaramouche",
+    "type": "Weekly Boss Material",
+    "materials": [
+      {
+        "name": "Mirror of Mushin",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      },
+      {
+        "name": "Daka\u0027s Bell",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      },
+      {
+        "name": "Puppet Strings",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      }
+    ],
+    "availableEveryDay": true
+  },
+  {
+    "name": "Stormterror Dvalin",
+    "type": "Weekly Boss Material",
+    "materials": [
+      {
+        "name": "Dvalin\u0027s Plume",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      },
+      {
+        "name": "Dvalin\u0027s Claw",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      },
+      {
+        "name": "Dvalin\u0027s Sigh",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      }
+    ],
+    "availableEveryDay": true
+  },
+  {
+    "name": "The Knave",
+    "type": "Weekly Boss Material",
+    "materials": [
+      {
+        "name": "Silken Feather",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      },
+      {
+        "name": "Fading Candle",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      },
+      {
+        "name": "Denial and Judgment",
+        "type": "Weekly Boss Material",
+        "availability": "All"
+      }
+    ],
+    "availableEveryDay": true
+  }
+]

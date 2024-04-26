@@ -262,7 +262,7 @@ public class DomainCardGUI extends JFrame {
         JLabel domainItemLabel = new JLabel();
         changeFont(domainItemLabel, ToolData.AVAILABLE_FONTS.TEXT_FONT, 12.0F);
         if (getDomainResourceType(domainTheme) == ToolData.RESOURCE_TYPE.ARTIFACT_SET) {
-            CharacterCard card = getCharacterCard(item);
+            CharacterListing card = getCharacterCard(item);
             if (card != null && !card.getCharacterNotes().isEmpty()) {
                 domainItemLabel.setText(formatLabel(item, card.getCharacterNotes()));
             } else {

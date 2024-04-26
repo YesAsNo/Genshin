@@ -5,6 +5,7 @@ import static Files.ToolGUI.UNKNOWN_CHARACTER;
 import static Files.ToolGUI.UNKNOWN_WEAPON;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 
 import javax.swing.ImageIcon;
@@ -13,6 +14,8 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Image;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -50,6 +53,7 @@ public class ToolData {
     private static final Map<String,Map<String,List<String>>> parsedMappings = new TreeMap<>();
     private static final Map<String,Map<String,ImageIcon>> parsedResourceIcons = new TreeMap<>();
     private static final Map<String,List<String>> parsedFlattenedData = new TreeMap<>();
+    public static final List<Weapon> parsedItems = new ArrayList<>(100);
 
     /** Enum that represents known mappings. All methods should use it instead of String values. */
     public enum knownMappings{
@@ -246,7 +250,7 @@ public class ToolData {
      * @param weaponName name of the desired weapon.
      * @return materials needed for the desired weapon.
      */
-    public static String getWeaponMaterialForWeapon(String weaponName){
+    public static String getAscensionMaterialForWeapon(String weaponName){
         Map<String, List<String>> mapping = getMapping(knownMappings.WEPMAT_WEPNAME);
         for (String weaponMat: mapping.keySet()){
             if (mapping.get(weaponMat).contains(weaponName)){
@@ -449,7 +453,66 @@ public class ToolData {
         ImageIcon originalIcon = getResourceIcon(resourceName,rt);
         return new ImageIcon(originalIcon.getImage().getScaledInstance(size,size,Image.SCALE_SMOOTH));
     }
-
+    public static String getAvailability(String resourceName){
+        for (String key: getMapping(knownMappings.DAY_AVAILABLEMATS).keySet()){
+            if (getMapping(knownMappings.DAY_AVAILABLEMATS).get(key).contains(resourceName)){
+                return key;
+            }
+        }
+        return "All";
+    }
+    public static void mergeJsonData(){
+        List<Domain> domains = new ArrayList<>(40);
+        List<Item> materials;
+        Map <String, List<String>> domainMapping = getMapping(knownMappings.WEPDOMAIN_WEPMAT);
+        for (String weaponDomainName : domainMapping.keySet()){
+            String domainType = DomainTabGUI.DOMAIN_FILTER_OPTIONS.WEAPON_MAT.stringToken;
+            materials = new ArrayList<>();
+            for (String mat: domainMapping.get(weaponDomainName)){
+                System.out.println(mat + " "+weaponDomainName);
+                materials.add(new Item(mat,domainType,getAvailability(mat)));
+            }
+            domains.add(new Domain(weaponDomainName,domainType,materials,false));
+        }
+        domainMapping = getMapping(knownMappings.ARTIDOMAIN_ARTISET);
+        for (String domainName : domainMapping.keySet()){
+            materials = new ArrayList<>();
+            String domainType = DomainTabGUI.DOMAIN_FILTER_OPTIONS.ARTIFACT.stringToken;
+            for (String mat: domainMapping.get(domainName)){
+                materials.add(new Item(mat,domainType,getAvailability(mat)));
+            }
+            domains.add(new Domain(domainName,domainType,materials,true));
+        }
+        domainMapping = getMapping(knownMappings.TALENTDOMAIN_TALENTBOOK);
+        for (String domainName : domainMapping.keySet()){
+            materials = new ArrayList<>();
+            String domainType = DomainTabGUI.DOMAIN_FILTER_OPTIONS.TALENT.stringToken;
+            for (String mat: domainMapping.get(domainName)){
+                materials.add(new Item(mat,domainType,getAvailability(mat)));
+            }
+            domains.add(new Domain(domainName,domainType,materials,false));
+        }
+        domainMapping = getMapping(knownMappings.WEEKLYDOMAIN_WEEKLYBOSSMAT);
+        for (String domainName : domainMapping.keySet()){
+            materials = new ArrayList<>();
+            String domainType = DomainTabGUI.DOMAIN_FILTER_OPTIONS.WEEKLY.stringToken;
+            for (String mat: domainMapping.get(domainName)){
+                materials.add(new Item(mat,domainType,getAvailability(mat)));
+            }
+            domains.add(new Domain(domainName,domainType,materials,true));
+        }
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        File f = new File("./domains.json");
+        try{
+            f.createNewFile();
+            FileWriter fd = new FileWriter(f);
+            gson.toJson(domains,fd);
+            fd.flush();
+            fd.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
     /**
      * Main method
      * @param args unused
@@ -460,7 +523,8 @@ public class ToolData {
         parseDataJsonFiles();
         parseFonts();
         parseResourceIcons();
-        new ToolGUI();
+        mergeJsonData();
+        //new ToolGUI();
         //new Program();
 
         }
