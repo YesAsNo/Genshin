@@ -279,8 +279,8 @@ public class DomainCardGUI extends JFrame {
             gbc.gridy = index / 3;
         }
         else {
-            gbc.gridx = index % 6;
-            gbc.gridy = index / 6;
+            gbc.gridx = index % 5;
+            gbc.gridy = index / 5;
         }
         gbc.anchor = GridBagConstraints.NORTH;
         gbc.insets = new Insets(0, 5, 0, 5);
