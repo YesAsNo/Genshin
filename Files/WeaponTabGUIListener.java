@@ -11,24 +11,24 @@ import java.awt.event.ItemListener;
  * This class is the listener for all checkboxes in WeaponTabGUI.java
  */
 public class WeaponTabGUIListener implements ItemListener {
-    private final String weaponName;
+    private final Weapon weapon;
 
     /**
      * Constructor of the class
      * @param name the name of the weapon
      */
-    public WeaponTabGUIListener(String name){
-        weaponName = name;
+    public WeaponTabGUIListener(Weapon weapon){
+        this.weapon = weapon;
     }
     @Override
     public void itemStateChanged(ItemEvent e) {
         JCheckBox source = (JCheckBox) e.getSource();
         source.setEnabled(false);
         if (source.isSelected()){
-            getUnassignedFarmedWeapons().add(weaponName);
+            getUnassignedFarmedWeapons().add(weapon);
         }
         else{
-            getUnassignedFarmedWeapons().remove(weaponName);
+            getUnassignedFarmedWeapons().remove(weapon);
         }
         serializeSave();
         source.setEnabled(true);

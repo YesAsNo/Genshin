@@ -1,10 +1,8 @@
 package Files;
 
-import static Files.ToolData.AVAILABLE_FONTS;
-import static Files.ToolData.SAVE_LOCATION;
+import static Files.ToolData.*;
 import static Files.ToolData.WEAPON_TYPE.ALL_OPTIONS_BY_STRING;
 import static Files.ToolData.WEAPON_TYPE.NO_FILTER;
-import static Files.ToolData.changeFont;
 import static Files.ToolGUI.*;
 
 import com.google.gson.Gson;
@@ -95,9 +93,13 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         }
         try {
             JsonReader reader = new JsonReader(new FileReader(f));
-            Set<String> map = gson.fromJson(reader, unassignedFarmedWeapons.getClass());
-            if (map != null) {
-                unassignedFarmedWeapons.addAll(map);
+            Set<String> map = new TreeSet<>();
+            map.addAll(gson.fromJson(reader, map.getClass()));
+
+            if (!map.isEmpty()) {
+                for (String weaponName:map) {
+                    unassignedFarmedWeapons.add(getWeapon(weaponName));
+                }
             }
         } catch (IOException ex) {
             System.out.println("The weapon save file failed to parse.");
@@ -136,7 +138,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
      * Note it is saved separately from character cards.
      * @return set of all weapons
      */
-    public static Set<String> getUnassignedFarmedWeapons(){
+    public static Set<Weapon> getUnassignedFarmedWeapons(){
         return unassignedFarmedWeapons;
     }
     private void parseSearch(SEARCH_FLAG flag) {
@@ -182,7 +184,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         }
         return false;
     }
-    private JPanel generateWeaponCard(String weaponName) {
+    private JPanel generateWeaponCard(Weapon weapon) {
 
         // WEAPON CARD PANEL
         JPanel devWeaponCard = new JPanel();
@@ -191,12 +193,13 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         devWeaponCard.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
                 TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         devWeaponCard.setPreferredSize(new Dimension(300,190));
+
         // WEAPON ICON AND NAME
         JLabel devWeaponIcon = new JLabel();
         devWeaponIcon.setHorizontalAlignment(0);
         devWeaponIcon.setHorizontalTextPosition(0);
-        devWeaponIcon.setIcon(getResourceIcon(weaponName, ToolData.RESOURCE_TYPE.WEAPON_NAME));
-        devWeaponIcon.setText(formatString(weaponName));
+        devWeaponIcon.setIcon(weapon.icon);
+        devWeaponIcon.setText(formatString(weapon.name));
         changeFont(devWeaponIcon, AVAILABLE_FONTS.BLACK_FONT, 12);
         devWeaponIcon.setVerticalAlignment(0);
         devWeaponIcon.setVerticalTextPosition(3);
@@ -208,17 +211,17 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         // WEAPON LISTING CHECK BOX
         JCheckBox devWepMatListingCheckbox = new JCheckBox();
         devWepMatListingCheckbox.setBackground(new Color(-1));
-        if (isSomeoneFarmingForTheWeapon(weaponName)){
+        if (isSomeoneFarmingForTheWeapon(weapon)){
             devWepMatListingCheckbox.setSelected(true);
             devWepMatListingCheckbox.setEnabled(false);
             devWepMatListingCheckbox.setText("Already Farmed");
         }
         else
         {
-            devWepMatListingCheckbox.setSelected(unassignedFarmedWeapons.contains(weaponName));
+            devWepMatListingCheckbox.setSelected(unassignedFarmedWeapons.contains(weapon));
             devWepMatListingCheckbox.setText("List weapon?");
         }        changeFont(devWepMatListingCheckbox, AVAILABLE_FONTS.TEXT_FONT, 12);
-        devWepMatListingCheckbox.addItemListener(new WeaponTabGUIListener(weaponName));
+        devWepMatListingCheckbox.addItemListener(new WeaponTabGUIListener(weapon));
         devWeaponCard.add(devWepMatListingCheckbox,
                 new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
@@ -228,7 +231,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         JLabel devWepMaterialPreview = new JLabel();
         devWepMaterialPreview.setHorizontalAlignment(0);
         devWepMaterialPreview.setHorizontalTextPosition(0);
-        devWepMaterialPreview.setIcon(getResourceIcon(getAscensionMaterialForWeapon(weaponName), ToolData.RESOURCE_TYPE.WEAPON_MATERIAL));
+        devWepMaterialPreview.setIcon(getResourceIcon(getAscensionMaterialForWeapon(weapon), ToolData.RESOURCE_TYPE.WEAPON_MATERIAL));
         devWepMaterialPreview.setText("");
         devWepMaterialPreview.setVerticalAlignment(0);
         devWepMaterialPreview.setVerticalTextPosition(3);
@@ -239,7 +242,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
 
         // WEAPON TYPE LABEL
         JLabel devWepTypeLabel = new JLabel();
-        devWepTypeLabel.setText("Type: " + lookUpWeaponRarityAndType(weaponName).getWeaponType());
+        devWepTypeLabel.setText("Type: " + lookUpWeaponRarityAndType(weapon).getWeaponType());
         changeFont(devWepTypeLabel, AVAILABLE_FONTS.TEXT_FONT, 12);
         devWeaponCard.add(devWepTypeLabel,
                 new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,

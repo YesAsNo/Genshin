@@ -281,6 +281,7 @@ public class ToolData {
         }
         throw new IllegalArgumentException(name + "is not a weapon name");
     }
+    
     public static List<Weapon> lookUpWeapons(WEAPON_RARITY rarity, WEAPON_TYPE type){
         List<Weapon> filtered = new ArrayList<>();
         for (Weapon weapon : weapons){
