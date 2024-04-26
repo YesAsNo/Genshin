@@ -1,11 +1,6 @@
 package Files;
 
-import static Files.ToolGUI.UNKNOWN_ARTIFACT;
-import static Files.ToolGUI.UNKNOWN_CHARACTER;
-import static Files.ToolGUI.UNKNOWN_WEAPON;
-
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 
 import javax.swing.ImageIcon;
@@ -14,92 +9,66 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Image;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 /** Main class of the application. Parses all static data from the json files, taken from the Genshin Fandom Wiki. */
 public class ToolData {
-    private static Map<String,String> artifactSetDescriptions = new TreeMap<>();
+
+    public static final String[] placeholderImageKeys = {"artifact","character","weapon"};
     private static final Map<String,Font> fonts = new TreeMap<>();
     /** Save location of user data. */
     public static final String SAVE_LOCATION = "./UserData/";
-    private static final String UNKNOWN_WEAPON_PATH = "/Files/Images/Weapons/unknown_weapon.png";
     /** Locations of all data json files. */
-    public static final Map<String, Boolean> PATHS_TO_DATA_FILES;
-    static {
-        PATHS_TO_DATA_FILES = new TreeMap<>();
-        PATHS_TO_DATA_FILES.put("/Files/JSONs/Element_Character.json",true);
-        PATHS_TO_DATA_FILES.put("/Files/JSONs/WeeklyBossMaterial_Character.json",false);
-        PATHS_TO_DATA_FILES.put("/Files/JSONs/TalentBook_Character.json",false);
-        PATHS_TO_DATA_FILES.put("/Files/JSONs/ArtifactDomain_ArtifactSet.json",true);
-        PATHS_TO_DATA_FILES.put("/Files/JSONs/WeaponType_Character.json",false);
-        PATHS_TO_DATA_FILES.put("/Files/JSONs/TalentDomain_TalentBook.json",true);
-        PATHS_TO_DATA_FILES.put("/Files/JSONs/WeaponDomain_WeaponMaterial.json",true);
-        PATHS_TO_DATA_FILES.put("/Files/JSONs/WeeklyDomain_WeeklyBossMaterial.json",true);
-        PATHS_TO_DATA_FILES.put("/Files/JSONs/WeaponMaterial_WeaponName.json",true);
-        PATHS_TO_DATA_FILES.put("/Files/JSONs/ArtifactSet_ArtifactSetDescription.json",false);
-        PATHS_TO_DATA_FILES.put("/Files/JSONs/WeaponRarityAndType_WeaponName.json",false);
-        PATHS_TO_DATA_FILES.put("/Files/JSONs/Day_AvailableMaterials.json",false);
-    }
-    private static final Map<String,Map<String,List<String>>> parsedMappings = new TreeMap<>();
-    private static final Map<String,Map<String,ImageIcon>> parsedResourceIcons = new TreeMap<>();
-    private static final Map<String,List<String>> parsedFlattenedData = new TreeMap<>();
-    public static final List<Weapon> parsedItems = new ArrayList<>(100);
+    private static final Map<String,String> artifactSetDescriptions = new TreeMap<>();
+    private static final List<Character> characters = new ArrayList<>();
+    private static final List<Domain> domains = new ArrayList<>();
+    private static final List<Weapon> weapons = new ArrayList<>();
+    private static final Map<String,ImageIcon> placeholderIcons = new TreeMap<>();
 
     /** Enum that represents known mappings. All methods should use it instead of String values. */
-    public enum knownMappings{
-        /** Artifact Domain -> Artifact Set available there. */
-        ARTIDOMAIN_ARTISET("ArtifactDomain_ArtifactSet"),
-        /** Artifact Set -> Artifact Set Description. */
-        ARTISET_ARTISETDESC("ArtifactSet_ArtifactSetDescription"),
-        /** Day of the week -> Available materials on that day. Note it does not contain Sunday as all materials are available then. */
-        DAY_AVAILABLEMATS("Day_AvailableMaterials"),
-        /** Element -> All characters of that element. */
-        ELEM_CHAR("Element_Character"),
-        /** Talent Book Name -> All characters that need it for their talents. */
-        TALENTBOOK_CHAR("TalentBook_Character"),
-        /** Talent Domain Name -> All Talent Books available there. */
-        TALENTDOMAIN_TALENTBOOK("TalentDomain_TalentBook"),
-        /** Weapon Domain Name -> All Weapon Materials available there. */
-        WEPDOMAIN_WEPMAT("WeaponDomain_WeaponMaterial"),
-        /** Weapon Material Name -> All names of Weapons that need it for ascension. */
-        WEPMAT_WEPNAME("WeaponMaterial_WeaponName"),
-        /**
-         * Weapon Rarity and Type -> All weapons of that rarity and type.
-         * The keys are in the form of (Four/Five-Star *type*)
-         */
-        WEPRARITYANDTYPE_WEPNAME("WeaponRarityAndType_WeaponName"),
-        /** Weapon Type -> All characters who can equip weapons of this type. */
-        WEPTYPE_CHAR("WeaponType_Character"),
-        /** Weekly Boss Material -> All Characters who can use it for their talents. */
-        WEEKLYBOSSMAT_CHAR("WeeklyBossMaterial_Character"),
-
-        /** Weekly Boss Domain -> All Weekly Boss Materials available there. */
-        WEEKLYDOMAIN_WEEKLYBOSSMAT("WeeklyDomain_WeeklyBossMaterial");
+    public enum DATA_CATEGORY {
+        /** Artifact Set Descriptions */
+        SET_DESCRIPTION("setDescriptions","/Files/JSONs/setDescriptions.json"),
+        /** All characters */
+        CHARACTER("characters","/Files/JSONs/characters.json"),
+        /** All domains */
+        DOMAIN("domains","/Files/JSONs/domains.json"),
+        /** All weapons */
+        WEAPON("weapons","/Files/JSONs/weapons.json");
 
         /** The string token used to look up the mapping. */
         public final String stringToken;
-        knownMappings(String data) {
-            this.stringToken = data;
+        private final String datapath;
+        DATA_CATEGORY(String dataCategory, String dataPath) {
+            this.stringToken = dataCategory;
+            this.datapath = dataPath;
         }
     }
 
     /** Enum that represents weapon rarities (FIVE and FOUR). It doesn't consider THREE_STAR. */
     public enum WEAPON_RARITY {
         /** 5 Star rarity! */
-        FIVE_STAR,
+        FIVE_STAR("5-Star"),
 
         /** 4 Star rarity! */
-        FOUR_STAR
+        FOUR_STAR("4-Star");
+        public final String stringToken;
+        public static final Map<String, WEAPON_RARITY> byString = new TreeMap<>();
+
+        static{
+            for (WEAPON_RARITY rt : WEAPON_RARITY.values()){
+                byString.put(rt.stringToken,rt);
+            }
+        }
+        WEAPON_RARITY(String token){
+            stringToken = token;
+        }
     }
 
     /** Resource type for JSONs and icons. */
@@ -107,18 +76,25 @@ public class ToolData {
         /** Weapon resource type (icon/JSON)*/
         WEAPON_NAME("WeaponName"),
         /** Artifact set resource type (icon/JSON)*/
-        ARTIFACT_SET("ArtifactSet"),
+        ARTIFACT("Artifact"),
         /** Weapon material resource type (icon/JSON)*/
-        WEAPON_MATERIAL("WeaponMaterial"),
+        WEAPON_MATERIAL("Weapon Material"),
         /** Character resource type (icon/JSON)*/
         CHARACTER("Character"),
         /** Talent book resource type (icon/JSON)*/
-        TALENT_BOOK("TalentBook"),
+        TALENT_BOOK("Talent Book"),
         /** Weekly boss talent resource type (icon/JSON)*/
-        WEEKLY_BOSS_MATERIAL("WeeklyBossMaterial");
+        WEEKLY_BOSS_MATERIAL("Weekly Boss Material");
 
         /** The string token used to look up the mapping. */
         public final String stringToken;
+        public static final Map<String, RESOURCE_TYPE> byString = new TreeMap<>();
+
+        static{
+            for (RESOURCE_TYPE rt : RESOURCE_TYPE.values()){
+                byString.put(rt.stringToken,rt);
+            }
+        }
         RESOURCE_TYPE(String data) {
             this.stringToken = data;
         }
@@ -148,7 +124,7 @@ public class ToolData {
     }
 
     /** Filter options for weapon tab's search. */
-    public enum WEAPON_FILTER_OPTIONS {
+    public enum WEAPON_TYPE {
         /** Search contains all objects */
         NO_FILTER("[ Filter ]"),
         /** Search contains claymores only */
@@ -163,13 +139,13 @@ public class ToolData {
         CATALYST("Catalyst");
 
         /** Mapping for weapon filter options (enum to String). */
-        public static final Map<WEAPON_FILTER_OPTIONS, String> ALL_OPTIONS_BY_ENUM = new TreeMap<>();
+        public static final Map<WEAPON_TYPE, String> ALL_OPTIONS_BY_ENUM = new TreeMap<>();
 
         /** Mapping for weapon filter options (String to enum). */
-        public static final Map<String,WEAPON_FILTER_OPTIONS> ALL_OPTIONS_BY_STRING = new TreeMap<>();
+        public static final Map<String, WEAPON_TYPE> ALL_OPTIONS_BY_STRING = new TreeMap<>();
 
         static {
-            for (WEAPON_FILTER_OPTIONS e: values()) {
+            for (WEAPON_TYPE e: values()) {
                 ALL_OPTIONS_BY_ENUM.put(e, e.stringToken);
                 ALL_OPTIONS_BY_STRING.put(e.stringToken,e);
             }
@@ -177,7 +153,7 @@ public class ToolData {
 
         /** The string token used to look up the mapping. */
         public final String stringToken;
-        WEAPON_FILTER_OPTIONS(String stringToken) {
+        WEAPON_TYPE(String stringToken) {
             this.stringToken = stringToken;
         }
     }
@@ -218,24 +194,6 @@ public class ToolData {
     }
 
     /**
-     * Get the list of desired resources (characters, weapons etc)
-     * @param rt (resource type)
-     * @return the list of desired resource type
-     */
-    public static List<String> getFlattenedData(RESOURCE_TYPE rt){
-        return parsedFlattenedData.get(rt.stringToken);
-    }
-
-    /**
-     * Get a known data mapping
-     * @param mapping enum of the known mapping
-     * @return the mapping, duh!
-     */
-    public static Map<String,List<String>> getMapping(knownMappings mapping){
-        return parsedMappings.get(mapping.stringToken);
-    }
-
-    /**
      * Get the set description of desired artifact set.
      * @param artifactSetName the desired artifact set (duh).
      * @return set description of the desired artifact set.
@@ -245,157 +203,53 @@ public class ToolData {
         return artifactSetDescriptions.get(artifactSetName);
     }
 
-    /**
-     * Get the materials needed for the desired weapon.
-     * @param weaponName name of the desired weapon.
-     * @return materials needed for the desired weapon.
-     */
-    public static String getAscensionMaterialForWeapon(String weaponName){
-        Map<String, List<String>> mapping = getMapping(knownMappings.WEPMAT_WEPNAME);
-        for (String weaponMat: mapping.keySet()){
-            if (mapping.get(weaponMat).contains(weaponName)){
-                return weaponMat;
-            }
-        }
-        return "";
-    }
     private static void parseDataJsonFiles() throws IOException {
         Gson gson = new Gson();
-
-        for (String path : PATHS_TO_DATA_FILES.keySet()){
-            URL url = ToolData.class.getResource(path);
+        for (DATA_CATEGORY dataCategory: DATA_CATEGORY.values()){
+            URL url = ToolData.class.getResource(dataCategory.datapath);
             assert url != null;
+
             JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(url.openStream())));
-            String categoryName = (String) path.subSequence(path.lastIndexOf('/') + 1,path.lastIndexOf("."));
-            if (categoryName.equalsIgnoreCase(knownMappings.ARTISET_ARTISETDESC.stringToken)){
-                artifactSetDescriptions = gson.fromJson(reader,artifactSetDescriptions.getClass());
-                continue;
+            switch (dataCategory){
+                case DOMAIN: domains.addAll(gson.fromJson(reader,domains.getClass())); System.out.println(dataCategory.stringToken);System.out.println(domains); break;
+                case CHARACTER:characters.addAll(gson.fromJson(reader,characters.getClass()));System.out.println(dataCategory.stringToken); System.out.println(characters); break;
+                case WEAPON: weapons.addAll(gson.fromJson(reader,weapons.getClass()));System.out.println(dataCategory.stringToken);System.out.println(weapons); break;
+                case SET_DESCRIPTION: artifactSetDescriptions.putAll(gson.fromJson(reader,artifactSetDescriptions.getClass()));System.out.println(dataCategory.stringToken);System.out.println(artifactSetDescriptions.keySet()); break;
+                default:throw new IOException("parsing data " + dataCategory.stringToken + " went wrong.");
             }
-
-            TreeMap<String,List<String>> parsedMapping = new TreeMap<>();
-            parsedMapping = gson.fromJson(reader, parsedMapping.getClass());
-            parsedMappings.put(categoryName,parsedMapping);
-            if (PATHS_TO_DATA_FILES.get(path)){
-                List<List<String>> val_arrays = new ArrayList<>(parsedMapping.values());
-                List<String> valuesFlattened = new ArrayList<>();
-                val_arrays.forEach(valuesFlattened::addAll);
-                Collections.sort(valuesFlattened);
-                parsedFlattenedData.put((String) path.subSequence(path.indexOf('_') + 1,path.lastIndexOf(".")),valuesFlattened);
-            }
-
         }
     }
     /**
      * Generates a path to the specified resource.
-     * @param resourceName the name of the resource
+     * @param resource the name of the resource
      * @param resourceType the type of the resource
      * @return character icon path
      */
-    private static URL generateResourceIconPath(String resourceName, RESOURCE_TYPE resourceType) {
-        assert resourceName != null;
+    private static URL generateResourceIconPath(Object resource, RESOURCE_TYPE resourceType) {
+        assert resource != null;
         switch (resourceType){
             case WEAPON_NAME: {
-                if (resourceName.equalsIgnoreCase(UNKNOWN_WEAPON))
-                {
-                    return ToolData.class.getResource(UNKNOWN_WEAPON_PATH);
-
-                }
-                WeaponInfo wi = lookUpWeaponRarityAndType(resourceName);
-                switch (wi.getRarity()) {
-                    case FOUR_STAR: return ToolData.class.getResource("/Files/Images/Weapons/" + wi.getWeaponType() + "_4star/" + resourceName + ".png");
-                    case FIVE_STAR: return ToolData.class.getResource("/Files/Images/Weapons/" + wi.getWeaponType() + "_5star/" + resourceName + ".png");
-                }
+                assert resource instanceof Weapon;
+                Weapon weapon = (Weapon) resource;
+                return ToolData.class.getResource("/Files/Images/Weapons/" + weapon.type + "/" + weapon.rarity + "/" + weapon.name+ ".png");
             }
-            case ARTIFACT_SET: return ToolData.class.getResource("/Files/Images/Artifacts/" + resourceName + ".png");
-            case WEAPON_MATERIAL: return ToolData.class.getResource("/Files/Images/Weapon Materials/" + resourceName + ".png");
-            case CHARACTER: return ToolData.class.getResource("/Files/Images/Characters/" + resourceName + ".png");
-            case TALENT_BOOK: return ToolData.class.getResource("/Files/Images/Talent Materials/" + resourceName + ".png");
-            case WEEKLY_BOSS_MATERIAL: return ToolData.class.getResource("/Files/Images/Weekly Bosses/" + resourceName + ".png");
+            case ARTIFACT:
+            case WEAPON_MATERIAL:
+            case TALENT_BOOK:
+            case WEEKLY_BOSS_MATERIAL:{
+                assert resource instanceof Item;
+                Item artifact = (Item) resource;
+                return ToolData.class.getResource("/Files/Images/" + artifact.type+ "/" + artifact.name + ".png");
+            }
+            case CHARACTER:{
+                assert resource instanceof Character;
+                Character character = (Character) resource;
+                return ToolData.class.getResource("/Files/Images/Characters/" + character.name + ".png");
+            }
         }
         throw new IllegalArgumentException();
     }
-    /**
-     * Looks up what weapon category is assigned to the character, i.e. what type of weapons the character can wield.
-     * @param charName the name of the character
-     * @return the string that represents the category (one of five possibilities)
-     */
 
-    public static String lookUpWeaponCategoryForCharacter(String charName) {
-        Map<String, List<String>> weaponMapping = getMapping(knownMappings.WEPTYPE_CHAR);
-        for (String key : weaponMapping.keySet()) {
-            List<String> weapons = weaponMapping.get(key);
-            if (weapons.contains(charName)) {
-                return key;
-            }
-
-        }
-        return null;
-    }
-
-     /**
-      * Grabs all weapons based on their rarity and type.
-      * @param WEAPONRarity rarity of the weapon
-      * @param weaponType type of the weapon
-      * @return list of the weapons with the specified rarity.
-      */
-    public static List<String> lookUpWeapons(WEAPON_RARITY WEAPONRarity, String weaponType) {
-
-        final String FOUR_STAR_WEAPON_KEY = "Four-Star " + weaponType;
-        final String FIVE_STAR_WEAPON_KEY = "Five-Star " + weaponType;
-        Map<String, List<String>> weaponMapping = getMapping(knownMappings.WEPRARITYANDTYPE_WEPNAME);
-
-        switch (WEAPONRarity) {
-            case FOUR_STAR: return weaponMapping.get(FOUR_STAR_WEAPON_KEY);
-            case FIVE_STAR: return weaponMapping.get(FIVE_STAR_WEAPON_KEY);
-        }
-        return null;
-    }
-    /**
-     * Looks up the rarity and type of specified weapon.
-     * @param weaponName the weapon name
-     * @return WeaponInfo object with rarity and type of the weapon.
-     */
-    public static WeaponInfo lookUpWeaponRarityAndType(String weaponName) {
-
-        Map<String, List<String>> weaponMapping = getMapping(knownMappings.WEPRARITYANDTYPE_WEPNAME);
-        for (String key : weaponMapping.keySet()) {
-            List<String> weapons = weaponMapping.get(key);
-            if (weapons.contains(weaponName)) {
-                return new WeaponInfo(key);
-            }
-        }
-        return new WeaponInfo("");
-    }
-
-    /**
-     * Get the needed talent book materials for desired character.
-     * @param characterName desired character!
-     * @return the talent book materials the character needs.
-     */
-    public static String getTalentBookForCharacter(String characterName){
-        Map<String, List<String>> mapping = getMapping(knownMappings.TALENTBOOK_CHAR);
-        for (String key:mapping.keySet()){
-            if (mapping.get(key).contains(characterName)){
-                return key;
-            }
-        }
-        return "";
-    }
-
-    /**
-     * Get the needed weekly boss materials for desired character.
-      * @param characterName desired character!
-     * @return the weekly boss materials the chosen character needs.
-     */
-    public static String getWeeklyBossMatForCharacter(String characterName){
-        Map<String, List<String>> mapping = getMapping(knownMappings.WEEKLYBOSSMAT_CHAR);
-        for (String key:mapping.keySet()){
-            if (mapping.get(key).contains(characterName)){
-                return key;
-            }
-        }
-        return "";
-    }
     private static void parseFonts(){
         for (String fontName : fontPaths){
             URL address = ToolData.class.getResource("/Files/Fonts/"+fontName+".ttf");
@@ -411,107 +265,43 @@ public class ToolData {
             }
         }
     }
-
-    private static void parseResourceIcons(){
-        for (RESOURCE_TYPE data : RESOURCE_TYPE.values()){
-            parsedResourceIcons.put(data.stringToken,new LinkedHashMap<>());
-            if (data == RESOURCE_TYPE.ARTIFACT_SET){
-                parsedResourceIcons.get(data.stringToken).put(UNKNOWN_ARTIFACT,new ImageIcon(generateResourceIconPath(UNKNOWN_ARTIFACT,RESOURCE_TYPE.ARTIFACT_SET)));
-            }
-            else if (data == RESOURCE_TYPE.WEAPON_NAME){
-                parsedResourceIcons.get(data.stringToken).put(UNKNOWN_WEAPON,new ImageIcon(generateResourceIconPath(UNKNOWN_WEAPON,RESOURCE_TYPE.WEAPON_NAME)));
-            }
-            else if (data == RESOURCE_TYPE.CHARACTER){
-                parsedResourceIcons.get(data.stringToken).put(UNKNOWN_CHARACTER,new ImageIcon(generateResourceIconPath(UNKNOWN_CHARACTER,RESOURCE_TYPE.CHARACTER)));
-            }
-            for (String item : getFlattenedData(data)){
-                parsedResourceIcons.get(data.stringToken).put(item,new ImageIcon(generateResourceIconPath(item,data)));
+    public static List<Weapon> lookUpWeapons(WEAPON_RARITY rarity, WEAPON_TYPE type){
+        List<Weapon> filtered = new ArrayList<>();
+        for (Weapon weapon : weapons){
+            if (rarity.stringToken.equalsIgnoreCase(weapon.rarity) && type.stringToken.equalsIgnoreCase(weapon.type)){
+                filtered.add(weapon);
             }
         }
+        return filtered;
     }
-
-    /**
-     * Get icon for the desired resource
-     * @param resourceName name of the resource (character/weapon/material etc)
-     * @param rt (resource type)
-     * @return the icon of the resource
-     */
-    public static ImageIcon getResourceIcon(String resourceName, RESOURCE_TYPE rt){
-        assert getFlattenedData(rt).contains(resourceName);
-        return parsedResourceIcons.get(rt.stringToken).get(resourceName);
-    }
-
     /**
      * Resize resource icon
-     * @param resourceName name of the desired resource
-     * @param rt (resource type)
+     * @param originalIcon original icon
      * @param size desired size, duh!
      * @return the resized new icon
      */
-    public static ImageIcon getResizedResourceIcon(String resourceName, RESOURCE_TYPE rt, int size){
-        assert getFlattenedData(rt).contains(resourceName);
-        ImageIcon originalIcon = getResourceIcon(resourceName,rt);
+    public static ImageIcon getResizedResourceIcon(ImageIcon originalIcon, int size){
         return new ImageIcon(originalIcon.getImage().getScaledInstance(size,size,Image.SCALE_SMOOTH));
     }
-    public static String getAvailability(String resourceName){
-        for (String key: getMapping(knownMappings.DAY_AVAILABLEMATS).keySet()){
-            if (getMapping(knownMappings.DAY_AVAILABLEMATS).get(key).contains(resourceName)){
-                return key;
+    private static void fetchIcons(){
+        for (Character character: characters){
+            character.icon = new ImageIcon(generateResourceIconPath(character,RESOURCE_TYPE.CHARACTER));
+        }
+        for (Weapon weapon: weapons){
+            weapon.icon = new ImageIcon(generateResourceIconPath(weapon,RESOURCE_TYPE.WEAPON_NAME));
+        }
+        for (Domain domain: domains){
+            for (Item material: domain.materials){
+                material.icon = new ImageIcon(generateResourceIconPath(material,RESOURCE_TYPE.byString.get(domain.type)));
             }
         }
-        return "All";
+        for (String name : placeholderImageKeys){
+            placeholderIcons.put(name,new ImageIcon("/Files/Images/Placeholders/"+ name + ".png"));
+        }
     }
-    public static void mergeJsonData(){
-        List<Domain> domains = new ArrayList<>(40);
-        List<Item> materials;
-        Map <String, List<String>> domainMapping = getMapping(knownMappings.WEPDOMAIN_WEPMAT);
-        for (String weaponDomainName : domainMapping.keySet()){
-            String domainType = DomainTabGUI.DOMAIN_FILTER_OPTIONS.WEAPON_MAT.stringToken;
-            materials = new ArrayList<>();
-            for (String mat: domainMapping.get(weaponDomainName)){
-                System.out.println(mat + " "+weaponDomainName);
-                materials.add(new Item(mat,domainType,getAvailability(mat)));
-            }
-            domains.add(new Domain(weaponDomainName,domainType,materials,false));
-        }
-        domainMapping = getMapping(knownMappings.ARTIDOMAIN_ARTISET);
-        for (String domainName : domainMapping.keySet()){
-            materials = new ArrayList<>();
-            String domainType = DomainTabGUI.DOMAIN_FILTER_OPTIONS.ARTIFACT.stringToken;
-            for (String mat: domainMapping.get(domainName)){
-                materials.add(new Item(mat,domainType,getAvailability(mat)));
-            }
-            domains.add(new Domain(domainName,domainType,materials,true));
-        }
-        domainMapping = getMapping(knownMappings.TALENTDOMAIN_TALENTBOOK);
-        for (String domainName : domainMapping.keySet()){
-            materials = new ArrayList<>();
-            String domainType = DomainTabGUI.DOMAIN_FILTER_OPTIONS.TALENT.stringToken;
-            for (String mat: domainMapping.get(domainName)){
-                materials.add(new Item(mat,domainType,getAvailability(mat)));
-            }
-            domains.add(new Domain(domainName,domainType,materials,false));
-        }
-        domainMapping = getMapping(knownMappings.WEEKLYDOMAIN_WEEKLYBOSSMAT);
-        for (String domainName : domainMapping.keySet()){
-            materials = new ArrayList<>();
-            String domainType = DomainTabGUI.DOMAIN_FILTER_OPTIONS.WEEKLY.stringToken;
-            for (String mat: domainMapping.get(domainName)){
-                materials.add(new Item(mat,domainType,getAvailability(mat)));
-            }
-            domains.add(new Domain(domainName,domainType,materials,true));
-        }
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        File f = new File("./domains.json");
-        try{
-            f.createNewFile();
-            FileWriter fd = new FileWriter(f);
-            gson.toJson(domains,fd);
-            fd.flush();
-            fd.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public static ImageIcon getPlaceholderIcon(String key){
+        assert placeholderIcons.containsKey(key);
+        return placeholderIcons.get(key);
     }
     /**
      * Main method
@@ -521,9 +311,8 @@ public class ToolData {
     public static void main(String[] args) throws Exception {
 
         parseDataJsonFiles();
+        fetchIcons();
         parseFonts();
-        parseResourceIcons();
-        mergeJsonData();
         //new ToolGUI();
         //new Program();
 

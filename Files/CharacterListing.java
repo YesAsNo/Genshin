@@ -1,7 +1,5 @@
 package Files;
 
-import static Files.ToolData.RESOURCE_TYPE.CHARACTER;
-import static Files.ToolData.getResourceIcon;
 import static Files.ToolGUI.CHARACTER_LIMIT;
 import static Files.ToolGUI.EMPTY_SET_SELECTOR;
 import static Files.ToolGUI.EMPTY_WEAPON_SELECTOR;
@@ -14,7 +12,6 @@ import javax.swing.ImageIcon;
 public class CharacterListing {
 
     private final String characterName;
-    private transient ImageIcon characterIcon;
     private String characterNotes;
     private String weapon;
     private boolean weaponStatus;
@@ -31,7 +28,6 @@ public class CharacterListing {
     public CharacterListing(String character_name) {
         assert character_name != null;
         this.characterName = character_name;
-        this.characterIcon = getResourceIcon(characterName,CHARACTER);
         characterNotes="";
         weapon="";
         weaponStatus =false;
@@ -41,16 +37,6 @@ public class CharacterListing {
         artifactSet2Status=false;
         talentStatus=false;
 
-    }
-    /**
-     * Sets the character icon. The needed icon can be retrieved via the linked method.
-     * @param icon the character icon
-     * @link getResourceIcon in ToolData.java
-     */
-    public void setCharacterIcon(ImageIcon icon){
-        if(characterIcon == null){
-            characterIcon = icon;
-        }
     }
 
     /**

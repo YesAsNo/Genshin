@@ -1,7 +1,6 @@
 package Files;
 
 import static Files.ToolData.RESOURCE_TYPE;
-import static Files.ToolData.getResourceIcon;
 import static Files.ToolGUI.EMPTY_SET_SELECTOR;
 import static Files.ToolGUI.EMPTY_WEAPON_SELECTOR;
 import static Files.ToolGUI.UNKNOWN_ARTIFACT;

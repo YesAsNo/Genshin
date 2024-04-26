@@ -3,10 +3,6 @@ package Files;
 import static Files.ToolData.AVAILABLE_FONTS;
 import static Files.ToolData.SAVE_LOCATION;
 import static Files.ToolData.changeFont;
-import static Files.ToolData.getFlattenedData;
-import static Files.ToolData.getResourceIcon;
-import static Files.ToolData.getTalentBookForCharacter;
-import static Files.ToolData.getWeeklyBossMatForCharacter;
 import static Files.WeaponTabGUI.getUnassignedFarmedWeapons;
 
 import com.google.gson.Gson;

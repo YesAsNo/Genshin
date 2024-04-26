@@ -1,9 +1,6 @@
 package Files;
 
 import static Files.ToolData.changeFont;
-import static Files.ToolData.getFlattenedData;
-import static Files.ToolData.getMapping;
-import static Files.ToolData.getResourceIcon;
 import static Files.ToolGUI.NO_CHARACTERS_MATCH_MESSAGE;
 import static Files.ToolGUI.UNKNOWN_CHARACTER;
 import static Files.ToolGUI.checkIfCharacterCardHasBeenGenerated;
@@ -213,7 +210,7 @@ public final class CharacterTabGUI implements ActionListener {
             eligibleCharacters.addAll(getFlattenedData(ToolData.RESOURCE_TYPE.CHARACTER));
         }
         else{
-            Map<String,List<String>> mapping = getMapping(ToolData.knownMappings.ELEM_CHAR);
+            Map<String,List<String>> mapping = getMapping(ToolData.DATA_CATEGORY.CHARACTER);
             for (String key : mapping.keySet()){
                 if (key.contains(element)){
                     eligibleCharacters.addAll(mapping.get(key));

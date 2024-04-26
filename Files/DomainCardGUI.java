@@ -7,7 +7,6 @@ import static Files.DomainTabGUI.getDomainTargetResourceMapping;
 import static Files.DomainTabGUI.getDomainTargetResourceType;
 import static Files.DomainTabGUI.getListedCounterLabel;
 import static Files.ToolData.changeFont;
-import static Files.ToolData.getResourceIcon;
 import static Files.ToolGUI.getCharacterCard;
 import static Files.ToolGUI.isSomeoneFarmingForTheWeapon;
 import static Files.ToolGUI.whoIsFarmingThis;

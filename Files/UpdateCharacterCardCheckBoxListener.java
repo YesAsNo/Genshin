@@ -1,7 +1,5 @@
 package Files;
 
-import static Files.ToolData.getTalentBookForCharacter;
-import static Files.ToolData.getWeeklyBossMatForCharacter;
 import static Files.ToolGUI.updateFarmedItemMap;
 
 import Files.ToolData.CHARACTER_CARD_DATA_FIELD;

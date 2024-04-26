@@ -3,11 +3,10 @@ package Files;
 import static Files.ToolData.AVAILABLE_FONTS;
 import static Files.ToolData.RESOURCE_TYPE;
 import static Files.ToolData.changeFont;
-import static Files.ToolData.getFlattenedData;
+import static Files.ToolData.getPlaceholderIcon;
 import static Files.ToolData.getResizedResourceIcon;
-import static Files.ToolData.getResourceIcon;
-import static Files.ToolData.lookUpWeaponCategoryForCharacter;
 import static Files.ToolData.lookUpWeapons;
+import static Files.ToolData.placeholderImageKeys;
 import static Files.ToolGUI.CHARACTER_LIMIT;
 import static Files.ToolGUI.EMPTY_SET_SELECTOR;
 import static Files.ToolGUI.EMPTY_WEAPON_SELECTOR;
@@ -37,7 +36,6 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -72,14 +70,14 @@ public class CharacterCardGUI extends JFrame {
      * @param dcmb weapon selector combo box model used by the combo box
      * @param charName character name
      */
-    private void addAllowedWeapons(WeaponSelectorComboBoxModel dcmb, String charName) {
+    private void addAllowedWeapons(WeaponSelectorComboBoxModel dcmb, Character character) {
         JLabel label = new JLabel();
         label.setText(EMPTY_WEAPON_SELECTOR);
-        ImageIcon default_img = getResizedResourceIcon(UNKNOWN_WEAPON,RESOURCE_TYPE.WEAPON_NAME,20);
+        ImageIcon default_img = getResizedResourceIcon(getPlaceholderIcon(placeholderImageKeys[2]),20);
         label.setIcon(default_img);
         dcmb.addElement(label);
         for (ToolData.WEAPON_RARITY rarity: ToolData.WEAPON_RARITY.values()){
-            String weaponType = lookUpWeaponCategoryForCharacter(charName);
+            ToolData.WEAPON_TYPE weaponType = ToolData.WEAPON_TYPE.ALL_OPTIONS_BY_STRING.get(character.weaponType);
             label = new JLabel();
             switch(rarity){
                 case FIVE_STAR:
@@ -91,13 +89,11 @@ public class CharacterCardGUI extends JFrame {
             }
             label.setIcon(default_img);
             dcmb.addElement(label);
-            List<String> weapons = lookUpWeapons(rarity, weaponType);
-            assert weapons != null;
-            Collections.sort(weapons);
-            for (String weapon: weapons){
+            List<Weapon> weapons = lookUpWeapons(rarity, weaponType);
+            for (Weapon weapon: weapons){
                 label = new JLabel();
-                label.setIcon(getResizedResourceIcon(weapon,RESOURCE_TYPE.WEAPON_NAME,20));
-                label.setText(weapon);
+                label.setIcon(getResizedResourceIcon(weapon.icon, 20));
+                label.setText(weapon.name);
                 dcmb.addElement(label);
             }
         }
