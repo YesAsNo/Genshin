@@ -29,6 +29,10 @@ public class ToolData {
     private static final List<Character> characters = new ArrayList<>();
     private static final List<Domain> domains = new ArrayList<>();
     public static final List<Weapon> weapons = new ArrayList<>();
+    public static final List<Item> artifacts = new ArrayList<>();
+    public static final List<Item> weaponMaterials = new ArrayList<>();
+    public static final List<Item> talentBooks = new ArrayList<>();
+    public static final List<Item> weeklyTalents = new ArrayList<>();
     private static final Map<String,ImageIcon> placeholderIcons = new TreeMap<>();
 
     /** Enum that represents known mappings. All methods should use it instead of String values. */
@@ -281,7 +285,42 @@ public class ToolData {
         }
         throw new IllegalArgumentException(name + "is not a weapon name");
     }
-    
+
+    public static Item getWeaponMaterial(String name){
+        for (Item weaponMaterial:weaponMaterials){
+            if (weaponMaterial.name.equalsIgnoreCase(name)){
+                return weaponMaterial;
+            }
+        }
+        throw new IllegalArgumentException(name + "is not a weapon material name");
+    }
+
+    public static Item getTalentBook(String name){
+        for (Item talentBook:talentBooks){
+            if (talentBook.name.equalsIgnoreCase(name)){
+                return talentBook;
+            }
+        }
+        throw new IllegalArgumentException(name + "is not a talent book name");
+    }
+    public static Item getArtifact(String name){
+        for (Item artifact:artifacts){
+            if (artifact.name.equalsIgnoreCase(name)){
+                return artifact;
+            }
+        }
+        throw new IllegalArgumentException(name + "is not an artifact name");
+    }
+
+    public static Item getWeeklyTalentMaterial(String name){
+        for (Item weeklyTalentMaterial:weeklyTalents){
+            if (weeklyTalentMaterial.name.equalsIgnoreCase(name)){
+                return weeklyTalentMaterial;
+            }
+        }
+        throw new IllegalArgumentException(name + "is not a weekly talent material name");
+    }
+
     public static List<Weapon> lookUpWeapons(WEAPON_RARITY rarity, WEAPON_TYPE type){
         List<Weapon> filtered = new ArrayList<>();
         for (Weapon weapon : weapons){
@@ -309,7 +348,14 @@ public class ToolData {
         }
         for (Domain domain: domains){
             for (Item material: domain.materials){
-                material.icon = new ImageIcon(generateResourceIconPath(material,RESOURCE_TYPE.byString.get(domain.type)));
+                RESOURCE_TYPE materialType = RESOURCE_TYPE.byString.get(domain.type);
+                material.icon = new ImageIcon(generateResourceIconPath(material, materialType));
+                switch (materialType){
+                    case ARTIFACT: artifacts.add(material); break;
+                    case WEEKLY_BOSS_MATERIAL: weeklyTalents.add(material); break;
+                    case TALENT_BOOK: talentBooks.add(material); break;
+                    case WEAPON_MATERIAL: weaponMaterials.add(material); break;
+                }
             }
         }
         for (String name : placeholderImageKeys){

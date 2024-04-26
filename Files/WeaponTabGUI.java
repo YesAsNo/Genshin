@@ -1,8 +1,7 @@
 package Files;
 
 import static Files.ToolData.*;
-import static Files.ToolData.WEAPON_TYPE.ALL_OPTIONS_BY_STRING;
-import static Files.ToolData.WEAPON_TYPE.NO_FILTER;
+import static Files.ToolData.WEAPON_TYPE.*;
 import static Files.ToolGUI.*;
 
 import com.google.gson.Gson;
@@ -10,14 +9,7 @@ import com.google.gson.stream.JsonReader;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -31,6 +23,7 @@ import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -49,7 +42,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
     private final JCheckBox showUnlistedCheckBox = new JCheckBox();
     private final JLabel showMatchedAmountLabel = new JLabel();
     private static final JComboBox<JLabel> devFilterComboBox = new JComboBox<>();
-    private static final Set<Weapon> unassignedFarmedWeapons = new TreeSet<>();
+    private static final Set<Weapon> unassignedFarmedWeapons = new HashSet<>();
 
     /**
      * Search flag enum.
@@ -231,7 +224,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         JLabel devWepMaterialPreview = new JLabel();
         devWepMaterialPreview.setHorizontalAlignment(0);
         devWepMaterialPreview.setHorizontalTextPosition(0);
-        devWepMaterialPreview.setIcon(getResourceIcon(getAscensionMaterialForWeapon(weapon), ToolData.RESOURCE_TYPE.WEAPON_MATERIAL));
+        devWepMaterialPreview.setIcon(getWeaponMaterial(weapon.ascensionMaterial).icon);
         devWepMaterialPreview.setText("");
         devWepMaterialPreview.setVerticalAlignment(0);
         devWepMaterialPreview.setVerticalTextPosition(3);
@@ -242,7 +235,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
 
         // WEAPON TYPE LABEL
         JLabel devWepTypeLabel = new JLabel();
-        devWepTypeLabel.setText("Type: " + lookUpWeaponRarityAndType(weapon).getWeaponType());
+        devWepTypeLabel.setText("Type: " + weapon.type);
         changeFont(devWepTypeLabel, AVAILABLE_FONTS.TEXT_FONT, 12);
         devWeaponCard.add(devWepTypeLabel,
                 new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
@@ -307,7 +300,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         devFilterComboBox.setEnabled(true);
         final DefaultComboBoxModel<JLabel> weaponFilterComboBoxModel = new DefaultComboBoxModel<>();
 
-        for (ToolData.WEAPON_FILTER_OPTIONS options : ALL_OPTIONS_BY_ENUM.keySet()) {
+        for (ToolData.WEAPON_TYPE options : ALL_OPTIONS_BY_ENUM.keySet()) {
             JLabel label = new JLabel();
             label.setText(options.stringToken);
             weaponFilterComboBoxModel.addElement(label);
