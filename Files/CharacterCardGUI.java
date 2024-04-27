@@ -69,7 +69,7 @@ public class CharacterCardGUI extends JFrame {
      * Adds allowed weapons (that is, wieldable by the specified character) to the list of options in the weapon combobox.
      *
      * @param dcmb weapon selector combo box model used by the combo box
-     * @param charName character name
+     * @param character is the character's name
      */
     private void addAllowedWeapons(WeaponSelectorComboBoxModel dcmb, Character character) {
         JLabel label = new JLabel();
@@ -186,7 +186,7 @@ public class CharacterCardGUI extends JFrame {
         final DefaultComboBoxModel<JLabel> setComboBoxModel = new DefaultComboBoxModel<>();
         JLabel label = new JLabel();
         label.setText(EMPTY_SET_SELECTOR);
-        label.setIcon(getResizedResourceIcon(UNKNOWN_ARTIFACT,RESOURCE_TYPE.ARTIFACT_SET,20));
+        label.setIcon(getResizedResourceIcon(UNKNOWN_ARTIFACT,RESOURCE_TYPE.ARTIFACT,20));
         setComboBoxModel.addElement(label);
         for (String artifactName: getFlattenedData(RESOURCE_TYPE.ARTIFACT_SET)){
             label = new JLabel();

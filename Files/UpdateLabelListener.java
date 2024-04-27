@@ -1,10 +1,8 @@
 package Files;
 
-import static Files.ToolData.RESOURCE_TYPE;
+import static Files.ToolData.*;
 import static Files.ToolGUI.EMPTY_SET_SELECTOR;
 import static Files.ToolGUI.EMPTY_WEAPON_SELECTOR;
-import static Files.ToolGUI.UNKNOWN_ARTIFACT;
-import static Files.ToolGUI.UNKNOWN_WEAPON;
 
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
@@ -50,11 +48,11 @@ public class UpdateLabelListener implements ActionListener {
             if (_checkBox.isSelected()){
                 _checkBox.setSelected(false);
             }
-            if (SELECTION_BOX_TYPE == RESOURCE_TYPE.ARTIFACT_SET) {
-                icon = getResourceIcon(UNKNOWN_ARTIFACT, ToolData.RESOURCE_TYPE.ARTIFACT_SET);
+            if (SELECTION_BOX_TYPE == RESOURCE_TYPE.ARTIFACT) {
+                icon = getPlaceholderIcon("artifact");
             }
             else {
-                icon = getResourceIcon(UNKNOWN_WEAPON,RESOURCE_TYPE.WEAPON_NAME);
+                icon = getPlaceholderIcon("weapon");
             }
         }
         else
@@ -62,10 +60,10 @@ public class UpdateLabelListener implements ActionListener {
             _NameLabel.setText(item);
             _checkBox.setEnabled(true);
             if (SELECTION_BOX_TYPE == RESOURCE_TYPE.WEAPON_NAME) {
-                icon = getResourceIcon(item, ToolData.RESOURCE_TYPE.WEAPON_NAME);
+                icon = getWeapon(item).icon;
             }
             else {
-                icon = getResourceIcon(item, RESOURCE_TYPE.ARTIFACT_SET);
+                icon = getArtifact(item).icon;
             }
         }
         _JLabel.setIcon(icon);

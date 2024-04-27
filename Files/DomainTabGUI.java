@@ -3,7 +3,7 @@ package Files;
 import static Files.DomainTabGUI.DOMAIN_FILTER_OPTIONS.ALL_OPTIONS_BY_ENUM;
 import static Files.DomainTabGUI.DOMAIN_FILTER_OPTIONS.ALL_OPTIONS_BY_STRING;
 import static Files.ToolData.AVAILABLE_FONTS;
-import static Files.ToolData.RESOURCE_TYPE.ARTIFACT_SET;
+import static Files.ToolData.RESOURCE_TYPE.ARTIFACT;
 import static Files.ToolData.RESOURCE_TYPE.TALENT_BOOK;
 import static Files.ToolData.RESOURCE_TYPE.WEEKLY_BOSS_MATERIAL;
 import static Files.ToolData.changeFont;
@@ -60,7 +60,6 @@ public class DomainTabGUI implements ActionListener {
     private final JPanel domainTab = new JPanel(new GridBagLayout());
     private final JComboBox<JLabel> filterBox = new JComboBox<>();
     private final JPanel domainsPanelOverview = new JPanel(new GridBagLayout());
-    private final Map<String, List<String>> dayToAvailableMaterialsMapping = getMapping(DAY_AVAILABLEMATS);
     private static final JRadioButton wedSatButton = new JRadioButton();
     private static final JRadioButton tueFriButton = new JRadioButton();
     private static final JRadioButton monThuButton = new JRadioButton();
@@ -411,7 +410,7 @@ public class DomainTabGUI implements ActionListener {
             ImageIcon materialIcon = getResourceIcon(materialName, getDomainResourceType(dt));
 
             if (dayFilter.equalsIgnoreCase(DAY_FILTER.SUNDAY_ALL.stringToken) ||getDomainResourceType(dt) == WEEKLY_BOSS_MATERIAL
-                    || getDomainResourceType(dt) == ToolData.RESOURCE_TYPE.ARTIFACT_SET || dayToAvailableMaterialsMapping.get(dayFilter).contains(materialName)) {
+                    || getDomainResourceType(dt) == ToolData.RESOURCE_TYPE.ARTIFACT || dayToAvailableMaterialsMapping.get(dayFilter).contains(materialName)) {
                 materialIconLabel.setIcon(materialIcon);
             }
             else{
