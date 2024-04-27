@@ -11,7 +11,5 @@ public abstract class Item {
         name = itemName;
         type = itemType;
     }
-    public void printInfo(){
-        System.out.println(name + " " + type + " ");
-    }
+    public abstract void printInfo();
 }
