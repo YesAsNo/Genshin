@@ -1,8 +1,8 @@
 package Files.Code.Data;
 
-import static Files.ToolGUI.CHARACTER_LIMIT;
-import static Files.ToolGUI.EMPTY_SET_SELECTOR;
-import static Files.ToolGUI.EMPTY_WEAPON_SELECTOR;
+import static Files.Code.GUIs.ToolGUI.CHARACTER_LIMIT;
+import static Files.Code.GUIs.ToolGUI.EMPTY_SET_SELECTOR;
+import static Files.Code.GUIs.ToolGUI.EMPTY_WEAPON_SELECTOR;
 
 /**
  * This class is a data structure for a character. The data here is used in CharacterTabGUI.java to construct the GUI.

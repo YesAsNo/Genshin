@@ -1,22 +1,28 @@
 package Files.Code.GUIs;
 
-import static Files.ToolData.AVAILABLE_FONTS;
-import static Files.ToolData.artifacts;
-import static Files.ToolData.changeFont;
-import static Files.ToolData.getArtifact;
-import static Files.ToolData.getCharacter;
-import static Files.ToolData.getPlaceholderIcon;
-import static Files.ToolData.getResizedResourceIcon;
-import static Files.ToolData.getWeapon;
-import static Files.ToolData.lookUpWeapons;
-import static Files.ToolData.placeholderImageKeys;
-import static Files.ToolGUI.CHARACTER_LIMIT;
-import static Files.ToolGUI.EMPTY_SET_SELECTOR;
-import static Files.ToolGUI.EMPTY_WEAPON_SELECTOR;
-import static Files.ToolGUI.FIVE_STAR_WEAPON_DELIMITER;
-import static Files.ToolGUI.FOUR_STAR_WEAPON_DELIMITER;
+import static Files.Code.Data.ToolData.changeFont;
+import static Files.Code.Data.ToolData.getCharacter;
+import static Files.Code.Data.ToolData.getPlaceholderIcon;
+import static Files.Code.Data.ToolData.getResizedResourceIcon;
+import static Files.Code.Data.ToolData.lookUpWeapons;
+import static Files.Code.Data.ToolData.placeholderImageKeys;
+import static Files.Code.GUIs.ToolGUI.CHARACTER_LIMIT;
+import static Files.Code.GUIs.ToolGUI.EMPTY_WEAPON_SELECTOR;
+import static Files.Code.GUIs.ToolGUI.FIVE_STAR_WEAPON_DELIMITER;
+import static Files.Code.GUIs.ToolGUI.FOUR_STAR_WEAPON_DELIMITER;
 
+import Files.Code.Auxiliary.ComboBoxRenderer;
+import Files.Code.Auxiliary.NotesListener;
+import Files.Code.Auxiliary.NotesTextModel;
+import Files.Code.Auxiliary.SaveButtonListener;
+import Files.Code.Auxiliary.UpdateCharacterCardCheckBoxListener;
+import Files.Code.Auxiliary.UpdateCharacterCardComboBoxListener;
+import Files.Code.Auxiliary.UpdateLabelListener;
+import Files.Code.Auxiliary.UpdateTextAreaListener;
+import Files.Code.Auxiliary.WeaponSelectorComboBoxModel;
 import Files.Code.Data.CharacterListing;
+import Files.Code.Data.ToolData;
+import Files.Code.Data.Weapon;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 
@@ -123,7 +129,7 @@ public class CharacterCardGUI extends JFrame {
 
     private JTextField getNotesTextField(CharacterListing selectedCharacterListing, JPanel jpanel) {
         JTextField notesTextField = new JTextField();
-        changeFont(notesTextField, AVAILABLE_FONTS.TEXT_FONT, 14.0F);
+        changeFont(notesTextField, ToolData.AVAILABLE_FONTS.TEXT_FONT, 14.0F);
         notesTextField.setHorizontalAlignment(10);
         notesTextField.setInheritsPopupMenu(false);
         notesTextField.setMargin(new Insets(2, 6, 2, 6));
@@ -141,7 +147,7 @@ public class CharacterCardGUI extends JFrame {
         JComboBox<JLabel> weaponSelectionBox = new JComboBox<>();
         weaponSelectionBox.setAutoscrolls(false);
         weaponSelectionBox.setEditable(false);
-        changeFont(weaponSelectionBox, AVAILABLE_FONTS.HEADER_FONT, 14.0F);
+        changeFont(weaponSelectionBox, ToolData.AVAILABLE_FONTS.HEADER_FONT, 14.0F);
         weaponSelectionBox.setInheritsPopupMenu(false);
         final WeaponSelectorComboBoxModel weaponSelectorComboBoxModel = new WeaponSelectorComboBoxModel();
         addAllowedWeapons(weaponSelectorComboBoxModel, getCharacter(characterListing.getCharacterName()));
@@ -299,7 +305,7 @@ public class CharacterCardGUI extends JFrame {
                                          GridConstraints gridConstraints,
                                          ToolData.CHARACTER_CARD_DATA_FIELD dataField) {
         JCheckBox listingCheckBox = new JCheckBox();
-        changeFont(listingCheckBox, AVAILABLE_FONTS.TEXT_FONT, 14.0F);
+        changeFont(listingCheckBox, ToolData.AVAILABLE_FONTS.TEXT_FONT, 14.0F);
         listingCheckBox.setText(title);
         if (dataField == ToolData.CHARACTER_CARD_DATA_FIELD.FARMING_SET_ONE) {
             if (characterListing.getArtifactSet1Status()) {
@@ -339,7 +345,7 @@ public class CharacterCardGUI extends JFrame {
 
     private void getDomainListingsLabel(JPanel jpanel) {
         javax.swing.JLabel domainListingsLabel = new javax.swing.JLabel();
-        changeFont(domainListingsLabel, AVAILABLE_FONTS.HEADER_FONT, 18.0F);
+        changeFont(domainListingsLabel, ToolData.AVAILABLE_FONTS.HEADER_FONT, 18.0F);
         domainListingsLabel.setText("Set Information");
         jpanel.add(domainListingsLabel,
                 new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
@@ -351,7 +357,7 @@ public class CharacterCardGUI extends JFrame {
         saveButton.setBackground(new Color(YES_CHANGES_SAVE_BUTTON_COLOR));
         saveButton.setForeground(new Color(-394241));
         saveButton.setText("SAVE");
-        changeFont(saveButton, AVAILABLE_FONTS.HEADER_FONT, 12.0F);
+        changeFont(saveButton, ToolData.AVAILABLE_FONTS.HEADER_FONT, 12.0F);
         jpanel.add(saveButton,
                 new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
@@ -364,7 +370,7 @@ public class CharacterCardGUI extends JFrame {
         setDetailsTextArea.setFocusable(false);
         setDetailsTextArea.setLineWrap(true);
         setDetailsTextArea.setWrapStyleWord(true);
-        changeFont(setDetailsTextArea, AVAILABLE_FONTS.TEXT_FONT, 12.0F);
+        changeFont(setDetailsTextArea, ToolData.AVAILABLE_FONTS.TEXT_FONT, 12.0F);
         jpanel.add(setDetailsTextArea,
                 new GridConstraints(3, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                         GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW,

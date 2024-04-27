@@ -1,6 +1,22 @@
 package Files.Code.GUIs;
 
+import static Files.Code.Data.ToolData.changeFont;
+import static Files.Code.Data.ToolData.getCharacter;
+import static Files.Code.Data.ToolData.getWeapon;
+import static Files.Code.GUIs.DomainTabGUI.getAllCounterLabel;
+import static Files.Code.GUIs.DomainTabGUI.getDomainResourceType;
+import static Files.Code.GUIs.DomainTabGUI.getDomainTargetResourceMapping;
+import static Files.Code.GUIs.DomainTabGUI.getDomainTargetResourceType;
+import static Files.Code.GUIs.DomainTabGUI.getListedCounterLabel;
+import static Files.Code.GUIs.ToolGUI.getCharacterCard;
+import static Files.Code.GUIs.ToolGUI.isSomeoneFarmingForTheWeapon;
+import static Files.Code.GUIs.ToolGUI.whoIsFarmingThis;
+import static Files.Code.GUIs.WeaponTabGUI.getUnassignedFarmedWeapons;
+
 import Files.Code.Data.CharacterListing;
+import Files.Code.Data.Domain;
+import Files.Code.Data.FarmableItem;
+import Files.Code.Data.ToolData;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 
@@ -114,7 +130,7 @@ public class DomainCardGUI extends JFrame {
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null,
                         new Dimension(200, 200), null, 0, false));
-        for (Item domainMat : domain.materials) {
+        for (FarmableItem domainMat : domain.materials) {
             JPanel innerUnlistedPanel = new JPanel(new GridBagLayout());
             JPanel innerListedPanel = new JPanel(new GridBagLayout());
             JPanel dayTab = new JPanel();
@@ -219,7 +235,7 @@ public class DomainCardGUI extends JFrame {
         gbc.gridy = 1;
         gbc.weightx = 1.0;
         assert getDomainResourceType(domainTheme) != null;
-        JLabel label = new JLabel(getListedCounterLabel(domain.name, getDomainResourceType(domainTheme)));
+        JLabel label = new JLabel(getListedCounterLabel(domain, getDomainResourceType(domainTheme)));
         changeFont(label, ToolData.AVAILABLE_FONTS.REGULAR_FONT, 12);
         titlePanel.add(label, gbc);
 
@@ -228,7 +244,7 @@ public class DomainCardGUI extends JFrame {
         gbc.gridy = 2;
         gbc.weightx = 1.0;
         assert getDomainResourceType(domainTheme) != null;
-        JLabel label2 = new JLabel(getAllCounterLabel(domain.name, getDomainResourceType(domainTheme)));
+        JLabel label2 = new JLabel(getAllCounterLabel(domain, getDomainResourceType(domainTheme)));
         changeFont(label2, ToolData.AVAILABLE_FONTS.REGULAR_FONT, 12);
         titlePanel.add(label2, gbc);
         return mainPanel;
