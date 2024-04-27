@@ -1,5 +1,7 @@
 package Files.Code.Auxiliary;
 
+import static Files.Code.Data.ToolData.getArtifact;
+import static Files.Code.Data.ToolData.getWeapon;
 import static Files.Code.GUIs.ToolGUI.EMPTY_SET_SELECTOR;
 import static Files.Code.GUIs.ToolGUI.updateFarmedItemMap;
 
@@ -38,17 +40,20 @@ public class UpdateCharacterCardComboBoxListener implements ItemListener {
         _saveButton.setEnabled(true);
         String item = ((JLabel) e.getItem()).getText();
         if (e.getStateChange() == ItemEvent.DESELECTED && !item.equalsIgnoreCase(EMPTY_SET_SELECTOR)) {
-            if (_changedData == ToolData.CHARACTER_CARD_DATA_FIELD.WEAPON ||
-                    _changedData == ToolData.CHARACTER_CARD_DATA_FIELD.SET_ONE ||
+            if (_changedData == ToolData.CHARACTER_CARD_DATA_FIELD.WEAPON) {
+                updateFarmedItemMap(_changedData, _characterListing, false, getWeapon(item));
+            }
+            if (_changedData == ToolData.CHARACTER_CARD_DATA_FIELD.SET_ONE ||
                     _changedData == ToolData.CHARACTER_CARD_DATA_FIELD.SET_TWO) {
-                updateFarmedItemMap(_changedData, _characterListing, false, item);
+                updateFarmedItemMap(_changedData, _characterListing, false, getArtifact(item));
             }
         }
         if (e.getStateChange() == ItemEvent.SELECTED) {
             switch (_changedData) {
                 case WEAPON:
                     _characterListing.setWeapon(item);
-                    updateFarmedItemMap(_changedData, _characterListing, _characterListing.getWeaponStatus(), item);
+                    updateFarmedItemMap(_changedData, _characterListing, _characterListing.getWeaponStatus(),
+                            getWeapon(item));
                     return;
                 case NOTES:
                     _characterListing.setCharacterNotes(item);
@@ -56,12 +61,12 @@ public class UpdateCharacterCardComboBoxListener implements ItemListener {
                 case SET_ONE:
                     _characterListing.setArtifactSet1(item);
                     updateFarmedItemMap(_changedData, _characterListing, _characterListing.getArtifactSet1Status(),
-                            item);
+                            getArtifact(item));
                     return;
                 case SET_TWO:
                     _characterListing.setArtifactSet2(item);
                     updateFarmedItemMap(_changedData, _characterListing, _characterListing.getArtifactSet2Status(),
-                            item);
+                            getArtifact(item));
                     return;
                 default:
             }

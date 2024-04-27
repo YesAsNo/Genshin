@@ -1,7 +1,7 @@
 package Files.Code.Auxiliary;
 
 import static Files.Code.Data.ToolData.getArtifactSetDescription;
-import static Files.ToolGUI.EMPTY_SET_SELECTOR;
+import static Files.Code.GUIs.ToolGUI.EMPTY_SET_SELECTOR;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -17,11 +17,13 @@ public class UpdateTextAreaListener implements ActionListener {
 
     /**
      * Constructor of the class.
+     *
      * @param textArea the text area to update the contents of
      */
-    public UpdateTextAreaListener(JTextArea textArea){
+    public UpdateTextAreaListener(JTextArea textArea) {
         _textArea = textArea;
     }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         assert e.getSource() instanceof JComboBox<?>;
@@ -31,8 +33,7 @@ public class UpdateTextAreaListener implements ActionListener {
         assert item != null;
         if (!item.equalsIgnoreCase(EMPTY_SET_SELECTOR)) {
             _textArea.setText(getArtifactSetDescription(item));
-        }
-        else{
+        } else {
             _textArea.setText("");
         }
 

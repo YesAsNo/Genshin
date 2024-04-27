@@ -1,9 +1,9 @@
 package Files.Code.Auxiliary;
 
-import Files.Code.Data.Weapon;
-
+import static Files.Code.GUIs.ToolGUI.serializeSave;
 import static Files.Code.GUIs.WeaponTabGUI.getUnassignedFarmedWeapons;
-import static Files.ToolGUI.serializeSave;
+
+import Files.Code.Data.Weapon;
 
 import javax.swing.JCheckBox;
 import java.awt.event.ItemEvent;
@@ -17,19 +17,20 @@ public class WeaponTabGUIListener implements ItemListener {
 
     /**
      * Constructor of the class
-     * @param name the name of the weapon
+     *
+     * @param weapon weapon
      */
-    public WeaponTabGUIListener(Weapon weapon){
+    public WeaponTabGUIListener(Weapon weapon) {
         this.weapon = weapon;
     }
+
     @Override
     public void itemStateChanged(ItemEvent e) {
         JCheckBox source = (JCheckBox) e.getSource();
         source.setEnabled(false);
-        if (source.isSelected()){
+        if (source.isSelected()) {
             getUnassignedFarmedWeapons().add(weapon);
-        }
-        else{
+        } else {
             getUnassignedFarmedWeapons().remove(weapon);
         }
         serializeSave();

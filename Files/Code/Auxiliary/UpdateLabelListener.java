@@ -3,8 +3,8 @@ package Files.Code.Auxiliary;
 import static Files.Code.Data.ToolData.getArtifact;
 import static Files.Code.Data.ToolData.getPlaceholderIcon;
 import static Files.Code.Data.ToolData.getWeapon;
-import static Files.ToolGUI.EMPTY_SET_SELECTOR;
-import static Files.ToolGUI.EMPTY_WEAPON_SELECTOR;
+import static Files.Code.GUIs.ToolGUI.EMPTY_SET_SELECTOR;
+import static Files.Code.GUIs.ToolGUI.EMPTY_WEAPON_SELECTOR;
 
 import Files.Code.Data.ToolData;
 
