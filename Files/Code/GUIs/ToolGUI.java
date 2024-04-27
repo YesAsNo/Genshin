@@ -16,7 +16,6 @@ import static Files.Code.GUIs.WeaponTabGUI.getUnassignedFarmedWeapons;
 import Files.Code.Data.Artifact;
 import Files.Code.Data.Character;
 import Files.Code.Data.CharacterListing;
-import Files.Code.Data.FarmableItem;
 import Files.Code.Data.Item;
 import Files.Code.Data.TalentMaterial;
 import Files.Code.Data.ToolData;
@@ -48,7 +47,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -164,25 +162,6 @@ public class ToolGUI extends JFrame {
     }
 
     /**
-     * Returns one of the farmed maps.
-     *
-     * @param fd the enum corresponding to the farmed mapping.
-     * @return the corresponding farmed mapping.
-     */
-    public static TreeMap<? extends Item, Set<Character>> getFarmedMapping(FARMED_DATATYPE fd) {
-        assert fd != null;
-        switch (fd) {
-            case WEAPONS:
-                return farmedWeapons;
-            case ARTIFACTS:
-                return farmedArtifacts;
-            case TALENTS:
-                return farmedTalentBooks;
-        }
-        throw new IllegalArgumentException("Farmed Datatype can only be WEAPONS, ARTIFACTS or TALENTS");
-    }
-
-    /**
      * Returns whether a weapon has been listed for one of the characters.
      *
      * @param weapon weapon name
@@ -190,73 +169,6 @@ public class ToolGUI extends JFrame {
      */
     public static boolean isSomeoneFarmingForTheWeapon(Weapon weapon) {
         return !farmedWeapons.get(weapon).isEmpty();
-    }
-
-    /**
-     * Primarily used for farmed labels in DomainCardGUI.
-     *
-     * @param mat the farmed material
-     * @param rt the resource type of that material
-     * @return counter of characters who are farming this material.
-     */
-    public static int howManyAreFarmingThis(FarmableItem mat) {
-        int counter = 0;
-        for (CharacterListing characterListing : characterListings) {
-            if (mat.getClass().equals(TalentMaterial.class)) {
-                if (characterListing.getTalentStatus() &&
-                        ((TalentMaterial) mat).usedBy.contains(characterListing.getCharacterName())) {
-                    counter++;
-                }
-            } else if (mat.getClass().equals(WeeklyTalentMaterial.class)) {
-                if (characterListing.getTalentStatus() &&
-                        ((WeeklyTalentMaterial) mat).usedBy.contains(characterListing.getCharacterName())) {
-                    counter++;
-                }
-            } else if (mat.getClass().equals(Artifact.class)) {
-                if ((characterListing.getArtifactSet1Status() &&
-                        characterListing.getArtifactSet1().equalsIgnoreCase(mat.name)) ||
-                        characterListing.getArtifactSet2Status() &&
-                                characterListing.getArtifactSet2().equalsIgnoreCase(mat.name)) {
-                    counter++;
-                }
-            } else {
-                throw new IllegalArgumentException("RESOURCE TYPE INVALID: " + mat.type);
-            }
-        }
-        return counter;
-    }
-
-    /**
-     * Primarily used for farmed labels in DomainCardGUI.
-     *
-     * @param mat the farmed material
-     * @return set of characters who are farming this material.
-     */
-    public static Set<Character> whoIsFarmingThis(FarmableItem mat) {
-        Set<Character> characterSet = new HashSet<>();
-        for (CharacterListing characterListing : characterListings) {
-            if (mat.getClass().equals(TalentMaterial.class)) {
-                if (characterListing.getTalentStatus() &&
-                        ((TalentMaterial) mat).usedBy.contains(characterListing.getCharacterName())) {
-                    characterSet.add(getCharacter(characterListing.getCharacterName()));
-                }
-            } else if (mat.getClass().equals(WeeklyTalentMaterial.class)) {
-                if (characterListing.getTalentStatus() &&
-                        ((WeeklyTalentMaterial) mat).usedBy.contains(characterListing.getCharacterName())) {
-                    characterSet.add(getCharacter(characterListing.getCharacterName()));
-                }
-            } else if (mat.getClass().equals(Artifact.class)) {
-                if ((characterListing.getArtifactSet1Status() &&
-                        characterListing.getArtifactSet1().equalsIgnoreCase(mat.name)) ||
-                        characterListing.getArtifactSet2Status() &&
-                                characterListing.getArtifactSet2().equalsIgnoreCase(mat.name)) {
-                    characterSet.add(getCharacter(characterListing.getCharacterName()));
-                }
-            } else {
-                throw new IllegalArgumentException("RESOURCE TYPE INVALID: " + mat.type);
-            }
-        }
-        return characterSet;
     }
 
     /**

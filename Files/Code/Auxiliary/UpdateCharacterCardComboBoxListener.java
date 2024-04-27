@@ -1,7 +1,7 @@
 package Files.Code.Auxiliary;
 
-import static Files.ToolGUI.EMPTY_SET_SELECTOR;
-import static Files.ToolGUI.updateFarmedItemMap;
+import static Files.Code.GUIs.ToolGUI.EMPTY_SET_SELECTOR;
+import static Files.Code.GUIs.ToolGUI.updateFarmedItemMap;
 
 import Files.Code.Data.CharacterListing;
 import Files.Code.Data.ToolData;

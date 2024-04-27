@@ -1,22 +1,20 @@
 package Files.Code.GUIs;
 
 import static Files.Code.Data.ToolData.changeFont;
-import static Files.Code.Data.ToolData.getCharacter;
-import static Files.Code.Data.ToolData.getWeapon;
 import static Files.Code.GUIs.DomainTabGUI.getAllCounterLabel;
 import static Files.Code.GUIs.DomainTabGUI.getDomainResourceType;
 import static Files.Code.GUIs.DomainTabGUI.getDomainTargetResourceType;
 import static Files.Code.GUIs.DomainTabGUI.getListedCounterLabel;
+import static Files.Code.GUIs.DomainTabGUI.whoNeedsThisItem;
 import static Files.Code.GUIs.ToolGUI.getCharacterCard;
-import static Files.Code.GUIs.ToolGUI.isSomeoneFarmingForTheWeapon;
-import static Files.Code.GUIs.ToolGUI.whoIsFarmingThis;
-import static Files.Code.GUIs.WeaponTabGUI.getUnassignedFarmedWeapons;
 
 import Files.Code.Data.Character;
 import Files.Code.Data.CharacterListing;
 import Files.Code.Data.Domain;
 import Files.Code.Data.FarmableItem;
+import Files.Code.Data.Item;
 import Files.Code.Data.ToolData;
+import Files.Code.Data.Weapon;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 
@@ -184,56 +182,37 @@ public class DomainCardGUI extends JFrame {
 
             int i = 0;
             int k = 0;
-            if (domain.isArtifactDomain()){
-                for (Character character : whoIsFarmingThis(domainMat)){
+            if (domain.isArtifactDomain()) {
+                for (Item character : whoNeedsThisItem(domain, domainMat, true)) {
+                    assert character instanceof Character;
                     generateDomainItemLabel(character.name, character.icon, i, innerListedPanel);
                     i++;
                 }
-            }
-            else if (domain.isWeaponMaterialDomain()){
-
-            }
-            else if (domain.isWeeklyTalentDomain()){
-
-            }
-            else if (domain.isTalentBookDomain()){
-
-            }
-            switch (ToolData.RESOURCE_TYPE.byString.get(domain.domainType)) {
-                case WEAPON_MATERIAL: {
-                    assert domainM
-                    for (Weapon weapon : domainMat.) {
-                        if (isSomeoneFarmingForTheWeapon(eligibleWeapon) ||
-                                getUnassignedFarmedWeapons().contains(getWeapon(eligibleWeapon))) {
-                            generateDomainItemLabel(eligibleWeapon, getWeapon(eligibleWeapon).icon, i,
-                                    innerListedPanel);
-                            i++;
-                        } else {
-                            generateDomainItemLabel(eligibleWeapon, getWeapon(eligibleWeapon).icon, k,
-                                    innerUnlistedPanel);
-                            k++;
-                        }
-                    }
-                    break;
+            } else if (domain.isWeaponMaterialDomain()) {
+                for (Item weapon : whoNeedsThisItem(domain, domainMat, true)) {
+                    assert weapon instanceof Weapon;
+                    generateDomainItemLabel(weapon.name, weapon.icon, i, innerListedPanel);
+                    i++;
                 }
-                case WEEKLY_BOSS_MATERIAL:
-                case TALENT_BOOK: {
-                    for (String eligibleCharacter : getEligibleItems(domainMat.name)) {
-                        if (whoIsFarmingThis(domainMat.name, getDomainResourceType(domainTheme)).contains(
-                                eligibleCharacter)) {
-                            generateDomainItemLabel(eligibleCharacter, getCharacter(eligibleCharacter).icon, i,
-                                    innerListedPanel);
-                            i++;
-                        } else {
-                            generateDomainItemLabel(eligibleCharacter, getCharacter(eligibleCharacter).icon, k,
-                                    innerUnlistedPanel);
-                            k++;
-                        }
-                    }
+                for (Item weapon : whoNeedsThisItem(domain, domainMat, false)) {
+                    assert weapon instanceof Weapon;
+                    generateDomainItemLabel(weapon.name, weapon.icon, k, innerUnlistedPanel);
+                    k++;
                 }
-                break;
+            } else if (domain.isWeeklyTalentDomain() || domain.isTalentBookDomain()) {
+                for (Item character : whoNeedsThisItem(domain, domainMat, true)) {
+                    assert character instanceof Character;
+                    generateDomainItemLabel(character.name, character.icon, i, innerListedPanel);
+                    i++;
+                }
+                for (Item character : whoNeedsThisItem(domain, domainMat, false)) {
+                    assert character instanceof Character;
+                    generateDomainItemLabel(character.name, character.icon, k, innerUnlistedPanel);
+                    k++;
+                }
+            } else {
+                throw new IllegalArgumentException("The domain type is unknown");
             }
-
         }
 
         // DOMAIN LISTINGS INFO
@@ -256,7 +235,6 @@ public class DomainCardGUI extends JFrame {
         titlePanel.add(label2, gbc);
         return mainPanel;
     }
-
 
     private String formatLabel(String characterName, String characterNotes) {
         final String HTML_BEGINNING = "<html><center>";

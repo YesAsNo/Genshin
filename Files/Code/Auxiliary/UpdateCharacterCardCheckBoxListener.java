@@ -1,6 +1,10 @@
 package Files.Code.Auxiliary;
 
 import static Files.Code.Data.ToolData.getArtifact;
+import static Files.Code.Data.ToolData.getCharacter;
+import static Files.Code.Data.ToolData.getTalentBook;
+import static Files.Code.Data.ToolData.getWeapon;
+import static Files.Code.Data.ToolData.getWeeklyTalentMaterial;
 import static Files.Code.GUIs.ToolGUI.updateFarmedItemMap;
 
 import Files.Code.Data.CharacterListing;
@@ -51,13 +55,14 @@ public class UpdateCharacterCardCheckBoxListener implements ItemListener {
             case FARMING_TALENT_MATERIALS:
                 _characterListing.setTalentStatus(currentStatus);
                 updateFarmedItemMap(_changedData, _characterListing, currentStatus,
-                        getTalentBookForCharacter(_characterListing.getCharacterName()));
-                updateFarmedItemMap(_changedData, _characterListing, currentStatus,
-                        getWeeklyBossMatForCharacter(_characterListing.getCharacterName()));
+                        getTalentBook(getCharacter(_characterListing.getCharacterName()).talentMaterial));
+                updateFarmedItemMap(_changedData, _characterListing, currentStatus, getWeeklyTalentMaterial(
+                        getCharacter(_characterListing.getCharacterName()).weeklyTalentMaterial));
                 return;
             case FARMING_WEAPON_MATERIALS:
                 _characterListing.setWeaponStatus(currentStatus);
-                updateFarmedItemMap(_changedData, _characterListing, currentStatus, _characterListing.getWeapon());
+                updateFarmedItemMap(_changedData, _characterListing, currentStatus,
+                        getWeapon(_characterListing.getWeapon()));
                 return;
             default:
         }

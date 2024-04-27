@@ -1,13 +1,9 @@
 package Files.Code.GUIs;
 
 import static Files.Code.Data.ToolData.RESOURCE_TYPE.WEEKLY_BOSS_MATERIAL;
-import static Files.Code.Data.ToolData.artifacts;
 import static Files.Code.Data.ToolData.changeFont;
 import static Files.Code.Data.ToolData.domains;
-import static Files.Code.Data.ToolData.getWeaponMaterial;
-import static Files.Code.Data.ToolData.talentBooks;
-import static Files.Code.Data.ToolData.weapons;
-import static Files.Code.Data.ToolData.weeklyTalents;
+import static Files.Code.Data.ToolData.getWeapon;
 import static Files.Code.GUIs.DomainTabGUI.DOMAIN_FILTER_OPTIONS.ALL_OPTIONS_BY_ENUM;
 import static Files.Code.GUIs.DomainTabGUI.DOMAIN_FILTER_OPTIONS.ALL_OPTIONS_BY_STRING;
 import static Files.Code.GUIs.DomainTabGUI.DOMAIN_FILTER_OPTIONS.NO_FILTER;
@@ -25,6 +21,7 @@ import static java.util.Calendar.WEDNESDAY;
 
 import Files.Code.Auxiliary.ComboBoxRenderer;
 import Files.Code.Data.Artifact;
+import Files.Code.Data.Character;
 import Files.Code.Data.Domain;
 import Files.Code.Data.FarmableItem;
 import Files.Code.Data.Item;
@@ -396,6 +393,12 @@ public class DomainTabGUI implements ActionListener {
         return !whoNeedsThisDomain(domain, true).isEmpty();
     }
 
+    /**
+     * Returns a domain theme based on the domain supplied.
+     *
+     * @param domain Domain
+     * @return domain theme
+     */
     public static DOMAIN_THEME getDomainTheme(Domain domain) {
         if (domain.isArtifactDomain()) {
             return DOMAIN_THEME.ARTIFACT_DOMAIN_THEME;
@@ -549,41 +552,95 @@ public class DomainTabGUI implements ActionListener {
      */
     public static Set<? extends Item> whoNeedsThisDomain(Domain domain, boolean farmedOnly) {
         if (domain.isWeaponMaterialDomain()) {
-            Set<WeaponMaterial> farmedWeaponMaterials = new HashSet<>();
-            for (Weapon weapon : weapons) {
-                if (domain.materials.contains(getWeaponMaterial(weapon.ascensionMaterial)) &&
-                        (!farmedOnly || getUnassignedFarmedWeapons().contains(weapon) ||
-                                !farmedWeapons.get(weapon).isEmpty())) {
-                    farmedWeaponMaterials.add(getWeaponMaterial(weapon.ascensionMaterial));
+            Set<Weapon> possibleWeapons = new HashSet<>();
+            for (FarmableItem weaponMaterial : domain.materials) {
+                assert weaponMaterial instanceof WeaponMaterial;
+                for (String weaponName : ((WeaponMaterial) weaponMaterial).usedBy) {
+                    Weapon weapon = getWeapon(weaponName);
+                    if (!farmedOnly || !farmedWeapons.get(weapon).isEmpty() ||
+                            getUnassignedFarmedWeapons().contains(weapon)) {
+                        possibleWeapons.add(weapon);
+                    }
                 }
             }
-            return farmedWeaponMaterials;
+            return possibleWeapons;
         } else if (domain.isWeeklyTalentDomain()) {
-            Set<WeeklyTalentMaterial> allFarmedWeeklyTalents = new HashSet<>();
-            for (WeeklyTalentMaterial weeklyTalentMaterial : weeklyTalents) {
-                if (domain.materials.contains(weeklyTalentMaterial) &&
-                        (!farmedOnly || !farmedWeeklyTalentMaterials.get(weeklyTalentMaterial).isEmpty())) {
-                    allFarmedWeeklyTalents.add(weeklyTalentMaterial);
+            Set<Character> possibleCharacters = new HashSet<>();
+            for (FarmableItem weeklyTalentMaterial : domain.materials) {
+                assert weeklyTalentMaterial instanceof WeeklyTalentMaterial;
+                if (!farmedOnly || !farmedWeeklyTalentMaterials.get(weeklyTalentMaterial).isEmpty()) {
+                    possibleCharacters.addAll(farmedWeeklyTalentMaterials.get(weeklyTalentMaterial));
                 }
             }
-            return allFarmedWeeklyTalents;
+            return possibleCharacters;
         } else if (domain.isTalentBookDomain()) {
-            Set<TalentMaterial> allFarmedTalents = new HashSet<>();
-            for (TalentMaterial talentMaterial : talentBooks) {
-                if (domain.materials.contains(talentMaterial) &&
-                        (!farmedOnly || !farmedTalentBooks.get(talentMaterial).isEmpty())) {
-                    allFarmedTalents.add(talentMaterial);
+            Set<Character> possibleCharacters = new HashSet<>();
+            for (FarmableItem talentMaterial : domain.materials) {
+                assert talentMaterial instanceof TalentMaterial;
+                if (!farmedOnly || !farmedTalentBooks.get(talentMaterial).isEmpty()) {
+                    possibleCharacters.addAll(farmedTalentBooks.get(talentMaterial));
                 }
             }
-            return allFarmedTalents;
+            return possibleCharacters;
         } else if (domain.isArtifactDomain()) {
-            Set<Artifact> allFarmedArtifacts = new HashSet<>();
-            for (Artifact artifact : artifacts) {
-                if (domain.materials.contains(artifact) && (!farmedOnly || !farmedArtifacts.get(artifact).isEmpty())) {
-                    allFarmedArtifacts.add(artifact);
+            Set<Character> possibleCharacters = new HashSet<>();
+            for (FarmableItem artifact : domain.materials) {
+                assert artifact instanceof Artifact;
+                if (!farmedOnly || !farmedArtifacts.get(artifact).isEmpty()) {
+                    possibleCharacters.addAll(farmedArtifacts.get(artifact));
                 }
             }
-            return allFarmedArtifacts;
+            return possibleCharacters;
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    /**
+     * Returns a set of items from this domain.
+     *
+     * @param domain domain
+     * @param item specified item available from the domain
+     * @param farmedOnly flag to show only items in listings
+     * @return set of items
+     */
+    public static Set<? extends Item> whoNeedsThisItem(Domain domain, FarmableItem item, boolean farmedOnly) {
+        assert domain.materials.contains(item);
+        if (domain.isWeaponMaterialDomain()) {
+
+            assert item instanceof WeaponMaterial;
+
+            Set<Weapon> possibleWeapons = new HashSet<>();
+            for (String weaponName : ((WeaponMaterial) item).usedBy) {
+                Weapon weapon = getWeapon(weaponName);
+                if (!farmedOnly || !farmedWeapons.get(weapon).isEmpty() ||
+                        getUnassignedFarmedWeapons().contains(weapon)) {
+                    possibleWeapons.add(weapon);
+                }
+            }
+
+            return possibleWeapons;
+        } else if (domain.isWeeklyTalentDomain()) {
+            Set<Character> possibleCharacters = new HashSet<>();
+            assert item instanceof WeeklyTalentMaterial;
+            if (!farmedOnly || !farmedWeeklyTalentMaterials.get(item).isEmpty()) {
+                possibleCharacters.addAll(farmedWeeklyTalentMaterials.get(item));
+            }
+            return possibleCharacters;
+        } else if (domain.isTalentBookDomain()) {
+            Set<Character> possibleCharacters = new HashSet<>();
+            assert item instanceof TalentMaterial;
+            if (!farmedOnly || !farmedTalentBooks.get(item).isEmpty()) {
+                possibleCharacters.addAll(farmedTalentBooks.get(item));
+            }
+            return possibleCharacters;
+        } else if (domain.isArtifactDomain()) {
+            Set<Character> possibleCharacters = new HashSet<>();
+            assert item instanceof Artifact;
+            if (!farmedOnly || !farmedArtifacts.get(item).isEmpty()) {
+                possibleCharacters.addAll(farmedArtifacts.get(item));
+            }
+            return possibleCharacters;
         } else {
             throw new IllegalArgumentException();
         }

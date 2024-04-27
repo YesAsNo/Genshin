@@ -1,6 +1,9 @@
 package Files.Code.Auxiliary;
 
 import static Files.Code.Data.ToolData.getWeapon;
+import static Files.Code.GUIs.ToolGUI.isSomeoneFarmingForTheWeapon;
+
+import Files.Code.Data.Weapon;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -49,8 +52,8 @@ public class ComboBoxRenderer extends JLabel implements ListCellRenderer<JLabel>
             }
             jlabel.setText(value.getText());
             try {
-                getWeapon(value.getText());
-                if (isSomeoneFarmingForTheWeapon(value.getText())) {
+                Weapon weapon = getWeapon(value.getText());
+                if (isSomeoneFarmingForTheWeapon(weapon)) {
                     jlabel.setForeground(_selectedColor);
                 } else {
                     jlabel.setForeground(Color.BLACK);
