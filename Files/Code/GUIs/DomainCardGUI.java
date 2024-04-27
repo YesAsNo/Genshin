@@ -1,4 +1,4 @@
-package Files;
+package Files.Code.GUIs;
 
 import static Files.DomainTabGUI.getAllCounterLabel;
 import static Files.DomainTabGUI.getDomainResourceType;

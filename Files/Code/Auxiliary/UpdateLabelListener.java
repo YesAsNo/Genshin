@@ -1,4 +1,4 @@
-package Files;
+package Files.Code.Auxiliary;
 
 import static Files.ToolData.RESOURCE_TYPE;
 import static Files.ToolData.getArtifact;

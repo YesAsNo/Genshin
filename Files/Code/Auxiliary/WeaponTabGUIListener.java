@@ -1,7 +1,7 @@
-package Files;
+package Files.Code.Auxiliary;
 
+import static Files.Code.GUIs.WeaponTabGUI.getUnassignedFarmedWeapons;
 import static Files.ToolGUI.serializeSave;
-import static Files.WeaponTabGUI.getUnassignedFarmedWeapons;
 
 import javax.swing.JCheckBox;
 import java.awt.event.ItemEvent;

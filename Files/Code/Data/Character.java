@@ -1,4 +1,4 @@
-package Files;
+package Files.Code.Data;
 
 public class Character extends Item {
     public final String element;

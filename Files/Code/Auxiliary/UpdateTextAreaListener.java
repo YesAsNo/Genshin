@@ -1,4 +1,4 @@
-package Files;
+package Files.Code.Auxiliary;
 
 import static Files.ToolData.getArtifactSetDescription;
 import static Files.ToolGUI.EMPTY_SET_SELECTOR;

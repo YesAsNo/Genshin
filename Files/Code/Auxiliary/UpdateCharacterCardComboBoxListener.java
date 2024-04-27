@@ -1,7 +1,10 @@
-package Files;
+package Files.Code.Auxiliary;
 
 import static Files.ToolGUI.EMPTY_SET_SELECTOR;
 import static Files.ToolGUI.updateFarmedItemMap;
+
+import Files.Code.Data.ToolData;
+import Files.Code.GUIs.CharacterListing;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -27,7 +30,7 @@ public class UpdateCharacterCardComboBoxListener implements ItemListener {
         _changedData = changedData;
         _saveButton = saveButton;
     }
-    @Override
+@Override
     public void itemStateChanged(ItemEvent e) {
         _saveButton.setEnabled(true);
         String item = ((JLabel)e.getItem()).getText();

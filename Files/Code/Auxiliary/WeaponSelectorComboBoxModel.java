@@ -1,4 +1,6 @@
-package Files;
+package Files.Code.Auxiliary;
+
+import Files.ToolGUI;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;

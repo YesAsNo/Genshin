@@ -1,4 +1,4 @@
-package Files;
+package Files.Code.Auxiliary;
 
 import javax.swing.JTextField;
 import java.awt.event.MouseAdapter;

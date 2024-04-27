@@ -1,4 +1,4 @@
-package Files;
+package Files.Code.Data;
 
 public class WeeklyTalentMaterial extends TalentMaterial{
     public WeeklyTalentMaterial(String itemName, String itemType) {

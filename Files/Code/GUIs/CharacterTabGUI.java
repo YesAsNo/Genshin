@@ -1,4 +1,4 @@
-package Files;
+package Files.Code.GUIs;
 
 import static Files.ToolData.changeFont;
 import static Files.ToolData.characters;

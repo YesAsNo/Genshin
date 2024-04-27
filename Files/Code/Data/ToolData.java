@@ -1,4 +1,4 @@
-package Files;
+package Files.Code.Data;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;

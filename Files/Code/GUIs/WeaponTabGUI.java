@@ -1,4 +1,4 @@
-package Files;
+package Files.Code.GUIs;
 
 import static Files.ToolData.AVAILABLE_FONTS;
 import static Files.ToolData.SAVE_LOCATION;

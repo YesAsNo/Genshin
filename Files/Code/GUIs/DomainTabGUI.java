@@ -1,4 +1,4 @@
-package Files;
+package Files.Code.GUIs;
 
 import static Files.DomainTabGUI.DOMAIN_FILTER_OPTIONS.ALL_OPTIONS_BY_ENUM;
 import static Files.DomainTabGUI.DOMAIN_FILTER_OPTIONS.ALL_OPTIONS_BY_STRING;
@@ -532,7 +532,7 @@ public class DomainTabGUI implements ActionListener {
             case TALENT_BOOK_THEME: return getMapping(TALENTBOOK_CHAR);
             case WEEKLY_BOSS_DOMAIN_THEME: return getMapping(WEEKLYBOSSMAT_CHAR);
             case ARTIFACT_DOMAIN_THEME: return getMapping(ARTIDOMAIN_ARTISET);
-        };
+        }
         throw new IllegalArgumentException();
     }
 

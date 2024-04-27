@@ -1,4 +1,4 @@
-package Files;
+package Files.Code.Data;
 
 import javax.swing.ImageIcon;
 

@@ -1,4 +1,4 @@
-package Files;
+package Files.Code.GUIs;
 
 import static Files.ToolGUI.CHARACTER_LIMIT;
 import static Files.ToolGUI.EMPTY_SET_SELECTOR;

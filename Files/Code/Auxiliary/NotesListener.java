@@ -1,4 +1,4 @@
-package Files;
+package Files.Code.Auxiliary;
 
 import javax.swing.JButton;
 import javax.swing.event.DocumentEvent;

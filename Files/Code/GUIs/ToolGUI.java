@@ -1,16 +1,5 @@
 package Files;
 
-import static Files.ToolData.AVAILABLE_FONTS;
-import static Files.ToolData.SAVE_LOCATION;
-import static Files.ToolData.artifacts;
-import static Files.ToolData.changeFont;
-import static Files.ToolData.getTalentBook;
-import static Files.ToolData.getWeeklyTalentMaterial;
-import static Files.ToolData.talentBooks;
-import static Files.ToolData.weapons;
-import static Files.ToolData.weeklyTalents;
-import static Files.WeaponTabGUI.getUnassignedFarmedWeapons;
-
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -81,21 +70,6 @@ public class ToolGUI extends JFrame {
      * Weapon save file name.
      */
     public static final String WEAPON_SAVE_FILE_NAME = "saved_weapons.json";
-    private JPanel mainPanel;
-    private JTabbedPane mainTabbedPane;
-    private JPanel mainInformationPanel;
-    private JPanel devBasicInfoPanel;
-    private JPanel devBasicInfoLeftPanel;
-    private JLabel Welcome_Barbara;
-    private JTextPane devUpdatesTextPane;
-    private JLabel devCreatorsLabel;
-    private JLabel devLinakoLabel;
-    private JLabel devPrecisi0nLabel;
-    private JPanel devBasicInfoRightPanel;
-    private JLabel devWelcomeLabel;
-    private JPanel devBasicInfoSpacer;
-    private JTextPane devInfoTextPane;
-    private JPanel welcomeTab;
     /**
      * This mapping contains all farmed weapons from all saved characters. Note that weapons unassigned to characters are not put into this mapping.
      */
@@ -112,24 +86,21 @@ public class ToolGUI extends JFrame {
     private static final CharacterTabGUI _characterTabGUI = new CharacterTabGUI();
     private static final WeaponTabGUI _weaponsTabGUI = new WeaponTabGUI();
     private static final DomainTabGUI __DOMAIN_TAB_GUI = new DomainTabGUI();
-
-    /**
-     * This enum is primarily used to return one of the farmed mappings.
-     */
-    public enum FARMED_DATATYPE {
-        /**
-         * Weapon map enum
-         */
-        WEAPONS,
-        /**
-         * Artifact map enum
-         */
-        ARTIFACTS,
-        /**
-         * Talent material (and weekly talent material) map enum
-         */
-        TALENTS
-    }
+    private JPanel mainPanel;
+    private JTabbedPane mainTabbedPane;
+    private JPanel mainInformationPanel;
+    private JPanel devBasicInfoPanel;
+    private JPanel devBasicInfoLeftPanel;
+    private JLabel Welcome_Barbara;
+    private JTextPane devUpdatesTextPane;
+    private JLabel devCreatorsLabel;
+    private JLabel devLinakoLabel;
+    private JLabel devPrecisi0nLabel;
+    private JPanel devBasicInfoRightPanel;
+    private JLabel devWelcomeLabel;
+    private JPanel devBasicInfoSpacer;
+    private JTextPane devInfoTextPane;
+    private JPanel welcomeTab;
 
     /**
      * Constructor of the GUI class.
@@ -154,38 +125,10 @@ public class ToolGUI extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(1000, 600);
         setLocationRelativeTo(null);
-        setIconImage(new ImageIcon(Objects.requireNonNull(ToolGUI.class.getResource("/Files/Images/Icons/Program_Icon_Barbara.png"))).getImage());
+        setIconImage(new ImageIcon(Objects.requireNonNull(
+                ToolGUI.class.getResource("/Files/Images/Icons/Program_Icon_Barbara.png"))).getImage());
         setResizable(false);
         setVisible(true);
-    }
-
-    /**
-     * Creates a few custom UI components by hand.
-     */
-    private void createUIComponents() {
-        //Place custom component creation code here
-        mainPanel = new JPanel();
-        initialiseFarmedArrays();
-        readGeneratedCharacterCards();
-    }
-
-    private void initialiseFarmedArrays() {
-        for (Item talentBook : talentBooks) {
-            farmedTalents.put(talentBook.name, new TreeSet<>());
-        }
-        for (Item weeklyMat : weeklyTalents) {
-            farmedTalents.put(weeklyMat.name, new TreeSet<>());
-        }
-        for (Item artifactSet : artifacts) {
-            farmedArtifacts.put(artifactSet.name, new TreeSet<>());
-        }
-        for (Weapon weapon : weapons) {
-            farmedWeapons.put(weapon.name, new TreeSet<>());
-        }
-    }
-
-    private void addTab(String title, JPanel jpanel) {
-        mainTabbedPane.addTab(title, jpanel);
     }
 
     /**
@@ -214,44 +157,6 @@ public class ToolGUI extends JFrame {
                 return farmedTalents;
         }
         throw new IllegalArgumentException();
-    }
-
-    /**
-     * Reads character cards that have been saved in previous sessions.
-     */
-    private void readGeneratedCharacterCards() {
-        File f_dir = new File(SAVE_LOCATION);
-        if (f_dir.mkdir()) {
-            return;
-        }
-        File[] savedCards = f_dir.listFiles(pathname -> !pathname.getAbsolutePath().contains(WEAPON_SAVE_FILE_NAME));
-        assert savedCards != null;
-        Gson gson = new Gson();
-
-        try {
-            for (File savedCard : savedCards) {
-                JsonReader reader = new JsonReader(new FileReader(savedCard));
-                CharacterListing card = gson.fromJson(reader, CharacterListing.class);
-                GENERATED_CHARACTER_LISTINGS.add(card);
-                if (card.getTalentStatus()) {
-                    farmedTalents.get(getTalentBook(card.getCharacterName()).name).add(card.getCharacterName());
-                    farmedTalents.get(getWeeklyTalentMaterial(card.getCharacterName()).name).add(card.getCharacterName());
-                }
-                if (!card.getArtifactSet1().isEmpty() && card.getArtifactSet1Status()) {
-                    farmedArtifacts.get(card.getArtifactSet1()).add(card.getCharacterName());
-                }
-                if (!card.getArtifactSet2().isEmpty() && card.getArtifactSet2Status()) {
-                    farmedArtifacts.get(card.getArtifactSet2()).add(card.getCharacterName());
-                }
-                if (!card.getWeapon().isEmpty() && card.getWeaponStatus()) {
-                    farmedWeapons.get(card.getWeapon()).add(card.getCharacterName());
-                }
-            }
-
-        } catch (IOException e) {
-            System.out.println("Could not read saved character cards.");
-        }
-
     }
 
     /**
@@ -332,8 +237,9 @@ public class ToolGUI extends JFrame {
                 }
                 case ARTIFACT: {
                     if ((characterListing.getArtifactSet1Status() &&
-                            characterListing.getArtifactSet1().equalsIgnoreCase(mat)) || characterListing.getArtifactSet2Status() &&
-                            characterListing.getArtifactSet2().equalsIgnoreCase(mat)) {
+                            characterListing.getArtifactSet1().equalsIgnoreCase(mat)) ||
+                            characterListing.getArtifactSet2Status() &&
+                                    characterListing.getArtifactSet2().equalsIgnoreCase(mat)) {
                         characterSet.add(characterListing.getCharacterName());
                     }
                     break;
@@ -353,8 +259,8 @@ public class ToolGUI extends JFrame {
      * @param status whether the character has started farming the item or not
      * @param item the item that has been either removed or assigned to the character card.
      */
-    public static void updateFarmedItemMap(ToolData.CHARACTER_CARD_DATA_FIELD dataField, CharacterListing characterListing,
-                                           boolean status, String item) {
+    public static void updateFarmedItemMap(ToolData.CHARACTER_CARD_DATA_FIELD dataField,
+                                           CharacterListing characterListing, boolean status, String item) {
         if (item.isEmpty() || item.equalsIgnoreCase(EMPTY_SET_SELECTOR) ||
                 item.equalsIgnoreCase(EMPTY_WEAPON_SELECTOR)) {
             return;
@@ -466,6 +372,74 @@ public class ToolGUI extends JFrame {
             String namePart1 = name.substring(0, chosenIndex);
             String namePart2 = name.substring(chosenIndex + 1);
             return HTML_BEGINNING + namePart1 + HTML_BREAK + namePart2 + HTML_END;
+        }
+
+    }
+
+    /**
+     * Creates a few custom UI components by hand.
+     */
+    private void createUIComponents() {
+        //Place custom component creation code here
+        mainPanel = new JPanel();
+        initialiseFarmedArrays();
+        readGeneratedCharacterCards();
+    }
+
+    private void initialiseFarmedArrays() {
+        for (Item talentBook : talentBooks) {
+            farmedTalents.put(talentBook.name, new TreeSet<>());
+        }
+        for (Item weeklyMat : weeklyTalents) {
+            farmedTalents.put(weeklyMat.name, new TreeSet<>());
+        }
+        for (Item artifactSet : artifacts) {
+            farmedArtifacts.put(artifactSet.name, new TreeSet<>());
+        }
+        for (Weapon weapon : weapons) {
+            farmedWeapons.put(weapon.name, new TreeSet<>());
+        }
+    }
+
+    private void addTab(String title, JPanel jpanel) {
+        mainTabbedPane.addTab(title, jpanel);
+    }
+
+    /**
+     * Reads character cards that have been saved in previous sessions.
+     */
+    private void readGeneratedCharacterCards() {
+        File f_dir = new File(SAVE_LOCATION);
+        if (f_dir.mkdir()) {
+            return;
+        }
+        File[] savedCards = f_dir.listFiles(pathname -> !pathname.getAbsolutePath().contains(WEAPON_SAVE_FILE_NAME));
+        assert savedCards != null;
+        Gson gson = new Gson();
+
+        try {
+            for (File savedCard : savedCards) {
+                JsonReader reader = new JsonReader(new FileReader(savedCard));
+                CharacterListing card = gson.fromJson(reader, CharacterListing.class);
+                GENERATED_CHARACTER_LISTINGS.add(card);
+                if (card.getTalentStatus()) {
+                    farmedTalents.get(getTalentBook(card.getCharacterName()).name).add(card.getCharacterName());
+                    farmedTalents.get(getWeeklyTalentMaterial(card.getCharacterName()).name)
+                            .add(card.getCharacterName());
+                }
+                if (!card.getArtifactSet1().isEmpty() && card.getArtifactSet1Status()) {
+                    farmedArtifacts.get(card.getArtifactSet1()).add(card.getCharacterName());
+                }
+                if (!card.getArtifactSet2().isEmpty() && card.getArtifactSet2Status()) {
+                    farmedArtifacts.get(card.getArtifactSet2()).add(card.getCharacterName());
+                }
+                if (!card.getWeapon().isEmpty() && card.getWeaponStatus()) {
+                    farmedWeapons.get(card.getWeapon()).add(card.getCharacterName());
+                }
+            }
+
+        } catch (IOException e) {
+            System.out.println("Could not read saved character cards.");
         }
 
     }
@@ -665,6 +639,24 @@ public class ToolGUI extends JFrame {
     /** @noinspection ALL */
     public JComponent $$$getRootComponent$$$() {
         return mainPanel;
+    }
+
+    /**
+     * This enum is primarily used to return one of the farmed mappings.
+     */
+    public enum FARMED_DATATYPE {
+        /**
+         * Weapon map enum
+         */
+        WEAPONS,
+        /**
+         * Artifact map enum
+         */
+        ARTIFACTS,
+        /**
+         * Talent material (and weekly talent material) map enum
+         */
+        TALENTS
     }
 
 }
