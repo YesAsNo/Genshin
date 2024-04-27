@@ -1,15 +1,31 @@
 package Files;
 
-import static Files.ToolData.*;
-import static Files.ToolData.WEAPON_TYPE.*;
-import static Files.ToolGUI.*;
+import static Files.ToolData.AVAILABLE_FONTS;
+import static Files.ToolData.SAVE_LOCATION;
+import static Files.ToolData.WEAPON_TYPE.ALL_OPTIONS_BY_ENUM;
+import static Files.ToolData.WEAPON_TYPE.ALL_OPTIONS_BY_STRING;
+import static Files.ToolData.WEAPON_TYPE.NO_FILTER;
+import static Files.ToolData.changeFont;
+import static Files.ToolData.getWeapon;
+import static Files.ToolData.getWeaponMaterial;
+import static Files.ToolGUI.WEAPON_SAVE_FILE_NAME;
+import static Files.ToolGUI.formatString;
+import static Files.ToolGUI.isSomeoneFarmingForTheWeapon;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -164,9 +180,9 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
     private boolean inputMatchesFilters(String input, Weapon weapon, ToolData.WEAPON_TYPE filter,
                                         SEARCH_FLAG flag){
         if(weapon.name.toLowerCase().contains(input.toLowerCase()) &&
-                (weapon.type.equalsIgnoreCase(filter.stringToken)||
+                (weapon.weaponType.equalsIgnoreCase(filter.stringToken)||
                         filter == NO_FILTER)){
-            boolean isTheWeaponListed = isSomeoneFarmingForTheWeapon(weapon)|| unassignedFarmedWeapons.contains(weapon);
+            boolean isTheWeaponListed = isSomeoneFarmingForTheWeapon(weapon.name)|| unassignedFarmedWeapons.contains(weapon);
             if(isTheWeaponListed && flag == SEARCH_FLAG.LISTED_ONLY){
                 return true;
             }
@@ -204,7 +220,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         // WEAPON LISTING CHECK BOX
         JCheckBox devWepMatListingCheckbox = new JCheckBox();
         devWepMatListingCheckbox.setBackground(new Color(-1));
-        if (isSomeoneFarmingForTheWeapon(weapon)){
+        if (isSomeoneFarmingForTheWeapon(weapon.name)){
             devWepMatListingCheckbox.setSelected(true);
             devWepMatListingCheckbox.setEnabled(false);
             devWepMatListingCheckbox.setText("Already Farmed");
@@ -235,7 +251,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
 
         // WEAPON TYPE LABEL
         JLabel devWepTypeLabel = new JLabel();
-        devWepTypeLabel.setText("Type: " + weapon.type);
+        devWepTypeLabel.setText("Type: " + weapon.weaponType);
         changeFont(devWepTypeLabel, AVAILABLE_FONTS.TEXT_FONT, 12);
         devWeaponCard.add(devWepTypeLabel,
                 new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,

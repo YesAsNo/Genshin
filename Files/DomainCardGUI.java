@@ -1,12 +1,13 @@
 package Files;
 
 import static Files.DomainTabGUI.getAllCounterLabel;
-import static Files.DomainTabGUI.getDomainMapping;
 import static Files.DomainTabGUI.getDomainResourceType;
 import static Files.DomainTabGUI.getDomainTargetResourceMapping;
 import static Files.DomainTabGUI.getDomainTargetResourceType;
 import static Files.DomainTabGUI.getListedCounterLabel;
 import static Files.ToolData.changeFont;
+import static Files.ToolData.getCharacter;
+import static Files.ToolData.getWeapon;
 import static Files.ToolGUI.getCharacterCard;
 import static Files.ToolGUI.isSomeoneFarmingForTheWeapon;
 import static Files.ToolGUI.whoIsFarmingThis;
@@ -38,18 +39,18 @@ import java.util.Objects;
  */
 public class DomainCardGUI extends JFrame {
     private final DomainTabGUI.DOMAIN_THEME domainTheme;
-    private final String domainName;
+    private final Domain domain;
     private final JPanel mainPanel = new JPanel(new GridBagLayout());
 
     /**
      * Constructor of the class.
-     * @param domainName domain name
+     * @param domain domain
      * @param domainTheme domain type. There are currently 4 types in the game
      */
-    public DomainCardGUI(String domainName, DomainTabGUI.DOMAIN_THEME domainTheme) {
+    public DomainCardGUI(Domain domain, DomainTabGUI.DOMAIN_THEME domainTheme) {
         this.domainTheme = domainTheme;
-        this.domainName = domainName;
-        setTitle(domainName + " Overview");
+        this.domain = domain;
+        setTitle(domain.name + " Overview");
         setContentPane(generateDomainCard());
         setDefaultCloseOperation(HIDE_ON_CLOSE);
         setSize(1000, 600);
@@ -94,7 +95,7 @@ public class DomainCardGUI extends JFrame {
         // DOMAIN NAME
         JLabel domainNameLabel = new JLabel();
         domainNameLabel.setForeground(new Color(domainTheme.panelForegroundColor));
-        domainNameLabel.setText(domainName);
+        domainNameLabel.setText(domain.name);
         changeFont(domainNameLabel, ToolData.AVAILABLE_FONTS.HEADER_FONT, 20);
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -122,13 +123,13 @@ public class DomainCardGUI extends JFrame {
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null,
                         new Dimension(200, 200), null, 0, false));
-        for (String domainMat : Objects.requireNonNull(getDomainMapping(domainTheme)).get(domainName)){
+        for (Item domainMat:domain.materials){
             JPanel innerUnlistedPanel = new JPanel(new GridBagLayout());
             JPanel innerListedPanel = new JPanel(new GridBagLayout());
             JPanel dayTab = new JPanel();
             dayTab.setLayout(new GridBagLayout());
             dayTab.setBackground(new Color(-1));
-            itemOverviewTabbedPane.addTab("",getResourceIcon(domainMat,getDomainResourceType(domainTheme)), dayTab, domainMat);
+            itemOverviewTabbedPane.addTab("",domainMat.icon, dayTab, domainMat.name);
             JLabel listedWeaponHeadline = new JLabel();
             listedWeaponHeadline.setForeground(new Color(domainTheme.panelForegroundColor));
             if (getDomainTargetResourceType(domainTheme) == ToolData.RESOURCE_TYPE.WEAPON_NAME){
@@ -179,35 +180,35 @@ public class DomainCardGUI extends JFrame {
 
             int i = 0;
             int k = 0;
-            switch (Objects.requireNonNull(getDomainResourceType(domainTheme))){
-                case ARTIFACT_SET: {
-                    for (String charName : whoIsFarmingThis(domainMat,getDomainResourceType(domainTheme))){
-                        generateDomainItemLabel(charName,i,innerListedPanel);
+            switch (ToolData.RESOURCE_TYPE.byString.get(domain.type)){
+                case ARTIFACT: {
+                    for (String charName : whoIsFarmingThis(domainMat.name,getDomainResourceType(domainTheme))){
+                        generateDomainItemLabel(charName,getCharacter(charName).icon,i,innerListedPanel);
                         i++;
                     }
                     break;
                 }
                 case WEAPON_MATERIAL: {
-                    for (String eligibleWeapon : getEligibleItems(domainMat)){
-                        if (isSomeoneFarmingForTheWeapon(eligibleWeapon)|| getUnassignedFarmedWeapons().contains(eligibleWeapon)){
-                            generateDomainItemLabel(eligibleWeapon,i,innerListedPanel);
+                    for (String eligibleWeapon : getEligibleItems(domainMat.name)){
+                        if (isSomeoneFarmingForTheWeapon(eligibleWeapon)|| getUnassignedFarmedWeapons().contains(getWeapon(eligibleWeapon))){
+                            generateDomainItemLabel(eligibleWeapon,getWeapon(eligibleWeapon).icon,i,innerListedPanel);
                             i++;
                         }
                         else{
-                            generateDomainItemLabel(eligibleWeapon,k,innerUnlistedPanel);
+                            generateDomainItemLabel(eligibleWeapon,getWeapon(eligibleWeapon).icon,k,innerUnlistedPanel);
                             k++;
                         }
                     }
                     break;
                 }
                 case WEEKLY_BOSS_MATERIAL: case TALENT_BOOK: {
-                    for (String eligibleCharacter : getEligibleItems(domainMat)){
-                        if (whoIsFarmingThis(domainMat,getDomainResourceType(domainTheme)).contains(eligibleCharacter)){
-                            generateDomainItemLabel(eligibleCharacter,i,innerListedPanel);
+                    for (String eligibleCharacter : getEligibleItems(domainMat.name)){
+                        if (whoIsFarmingThis(domainMat.name,getDomainResourceType(domainTheme)).contains(eligibleCharacter)){
+                            generateDomainItemLabel(eligibleCharacter,getCharacter(eligibleCharacter).icon,i,innerListedPanel);
                             i++;
                             }
                         else{
-                            generateDomainItemLabel(eligibleCharacter,k,innerUnlistedPanel);
+                            generateDomainItemLabel(eligibleCharacter,getCharacter(eligibleCharacter).icon,k,innerUnlistedPanel);
                             k++;
                             }
                     }
@@ -223,7 +224,7 @@ public class DomainCardGUI extends JFrame {
         gbc.gridy = 1;
         gbc.weightx = 1.0;
         assert getDomainResourceType(domainTheme) != null;
-        JLabel label = new JLabel(getListedCounterLabel(domainName,getDomainResourceType(domainTheme)));
+        JLabel label = new JLabel(getListedCounterLabel(domain.name,getDomainResourceType(domainTheme)));
         changeFont(label, ToolData.AVAILABLE_FONTS.REGULAR_FONT, 12);
         titlePanel.add(label, gbc);
 
@@ -232,7 +233,7 @@ public class DomainCardGUI extends JFrame {
         gbc.gridy = 2;
         gbc.weightx = 1.0;
         assert getDomainResourceType(domainTheme) != null;
-        JLabel label2 = new JLabel(getAllCounterLabel(domainName,getDomainResourceType(domainTheme)));
+        JLabel label2 = new JLabel(getAllCounterLabel(domain.name,getDomainResourceType(domainTheme)));
         changeFont(label2, ToolData.AVAILABLE_FONTS.REGULAR_FONT, 12);
         titlePanel.add(label2, gbc);
         return mainPanel;
@@ -257,15 +258,15 @@ public class DomainCardGUI extends JFrame {
         }
     // GENERATED WEAPONS/CHARACTERS
 
-    private void generateDomainItemLabel(String item, int index,JPanel panel){
+    private void generateDomainItemLabel(String itemName,ImageIcon itemIcon, int index,JPanel panel){
         JLabel domainItemLabel = new JLabel();
         changeFont(domainItemLabel, ToolData.AVAILABLE_FONTS.TEXT_FONT, 12.0F);
-        if (getDomainResourceType(domainTheme) == ToolData.RESOURCE_TYPE.ARTIFACT_SET) {
-            CharacterListing card = getCharacterCard(item);
+        if (getDomainResourceType(domainTheme) == ToolData.RESOURCE_TYPE.ARTIFACT) {
+            CharacterListing card = getCharacterCard(itemName);
             if (card != null && !card.getCharacterNotes().isEmpty()) {
-                domainItemLabel.setText(formatLabel(item, card.getCharacterNotes()));
+                domainItemLabel.setText(formatLabel(itemName, card.getCharacterNotes()));
             } else {
-                domainItemLabel.setText(formatLabel(item,""));
+                domainItemLabel.setText(formatLabel(itemName,""));
             }
         }
         domainItemLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -283,7 +284,7 @@ public class DomainCardGUI extends JFrame {
         }
         gbc.anchor = GridBagConstraints.NORTH;
         gbc.insets = new Insets(0, 5, 0, 5);
-        domainItemLabel.setIcon(getResourceIcon(item,getDomainTargetResourceType(domainTheme)));
+        domainItemLabel.setIcon(itemIcon);
         panel.add(domainItemLabel, gbc);
     }
 }

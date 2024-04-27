@@ -25,9 +25,9 @@ public class ToolData {
     /** Save location of user data. */
     public static final String SAVE_LOCATION = "./UserData/";
     /** Locations of all data json files. */
-    private static final Map<String,String> artifactSetDescriptions = new TreeMap<>();
-    private static final List<Character> characters = new ArrayList<>();
-    private static final List<Domain> domains = new ArrayList<>();
+    public static final Map<String,String> artifactSetDescriptions = new TreeMap<>();
+    public static final List<Character> characters = new ArrayList<>();
+    public static final List<Domain> domains = new ArrayList<>();
     public static final List<Weapon> weapons = new ArrayList<>();
     public static final List<Item> artifacts = new ArrayList<>();
     public static final List<Item> weaponMaterials = new ArrayList<>();
@@ -235,7 +235,7 @@ public class ToolData {
             case WEAPON_NAME: {
                 assert resource instanceof Weapon;
                 Weapon weapon = (Weapon) resource;
-                return ToolData.class.getResource("/Files/Images/Weapons/" + weapon.type + "/" + weapon.rarity + "/" + weapon.name+ ".png");
+                return ToolData.class.getResource("/Files/Images/Weapons/" + weapon.weaponType + "/" + weapon.rarity + "/" + weapon.name+ ".png");
             }
             case ARTIFACT:
             case WEAPON_MATERIAL:
@@ -324,7 +324,7 @@ public class ToolData {
     public static List<Weapon> lookUpWeapons(WEAPON_RARITY rarity, WEAPON_TYPE type){
         List<Weapon> filtered = new ArrayList<>();
         for (Weapon weapon : weapons){
-            if (rarity.stringToken.equalsIgnoreCase(weapon.rarity) && type.stringToken.equalsIgnoreCase(weapon.type)){
+            if (rarity.stringToken.equalsIgnoreCase(weapon.rarity) && type.stringToken.equalsIgnoreCase(weapon.weaponType)){
                 filtered.add(weapon);
             }
         }

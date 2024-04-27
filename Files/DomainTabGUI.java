@@ -3,7 +3,6 @@ package Files;
 import static Files.DomainTabGUI.DOMAIN_FILTER_OPTIONS.ALL_OPTIONS_BY_ENUM;
 import static Files.DomainTabGUI.DOMAIN_FILTER_OPTIONS.ALL_OPTIONS_BY_STRING;
 import static Files.ToolData.AVAILABLE_FONTS;
-import static Files.ToolData.RESOURCE_TYPE.ARTIFACT;
 import static Files.ToolData.RESOURCE_TYPE.TALENT_BOOK;
 import static Files.ToolData.RESOURCE_TYPE.WEEKLY_BOSS_MATERIAL;
 import static Files.ToolData.changeFont;
@@ -363,7 +362,7 @@ public class DomainTabGUI implements ActionListener {
         int i = 0;
         for (DOMAIN_THEME dt : filteredThemes) {
             Map<String, List<String>> domainMapping = getDomainMapping(dt);
-            for (String domainName : domainMapping.keySet()) {
+            for (Domain domain : domainMapping.keySet()) {
                 if (status || isSomethingFarmedInThisDomain(dt, domainName)) {
                     GridBagConstraints gbc = new GridBagConstraints();
                     gbc.gridx = 0;
@@ -384,10 +383,10 @@ public class DomainTabGUI implements ActionListener {
      * @param domainName domain name
      * @return true if something is farmed, false if not.
      */
-    public static boolean isSomethingFarmedInThisDomain(DOMAIN_THEME dt,String domainName){
-        Set<String> farmedMapping = getDomainFarmedList(dt);
+    public static boolean isSomethingFarmedInThisDomain(DOMAIN_THEME dt,Domain domain){
+        Set<Item> farmedMapping = getDomainFarmedList(dt);
         List<String> domainItems = Objects.requireNonNull(getDomainMapping(dt)).get(domainName);
-        for (String item : farmedMapping){
+        for (Item item : farmedMapping){
             if (dt == DOMAIN_THEME.WEAPON_MATERIAL_THEME && domainItems.contains(getAscensionMaterialForWeapon(item))){
                 return true;
             }
@@ -398,7 +397,7 @@ public class DomainTabGUI implements ActionListener {
         return false;
     }
 
-    private JPanel generateDomainCard(DOMAIN_THEME dt, String domainName, String dayFilter){
+    private JPanel generateDomainCard(DOMAIN_THEME dt, Domain domain, String dayFilter){
         JPanel domainCard = new JPanel(new GridBagLayout());
         domainCard.setBackground(new Color(dt.panelBackgroundColor));
         domainCard.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
@@ -555,10 +554,10 @@ public class DomainTabGUI implements ActionListener {
      * @param dt domain theme
      * @return set of items
      */
-    public static Set<String> getDomainFarmedList(DOMAIN_THEME dt){
+    public static Set<Item> getDomainFarmedList(DOMAIN_THEME dt){
         switch(dt){
             case WEAPON_MATERIAL_THEME: {
-                TreeSet<String> allFarmedWeapons = new TreeSet<>(getUnassignedFarmedWeapons());
+                TreeSet<Item> allFarmedWeapons = new TreeSet<>(getUnassignedFarmedWeapons());
                 for (String weapon: getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS).keySet()){
                     assert getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS) != null;
                     if (!getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS).get(weapon).isEmpty()){
@@ -596,7 +595,7 @@ public class DomainTabGUI implements ActionListener {
      * @param rt resource type
      * @return the text
      */
-    public static String getAllCounterLabel(String domainName,ToolData.RESOURCE_TYPE rt){
+    public static String getAllCounterLabel(Domain domain,ToolData.RESOURCE_TYPE rt){
         String labelText;
         String domainMaterialCategory = "";
         Set<String> matchedCharacters = new TreeSet<>();
@@ -642,7 +641,7 @@ public class DomainTabGUI implements ActionListener {
      * @param rt resource type
      * @return the text
      */
-    public static String getListedCounterLabel(String domainName, ToolData.RESOURCE_TYPE rt){
+    public static String getListedCounterLabel(Domain domain, ToolData.RESOURCE_TYPE rt){
         String labelText;
         String domainMaterialCategory = "";
         int counter = 0;

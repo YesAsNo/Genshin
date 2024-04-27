@@ -2,19 +2,18 @@ package Files;
 
 import javax.swing.ImageIcon;
 
-public class Weapon {
-    public final String name;
+public class Weapon extends Item{
     public final String rarity;
-    public final String type;
+    public final String weaponType;
     public final String ascensionMaterial;
     public transient ImageIcon icon;
     public Weapon(String weaponName, String weaponRarity, String weaponType, String weaponAscensionMaterial){
-        name = weaponName;
+        super(weaponName,"weapon");
         rarity = weaponRarity;
-        type = weaponType;
+        this.weaponType = weaponType;
         ascensionMaterial = weaponAscensionMaterial;
     }
     public void printInfo(){
-        System.out.println(name + " " + rarity + " " + type + " "+ ascensionMaterial);
+        System.out.println(name + " " + rarity + " " + weaponType + " "+ ascensionMaterial);
     }
 }

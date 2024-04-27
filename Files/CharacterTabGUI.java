@@ -1,8 +1,10 @@
 package Files;
 
 import static Files.ToolData.changeFont;
+import static Files.ToolData.characters;
+import static Files.ToolData.getCharacter;
+import static Files.ToolData.getPlaceholderIcon;
 import static Files.ToolGUI.NO_CHARACTERS_MATCH_MESSAGE;
-import static Files.ToolGUI.UNKNOWN_CHARACTER;
 import static Files.ToolGUI.checkIfCharacterCardHasBeenGenerated;
 import static Files.ToolGUI.formatString;
 import static Files.ToolGUI.getCharacterCard;
@@ -139,15 +141,6 @@ public final class CharacterTabGUI implements ActionListener {
      * @param index which character by count it is
      */
     private void generateCharacterButton(String characterName, int index) {
-        if (characterName.equalsIgnoreCase(UNKNOWN_CHARACTER)) {
-            JLabel unknownCharacterLabel = new JLabel(getResourceIcon(characterName, ToolData.RESOURCE_TYPE.CHARACTER));
-            unknownCharacterLabel.setText(NO_CHARACTERS_MATCH_MESSAGE);
-            unknownCharacterLabel.setVerticalTextPosition(SwingConstants.BOTTOM);
-            unknownCharacterLabel.setHorizontalTextPosition(SwingConstants.CENTER);
-            searchResultPanel.add(unknownCharacterLabel);
-            searchResultPanel.updateUI();
-            return;
-        }
         JButton characterButton = getjButton(characterName);
         addCharacterButtonToSelectedCharacterPanel(characterButton, index);
 
@@ -176,7 +169,7 @@ public final class CharacterTabGUI implements ActionListener {
             characterListing = getCharacterCard(characterName);
         }
         assert characterListing != null;
-        characterButton.setIcon(characterListing.getCharacterIcon());
+        characterButton.setIcon(getCharacter(characterListing.getCharacterName()).icon);
         characterButton.setText(formatString(characterName));
         changeFont(characterButton, ToolData.AVAILABLE_FONTS.BLACK_FONT, 12);
         characterButton.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -205,34 +198,29 @@ public final class CharacterTabGUI implements ActionListener {
         JLabel label = (JLabel) elementFilterBox.getSelectedItem();
         assert label != null;
         String element = label.getText();
-        List<String> eligibleCharacters = new ArrayList<>();
+        List<Character> eligibleCharacters = new ArrayList<>();
         if (element.equalsIgnoreCase(ALL_ELEMENTS)){
-            eligibleCharacters.addAll(getFlattenedData(ToolData.RESOURCE_TYPE.CHARACTER));
+            eligibleCharacters.addAll(characters);
         }
         else{
-            Map<String,List<String>> mapping = getMapping(ToolData.DATA_CATEGORY.CHARACTER);
-            for (String key : mapping.keySet()){
-                if (key.contains(element)){
-                    eligibleCharacters.addAll(mapping.get(key));
-                    break;
+            for (Character character:characters){
+                if (character.element.equalsIgnoreCase(element)){
+                    eligibleCharacters.add(character);
                 }
-            }
-            if (eligibleCharacters.isEmpty()){
-                eligibleCharacters.add("Traveler");
             }
         }
 
-        for (String s : eligibleCharacters) {
-            if (s.toLowerCase().contains(userFieldInput) ) {
+        for (Character character : eligibleCharacters) {
+            if (character.name.toLowerCase().contains(userFieldInput) ) {
                 {
-                    generateCharacterButton(s, matchedCount);
+                    generateCharacterButton(character.name, matchedCount);
                 }
                 matchedCount++;
             }
         }
         matchesLabel.setText("Matches: " + matchedCount);
         if (matchedCount == 0) {
-            generateCharacterButton(UNKNOWN_CHARACTER, matchedCount);
+            generateNoMatchesLabel();
         } else {
             searchScrollPane.setViewportView(searchResultPanel);
             GridBagConstraints gbc = new GridBagConstraints();
@@ -246,6 +234,14 @@ public final class CharacterTabGUI implements ActionListener {
             mainPanel.add(searchScrollPane, gbc);
         }
 
+    }
+    private void generateNoMatchesLabel(){
+        JLabel unknownCharacterLabel = new JLabel(getPlaceholderIcon("character"));
+        unknownCharacterLabel.setText(NO_CHARACTERS_MATCH_MESSAGE);
+        unknownCharacterLabel.setVerticalTextPosition(SwingConstants.BOTTOM);
+        unknownCharacterLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+        searchResultPanel.add(unknownCharacterLabel);
+        searchResultPanel.updateUI();
     }
     /**
      * Verifies if a window for the specified character has already been opened.

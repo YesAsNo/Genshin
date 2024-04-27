@@ -4,8 +4,6 @@ import static Files.ToolGUI.CHARACTER_LIMIT;
 import static Files.ToolGUI.EMPTY_SET_SELECTOR;
 import static Files.ToolGUI.EMPTY_WEAPON_SELECTOR;
 
-import javax.swing.ImageIcon;
-
 /**
  * This class is a data structure for a character. The data here is used in CharacterTabGUI.java to construct the GUI.
  */
@@ -46,12 +44,6 @@ public class CharacterListing {
     public String getCharacterName() {
         return characterName;
     }
-
-    /**
-     * Returns the character icon.
-     * @return icon
-     */
-    public ImageIcon getCharacterIcon(){return characterIcon;}
 
     /**
      * Returns the character notes (String value, up to 150 characters)
