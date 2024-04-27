@@ -1,12 +1,16 @@
 package Files.Code.GUIs;
 
+import static Files.Code.Data.ToolData.artifacts;
 import static Files.Code.Data.ToolData.changeFont;
+import static Files.Code.Data.ToolData.getArtifact;
 import static Files.Code.Data.ToolData.getCharacter;
 import static Files.Code.Data.ToolData.getPlaceholderIcon;
 import static Files.Code.Data.ToolData.getResizedResourceIcon;
+import static Files.Code.Data.ToolData.getWeapon;
 import static Files.Code.Data.ToolData.lookUpWeapons;
 import static Files.Code.Data.ToolData.placeholderImageKeys;
 import static Files.Code.GUIs.ToolGUI.CHARACTER_LIMIT;
+import static Files.Code.GUIs.ToolGUI.EMPTY_SET_SELECTOR;
 import static Files.Code.GUIs.ToolGUI.EMPTY_WEAPON_SELECTOR;
 import static Files.Code.GUIs.ToolGUI.FIVE_STAR_WEAPON_DELIMITER;
 import static Files.Code.GUIs.ToolGUI.FOUR_STAR_WEAPON_DELIMITER;
@@ -20,7 +24,9 @@ import Files.Code.Auxiliary.UpdateCharacterCardComboBoxListener;
 import Files.Code.Auxiliary.UpdateLabelListener;
 import Files.Code.Auxiliary.UpdateTextAreaListener;
 import Files.Code.Auxiliary.WeaponSelectorComboBoxModel;
+import Files.Code.Data.Character;
 import Files.Code.Data.CharacterListing;
+import Files.Code.Data.Item;
 import Files.Code.Data.ToolData;
 import Files.Code.Data.Weapon;
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -165,7 +171,7 @@ public class CharacterCardGUI extends JFrame {
                                             ToolData.CHARACTER_CARD_DATA_FIELD dataField) {
         javax.swing.JLabel setNameLabel = new javax.swing.JLabel();
         setNameLabel.setAutoscrolls(true);
-        changeFont(setNameLabel, AVAILABLE_FONTS.HEADER_FONT, 18.0F);
+        changeFont(setNameLabel, ToolData.AVAILABLE_FONTS.HEADER_FONT, 18.0F);
 
         if (dataField == ToolData.CHARACTER_CARD_DATA_FIELD.SET_ONE) {
             setNameLabel.setText(characterListing.getArtifactSet1());
@@ -190,7 +196,7 @@ public class CharacterCardGUI extends JFrame {
         setComboBox.setAutoscrolls(false);
         setComboBox.setEditable(false);
         setComboBox.setFocusable(false);
-        changeFont(setComboBox, AVAILABLE_FONTS.HEADER_FONT, 14.0F);
+        changeFont(setComboBox, ToolData.AVAILABLE_FONTS.HEADER_FONT, 14.0F);
         setComboBox.setInheritsPopupMenu(false);
         final DefaultComboBoxModel<JLabel> setComboBoxModel = new DefaultComboBoxModel<>();
         JLabel label = new JLabel();
@@ -239,7 +245,7 @@ public class CharacterCardGUI extends JFrame {
         jpanel.add(characterWeaponSpacer, gridConstraints);
     }
 
-    private JLabel getWeaponIcon(CharacterListing characterListing, JPanel jpanel) {
+    private JLabel getWeaponIconLabel(CharacterListing characterListing, JPanel jpanel) {
         JLabel weaponIcon = new javax.swing.JLabel();
         weaponIcon.setHorizontalAlignment(4);
         weaponIcon.setHorizontalTextPosition(4);
@@ -271,7 +277,7 @@ public class CharacterCardGUI extends JFrame {
         jpanel.add(charLabel, gbc);
     }
 
-    private JLabel getSetIcon(String savedArtifactSetName, JPanel jpanel, GridBagConstraints gbc) {
+    private JLabel getSetIconLabel(String savedArtifactSetName, JPanel jpanel, GridBagConstraints gbc) {
         JLabel setIcon = new JLabel();
         setIcon.setHorizontalAlignment(4);
         setIcon.setHorizontalTextPosition(4);
@@ -439,7 +445,7 @@ public class CharacterCardGUI extends JFrame {
                         GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null,
                         0, false));
 
-        javax.swing.JLabel weaponJLabel = getWeaponIcon(characterListing, templateTab);
+        javax.swing.JLabel weaponJLabel = getWeaponIconLabel(characterListing, templateTab);
 
         getCharLabel(getCharacter(characterListing.getCharacterName()).icon, templateTab);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -448,9 +454,9 @@ public class CharacterCardGUI extends JFrame {
         gbc.weightx = 0.5;
         gbc.anchor = GridBagConstraints.NORTHEAST;
         gbc.insets = new Insets(5, 0, 0, 20);
-        javax.swing.JLabel set1Icon = getSetIcon(characterListing.getArtifactSet1(), templateTab, gbc);
+        javax.swing.JLabel set1Icon = getSetIconLabel(characterListing.getArtifactSet1(), templateTab, gbc);
         gbc.gridy++;
-        javax.swing.JLabel set2Icon = getSetIcon(characterListing.getArtifactSet2(), templateTab, gbc);
+        javax.swing.JLabel set2Icon = getSetIconLabel(characterListing.getArtifactSet2(), templateTab, gbc);
 
         JPanel checkboxAndButtonPanel = getRightPanel(templateTab);
         JCheckBox artifactSet1ListingCheckBox =

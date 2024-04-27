@@ -5,7 +5,6 @@ import static Files.Code.Data.ToolData.getCharacter;
 import static Files.Code.Data.ToolData.getWeapon;
 import static Files.Code.GUIs.DomainTabGUI.getAllCounterLabel;
 import static Files.Code.GUIs.DomainTabGUI.getDomainResourceType;
-import static Files.Code.GUIs.DomainTabGUI.getDomainTargetResourceMapping;
 import static Files.Code.GUIs.DomainTabGUI.getDomainTargetResourceType;
 import static Files.Code.GUIs.DomainTabGUI.getListedCounterLabel;
 import static Files.Code.GUIs.ToolGUI.getCharacterCard;
@@ -13,6 +12,7 @@ import static Files.Code.GUIs.ToolGUI.isSomeoneFarmingForTheWeapon;
 import static Files.Code.GUIs.ToolGUI.whoIsFarmingThis;
 import static Files.Code.GUIs.WeaponTabGUI.getUnassignedFarmedWeapons;
 
+import Files.Code.Data.Character;
 import Files.Code.Data.CharacterListing;
 import Files.Code.Data.Domain;
 import Files.Code.Data.FarmableItem;
@@ -34,8 +34,6 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -186,16 +184,25 @@ public class DomainCardGUI extends JFrame {
 
             int i = 0;
             int k = 0;
-            switch (ToolData.RESOURCE_TYPE.byString.get(domain.domainType)) {
-                case ARTIFACT: {
-                    for (String charName : whoIsFarmingThis(domainMat.name, getDomainResourceType(domainTheme))) {
-                        generateDomainItemLabel(charName, getCharacter(charName).icon, i, innerListedPanel);
-                        i++;
-                    }
-                    break;
+            if (domain.isArtifactDomain()){
+                for (Character character : whoIsFarmingThis(domainMat)){
+                    generateDomainItemLabel(character.name, character.icon, i, innerListedPanel);
+                    i++;
                 }
+            }
+            else if (domain.isWeaponMaterialDomain()){
+
+            }
+            else if (domain.isWeeklyTalentDomain()){
+
+            }
+            else if (domain.isTalentBookDomain()){
+
+            }
+            switch (ToolData.RESOURCE_TYPE.byString.get(domain.domainType)) {
                 case WEAPON_MATERIAL: {
-                    for (String eligibleWeapon : getEligibleItems(domainMat.name)) {
+                    assert domainM
+                    for (Weapon weapon : domainMat.) {
                         if (isSomeoneFarmingForTheWeapon(eligibleWeapon) ||
                                 getUnassignedFarmedWeapons().contains(getWeapon(eligibleWeapon))) {
                             generateDomainItemLabel(eligibleWeapon, getWeapon(eligibleWeapon).icon, i,
@@ -235,7 +242,7 @@ public class DomainCardGUI extends JFrame {
         gbc.gridy = 1;
         gbc.weightx = 1.0;
         assert getDomainResourceType(domainTheme) != null;
-        JLabel label = new JLabel(getListedCounterLabel(domain, getDomainResourceType(domainTheme)));
+        JLabel label = new JLabel(getListedCounterLabel(domain));
         changeFont(label, ToolData.AVAILABLE_FONTS.REGULAR_FONT, 12);
         titlePanel.add(label, gbc);
 
@@ -244,16 +251,12 @@ public class DomainCardGUI extends JFrame {
         gbc.gridy = 2;
         gbc.weightx = 1.0;
         assert getDomainResourceType(domainTheme) != null;
-        JLabel label2 = new JLabel(getAllCounterLabel(domain, getDomainResourceType(domainTheme)));
+        JLabel label2 = new JLabel(getAllCounterLabel(domain));
         changeFont(label2, ToolData.AVAILABLE_FONTS.REGULAR_FONT, 12);
         titlePanel.add(label2, gbc);
         return mainPanel;
     }
 
-    private List<String> getEligibleItems(String material) {
-        Map<String, List<String>> targetResourceMapping = getDomainTargetResourceMapping(domainTheme);
-        return targetResourceMapping.get(material);
-    }
 
     private String formatLabel(String characterName, String characterNotes) {
         final String HTML_BEGINNING = "<html><center>";

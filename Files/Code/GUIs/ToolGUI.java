@@ -3,17 +3,25 @@ package Files.Code.GUIs;
 import static Files.Code.Data.ToolData.SAVE_LOCATION;
 import static Files.Code.Data.ToolData.artifacts;
 import static Files.Code.Data.ToolData.changeFont;
+import static Files.Code.Data.ToolData.getArtifact;
+import static Files.Code.Data.ToolData.getCharacter;
 import static Files.Code.Data.ToolData.getTalentBook;
+import static Files.Code.Data.ToolData.getWeapon;
 import static Files.Code.Data.ToolData.getWeeklyTalentMaterial;
 import static Files.Code.Data.ToolData.talentBooks;
 import static Files.Code.Data.ToolData.weapons;
 import static Files.Code.Data.ToolData.weeklyTalents;
 import static Files.Code.GUIs.WeaponTabGUI.getUnassignedFarmedWeapons;
 
+import Files.Code.Data.Artifact;
+import Files.Code.Data.Character;
 import Files.Code.Data.CharacterListing;
+import Files.Code.Data.FarmableItem;
 import Files.Code.Data.Item;
+import Files.Code.Data.TalentMaterial;
 import Files.Code.Data.ToolData;
 import Files.Code.Data.Weapon;
+import Files.Code.Data.WeeklyTalentMaterial;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -40,9 +48,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
@@ -87,19 +95,20 @@ public class ToolGUI extends JFrame {
     /**
      * This mapping contains all farmed weapons from all saved characters. Note that weapons unassigned to characters are not put into this mapping.
      */
-    public static final TreeMap<String, Set<String>> farmedWeapons = new TreeMap<>();
+    public static final TreeMap<Weapon, Set<Character>> farmedWeapons = new TreeMap<>();
     /**
      * This mapping contains all farmed artifact sets from all saved characters.
      */
-    public static final TreeMap<String, Set<String>> farmedArtifacts = new TreeMap<>();
+    public static final TreeMap<Artifact, Set<Character>> farmedArtifacts = new TreeMap<>();
     /**
      * This mapping contains all farmed talent book names and weekly boss materials.
      */
-    public static final TreeMap<String, Set<String>> farmedTalents = new TreeMap<>();
-    private static final List<CharacterListing> GENERATED_CHARACTER_LISTINGS = new ArrayList<>();
+    public static final TreeMap<TalentMaterial, Set<Character>> farmedTalentBooks = new TreeMap<>();
+    public static final TreeMap<WeeklyTalentMaterial, Set<Character>> farmedWeeklyTalentMaterials = new TreeMap<>();
+    private static final List<CharacterListing> characterListings = new ArrayList<>();
     private static final CharacterTabGUI _characterTabGUI = new CharacterTabGUI();
     private static final WeaponTabGUI _weaponsTabGUI = new WeaponTabGUI();
-    private static final DomainTabGUI __DOMAIN_TAB_GUI = new DomainTabGUI();
+    private static final DomainTabGUI _domainTabGUI = new DomainTabGUI();
     private JPanel mainPanel;
     private JTabbedPane mainTabbedPane;
     private JPanel mainInformationPanel;
@@ -133,7 +142,7 @@ public class ToolGUI extends JFrame {
 
         addTab("Characters", _characterTabGUI.getMainPanel());
         addTab("Weapons", _weaponsTabGUI.getMainPanel());
-        addTab("Domains", __DOMAIN_TAB_GUI.getMainPanel());
+        addTab("Domains", _domainTabGUI.getMainPanel());
         setContentPane(mainPanel);
         setTitle("Genshin Domain App v.1.1");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -150,8 +159,8 @@ public class ToolGUI extends JFrame {
      *
      * @param characterListing character card
      */
-    public static void addCharacterCard(CharacterListing characterListing) {
-        GENERATED_CHARACTER_LISTINGS.add(characterListing);
+    public static void addCharacterListing(CharacterListing characterListing) {
+        characterListings.add(characterListing);
     }
 
     /**
@@ -160,7 +169,7 @@ public class ToolGUI extends JFrame {
      * @param fd the enum corresponding to the farmed mapping.
      * @return the corresponding farmed mapping.
      */
-    public static TreeMap<?, Set<String>> getFarmedMapping(FARMED_DATATYPE fd) {
+    public static TreeMap<? extends Item, Set<Character>> getFarmedMapping(FARMED_DATATYPE fd) {
         assert fd != null;
         switch (fd) {
             case WEAPONS:
@@ -168,9 +177,9 @@ public class ToolGUI extends JFrame {
             case ARTIFACTS:
                 return farmedArtifacts;
             case TALENTS:
-                return farmedTalents;
+                return farmedTalentBooks;
         }
-        throw new IllegalArgumentException();
+        throw new IllegalArgumentException("Farmed Datatype can only be WEAPONS, ARTIFACTS or TALENTS");
     }
 
     /**
@@ -179,7 +188,7 @@ public class ToolGUI extends JFrame {
      * @param weapon weapon name
      * @return true, if the weapon was listed for one of the characters.
      */
-    public static boolean isSomeoneFarmingForTheWeapon(String weapon) {
+    public static boolean isSomeoneFarmingForTheWeapon(Weapon weapon) {
         return !farmedWeapons.get(weapon).isEmpty();
     }
 
@@ -190,35 +199,28 @@ public class ToolGUI extends JFrame {
      * @param rt the resource type of that material
      * @return counter of characters who are farming this material.
      */
-    public static int howManyAreFarmingThis(String mat, ToolData.RESOURCE_TYPE rt) {
+    public static int howManyAreFarmingThis(FarmableItem mat) {
         int counter = 0;
-        for (CharacterListing characterListing : GENERATED_CHARACTER_LISTINGS) {
-            switch (rt) {
-                case TALENT_BOOK: {
-                    if (characterListing.getTalentStatus() &&
-                            getTalentBook(characterListing.getCharacterName()).name.equalsIgnoreCase(mat)) {
-                        counter++;
-                    }
-                    break;
+        for (CharacterListing characterListing : characterListings) {
+            if (mat.getClass().equals(TalentMaterial.class)) {
+                if (characterListing.getTalentStatus() &&
+                        ((TalentMaterial) mat).usedBy.contains(characterListing.getCharacterName())) {
+                    counter++;
                 }
-                case WEEKLY_BOSS_MATERIAL: {
-                    if (characterListing.getTalentStatus() &&
-                            getWeeklyTalentMaterial(characterListing.getCharacterName()).name.equalsIgnoreCase(mat)) {
-                        counter++;
-                    }
-                    break;
+            } else if (mat.getClass().equals(WeeklyTalentMaterial.class)) {
+                if (characterListing.getTalentStatus() &&
+                        ((WeeklyTalentMaterial) mat).usedBy.contains(characterListing.getCharacterName())) {
+                    counter++;
                 }
-                case ARTIFACT: {
-                    if ((characterListing.getArtifactSet1Status() &&
-                            characterListing.getArtifactSet1().equalsIgnoreCase(mat)) ||
-                            characterListing.getArtifactSet2Status() &&
-                                    characterListing.getArtifactSet2().equalsIgnoreCase(mat)) {
-                        counter++;
-                    }
-                    break;
+            } else if (mat.getClass().equals(Artifact.class)) {
+                if ((characterListing.getArtifactSet1Status() &&
+                        characterListing.getArtifactSet1().equalsIgnoreCase(mat.name)) ||
+                        characterListing.getArtifactSet2Status() &&
+                                characterListing.getArtifactSet2().equalsIgnoreCase(mat.name)) {
+                    counter++;
                 }
-                default:
-                    throw new IllegalArgumentException("RESOURCE TYPE INVALID: " + rt.stringToken);
+            } else {
+                throw new IllegalArgumentException("RESOURCE TYPE INVALID: " + mat.type);
             }
         }
         return counter;
@@ -228,38 +230,30 @@ public class ToolGUI extends JFrame {
      * Primarily used for farmed labels in DomainCardGUI.
      *
      * @param mat the farmed material
-     * @param rt the resource type of that material
      * @return set of characters who are farming this material.
      */
-    public static Set<String> whoIsFarmingThis(String mat, ToolData.RESOURCE_TYPE rt) {
-        Set<String> characterSet = new TreeSet<>();
-        for (CharacterListing characterListing : GENERATED_CHARACTER_LISTINGS) {
-            switch (rt) {
-                case TALENT_BOOK: {
-                    if (characterListing.getTalentStatus() &&
-                            getTalentBook(characterListing.getCharacterName()).name.equalsIgnoreCase(mat)) {
-                        characterSet.add(characterListing.getCharacterName());
-                    }
-                    break;
+    public static Set<Character> whoIsFarmingThis(FarmableItem mat) {
+        Set<Character> characterSet = new HashSet<>();
+        for (CharacterListing characterListing : characterListings) {
+            if (mat.getClass().equals(TalentMaterial.class)) {
+                if (characterListing.getTalentStatus() &&
+                        ((TalentMaterial) mat).usedBy.contains(characterListing.getCharacterName())) {
+                    characterSet.add(getCharacter(characterListing.getCharacterName()));
                 }
-                case WEEKLY_BOSS_MATERIAL: {
-                    if (characterListing.getTalentStatus() &&
-                            getWeeklyTalentMaterial(characterListing.getCharacterName()).name.equalsIgnoreCase(mat)) {
-                        characterSet.add(characterListing.getCharacterName());
-                    }
-                    break;
+            } else if (mat.getClass().equals(WeeklyTalentMaterial.class)) {
+                if (characterListing.getTalentStatus() &&
+                        ((WeeklyTalentMaterial) mat).usedBy.contains(characterListing.getCharacterName())) {
+                    characterSet.add(getCharacter(characterListing.getCharacterName()));
                 }
-                case ARTIFACT: {
-                    if ((characterListing.getArtifactSet1Status() &&
-                            characterListing.getArtifactSet1().equalsIgnoreCase(mat)) ||
-                            characterListing.getArtifactSet2Status() &&
-                                    characterListing.getArtifactSet2().equalsIgnoreCase(mat)) {
-                        characterSet.add(characterListing.getCharacterName());
-                    }
-                    break;
+            } else if (mat.getClass().equals(Artifact.class)) {
+                if ((characterListing.getArtifactSet1Status() &&
+                        characterListing.getArtifactSet1().equalsIgnoreCase(mat.name)) ||
+                        characterListing.getArtifactSet2Status() &&
+                                characterListing.getArtifactSet2().equalsIgnoreCase(mat.name)) {
+                    characterSet.add(getCharacter(characterListing.getCharacterName()));
                 }
-                default:
-                    throw new IllegalArgumentException("RESOURCE TYPE INVALID: " + rt.stringToken);
+            } else {
+                throw new IllegalArgumentException("RESOURCE TYPE INVALID: " + mat.type);
             }
         }
         return characterSet;
@@ -274,32 +268,42 @@ public class ToolGUI extends JFrame {
      * @param item the item that has been either removed or assigned to the character card.
      */
     public static void updateFarmedItemMap(ToolData.CHARACTER_CARD_DATA_FIELD dataField,
-                                           CharacterListing characterListing, boolean status, String item) {
-        if (item.isEmpty() || item.equalsIgnoreCase(EMPTY_SET_SELECTOR) ||
-                item.equalsIgnoreCase(EMPTY_WEAPON_SELECTOR)) {
+                                           CharacterListing characterListing, boolean status, Item item) {
+        if (item == null) {
             return;
         }
-        Map<String, Set<String>> mapping;
         switch (dataField) {
             case WEAPON:
             case FARMING_WEAPON_MATERIALS:
-                mapping = farmedWeapons;
+                assert item instanceof Weapon;
+                if (status) {
+                    farmedWeapons.get(item).add(getCharacter(characterListing.getCharacterName()));
+                } else {
+                    farmedWeapons.get(item).remove(getCharacter(characterListing.getCharacterName()));
+                }
                 break;
             case SET_ONE:
             case SET_TWO:
-                mapping = farmedArtifacts;
+                assert item instanceof Artifact;
+                if (status) {
+                    farmedArtifacts.get(item).add(getCharacter(characterListing.getCharacterName()));
+                } else {
+                    farmedArtifacts.get(item).remove(getCharacter(characterListing.getCharacterName()));
+                }
                 break;
             case FARMING_TALENT_MATERIALS:
-                mapping = farmedTalents;
+                //TODO: Add support for Weekly Talent Materials
+                assert item instanceof TalentMaterial;
+                if (status) {
+                    farmedTalentBooks.get(item).add(getCharacter(characterListing.getCharacterName()));
+                } else {
+                    farmedTalentBooks.get(item).remove(getCharacter(characterListing.getCharacterName()));
+                }
                 break;
             default:
                 throw new IllegalArgumentException("This datafield cannot be farmed " + dataField);
         }
-        if (status) {
-            mapping.get(item).add(characterListing.getCharacterName());
-        } else {
-            mapping.get(item).remove(characterListing.getCharacterName());
-        }
+
     }
 
     /**
@@ -327,10 +331,10 @@ public class ToolGUI extends JFrame {
      */
 
     public static boolean checkIfCharacterCardHasBeenGenerated(String charName) {
-        if (GENERATED_CHARACTER_LISTINGS.isEmpty()) {
+        if (characterListings.isEmpty()) {
             return false;
         }
-        for (CharacterListing generatedCharacterListing : GENERATED_CHARACTER_LISTINGS) {
+        for (CharacterListing generatedCharacterListing : characterListings) {
             if (generatedCharacterListing.getCharacterName().equalsIgnoreCase(charName)) {
                 return true;
             }
@@ -345,7 +349,7 @@ public class ToolGUI extends JFrame {
      * @return character card
      */
     public static CharacterListing getCharacterCard(String charName) {
-        for (CharacterListing generatedCharacterListing : GENERATED_CHARACTER_LISTINGS) {
+        for (CharacterListing generatedCharacterListing : characterListings) {
             if (generatedCharacterListing.getCharacterName().equalsIgnoreCase(charName)) {
                 return generatedCharacterListing;
             }
@@ -401,17 +405,17 @@ public class ToolGUI extends JFrame {
     }
 
     private void initialiseFarmedArrays() {
-        for (Item talentBook : talentBooks) {
-            farmedTalents.put(talentBook.name, new TreeSet<>());
+        for (TalentMaterial talentBook : talentBooks) {
+            farmedTalentBooks.put(talentBook, new TreeSet<>());
         }
-        for (Item weeklyMat : weeklyTalents) {
-            farmedTalents.put(weeklyMat.name, new TreeSet<>());
+        for (WeeklyTalentMaterial weeklyMat : weeklyTalents) {
+            farmedWeeklyTalentMaterials.put(weeklyMat, new TreeSet<>());
         }
-        for (Item artifactSet : artifacts) {
-            farmedArtifacts.put(artifactSet.name, new TreeSet<>());
+        for (Artifact artifactSet : artifacts) {
+            farmedArtifacts.put(artifactSet, new TreeSet<>());
         }
         for (Weapon weapon : weapons) {
-            farmedWeapons.put(weapon.name, new TreeSet<>());
+            farmedWeapons.put(weapon, new TreeSet<>());
         }
     }
 
@@ -435,20 +439,21 @@ public class ToolGUI extends JFrame {
             for (File savedCard : savedCards) {
                 JsonReader reader = new JsonReader(new FileReader(savedCard));
                 CharacterListing card = gson.fromJson(reader, CharacterListing.class);
-                GENERATED_CHARACTER_LISTINGS.add(card);
+                characterListings.add(card);
                 if (card.getTalentStatus()) {
-                    farmedTalents.get(getTalentBook(card.getCharacterName()).name).add(card.getCharacterName());
-                    farmedTalents.get(getWeeklyTalentMaterial(card.getCharacterName()).name)
-                            .add(card.getCharacterName());
+                    farmedTalentBooks.get(getTalentBook(card.getCharacterName()))
+                            .add(getCharacter(card.getCharacterName()));
+                    farmedWeeklyTalentMaterials.get(getWeeklyTalentMaterial(card.getCharacterName()))
+                            .add(getCharacter(card.getCharacterName()));
                 }
                 if (!card.getArtifactSet1().isEmpty() && card.getArtifactSet1Status()) {
-                    farmedArtifacts.get(card.getArtifactSet1()).add(card.getCharacterName());
+                    farmedArtifacts.get(getArtifact(card.getArtifactSet1())).add(getCharacter(card.getCharacterName()));
                 }
                 if (!card.getArtifactSet2().isEmpty() && card.getArtifactSet2Status()) {
-                    farmedArtifacts.get(card.getArtifactSet2()).add(card.getCharacterName());
+                    farmedArtifacts.get(getArtifact(card.getArtifactSet2())).add(getCharacter(card.getCharacterName()));
                 }
                 if (!card.getWeapon().isEmpty() && card.getWeaponStatus()) {
-                    farmedWeapons.get(card.getWeapon()).add(card.getCharacterName());
+                    farmedWeapons.get(getWeapon(card.getWeapon())).add(getCharacter(card.getCharacterName()));
                 }
             }
 

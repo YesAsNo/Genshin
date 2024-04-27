@@ -1,6 +1,7 @@
 package Files.Code.Auxiliary;
 
-import static Files.ToolGUI.updateFarmedItemMap;
+import static Files.Code.Data.ToolData.getArtifact;
+import static Files.Code.GUIs.ToolGUI.updateFarmedItemMap;
 
 import Files.Code.Data.CharacterListing;
 import Files.Code.Data.ToolData;
@@ -40,12 +41,12 @@ public class UpdateCharacterCardCheckBoxListener implements ItemListener {
             case FARMING_SET_ONE:
                 _characterListing.setArtifactSet1Status(currentStatus);
                 updateFarmedItemMap(ToolData.CHARACTER_CARD_DATA_FIELD.SET_ONE, _characterListing, currentStatus,
-                        _characterListing.getArtifactSet1());
+                        getArtifact(_characterListing.getArtifactSet1()));
                 return;
             case FARMING_SET_TWO:
                 _characterListing.setArtifactSet2Status(currentStatus);
                 updateFarmedItemMap(ToolData.CHARACTER_CARD_DATA_FIELD.SET_TWO, _characterListing, currentStatus,
-                        _characterListing.getArtifactSet2());
+                        getArtifact(_characterListing.getArtifactSet2()));
                 return;
             case FARMING_TALENT_MATERIALS:
                 _characterListing.setTalentStatus(currentStatus);

@@ -29,10 +29,10 @@ public class ToolData {
     public static final List<Character> characters = new ArrayList<>();
     public static final List<Domain> domains = new ArrayList<>();
     public static final List<Weapon> weapons = new ArrayList<>();
-    public static final List<Item> artifacts = new ArrayList<>();
-    public static final List<Item> weaponMaterials = new ArrayList<>();
-    public static final List<Item> talentBooks = new ArrayList<>();
-    public static final List<Item> weeklyTalents = new ArrayList<>();
+    public static final List<Artifact> artifacts = new ArrayList<>();
+    public static final List<WeaponMaterial> weaponMaterials = new ArrayList<>();
+    public static final List<TalentMaterial> talentBooks = new ArrayList<>();
+    public static final List<WeeklyTalentMaterial> weeklyTalents = new ArrayList<>();
     private static final Map<String, ImageIcon> placeholderIcons = new TreeMap<>();
 
     /** Enum that represents known mappings. All methods should use it instead of String values. */
@@ -317,8 +317,8 @@ public class ToolData {
         throw new IllegalArgumentException(name + "is not a weapon name");
     }
 
-    public static Item getWeaponMaterial(String name) {
-        for (Item weaponMaterial : weaponMaterials) {
+    public static WeaponMaterial getWeaponMaterial(String name) {
+        for (WeaponMaterial weaponMaterial : weaponMaterials) {
             if (weaponMaterial.name.equalsIgnoreCase(name)) {
                 return weaponMaterial;
             }
@@ -326,8 +326,8 @@ public class ToolData {
         throw new IllegalArgumentException(name + "is not a weapon material name");
     }
 
-    public static Item getTalentBook(String name) {
-        for (Item talentBook : talentBooks) {
+    public static TalentMaterial getTalentBook(String name) {
+        for (TalentMaterial talentBook : talentBooks) {
             if (talentBook.name.equalsIgnoreCase(name)) {
                 return talentBook;
             }
@@ -335,8 +335,8 @@ public class ToolData {
         throw new IllegalArgumentException(name + "is not a talent book name");
     }
 
-    public static Item getArtifact(String name) {
-        for (Item artifact : artifacts) {
+    public static Artifact getArtifact(String name) {
+        for (Artifact artifact : artifacts) {
             if (artifact.name.equalsIgnoreCase(name)) {
                 return artifact;
             }
@@ -344,8 +344,8 @@ public class ToolData {
         throw new IllegalArgumentException(name + "is not an artifact name");
     }
 
-    public static Item getWeeklyTalentMaterial(String name) {
-        for (Item weeklyTalentMaterial : weeklyTalents) {
+    public static WeeklyTalentMaterial getWeeklyTalentMaterial(String name) {
+        for (WeeklyTalentMaterial weeklyTalentMaterial : weeklyTalents) {
             if (weeklyTalentMaterial.name.equalsIgnoreCase(name)) {
                 return weeklyTalentMaterial;
             }
@@ -383,21 +383,25 @@ public class ToolData {
             weapon.icon = new ImageIcon(generateResourceIconPath(weapon, RESOURCE_TYPE.WEAPON_NAME));
         }
         for (Domain domain : domains) {
-            for (Item material : domain.materials) {
+            for (FarmableItem material : domain.materials) {
                 RESOURCE_TYPE materialType = RESOURCE_TYPE.byString.get(domain.domainType);
                 material.icon = new ImageIcon(generateResourceIconPath(material, materialType));
                 switch (materialType) {
                     case ARTIFACT:
-                        artifacts.add(material);
+                        assert material instanceof Artifact;
+                        artifacts.add((Artifact) material);
                         break;
                     case WEEKLY_BOSS_MATERIAL:
-                        weeklyTalents.add(material);
+                        assert material instanceof WeeklyTalentMaterial;
+                        weeklyTalents.add((WeeklyTalentMaterial) material);
                         break;
                     case TALENT_BOOK:
-                        talentBooks.add(material);
+                        assert material instanceof TalentMaterial;
+                        talentBooks.add((TalentMaterial) material);
                         break;
                     case WEAPON_MATERIAL:
-                        weaponMaterials.add(material);
+                        assert material instanceof WeaponMaterial;
+                        weaponMaterials.add((WeaponMaterial) material);
                         break;
                 }
             }

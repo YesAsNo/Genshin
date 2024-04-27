@@ -1,5 +1,17 @@
 package Files.Code.GUIs;
 
+import static Files.Code.Data.ToolData.AVAILABLE_FONTS;
+import static Files.Code.Data.ToolData.SAVE_LOCATION;
+import static Files.Code.Data.ToolData.WEAPON_TYPE.ALL_OPTIONS_BY_ENUM;
+import static Files.Code.Data.ToolData.WEAPON_TYPE.ALL_OPTIONS_BY_STRING;
+import static Files.Code.Data.ToolData.WEAPON_TYPE.NO_FILTER;
+import static Files.Code.Data.ToolData.changeFont;
+import static Files.Code.Data.ToolData.getWeapon;
+import static Files.Code.Data.ToolData.getWeaponMaterial;
+import static Files.Code.GUIs.ToolGUI.WEAPON_SAVE_FILE_NAME;
+import static Files.Code.GUIs.ToolGUI.formatString;
+import static Files.Code.GUIs.ToolGUI.isSomeoneFarmingForTheWeapon;
+
 import Files.Code.Auxiliary.ComboBoxRenderer;
 import Files.Code.Auxiliary.SearchBarListener;
 import Files.Code.Auxiliary.WeaponTabGUIListener;
@@ -35,10 +47,6 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
-
-import static Files.Code.Data.ToolData.*;
-import static Files.Code.Data.ToolData.WEAPON_TYPE.*;
-import static Files.Code.GUIs.ToolGUI.*;
 
 /**
  * This class generates the weapon tab of the main application window.
@@ -78,20 +86,21 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
     /**
      * Constructor of the class.
      */
-    public WeaponTabGUI(){
+    public WeaponTabGUI() {
         setUpWeaponsPanel();
         parseWeaponsMap();
     }
 
     /**
      * Returns the main panel. Only used in ToolGUI.java
+     *
      * @return main panel
      */
     public JPanel getMainPanel() {
         return mainPanel;
     }
 
-    private static void parseWeaponsMap(){
+    private static void parseWeaponsMap() {
         Gson gson = new Gson();
         File f = new File(SAVE_LOCATION + WEAPON_SAVE_FILE_NAME);
         if (!f.exists()) {
@@ -103,7 +112,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
             map.addAll(gson.fromJson(reader, map.getClass()));
 
             if (!map.isEmpty()) {
-                for (String weaponName:map) {
+                for (String weaponName : map) {
                     unassignedFarmedWeapons.add(getWeapon(weaponName));
                 }
             }
@@ -120,17 +129,17 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         showListedCheckBox.setEnabled(true);
         showUnlistedCheckBox.setEnabled(true);
     }
-    private SEARCH_FLAG getSearchFlag(){
-        if (showListedCheckBox.isSelected() && !showUnlistedCheckBox.isSelected()){
+
+    private SEARCH_FLAG getSearchFlag() {
+        if (showListedCheckBox.isSelected() && !showUnlistedCheckBox.isSelected()) {
             return SEARCH_FLAG.LISTED_ONLY;
-        }
-        else if (showUnlistedCheckBox.isSelected() && !showListedCheckBox.isSelected()){
+        } else if (showUnlistedCheckBox.isSelected() && !showListedCheckBox.isSelected()) {
             return SEARCH_FLAG.UNLISTED_ONLY;
-        }
-        else{
+        } else {
             return SEARCH_FLAG.ALL;
         }
     }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton triggerButton = (JButton) e.getSource();
@@ -142,11 +151,13 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
     /**
      * Returns the mapping that contains all weapons which are listed on this tab only.
      * Note it is saved separately from character cards.
+     *
      * @return set of all weapons
      */
-    public static Set<Weapon> getUnassignedFarmedWeapons(){
+    public static Set<Weapon> getUnassignedFarmedWeapons() {
         return unassignedFarmedWeapons;
     }
+
     private void parseSearch(SEARCH_FLAG flag) {
         String userFieldInput = devWeaponsTabSearchbar.getText().toLowerCase();
         devWeaponTabScrollPanePanel.removeAll();
@@ -159,7 +170,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
             ToolData.WEAPON_TYPE filter = ALL_OPTIONS_BY_STRING.get(label.getText());
             assert filter != null;
 
-            if (inputMatchesFilters(userFieldInput,weapon,filter,flag)) {
+            if (inputMatchesFilters(userFieldInput, weapon, filter, flag)) {
                 GridBagConstraints gbc = new GridBagConstraints();
                 gbc.gridx = matchedCount % 3;
                 gbc.gridy = (matchedCount - gbc.gridx) / 3;
@@ -171,25 +182,26 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
             }
 
         }
-        showMatchedAmountLabel.setText("Matches: "+ matchedCount);
+        showMatchedAmountLabel.setText("Matches: " + matchedCount);
         changeFont(showMatchedAmountLabel, AVAILABLE_FONTS.BLACK_FONT, 12);
     }
-    private boolean inputMatchesFilters(String input, Weapon weapon, ToolData.WEAPON_TYPE filter,
-                                        SEARCH_FLAG flag){
-        if(weapon.name.toLowerCase().contains(input.toLowerCase()) &&
-                (weapon.weaponType.equalsIgnoreCase(filter.stringToken)||
-                        filter == NO_FILTER)){
-            boolean isTheWeaponListed = isSomeoneFarmingForTheWeapon(weapon.name)|| unassignedFarmedWeapons.contains(weapon);
-            if(isTheWeaponListed && flag == SEARCH_FLAG.LISTED_ONLY){
+
+    private boolean inputMatchesFilters(String input, Weapon weapon, ToolData.WEAPON_TYPE filter, SEARCH_FLAG flag) {
+        if (weapon.name.toLowerCase().contains(input.toLowerCase()) &&
+                (weapon.weaponType.equalsIgnoreCase(filter.stringToken) || filter == NO_FILTER)) {
+            boolean isTheWeaponListed =
+                    isSomeoneFarmingForTheWeapon(weapon) || unassignedFarmedWeapons.contains(weapon);
+            if (isTheWeaponListed && flag == SEARCH_FLAG.LISTED_ONLY) {
                 return true;
             }
-            if(!isTheWeaponListed && flag == SEARCH_FLAG.UNLISTED_ONLY){
+            if (!isTheWeaponListed && flag == SEARCH_FLAG.UNLISTED_ONLY) {
                 return true;
             }
             return flag == SEARCH_FLAG.ALL;
         }
         return false;
     }
+
     private JPanel generateWeaponCard(Weapon weapon) {
 
         // WEAPON CARD PANEL
@@ -198,7 +210,7 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         devWeaponCard.setBackground(new Color(-1));
         devWeaponCard.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
                 TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
-        devWeaponCard.setPreferredSize(new Dimension(300,190));
+        devWeaponCard.setPreferredSize(new Dimension(300, 190));
 
         // WEAPON ICON AND NAME
         JLabel devWeaponIcon = new JLabel();
@@ -217,16 +229,15 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         // WEAPON LISTING CHECK BOX
         JCheckBox devWepMatListingCheckbox = new JCheckBox();
         devWepMatListingCheckbox.setBackground(new Color(-1));
-        if (isSomeoneFarmingForTheWeapon(weapon.name)){
+        if (isSomeoneFarmingForTheWeapon(weapon)) {
             devWepMatListingCheckbox.setSelected(true);
             devWepMatListingCheckbox.setEnabled(false);
             devWepMatListingCheckbox.setText("Already Farmed");
-        }
-        else
-        {
+        } else {
             devWepMatListingCheckbox.setSelected(unassignedFarmedWeapons.contains(weapon));
             devWepMatListingCheckbox.setText("List weapon?");
-        }        changeFont(devWepMatListingCheckbox, AVAILABLE_FONTS.TEXT_FONT, 12);
+        }
+        changeFont(devWepMatListingCheckbox, AVAILABLE_FONTS.TEXT_FONT, 12);
         devWepMatListingCheckbox.addItemListener(new WeaponTabGUIListener(weapon));
         devWeaponCard.add(devWepMatListingCheckbox,
                 new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,

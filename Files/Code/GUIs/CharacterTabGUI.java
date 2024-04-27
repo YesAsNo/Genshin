@@ -176,7 +176,7 @@ public final class CharacterTabGUI implements ActionListener {
         CharacterListing characterListing;
         if (!checkIfCharacterCardHasBeenGenerated(characterName)) {
             characterListing = new CharacterListing(characterName);
-            ToolGUI.addCharacterCard(characterListing);
+            ToolGUI.addCharacterListing(characterListing);
         } else {
             characterListing = getCharacterCard(characterName);
         }

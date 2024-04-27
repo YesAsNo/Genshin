@@ -1,8 +1,21 @@
 package Files.Code.GUIs;
 
+import static Files.Code.Data.ToolData.RESOURCE_TYPE.WEEKLY_BOSS_MATERIAL;
+import static Files.Code.Data.ToolData.artifacts;
 import static Files.Code.Data.ToolData.changeFont;
+import static Files.Code.Data.ToolData.domains;
+import static Files.Code.Data.ToolData.getWeaponMaterial;
+import static Files.Code.Data.ToolData.talentBooks;
+import static Files.Code.Data.ToolData.weapons;
+import static Files.Code.Data.ToolData.weeklyTalents;
 import static Files.Code.GUIs.DomainTabGUI.DOMAIN_FILTER_OPTIONS.ALL_OPTIONS_BY_ENUM;
 import static Files.Code.GUIs.DomainTabGUI.DOMAIN_FILTER_OPTIONS.ALL_OPTIONS_BY_STRING;
+import static Files.Code.GUIs.DomainTabGUI.DOMAIN_FILTER_OPTIONS.NO_FILTER;
+import static Files.Code.GUIs.ToolGUI.farmedArtifacts;
+import static Files.Code.GUIs.ToolGUI.farmedTalentBooks;
+import static Files.Code.GUIs.ToolGUI.farmedWeapons;
+import static Files.Code.GUIs.ToolGUI.farmedWeeklyTalentMaterials;
+import static Files.Code.GUIs.WeaponTabGUI.getUnassignedFarmedWeapons;
 import static java.util.Calendar.FRIDAY;
 import static java.util.Calendar.MONDAY;
 import static java.util.Calendar.SATURDAY;
@@ -11,9 +24,15 @@ import static java.util.Calendar.TUESDAY;
 import static java.util.Calendar.WEDNESDAY;
 
 import Files.Code.Auxiliary.ComboBoxRenderer;
+import Files.Code.Data.Artifact;
 import Files.Code.Data.Domain;
+import Files.Code.Data.FarmableItem;
 import Files.Code.Data.Item;
+import Files.Code.Data.TalentMaterial;
 import Files.Code.Data.ToolData;
+import Files.Code.Data.Weapon;
+import Files.Code.Data.WeaponMaterial;
+import Files.Code.Data.WeeklyTalentMaterial;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 
@@ -39,16 +58,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 /**
  * This class constructs the domain tab GUI, available from the Domains tab in the main application.
@@ -341,40 +358,30 @@ public class DomainTabGUI implements ActionListener {
     }
 
     private void parseFilter(DOMAIN_FILTER_OPTIONS filter, String dayFilter, boolean status) {
-        List<DOMAIN_THEME> filteredThemes = new ArrayList<>();
-        assert filter != null;
-        switch (filter) {
-            case TALENT:
-                filteredThemes.add(DOMAIN_THEME.TALENT_BOOK_THEME);
-                break;
-            case ARTIFACT:
-                filteredThemes.add(DOMAIN_THEME.ARTIFACT_DOMAIN_THEME);
-                break;
-            case WEAPON_MAT:
-                filteredThemes.add(DOMAIN_THEME.WEAPON_MATERIAL_THEME);
-                break;
-            case WEEKLY:
-                filteredThemes.add(DOMAIN_THEME.WEEKLY_BOSS_DOMAIN_THEME);
-                break;
-            case NO_FILTER:
-                Collections.addAll(filteredThemes, DOMAIN_THEME.values());
-                break;
-        }
+        List<Domain> filteredDomains = new ArrayList<>();
         domainsPanelOverview.removeAll();
         domainsPanelOverview.updateUI();
         int i = 0;
-        for (DOMAIN_THEME dt : filteredThemes) {
-            Map<String, List<String>> domainMapping = getDomainMapping(dt);
-            for (Domain domain : domainMapping.keySet()) {
-                if (status || isSomethingFarmedInThisDomain(dt, domainName)) {
-                    GridBagConstraints gbc = new GridBagConstraints();
-                    gbc.gridx = 0;
-                    gbc.gridy = i++;
-                    gbc.weightx = 1.0;
-                    gbc.fill = GridBagConstraints.BOTH;
-                    gbc.insets = new Insets(5, 100, 5, 100);
-                    domainsPanelOverview.add(generateDomainCard(dt, domainName, dayFilter), gbc);
+        assert filter != null;
+        if (filter == NO_FILTER) {
+            filteredDomains = domains;
+        } else {
+            for (Domain domain : domains) {
+                if (domain.domainType.equalsIgnoreCase(filter.stringToken)) {
+                    filteredDomains.add(domain);
                 }
+            }
+        }
+
+        for (Domain domain : filteredDomains) {
+            if (status || isSomethingFarmedInThisDomain(domain)) {
+                GridBagConstraints gbc = new GridBagConstraints();
+                gbc.gridx = 0;
+                gbc.gridy = i++;
+                gbc.weightx = 1.0;
+                gbc.fill = GridBagConstraints.BOTH;
+                gbc.insets = new Insets(5, 100, 5, 100);
+                domainsPanelOverview.add(generateDomainCard(domain, dayFilter), gbc);
             }
         }
     }
@@ -382,44 +389,45 @@ public class DomainTabGUI implements ActionListener {
     /**
      * Returns whether something is farmed in this domain.
      *
-     * @param dt domain type identified by the theme.
-     * @param domainName domain name
+     * @param domain domain
      * @return true if something is farmed, false if not.
      */
-    public static boolean isSomethingFarmedInThisDomain(DOMAIN_THEME dt, Domain domain) {
-        Set<Item> farmedMapping = getDomainFarmedList(dt);
-        List<String> domainItems = Objects.requireNonNull(getDomainMapping(dt)).get(domainName);
-        for (Item item : farmedMapping) {
-            if (dt == DOMAIN_THEME.WEAPON_MATERIAL_THEME && domainItems.contains(getAscensionMaterialForWeapon(item))) {
-                return true;
-            } else if (domainItems.contains(item)) {
-                return true;
-            }
-        }
-        return false;
+    public static boolean isSomethingFarmedInThisDomain(Domain domain) {
+        return !whoNeedsThisDomain(domain, true).isEmpty();
     }
 
-    private JPanel generateDomainCard(DOMAIN_THEME dt, Domain domain, String dayFilter) {
+    public static DOMAIN_THEME getDomainTheme(Domain domain) {
+        if (domain.isArtifactDomain()) {
+            return DOMAIN_THEME.ARTIFACT_DOMAIN_THEME;
+        } else if (domain.isTalentBookDomain()) {
+            return DOMAIN_THEME.TALENT_BOOK_THEME;
+        } else if (domain.isWeaponMaterialDomain()) {
+            return DOMAIN_THEME.WEAPON_MATERIAL_THEME;
+        } else if (domain.isWeeklyTalentDomain()) {
+            return DOMAIN_THEME.WEEKLY_BOSS_DOMAIN_THEME;
+        } else {
+            throw new IllegalArgumentException("Unknown domain type");
+        }
+    }
+
+    private JPanel generateDomainCard(Domain domain, String dayFilter) {
+        DOMAIN_THEME dt = getDomainTheme(domain);
         JPanel domainCard = new JPanel(new GridBagLayout());
         domainCard.setBackground(new Color(dt.panelBackgroundColor));
         domainCard.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), null,
                 TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
         int i = 0;
-        for (String materialName : getDomainMapping(dt).get(domainName)) {
+        for (FarmableItem item : domain.materials) {
 
             JLabel materialIconLabel = new JLabel();
-            ImageIcon materialIcon = getResourceIcon(materialName, getDomainResourceType(dt));
 
-            if (dayFilter.equalsIgnoreCase(DAY_FILTER.SUNDAY_ALL.stringToken) ||
-                    getDomainResourceType(dt) == WEEKLY_BOSS_MATERIAL ||
-                    getDomainResourceType(dt) == ToolData.RESOURCE_TYPE.ARTIFACT ||
-                    dayToAvailableMaterialsMapping.get(dayFilter).contains(materialName)) {
-                materialIconLabel.setIcon(materialIcon);
+            if (dayFilter.equalsIgnoreCase(DAY_FILTER.SUNDAY_ALL.stringToken) || !domain.rotates ||
+                    item.availability.equalsIgnoreCase(dayFilter)) {
+                materialIconLabel.setIcon(item.icon);
             } else {
-                materialIcon = new ImageIcon(GrayFilter.createDisabledImage(materialIcon.getImage()));
-                materialIconLabel.setIcon(materialIcon);
+                materialIconLabel.setIcon(new ImageIcon(GrayFilter.createDisabledImage(item.icon.getImage())));
             }
-            materialIconLabel.setToolTipText(materialName);
+            materialIconLabel.setToolTipText(item.name);
             materialIconLabel.setText("");
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.gridx = 2 + i;
@@ -444,9 +452,9 @@ public class DomainTabGUI implements ActionListener {
         gbc.fill = GridBagConstraints.BOTH;
         domainCard.add(domainInfoPanel, gbc);
         JLabel domainNameLabel = new JLabel();
-        changeFont(domainNameLabel, AVAILABLE_FONTS.HEADER_FONT, 18);
+        changeFont(domainNameLabel, ToolData.AVAILABLE_FONTS.HEADER_FONT, 18);
         domainNameLabel.setForeground(new Color(dt.panelForegroundColor));
-        domainNameLabel.setText(domainName);
+        domainNameLabel.setText(domain.name);
         domainInfoPanel.add(domainNameLabel,
                 new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
@@ -454,9 +462,9 @@ public class DomainTabGUI implements ActionListener {
 
         // CHARACTERS LISTED FOR THIS DOMAIN LABEL
         JLabel domainListedCounterLabel = new JLabel();
-        changeFont(domainListedCounterLabel, AVAILABLE_FONTS.TEXT_FONT, 16);
+        changeFont(domainListedCounterLabel, ToolData.AVAILABLE_FONTS.TEXT_FONT, 16);
         domainListedCounterLabel.setForeground(new Color(dt.panelForegroundColor));
-        domainListedCounterLabel.setText(getListedCounterLabel(domainName, getDomainResourceType(dt)));
+        domainListedCounterLabel.setText(getListedCounterLabel(domain));
         domainInfoPanel.add(domainListedCounterLabel,
                 new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
                         GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
@@ -478,7 +486,7 @@ public class DomainTabGUI implements ActionListener {
         domainIconLabel.setAlignmentX(0.5f);
         domainIconLabel.setFocusTraversalPolicyProvider(false);
         domainIconLabel.setFocusable(false);
-        changeFont(domainIconLabel, AVAILABLE_FONTS.BLACK_FONT, 16);
+        changeFont(domainIconLabel, ToolData.AVAILABLE_FONTS.BLACK_FONT, 16);
         domainIconLabel.setForeground(new Color(-1));
         domainIconLabel.setText(dt.marginSymbol);
         marginPanel.add(domainIconLabel,
@@ -488,30 +496,10 @@ public class DomainTabGUI implements ActionListener {
         domainCard.addMouseListener(new MouseInputAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                new DomainCardGUI(domainName, dt);
+                new DomainCardGUI(domain, dt);
             }
         });
         return domainCard;
-    }
-
-    /**
-     * Returns the general mapping of a domain (All domains of this type -> All materials farmed in every domain of this type)
-     *
-     * @param dt domain theme
-     * @return the mapping
-     */
-    public static Map<String, List<String>> getDomainMapping(DOMAIN_THEME dt) {
-        switch (dt) {
-            case WEAPON_MATERIAL_THEME:
-                return getMapping(WEPDOMAIN_WEPMAT);
-            case TALENT_BOOK_THEME:
-                return getMapping(TALENTDOMAIN_TALENTBOOK);
-            case WEEKLY_BOSS_DOMAIN_THEME:
-                return getMapping(WEEKLYDOMAIN_WEEKLYBOSSMAT);
-            case ARTIFACT_DOMAIN_THEME:
-                return getMapping(ARTIDOMAIN_ARTISET);
-        }
-        throw new IllegalArgumentException();
     }
 
     /**
@@ -529,27 +517,7 @@ public class DomainTabGUI implements ActionListener {
             case WEEKLY_BOSS_DOMAIN_THEME:
                 return WEEKLY_BOSS_MATERIAL;
             case ARTIFACT_DOMAIN_THEME:
-                return ToolData.RESOURCE_TYPE.ARTIFACT_SET;
-        }
-        throw new IllegalArgumentException();
-    }
-
-    /**
-     * Returns the mapping for the "beneficiary" of the farmed resources. E.g. if it's a weapon material domain, returns the weapon material mapping.
-     *
-     * @param dt domain theme
-     * @return the target resource mapping
-     */
-    public static Map<String, List<String>> getDomainTargetResourceMapping(DOMAIN_THEME dt) {
-        switch (dt) {
-            case WEAPON_MATERIAL_THEME:
-                return getMapping(WEPMAT_WEPNAME);
-            case TALENT_BOOK_THEME:
-                return getMapping(TALENTBOOK_CHAR);
-            case WEEKLY_BOSS_DOMAIN_THEME:
-                return getMapping(WEEKLYBOSSMAT_CHAR);
-            case ARTIFACT_DOMAIN_THEME:
-                return getMapping(ARTIDOMAIN_ARTISET);
+                return ToolData.RESOURCE_TYPE.ARTIFACT;
         }
         throw new IllegalArgumentException();
     }
@@ -573,91 +541,64 @@ public class DomainTabGUI implements ActionListener {
     }
 
     /**
-     * Returns a set of items farmed in all domains of this type.
+     * Returns a set of items from this domain.
      *
-     * @param dt domain theme
+     * @param domain domain
+     * @param farmedOnly flag to show only items in listings
      * @return set of items
      */
-    public static Set<Item> getDomainFarmedList(DOMAIN_THEME dt) {
-        switch (dt) {
-            case WEAPON_MATERIAL_THEME: {
-                TreeSet<Item> allFarmedWeapons = new TreeSet<>(getUnassignedFarmedWeapons());
-                for (String weapon : getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS).keySet()) {
-                    assert getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS) != null;
-                    if (!getFarmedMapping(ToolGUI.FARMED_DATATYPE.WEAPONS).get(weapon).isEmpty()) {
-                        allFarmedWeapons.add(weapon);
-                    }
+    public static Set<? extends Item> whoNeedsThisDomain(Domain domain, boolean farmedOnly) {
+        if (domain.isWeaponMaterialDomain()) {
+            Set<WeaponMaterial> farmedWeaponMaterials = new HashSet<>();
+            for (Weapon weapon : weapons) {
+                if (domain.materials.contains(getWeaponMaterial(weapon.ascensionMaterial)) &&
+                        (!farmedOnly || getUnassignedFarmedWeapons().contains(weapon) ||
+                                !farmedWeapons.get(weapon).isEmpty())) {
+                    farmedWeaponMaterials.add(getWeaponMaterial(weapon.ascensionMaterial));
                 }
-                return allFarmedWeapons;
             }
-            case TALENT_BOOK_THEME:
-            case WEEKLY_BOSS_DOMAIN_THEME: {
-                TreeSet<String> allFarmedTalents = new TreeSet<>();
-                for (String talentResourceName : getFarmedMapping(ToolGUI.FARMED_DATATYPE.TALENTS).keySet()) {
-                    if (!getFarmedMapping(ToolGUI.FARMED_DATATYPE.TALENTS).get(talentResourceName).isEmpty()) {
-                        allFarmedTalents.add(talentResourceName);
-                    }
+            return farmedWeaponMaterials;
+        } else if (domain.isWeeklyTalentDomain()) {
+            Set<WeeklyTalentMaterial> allFarmedWeeklyTalents = new HashSet<>();
+            for (WeeklyTalentMaterial weeklyTalentMaterial : weeklyTalents) {
+                if (domain.materials.contains(weeklyTalentMaterial) &&
+                        (!farmedOnly || !farmedWeeklyTalentMaterials.get(weeklyTalentMaterial).isEmpty())) {
+                    allFarmedWeeklyTalents.add(weeklyTalentMaterial);
                 }
-                return allFarmedTalents;
             }
-            case ARTIFACT_DOMAIN_THEME: {
-                TreeSet<String> allFarmedArtifacts = new TreeSet<>();
-                for (String artifactName : getFarmedMapping(ToolGUI.FARMED_DATATYPE.ARTIFACTS).keySet()) {
-                    if (!getFarmedMapping(ToolGUI.FARMED_DATATYPE.ARTIFACTS).get(artifactName).isEmpty()) {
-                        allFarmedArtifacts.add(artifactName);
-                    }
+            return allFarmedWeeklyTalents;
+        } else if (domain.isTalentBookDomain()) {
+            Set<TalentMaterial> allFarmedTalents = new HashSet<>();
+            for (TalentMaterial talentMaterial : talentBooks) {
+                if (domain.materials.contains(talentMaterial) &&
+                        (!farmedOnly || !farmedTalentBooks.get(talentMaterial).isEmpty())) {
+                    allFarmedTalents.add(talentMaterial);
                 }
-                return allFarmedArtifacts;
             }
+            return allFarmedTalents;
+        } else if (domain.isArtifactDomain()) {
+            Set<Artifact> allFarmedArtifacts = new HashSet<>();
+            for (Artifact artifact : artifacts) {
+                if (domain.materials.contains(artifact) && (!farmedOnly || !farmedArtifacts.get(artifact).isEmpty())) {
+                    allFarmedArtifacts.add(artifact);
+                }
+            }
+            return allFarmedArtifacts;
+        } else {
+            throw new IllegalArgumentException();
         }
-        throw new IllegalArgumentException();
     }
 
     /**
      * Returns a counter label text that tells how many "benefactors" are there per domain.
      * E.g. for a talent domain: how many characters exist in the game that require talent books from the given domain
      *
-     * @param domainName domain name
-     * @param rt resource type
+     * @param domain domain
      * @return the text
      */
-    public static String getAllCounterLabel(Domain domain, ToolData.RESOURCE_TYPE rt) {
-        String labelText;
-        String domainMaterialCategory = "";
-        Set<String> matchedCharacters = new TreeSet<>();
-        int counter = 0;
-        switch (rt) {
-            case WEAPON_MATERIAL: {
-                for (String matName : getMapping(WEPDOMAIN_WEPMAT).get(domainName)) {
-                    matchedCharacters.addAll(getMapping(WEPMAT_WEPNAME).get(matName));
-                }
-                domainMaterialCategory = "weapons";
-                break;
-            }
-            case ARTIFACT: {
-                counter = getFlattenedData(ToolData.RESOURCE_TYPE.CHARACTER).size();
-                matchedCharacters.add("All characters");
-                domainMaterialCategory = "characters";
-                break;
-            }
-            case WEEKLY_BOSS_MATERIAL: {
-                for (String matName : getMapping(WEEKLYDOMAIN_WEEKLYBOSSMAT).get(domainName)) {
-                    matchedCharacters.addAll(getMapping(WEEKLYBOSSMAT_CHAR).get(matName));
-                }
-                domainMaterialCategory = "characters";
-                break;
-            }
-            case TALENT_BOOK: {
-                for (String matName : getMapping(TALENTDOMAIN_TALENTBOOK).get(domainName)) {
-                    matchedCharacters.addAll(getMapping(TALENTBOOK_CHAR).get(matName));
-                }
-                domainMaterialCategory = "characters";
-                break;
-            }
-        }
-        labelText = "<html>" + "All" + " " + domainMaterialCategory + " " + "that need it: " + "<u>" +
-                (counter == 0 ? matchedCharacters.size() : counter) + "</u>" + "</html>";
-        return labelText;
+    public static String getAllCounterLabel(Domain domain) {
+        return "<html>" + "All" + " " + domain.domainType + " " + "that need it: " + "<u>" +
+                (whoNeedsThisDomain(domain, false).size()) + "</u>" + "</html>";
 
     }
 
@@ -665,62 +606,12 @@ public class DomainTabGUI implements ActionListener {
      * Returns a counter label text that tells how many listed "benefactors" are there per domain.
      * E.g. for a talent domain: how many characters are currently farming talents from that domain.
      *
-     * @param domainName domain name
-     * @param rt resource type
+     * @param domain domain name
      * @return the text
      */
-    public static String getListedCounterLabel(Domain domain, ToolData.RESOURCE_TYPE rt) {
-        String labelText;
-        String domainMaterialCategory = "";
-        int counter = 0;
-        switch (rt) {
-            case WEAPON_MATERIAL: {
-                for (String weaponName : getDomainFarmedList(DOMAIN_THEME.WEAPON_MATERIAL_THEME)) {
-                    if (getMapping(WEPDOMAIN_WEPMAT).get(domainName)
-                            .contains(getAscensionMaterialForWeapon(weaponName))) {
-                        counter++;
-                    }
-                }
-                domainMaterialCategory = "weapons";
-                break;
-            }
-            case ARTIFACT: {
-                Set<String> mapping = getDomainFarmedList(DOMAIN_THEME.ARTIFACT_DOMAIN_THEME);
-                for (String setName : mapping) {
-                    if (getMapping(ARTIDOMAIN_ARTISET).get(domainName).contains(setName)) {
-                        counter += howManyAreFarmingThis(setName, ARTIFACT_SET);
-                    }
-                }
-                domainMaterialCategory = "characters";
-                break;
-            }
-            case WEEKLY_BOSS_MATERIAL: {
-                Set<String> mapping = getDomainFarmedList(DOMAIN_THEME.WEEKLY_BOSS_DOMAIN_THEME);
-                for (String materialName : mapping) {
-                    if (getMapping(WEEKLYDOMAIN_WEEKLYBOSSMAT).get(domainName).contains(materialName)) {
-                        counter += howManyAreFarmingThis(materialName, WEEKLY_BOSS_MATERIAL);
-                    }
-                }
-                domainMaterialCategory = "characters";
-                break;
-            }
-            case TALENT_BOOK: {
-                Set<String> mapping = getDomainFarmedList(DOMAIN_THEME.TALENT_BOOK_THEME);
-                for (String bookName : mapping) {
-                    if (getMapping(TALENTDOMAIN_TALENTBOOK).get(domainName).contains(bookName)) {
-                        counter += howManyAreFarmingThis(bookName, TALENT_BOOK);
-                    }
-                }
-                domainMaterialCategory = "characters";
-                break;
-            }
-            default: {
-            }
-        }
-        labelText =
-                "<html>" + "Listed" + " " + domainMaterialCategory + " " + "that need it: " + "<u>" + counter + "</u>" +
-                        "</html>";
-        return labelText;
+    public static String getListedCounterLabel(Domain domain) {
+        return "<html>" + "Listed" + " " + domain.domainType + " " + "that need it: " + "<u>" +
+                (whoNeedsThisDomain(domain, true).size()) + "</u>" + "</html>";
     }
 
     /**
