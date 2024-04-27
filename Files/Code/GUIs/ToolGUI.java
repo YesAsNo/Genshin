@@ -1,5 +1,16 @@
 package Files.Code.GUIs;
 
+import static Files.Code.Data.ToolData.SAVE_LOCATION;
+import static Files.Code.Data.ToolData.artifacts;
+import static Files.Code.Data.ToolData.changeFont;
+import static Files.Code.Data.ToolData.getTalentBook;
+import static Files.Code.Data.ToolData.getWeeklyTalentMaterial;
+import static Files.Code.Data.ToolData.talentBooks;
+import static Files.Code.Data.ToolData.weapons;
+import static Files.Code.Data.ToolData.weeklyTalents;
+import static Files.Code.GUIs.WeaponTabGUI.getUnassignedFarmedWeapons;
+
+import Files.Code.Data.CharacterListing;
 import Files.Code.Data.Item;
 import Files.Code.Data.ToolData;
 import Files.Code.Data.Weapon;
@@ -36,9 +47,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-
-import static Files.Code.Data.ToolData.*;
-import static Files.Code.GUIs.WeaponTabGUI.getUnassignedFarmedWeapons;
 
 /**
  * This class generates the main application window.

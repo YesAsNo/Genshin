@@ -1,13 +1,19 @@
 package Files.Code.GUIs;
 
-import static Files.ToolData.changeFont;
-import static Files.ToolData.characters;
-import static Files.ToolData.getCharacter;
-import static Files.ToolData.getPlaceholderIcon;
-import static Files.ToolGUI.NO_CHARACTERS_MATCH_MESSAGE;
-import static Files.ToolGUI.checkIfCharacterCardHasBeenGenerated;
-import static Files.ToolGUI.formatString;
-import static Files.ToolGUI.getCharacterCard;
+import static Files.Code.Data.ToolData.changeFont;
+import static Files.Code.Data.ToolData.characters;
+import static Files.Code.Data.ToolData.getCharacter;
+import static Files.Code.Data.ToolData.getPlaceholderIcon;
+import static Files.Code.GUIs.ToolGUI.NO_CHARACTERS_MATCH_MESSAGE;
+import static Files.Code.GUIs.ToolGUI.checkIfCharacterCardHasBeenGenerated;
+import static Files.Code.GUIs.ToolGUI.formatString;
+import static Files.Code.GUIs.ToolGUI.getCharacterCard;
+
+import Files.Code.Auxiliary.ComboBoxRenderer;
+import Files.Code.Auxiliary.SearchBarListener;
+import Files.Code.Data.Character;
+import Files.Code.Data.CharacterListing;
+import Files.Code.Data.ToolData;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -51,23 +57,23 @@ public final class CharacterTabGUI implements ActionListener {
     /**
      * Constructor of the class.
      */
-    public CharacterTabGUI(){
+    public CharacterTabGUI() {
         mainPanel.setBackground(new Color(-1));
         mainPanel.setEnabled(true);
         mainPanel.setFocusCycleRoot(false);
-        changeFont(mainPanel, ToolData.AVAILABLE_FONTS.REGULAR_FONT,15.0F);
+        changeFont(mainPanel, ToolData.AVAILABLE_FONTS.REGULAR_FONT, 15.0F);
         mainPanel.setOpaque(true);
         mainPanel.setRequestFocusEnabled(true);
         parseElementIcons();
 
         elementFilterBox.setBackground(new Color(-2702646));
         elementFilterBox.setEnabled(true);
-        changeFont(elementFilterBox, ToolData.AVAILABLE_FONTS.BLACK_FONT,12);
+        changeFont(elementFilterBox, ToolData.AVAILABLE_FONTS.BLACK_FONT, 12);
         final DefaultComboBoxModel<JLabel> elementFilterComboBoxModel = new DefaultComboBoxModel<>();
         elementFilterComboBoxModel.addElement(new JLabel(ALL_ELEMENTS));
-        for (String element:elementIcons.keySet()){
+        for (String element : elementIcons.keySet()) {
             JLabel elementLabel = new JLabel();
-            changeFont(elementLabel, ToolData.AVAILABLE_FONTS.BLACK_FONT,12);
+            changeFont(elementLabel, ToolData.AVAILABLE_FONTS.BLACK_FONT, 12);
             elementLabel.setText(element);
             elementLabel.setIcon(elementIcons.get(element));
             elementFilterComboBoxModel.addElement(elementLabel);
@@ -82,8 +88,7 @@ public final class CharacterTabGUI implements ActionListener {
         gbc.insets = new Insets(0, 255, 0, 5);
         mainPanel.add(elementFilterBox, gbc);
 
-
-        changeFont(matchesLabel, ToolData.AVAILABLE_FONTS.BLACK_FONT,12);
+        changeFont(matchesLabel, ToolData.AVAILABLE_FONTS.BLACK_FONT, 12);
         matchesLabel.setForeground(new Color(-15072759));
         gbc = new GridBagConstraints();
         gbc.gridx = 3;
@@ -115,7 +120,7 @@ public final class CharacterTabGUI implements ActionListener {
 
         searchField.addMouseListener(new SearchBarListener());
         searchField.setEnabled(true);
-        changeFont(searchField, ToolData.AVAILABLE_FONTS.BLACK_FONT,18.0F);
+        changeFont(searchField, ToolData.AVAILABLE_FONTS.BLACK_FONT, 18.0F);
         searchField.setInheritsPopupMenu(false);
         searchField.setMaximumSize(new Dimension(240, 33));
         searchField.setMinimumSize(new Dimension(240, 33));
@@ -131,9 +136,13 @@ public final class CharacterTabGUI implements ActionListener {
 
     /**
      * Returns the main panel of this tab
+     *
      * @return main panel
      */
-    public JPanel getMainPanel(){return mainPanel;}
+    public JPanel getMainPanel() {
+        return mainPanel;
+    }
+
     /**
      * Generates a character button for the character specified by name and the index of the match.
      *
@@ -145,14 +154,17 @@ public final class CharacterTabGUI implements ActionListener {
         addCharacterButtonToSelectedCharacterPanel(characterButton, index);
 
     }
-    private void parseElementIcons(){
+
+    private void parseElementIcons() {
         final String iconFolderAddress = "/Files/Images/Icons";
-        final String [] elements = {"Anemo","Cryo","Dendro","Electro","Geo","Hydro","Pyro"};
-        for (String element : elements){
+        final String[] elements = {"Anemo", "Cryo", "Dendro", "Electro", "Geo", "Hydro", "Pyro"};
+        for (String element : elements) {
             elementIcons.put(element, new ImageIcon(new ImageIcon(Objects.requireNonNull(
-                    ToolData.class.getResource(iconFolderAddress + "/Element_" + element + ".png"))).getImage().getScaledInstance(20,20,Image.SCALE_SMOOTH)));
+                    ToolData.class.getResource(iconFolderAddress + "/Element_" + element + ".png"))).getImage()
+                    .getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
         }
     }
+
     /**
      * Creates a JButton for the specified character.
      *
@@ -187,6 +199,7 @@ public final class CharacterTabGUI implements ActionListener {
 
         return characterButton;
     }
+
     @Override
     public void actionPerformed(ActionEvent e) {
 
@@ -199,19 +212,18 @@ public final class CharacterTabGUI implements ActionListener {
         assert label != null;
         String element = label.getText();
         List<Character> eligibleCharacters = new ArrayList<>();
-        if (element.equalsIgnoreCase(ALL_ELEMENTS)){
+        if (element.equalsIgnoreCase(ALL_ELEMENTS)) {
             eligibleCharacters.addAll(characters);
-        }
-        else{
-            for (Character character:characters){
-                if (character.element.equalsIgnoreCase(element)){
+        } else {
+            for (Character character : characters) {
+                if (character.element.equalsIgnoreCase(element)) {
                     eligibleCharacters.add(character);
                 }
             }
         }
 
         for (Character character : eligibleCharacters) {
-            if (character.name.toLowerCase().contains(userFieldInput) ) {
+            if (character.name.toLowerCase().contains(userFieldInput)) {
                 {
                     generateCharacterButton(character.name, matchedCount);
                 }
@@ -235,7 +247,8 @@ public final class CharacterTabGUI implements ActionListener {
         }
 
     }
-    private void generateNoMatchesLabel(){
+
+    private void generateNoMatchesLabel() {
         JLabel unknownCharacterLabel = new JLabel(getPlaceholderIcon("character"));
         unknownCharacterLabel.setText(NO_CHARACTERS_MATCH_MESSAGE);
         unknownCharacterLabel.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -243,6 +256,7 @@ public final class CharacterTabGUI implements ActionListener {
         searchResultPanel.add(unknownCharacterLabel);
         searchResultPanel.updateUI();
     }
+
     /**
      * Verifies if a window for the specified character has already been opened.
      *
@@ -259,6 +273,7 @@ public final class CharacterTabGUI implements ActionListener {
         }
         return false;
     }
+
     /**
      * Gets the open window for the specified character.
      *

@@ -1,7 +1,6 @@
 package Files.Code.Auxiliary;
 
 import static Files.Code.Data.ToolData.getWeapon;
-import static Files.ToolGUI.isSomeoneFarmingForTheWeapon;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -20,6 +19,7 @@ public class ComboBoxRenderer extends JLabel implements ListCellRenderer<JLabel>
 
     /**
      * Constructor of the renderer class.
+     *
      * @param comboBox the combobox which needs this renderer.
      */
     public ComboBoxRenderer(JComboBox<JLabel> comboBox) {
@@ -30,35 +30,32 @@ public class ComboBoxRenderer extends JLabel implements ListCellRenderer<JLabel>
         jlabel.setFont(comboBox.getFont());
         panel.add(jlabel);
     }
+
     @Override
     public Component getListCellRendererComponent(JList<? extends JLabel> list, JLabel value, int index,
                                                   boolean isSelected, boolean cellHasFocus) {
 
-        if (value!= null){
-            if (isSelected){
+        if (value != null) {
+            if (isSelected) {
                 jlabel.setBackground(new Color(-5275240));
                 jlabel.setOpaque(true);
-            }
-            else{
+            } else {
                 jlabel.setOpaque(false);
             }
-            if (value.getIcon() != null){
+            if (value.getIcon() != null) {
                 jlabel.setIcon(value.getIcon());
-            }
-            else{
+            } else {
                 jlabel.setIcon(null);
             }
             jlabel.setText(value.getText());
             try {
                 getWeapon(value.getText());
-                if (isSomeoneFarmingForTheWeapon(value.getText())){
+                if (isSomeoneFarmingForTheWeapon(value.getText())) {
                     jlabel.setForeground(_selectedColor);
-                }
-                else{
+                } else {
                     jlabel.setForeground(Color.BLACK);
                 }
-            }
-            catch(IllegalArgumentException e){
+            } catch (IllegalArgumentException e) {
                 jlabel.setForeground(Color.BLACK);
             }
         }

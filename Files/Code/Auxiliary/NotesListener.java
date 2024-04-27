@@ -1,6 +1,6 @@
 package Files.Code.Auxiliary;
 
-import Files.Code.GUIs.CharacterListing;
+import Files.Code.Data.CharacterListing;
 
 import javax.swing.JButton;
 import javax.swing.event.DocumentEvent;
@@ -18,18 +18,20 @@ public class NotesListener implements DocumentListener {
 
     /**
      * Constructor of the listener. Requires a character card.
+     *
      * @param card the character card
      * @param button save button
      */
-    public NotesListener(CharacterListing card, JButton button){
+    public NotesListener(CharacterListing card, JButton button) {
         _characterListing = card;
         _button = button;
     }
+
     @Override
     public void insertUpdate(DocumentEvent e) {
         _button.setEnabled(true);
         try {
-            _characterListing.setCharacterNotes(e.getDocument().getText(0,e.getDocument().getLength()));
+            _characterListing.setCharacterNotes(e.getDocument().getText(0, e.getDocument().getLength()));
         } catch (BadLocationException ex) {
             throw new RuntimeException(ex);
         }
