@@ -1,5 +1,6 @@
 package Files.Code.Auxiliary;
 
+import static Files.Code.Data.ToolData.getWeapon;
 import static Files.ToolGUI.isSomeoneFarmingForTheWeapon;
 
 import javax.swing.JComboBox;

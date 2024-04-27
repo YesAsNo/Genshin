@@ -1,5 +1,7 @@
 package Files.Code.Auxiliary;
 
+import Files.Code.Data.Weapon;
+
 import static Files.Code.GUIs.WeaponTabGUI.getUnassignedFarmedWeapons;
 import static Files.ToolGUI.serializeSave;
 

@@ -1,5 +1,7 @@
 package Files.Code.Auxiliary;
 
+import Files.Code.GUIs.CharacterListing;
+
 import javax.swing.JButton;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;

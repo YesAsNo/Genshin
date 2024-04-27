@@ -1,6 +1,6 @@
 package Files.Code.Auxiliary;
 
-import static Files.ToolData.getArtifactSetDescription;
+import static Files.Code.Data.ToolData.getArtifactSetDescription;
 import static Files.ToolGUI.EMPTY_SET_SELECTOR;
 
 import javax.swing.JComboBox;

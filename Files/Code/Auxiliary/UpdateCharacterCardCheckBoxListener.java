@@ -2,7 +2,8 @@ package Files.Code.Auxiliary;
 
 import static Files.ToolGUI.updateFarmedItemMap;
 
-import Files.ToolData.CHARACTER_CARD_DATA_FIELD;
+import Files.Code.Data.ToolData;
+import Files.Code.GUIs.CharacterListing;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -14,7 +15,7 @@ import java.awt.event.ItemListener;
  */
 public class UpdateCharacterCardCheckBoxListener implements ItemListener {
     private final CharacterListing _characterListing;
-    private final CHARACTER_CARD_DATA_FIELD _changedData;
+    private final ToolData.CHARACTER_CARD_DATA_FIELD _changedData;
     private final JButton _saveButton;
 
     /**
@@ -23,7 +24,7 @@ public class UpdateCharacterCardCheckBoxListener implements ItemListener {
      * @param changedData the changed data type in the card
      * @param saveButton implementation side effect. Will set the button to active once a change has been made.
      */
-    public UpdateCharacterCardCheckBoxListener(CharacterListing characterListing, CHARACTER_CARD_DATA_FIELD changedData,
+    public UpdateCharacterCardCheckBoxListener(CharacterListing characterListing, ToolData.CHARACTER_CARD_DATA_FIELD changedData,
                                                JButton saveButton){
         _characterListing = characterListing;
         _changedData = changedData;
@@ -36,12 +37,12 @@ public class UpdateCharacterCardCheckBoxListener implements ItemListener {
         switch(_changedData){
             case FARMING_SET_ONE:
                 _characterListing.setArtifactSet1Status(currentStatus);
-                updateFarmedItemMap(CHARACTER_CARD_DATA_FIELD.SET_ONE, _characterListing,currentStatus,
+                updateFarmedItemMap(ToolData.CHARACTER_CARD_DATA_FIELD.SET_ONE, _characterListing,currentStatus,
                         _characterListing.getArtifactSet1());
                 return;
             case FARMING_SET_TWO:
                 _characterListing.setArtifactSet2Status(currentStatus);
-                updateFarmedItemMap(CHARACTER_CARD_DATA_FIELD.SET_TWO, _characterListing,currentStatus,
+                updateFarmedItemMap(ToolData.CHARACTER_CARD_DATA_FIELD.SET_TWO, _characterListing,currentStatus,
                         _characterListing.getArtifactSet2());
                 return;
             case FARMING_TALENT_MATERIALS:

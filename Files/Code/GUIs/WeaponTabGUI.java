@@ -1,17 +1,10 @@
 package Files.Code.GUIs;
 
-import static Files.ToolData.AVAILABLE_FONTS;
-import static Files.ToolData.SAVE_LOCATION;
-import static Files.ToolData.WEAPON_TYPE.ALL_OPTIONS_BY_ENUM;
-import static Files.ToolData.WEAPON_TYPE.ALL_OPTIONS_BY_STRING;
-import static Files.ToolData.WEAPON_TYPE.NO_FILTER;
-import static Files.ToolData.changeFont;
-import static Files.ToolData.getWeapon;
-import static Files.ToolData.getWeaponMaterial;
-import static Files.ToolGUI.WEAPON_SAVE_FILE_NAME;
-import static Files.ToolGUI.formatString;
-import static Files.ToolGUI.isSomeoneFarmingForTheWeapon;
-
+import Files.Code.Auxiliary.ComboBoxRenderer;
+import Files.Code.Auxiliary.SearchBarListener;
+import Files.Code.Auxiliary.WeaponTabGUIListener;
+import Files.Code.Data.ToolData;
+import Files.Code.Data.Weapon;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -42,6 +35,10 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
+
+import static Files.Code.Data.ToolData.*;
+import static Files.Code.Data.ToolData.WEAPON_TYPE.*;
+import static Files.Code.GUIs.ToolGUI.*;
 
 /**
  * This class generates the weapon tab of the main application window.

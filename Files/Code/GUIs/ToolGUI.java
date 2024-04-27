@@ -1,5 +1,8 @@
-package Files;
+package Files.Code.GUIs;
 
+import Files.Code.Data.Item;
+import Files.Code.Data.ToolData;
+import Files.Code.Data.Weapon;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -33,6 +36,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+
+import static Files.Code.Data.ToolData.*;
+import static Files.Code.GUIs.WeaponTabGUI.getUnassignedFarmedWeapons;
 
 /**
  * This class generates the main application window.
@@ -107,13 +113,13 @@ public class ToolGUI extends JFrame {
      */
     public ToolGUI() {
         $$$setupUI$$$();
-        changeFont(mainTabbedPane, AVAILABLE_FONTS.HEADER_FONT, 20.0F);
-        changeFont(devWelcomeLabel, AVAILABLE_FONTS.HEADER_FONT, 20.0F);
-        changeFont(devCreatorsLabel, AVAILABLE_FONTS.HEADER_FONT, 20.0F);
-        changeFont(devPrecisi0nLabel, AVAILABLE_FONTS.CREATOR_FONT, 18.0F);
-        changeFont(devLinakoLabel, AVAILABLE_FONTS.CREATOR_FONT, 18.0F);
-        changeFont(devUpdatesTextPane, AVAILABLE_FONTS.TEXT_FONT, 12.0F);
-        changeFont(devInfoTextPane, AVAILABLE_FONTS.TEXT_FONT, 12.0F);
+        changeFont(mainTabbedPane, ToolData.AVAILABLE_FONTS.HEADER_FONT, 20.0F);
+        changeFont(devWelcomeLabel, ToolData.AVAILABLE_FONTS.HEADER_FONT, 20.0F);
+        changeFont(devCreatorsLabel, ToolData.AVAILABLE_FONTS.HEADER_FONT, 20.0F);
+        changeFont(devPrecisi0nLabel, ToolData.AVAILABLE_FONTS.CREATOR_FONT, 18.0F);
+        changeFont(devLinakoLabel, ToolData.AVAILABLE_FONTS.CREATOR_FONT, 18.0F);
+        changeFont(devUpdatesTextPane, ToolData.AVAILABLE_FONTS.TEXT_FONT, 12.0F);
+        changeFont(devInfoTextPane, ToolData.AVAILABLE_FONTS.TEXT_FONT, 12.0F);
         devInfoTextPane.setText(
                 "This is a personal project to make our daily tasks a little bit more coordinated! Here's how to get started!\n\n -\uD83D\uDD38✨ Character Tab ✨\uD83D\uDD38-\n- Search by name or filter\n- Fill in the desired information (2nd artifact set is optional).\n- Checkboxes exist for characters to show up in the domains tab. Unchecking will hide a character from its chosen materials, making it easier to tell who still needs those materials. For example, if a character is done with its talents, you should uncheck the character.\n- DON'T FORGET TO SAVE\n\n\uD83D\uDD38✨ Weapon Tab ✨\uD83D\uDD38-\n Search by name or filter.\n- Only checkboxes appear. Checking a weapon will make it show up in farmed items in domains.\n- If a weapon is already listed through a character, it will be marked as \"Already Farmed\".\n\n-\uD83D\uDD38✨ Domains Tab ✨\uD83D\uDD38-\n- Search by filter or day. Results will be shown for today by default.\n- The chosen domain will show all characters/weapons checked in other tabs.");
 
