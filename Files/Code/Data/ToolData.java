@@ -1,6 +1,11 @@
 package Files.Code.Data;
 
+import Files.Code.Auxiliary.CharacterAdapter;
+import Files.Code.Auxiliary.DomainAdapter;
+import Files.Code.Auxiliary.WeaponAdapter;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
 import javax.swing.ImageIcon;
@@ -217,7 +222,16 @@ public class ToolData {
     }
 
     private static void parseDataJsonFiles() throws IOException {
-        Gson gson = new Gson();
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        TypeToken<List<Character>> characterToken = new TypeToken<List<Character>>() {
+        };
+        TypeToken<List<Domain>> domainToken = new TypeToken<List<Domain>>() {
+        };
+        TypeToken<List<Weapon>> weaponToken = new TypeToken<List<Weapon>>() {
+        };
+        Gson gson = gsonBuilder.registerTypeAdapter(characterToken.getType(), new CharacterAdapter())
+                .registerTypeAdapter(weaponToken.getType(), new WeaponAdapter())
+                .registerTypeAdapter(domainToken.getType(), new DomainAdapter()).create();
         for (DATA_CATEGORY dataCategory : DATA_CATEGORY.values()) {
             URL url = ToolData.class.getResource(dataCategory.datapath);
             assert url != null;
@@ -225,24 +239,22 @@ public class ToolData {
             JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(url.openStream())));
             switch (dataCategory) {
                 case DOMAIN:
-                    domains.addAll(gson.fromJson(reader, domains.getClass()));
+
+                    domains.addAll(gson.fromJson(reader, domainToken));
                     System.out.println(dataCategory.stringToken);
-                    System.out.println(domains);
                     break;
                 case CHARACTER:
-                    characters.addAll(gson.fromJson(reader, characters.getClass()));
+
+                    characters.addAll(gson.fromJson(reader, characterToken));
                     System.out.println(dataCategory.stringToken);
-                    System.out.println(characters);
                     break;
                 case WEAPON:
-                    weapons.addAll(gson.fromJson(reader, weapons.getClass()));
+                    weapons.addAll(gson.fromJson(reader, weaponToken));
                     System.out.println(dataCategory.stringToken);
-                    System.out.println(weapons);
                     break;
                 case SET_DESCRIPTION:
-                    artifactSetDescriptions.putAll(gson.fromJson(reader, artifactSetDescriptions.getClass()));
-                    System.out.println(dataCategory.stringToken);
-                    System.out.println(artifactSetDescriptions.keySet());
+                    //gson = gsonBuilder.create();
+                    //artifactSetDescriptions.putAll(gson.fromJson(reader, artifactSetDescriptions.getClass()));
                     break;
                 default:
                     throw new IOException("parsing data " + dataCategory.stringToken + " went wrong.");
@@ -273,7 +285,7 @@ public class ToolData {
             case WEEKLY_BOSS_MATERIAL: {
                 assert resource instanceof FarmableItem;
                 FarmableItem artifact = (FarmableItem) resource;
-                return ToolData.class.getResource("/Files/Images/" + artifact.type + "/" + artifact.name + ".png");
+                return ToolData.class.getResource("/Files/Images/" + "Artifact" + "/" + artifact.name + ".png");
             }
             case CHARACTER: {
                 assert resource instanceof Character;
@@ -384,7 +396,7 @@ public class ToolData {
         }
         for (Domain domain : domains) {
             for (FarmableItem material : domain.materials) {
-                RESOURCE_TYPE materialType = RESOURCE_TYPE.byString.get(domain.domainType);
+                RESOURCE_TYPE materialType = RESOURCE_TYPE.byString.get(domain.type);
                 material.icon = new ImageIcon(generateResourceIconPath(material, materialType));
                 switch (materialType) {
                     case ARTIFACT:
@@ -425,8 +437,15 @@ public class ToolData {
     public static void main(String[] args) throws Exception {
 
         parseDataJsonFiles();
-        fetchIcons();
-        parseFonts();
+        System.out.println(characters.size());
+        System.out.println(weapons.size());
+        System.out.println(domains.size());
+        for (Domain domain : domains) {
+            domain.printInfo();
+        }
+
+        //fetchIcons();
+        //parseFonts();
         //new ToolGUI();
         //new Program();
 

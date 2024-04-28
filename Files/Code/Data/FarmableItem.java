@@ -4,14 +4,14 @@ public abstract class FarmableItem extends Item {
 
     public final String availability;
 
-    public FarmableItem(String farmableItemName, String availability, String farmableItemType) {
-        super(farmableItemName, farmableItemType);
+    public FarmableItem(String farmableItemName, String availability) {
+        super(farmableItemName);
         this.availability = availability;
     }
 
     @Override
     public void printInfo() {
-        System.out.println(name + " " + type + " " + availability);
+        System.out.println(name + " " + availability);
     }
 
 }

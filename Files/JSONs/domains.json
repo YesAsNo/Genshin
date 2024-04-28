@@ -19,7 +19,7 @@
         "availability": "Wed/Sat"
       }
     ],
-    "availableEveryDay": false
+    "rotates": true
   },
   {
     "name": "Court of Flowing Sand",
@@ -41,7 +41,7 @@
         "availability": "Wed/Sat"
       }
     ],
-    "availableEveryDay": false
+    "rotates": true
   },
   {
     "name": "Echoes of the Deep Tides",
@@ -63,7 +63,7 @@
         "availability": "Wed/Sat"
       }
     ],
-    "availableEveryDay": false
+    "rotates": true
   },
   {
     "name": "Hidden Palace of Lianshan Formula",
@@ -85,7 +85,7 @@
         "availability": "Wed/Sat"
       }
     ],
-    "availableEveryDay": false
+    "rotates": true
   },
   {
     "name": "Tower of Abject Pride",
@@ -107,7 +107,7 @@
         "availability": "Wed/Sat"
       }
     ],
-    "availableEveryDay": false
+    "rotates": true
   },
   {
     "name": "Bosses",
@@ -124,7 +124,7 @@
         "availability": "All"
       }
     ],
-    "availableEveryDay": true
+    "rotates": false
   },
   {
     "name": "City of Gold",
@@ -141,7 +141,7 @@
         "availability": "All"
       }
     ],
-    "availableEveryDay": true
+    "rotates": false
   },
   {
     "name": "Clear Pool and Mountain Cavern",
@@ -158,7 +158,7 @@
         "availability": "All"
       }
     ],
-    "availableEveryDay": true
+    "rotates": false
   },
   {
     "name": "Denouement of Sin",
@@ -175,7 +175,7 @@
         "availability": "All"
       }
     ],
-    "availableEveryDay": true
+    "rotates": false
   },
   {
     "name": "Domain of Guyun",
@@ -192,7 +192,7 @@
         "availability": "All"
       }
     ],
-    "availableEveryDay": true
+    "rotates": false
   },
   {
     "name": "Faded Theater",
@@ -209,7 +209,7 @@
         "availability": "All"
       }
     ],
-    "availableEveryDay": true
+    "rotates": false
   },
   {
     "name": "Hidden Palace of Zhou Formula",
@@ -226,7 +226,7 @@
         "availability": "All"
       }
     ],
-    "availableEveryDay": true
+    "rotates": false
   },
   {
     "name": "Midsummer Courtyard",
@@ -243,7 +243,7 @@
         "availability": "All"
       }
     ],
-    "availableEveryDay": true
+    "rotates": false
   },
   {
     "name": "Molten Iron Fortress",
@@ -260,7 +260,7 @@
         "availability": "All"
       }
     ],
-    "availableEveryDay": true
+    "rotates": false
   },
   {
     "name": "Momiji-Dyed Court",
@@ -277,7 +277,7 @@
         "availability": "All"
       }
     ],
-    "availableEveryDay": true
+    "rotates": false
   },
   {
     "name": "Peak of Vindagnyr",
@@ -294,7 +294,7 @@
         "availability": "All"
       }
     ],
-    "availableEveryDay": true
+    "rotates": false
   },
   {
     "name": "Ridge Watch",
@@ -311,7 +311,7 @@
         "availability": "All"
       }
     ],
-    "availableEveryDay": true
+    "rotates": false
   },
   {
     "name": "Slumbering Court",
@@ -328,7 +328,7 @@
         "availability": "All"
       }
     ],
-    "availableEveryDay": true
+    "rotates": false
   },
   {
     "name": "Spire of Solitary Enlightenment",
@@ -345,7 +345,7 @@
         "availability": "All"
       }
     ],
-    "availableEveryDay": true
+    "rotates": false
   },
   {
     "name": "The Lost Valley",
@@ -362,7 +362,7 @@
         "availability": "All"
       }
     ],
-    "availableEveryDay": true
+    "rotates": false
   },
   {
     "name": "Valley of Remembrance",
@@ -379,7 +379,7 @@
         "availability": "All"
       }
     ],
-    "availableEveryDay": true
+    "rotates": false
   },
   {
     "name": "Waterfall Wen",
@@ -396,7 +396,7 @@
         "availability": "All"
       }
     ],
-    "availableEveryDay": true
+    "rotates": false
   },
   {
     "name": "Forsaken Rift",
@@ -418,7 +418,7 @@
         "availability": "Wed/Sat"
       }
     ],
-    "availableEveryDay": false
+    "rotates": true
   },
   {
     "name": "Pale Forgotten Glory",
@@ -440,7 +440,7 @@
         "availability": "Wed/Sat"
       }
     ],
-    "availableEveryDay": false
+    "rotates": true
   },
   {
     "name": "Steeple of Ignorance",
@@ -462,7 +462,7 @@
         "availability": "Wed/Sat"
       }
     ],
-    "availableEveryDay": false
+    "rotates": true
   },
   {
     "name": "Taishan Mansion",
@@ -484,7 +484,7 @@
         "availability": "Wed/Sat"
       }
     ],
-    "availableEveryDay": false
+    "rotates": true
   },
   {
     "name": "Violet Court",
@@ -506,7 +506,7 @@
         "availability": "Wed/Sat"
       }
     ],
-    "availableEveryDay": false
+    "rotates": true
   },
   {
     "name": "All-Devouring Narwhal",
@@ -528,7 +528,7 @@
         "availability": "All"
       }
     ],
-    "availableEveryDay": true
+    "rotates": false
   },
   {
     "name": "Azhdaha",
@@ -550,7 +550,7 @@
         "availability": "All"
       }
     ],
-    "availableEveryDay": true
+    "rotates": false
   },
   {
     "name": "Childe",
@@ -572,7 +572,7 @@
         "availability": "All"
       }
     ],
-    "availableEveryDay": true
+    "rotates": false
   },
   {
     "name": "Guardian of Apep\u0027s Oasis",
@@ -594,7 +594,7 @@
         "availability": "All"
       }
     ],
-    "availableEveryDay": true
+    "rotates": false
   },
   {
     "name": "La Signora",
@@ -616,7 +616,7 @@
         "availability": "All"
       }
     ],
-    "availableEveryDay": true
+    "rotates": false
   },
   {
     "name": "Lupus Boreas",
@@ -638,7 +638,7 @@
         "availability": "All"
       }
     ],
-    "availableEveryDay": true
+    "rotates": false
   },
   {
     "name": "Raiden Shogun",
@@ -660,7 +660,7 @@
         "availability": "All"
       }
     ],
-    "availableEveryDay": true
+    "rotates": false
   },
   {
     "name": "Scaramouche",
@@ -682,7 +682,7 @@
         "availability": "All"
       }
     ],
-    "availableEveryDay": true
+    "rotates": false
   },
   {
     "name": "Stormterror Dvalin",
@@ -704,7 +704,7 @@
         "availability": "All"
       }
     ],
-    "availableEveryDay": true
+    "rotates": false
   },
   {
     "name": "The Knave",
@@ -726,6 +726,6 @@
         "availability": "All"
       }
     ],
-    "availableEveryDay": true
+    "rotates": false
   }
 ]

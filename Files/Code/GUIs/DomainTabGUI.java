@@ -364,7 +364,7 @@ public class DomainTabGUI implements ActionListener {
             filteredDomains = domains;
         } else {
             for (Domain domain : domains) {
-                if (domain.domainType.equalsIgnoreCase(filter.stringToken)) {
+                if (domain.type.equalsIgnoreCase(filter.stringToken)) {
                     filteredDomains.add(domain);
                 }
             }
@@ -654,7 +654,7 @@ public class DomainTabGUI implements ActionListener {
      * @return the text
      */
     public static String getAllCounterLabel(Domain domain) {
-        return "<html>" + "All" + " " + domain.domainType + " " + "that need it: " + "<u>" +
+        return "<html>" + "All" + " " + domain.type + " " + "that need it: " + "<u>" +
                 (whoNeedsThisDomain(domain, false).size()) + "</u>" + "</html>";
 
     }
@@ -667,7 +667,7 @@ public class DomainTabGUI implements ActionListener {
      * @return the text
      */
     public static String getListedCounterLabel(Domain domain) {
-        return "<html>" + "Listed" + " " + domain.domainType + " " + "that need it: " + "<u>" +
+        return "<html>" + "Listed" + " " + domain.type + " " + "that need it: " + "<u>" +
                 (whoNeedsThisDomain(domain, true).size()) + "</u>" + "</html>";
     }
 
