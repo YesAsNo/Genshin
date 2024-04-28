@@ -1,10 +1,9 @@
 package Files.Code.Data;
 
 public class Artifact extends FarmableItem {
-    public final String setDescription;
+    public String setDescription;
 
-    public Artifact(String itemName, String setDescription) {
+    public Artifact(String itemName) {
         super(itemName, "All");
-        this.setDescription = setDescription;
     }
 }

@@ -75,7 +75,7 @@ public class DomainAdapter extends TypeAdapter<List<Domain>> {
             }
             jsonReader.endObject();
             if (type.equalsIgnoreCase("artifact")) {
-                materials.add(new Artifact(name, ""));
+                materials.add(new Artifact(name));
             } else if (type.equalsIgnoreCase("Weapon Material")) {
                 materials.add(new WeaponMaterial(name, availability, new ArrayList<>()));
             } else if (type.equalsIgnoreCase("Talent Book")) {

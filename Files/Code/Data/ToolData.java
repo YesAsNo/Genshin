@@ -251,8 +251,8 @@ public class ToolData {
                     weapons.addAll(gson.fromJson(reader, weaponToken));
                     break;
                 case SET_DESCRIPTION:
-                    //gson = gsonBuilder.create();
-                    //artifactSetDescriptions.putAll(gson.fromJson(reader, artifactSetDescriptions.getClass()));
+                    gson = gsonBuilder.create();
+                    artifactSetDescriptions.putAll(gson.fromJson(reader, artifactSetDescriptions.getClass()));
                     break;
                 default:
                     throw new IOException("parsing data " + dataCategory.stringToken + " went wrong.");
