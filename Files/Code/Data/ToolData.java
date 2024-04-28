@@ -3,6 +3,7 @@ package Files.Code.Data;
 import Files.Code.Auxiliary.CharacterAdapter;
 import Files.Code.Auxiliary.DomainAdapter;
 import Files.Code.Auxiliary.WeaponAdapter;
+import Files.Code.GUIs.ToolGUI;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -241,16 +242,13 @@ public class ToolData {
                 case DOMAIN:
 
                     domains.addAll(gson.fromJson(reader, domainToken));
-                    System.out.println(dataCategory.stringToken);
                     break;
                 case CHARACTER:
 
                     characters.addAll(gson.fromJson(reader, characterToken));
-                    System.out.println(dataCategory.stringToken);
                     break;
                 case WEAPON:
                     weapons.addAll(gson.fromJson(reader, weaponToken));
-                    System.out.println(dataCategory.stringToken);
                     break;
                 case SET_DESCRIPTION:
                     //gson = gsonBuilder.create();
@@ -279,13 +277,25 @@ public class ToolData {
                         "/Files/Images/Weapons/" + weapon.weaponType + "/" + weapon.rarity + "/" + weapon.name +
                                 ".png");
             }
-            case ARTIFACT:
-            case WEAPON_MATERIAL:
-            case TALENT_BOOK:
-            case WEEKLY_BOSS_MATERIAL: {
-                assert resource instanceof FarmableItem;
-                FarmableItem artifact = (FarmableItem) resource;
+            case ARTIFACT: {
+                assert resource instanceof Artifact;
+                Artifact artifact = (Artifact) resource;
                 return ToolData.class.getResource("/Files/Images/" + "Artifact" + "/" + artifact.name + ".png");
+            }
+            case WEAPON_MATERIAL: {
+                assert resource instanceof WeaponMaterial;
+                WeaponMaterial weaponMaterial = (WeaponMaterial) resource;
+                return ToolData.class.getResource("/Files/Images/" + "Weapon Material" + "/" + weaponMaterial.name + ".png");
+            }
+            case TALENT_BOOK: {
+                assert resource instanceof TalentMaterial;
+                TalentMaterial talentMaterial = (TalentMaterial) resource;
+                return ToolData.class.getResource("/Files/Images/" + "Talent Book" + "/" + talentMaterial.name + ".png");
+            }
+            case WEEKLY_BOSS_MATERIAL: {
+                assert resource instanceof WeeklyTalentMaterial;
+                WeeklyTalentMaterial weeklyTalentMaterial = (WeeklyTalentMaterial) resource;
+                return ToolData.class.getResource("/Files/Images/" + "Weekly Boss Material" + "/" + weeklyTalentMaterial.name + ".png");
             }
             case CHARACTER: {
                 assert resource instanceof Character;
@@ -437,17 +447,9 @@ public class ToolData {
     public static void main(String[] args) throws Exception {
 
         parseDataJsonFiles();
-        System.out.println(characters.size());
-        System.out.println(weapons.size());
-        System.out.println(domains.size());
-        for (Domain domain : domains) {
-            domain.printInfo();
-        }
-
-        //fetchIcons();
-        //parseFonts();
-        //new ToolGUI();
-        //new Program();
+        fetchIcons();
+        parseFonts();
+        new ToolGUI();
 
     }
 }
