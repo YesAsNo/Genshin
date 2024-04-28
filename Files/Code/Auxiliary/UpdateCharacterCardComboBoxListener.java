@@ -3,6 +3,7 @@ package Files.Code.Auxiliary;
 import static Files.Code.Data.ToolData.getArtifact;
 import static Files.Code.Data.ToolData.getWeapon;
 import static Files.Code.GUIs.ToolGUI.EMPTY_SET_SELECTOR;
+import static Files.Code.GUIs.ToolGUI.EMPTY_WEAPON_SELECTOR;
 import static Files.Code.GUIs.ToolGUI.updateFarmedItemMap;
 
 import Files.Code.Data.CharacterListing;
@@ -39,8 +40,10 @@ public class UpdateCharacterCardComboBoxListener implements ItemListener {
     public void itemStateChanged(ItemEvent e) {
         _saveButton.setEnabled(true);
         String item = ((JLabel) e.getItem()).getText();
-        if (e.getStateChange() == ItemEvent.DESELECTED && !item.equalsIgnoreCase(EMPTY_SET_SELECTOR)) {
+        if (e.getStateChange() == ItemEvent.DESELECTED && !item.equals(EMPTY_WEAPON_SELECTOR) &&
+                !item.equals(EMPTY_SET_SELECTOR)) {
             if (_changedData == ToolData.CHARACTER_CARD_DATA_FIELD.WEAPON) {
+                System.out.println(item);
                 updateFarmedItemMap(_changedData, _characterListing, false, getWeapon(item));
             }
             if (_changedData == ToolData.CHARACTER_CARD_DATA_FIELD.SET_ONE ||

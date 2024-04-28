@@ -117,7 +117,7 @@
         "name": "Gladiator\u0027s Finale",
         "type": "Artifact",
         "2p": "ATK +18%.",
-        "4p":"If the wielder of this artifact set uses a Sword, Claymore or Polearm, increases their Normal Attack DMG by 35%."
+        "4p": "If the wielder of this artifact set uses a Sword, Claymore or Polearm, increases their Normal Attack DMG by 35%."
       },
       {
         "name": "Wanderer\u0027s Troupe",
@@ -211,7 +211,7 @@
       {
         "name": "Fragment of Harmonic Whimsy",
         "type": "Artifact",
-        "2p": "2-Piece: ATK +18%",
+        "2p": "ATK +18%",
         "4p": "When the value of a Bond of Life increases or decreases, this character deals 18% increased DMG for 6s. Max 3 stacks."
       },
       {

@@ -43,8 +43,6 @@ public class ToolData {
 
     /** Enum that represents known mappings. All methods should use it instead of String values. */
     public enum DATA_CATEGORY {
-        /** Artifact Set Descriptions */
-        SET_DESCRIPTION("setDescriptions", "/Files/JSONs/setDescriptions.json"),
         /** All characters */
         CHARACTER("characters", "/Files/JSONs/characters.json"),
         /** All domains */
@@ -240,19 +238,13 @@ public class ToolData {
             JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(url.openStream())));
             switch (dataCategory) {
                 case DOMAIN:
-
                     domains.addAll(gson.fromJson(reader, domainToken));
                     break;
                 case CHARACTER:
-
                     characters.addAll(gson.fromJson(reader, characterToken));
                     break;
                 case WEAPON:
                     weapons.addAll(gson.fromJson(reader, weaponToken));
-                    break;
-                case SET_DESCRIPTION:
-                    gson = gsonBuilder.create();
-                    artifactSetDescriptions.putAll(gson.fromJson(reader, artifactSetDescriptions.getClass()));
                     break;
                 default:
                     throw new IOException("parsing data " + dataCategory.stringToken + " went wrong.");
@@ -285,17 +277,20 @@ public class ToolData {
             case WEAPON_MATERIAL: {
                 assert resource instanceof WeaponMaterial;
                 WeaponMaterial weaponMaterial = (WeaponMaterial) resource;
-                return ToolData.class.getResource("/Files/Images/" + "Weapon Material" + "/" + weaponMaterial.name + ".png");
+                return ToolData.class.getResource(
+                        "/Files/Images/" + "Weapon Material" + "/" + weaponMaterial.name + ".png");
             }
             case TALENT_BOOK: {
                 assert resource instanceof TalentMaterial;
                 TalentMaterial talentMaterial = (TalentMaterial) resource;
-                return ToolData.class.getResource("/Files/Images/" + "Talent Book" + "/" + talentMaterial.name + ".png");
+                return ToolData.class.getResource(
+                        "/Files/Images/" + "Talent Book" + "/" + talentMaterial.name + ".png");
             }
             case WEEKLY_BOSS_MATERIAL: {
                 assert resource instanceof WeeklyTalentMaterial;
                 WeeklyTalentMaterial weeklyTalentMaterial = (WeeklyTalentMaterial) resource;
-                return ToolData.class.getResource("/Files/Images/" + "Weekly Boss Material" + "/" + weeklyTalentMaterial.name + ".png");
+                return ToolData.class.getResource(
+                        "/Files/Images/" + "Weekly Boss Material" + "/" + weeklyTalentMaterial.name + ".png");
             }
             case CHARACTER: {
                 assert resource instanceof Character;
@@ -438,6 +433,16 @@ public class ToolData {
         return placeholderIcons.get(key);
     }
 
+    private static void provideMappings() {
+        for (Character character : characters) {
+            getTalentBook(character.talentMaterial).usedBy.add(character.name);
+            getWeeklyTalentMaterial(character.weeklyTalentMaterial).usedBy.add(character.name);
+        }
+        for (Weapon weapon : weapons) {
+            getWeaponMaterial(weapon.ascensionMaterial).usedBy.add(weapon.name);
+        }
+    }
+
     /**
      * Main method
      *
@@ -449,6 +454,7 @@ public class ToolData {
         parseDataJsonFiles();
         fetchIcons();
         parseFonts();
+        provideMappings();
         new ToolGUI();
 
     }

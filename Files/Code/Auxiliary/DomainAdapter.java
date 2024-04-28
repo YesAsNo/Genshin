@@ -59,6 +59,8 @@ public class DomainAdapter extends TypeAdapter<List<Domain>> {
         String name = "";
         String type = "";
         String availability = "";
+        String descr_2p = "";
+        String descr_4p = "";
         while (jsonReader.hasNext()) {
             jsonReader.beginObject();
             while (jsonReader.hasNext()) {
@@ -69,13 +71,17 @@ public class DomainAdapter extends TypeAdapter<List<Domain>> {
                     type = jsonReader.nextString();
                 } else if ("availability".equalsIgnoreCase(fieldName)) {
                     availability = jsonReader.nextString();
+                } else if ("2p".equalsIgnoreCase(fieldName)) {
+                    descr_2p = jsonReader.nextString();
+                } else if ("4p".equalsIgnoreCase(fieldName)) {
+                    descr_4p = jsonReader.nextString();
                 } else {
                     jsonReader.skipValue();
                 }
             }
             jsonReader.endObject();
             if (type.equalsIgnoreCase("artifact")) {
-                materials.add(new Artifact(name));
+                materials.add(new Artifact(name, descr_2p, descr_4p));
             } else if (type.equalsIgnoreCase("Weapon Material")) {
                 materials.add(new WeaponMaterial(name, availability, new ArrayList<>()));
             } else if (type.equalsIgnoreCase("Talent Book")) {
