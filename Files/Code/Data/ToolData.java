@@ -2,6 +2,7 @@ package Files.Code.Data;
 
 import Files.Code.Auxiliary.CharacterAdapter;
 import Files.Code.Auxiliary.DomainAdapter;
+import Files.Code.Auxiliary.ItemComparator;
 import Files.Code.Auxiliary.WeaponAdapter;
 import Files.Code.GUIs.ToolGUI;
 import com.google.gson.Gson;
@@ -21,25 +22,57 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 /** Main class of the application. Parses all static data from the json files, taken from the Genshin Fandom Wiki. */
 public class ToolData {
 
+    /**
+     * Image keys that represent placeholder icons (i.e. icons that show that no item of the specified category has been selected)
+     */
     public static final String[] placeholderImageKeys = {"artifact", "character", "weapon"};
     private static final Map<String, Font> fonts = new TreeMap<>();
     /** Save location of user data. */
     public static final String SAVE_LOCATION = "./UserData/";
-    /** Locations of all data json files. */
-    public static final Map<String, String> artifactSetDescriptions = new TreeMap<>();
-    public static final List<Character> characters = new ArrayList<>();
-    public static final List<Domain> domains = new ArrayList<>();
-    public static final List<Weapon> weapons = new ArrayList<>();
-    public static final List<Artifact> artifacts = new ArrayList<>();
-    public static final List<WeaponMaterial> weaponMaterials = new ArrayList<>();
-    public static final List<TalentMaterial> talentBooks = new ArrayList<>();
-    public static final List<WeeklyTalentMaterial> weeklyTalents = new ArrayList<>();
-    private static final Map<String, ImageIcon> placeholderIcons = new TreeMap<>();
+    /**
+     * Comparator class for items. All treesets need to have this as argument upon creation.
+     */
+    public static final ItemComparator comparator = new ItemComparator();
+    /**
+     * All characters in the game.
+     */
+    public static final Set<Character> characters = new TreeSet<>(comparator);
+    /**
+     * All domains in the game.
+     */
+    public static final Set<Domain> domains = new TreeSet<>(comparator);
+    /**
+     * All weapons in the game.
+     */
+    public static final Set<Weapon> weapons = new TreeSet<>(comparator);
+    /**
+     * All artifact sets in the game.
+     */
+    public static final Set<Artifact> artifacts = new TreeSet<>(comparator);
+    /**
+     * All weapon materials obtainable from domains in the game.
+     */
+    public static final Set<WeaponMaterial> weaponMaterials = new TreeSet<>(comparator);
+    /**
+     * All talent materials (excluding weekly ones) obtainable in the game.
+     */
+    public static final Set<TalentMaterial> talentMaterials = new TreeSet<>(comparator);
+    /**
+     * All weekly talent materials (excluding non-weekly ones) obtainable in the game.
+     */
+    public static final TreeSet<WeeklyTalentMaterial> weeklyTalentMaterials = new TreeSet<>(comparator);
+    /**
+     * All placeholder icons to use in GUIs.
+     */
+    public static final Map<String, ImageIcon> placeholderIcons = new TreeMap<>();
 
     /** Enum that represents known mappings. All methods should use it instead of String values. */
     public enum DATA_CATEGORY {
@@ -67,7 +100,13 @@ public class ToolData {
 
         /** 4 Star rarity! */
         FOUR_STAR("4-Star");
+        /**
+         * Respective string token.
+         */
         public final String stringToken;
+        /**
+         * Map that stores all values in the form (string -> enum)
+         */
         public static final Map<String, WEAPON_RARITY> byString = new TreeMap<>();
 
         static {
@@ -98,6 +137,9 @@ public class ToolData {
 
         /** The string token used to look up the mapping. */
         public final String stringToken;
+        /**
+         * Map that stores all values in the form (string -> enum)
+         */
         public static final Map<String, RESOURCE_TYPE> byString = new TreeMap<>();
 
         static {
@@ -209,24 +251,13 @@ public class ToolData {
         jcomponent.setFont(desiredFont.fontName.deriveFont(size));
     }
 
-    /**
-     * Get the set description of desired artifact set.
-     *
-     * @param artifactSetName the desired artifact set (duh).
-     * @return set description of the desired artifact set.
-     */
-    public static String getArtifactSetDescription(String artifactSetName) {
-        assert artifactSetDescriptions.containsKey(artifactSetName);
-        return artifactSetDescriptions.get(artifactSetName);
-    }
-
     private static void parseDataJsonFiles() throws IOException {
         GsonBuilder gsonBuilder = new GsonBuilder();
-        TypeToken<List<Character>> characterToken = new TypeToken<List<Character>>() {
+        TypeToken<Set<Character>> characterToken = new TypeToken<Set<Character>>() {
         };
-        TypeToken<List<Domain>> domainToken = new TypeToken<List<Domain>>() {
+        TypeToken<Set<Domain>> domainToken = new TypeToken<Set<Domain>>() {
         };
-        TypeToken<List<Weapon>> weaponToken = new TypeToken<List<Weapon>>() {
+        TypeToken<Set<Weapon>> weaponToken = new TypeToken<Set<Weapon>>() {
         };
         Gson gson = gsonBuilder.registerTypeAdapter(characterToken.getType(), new CharacterAdapter())
                 .registerTypeAdapter(weaponToken.getType(), new WeaponAdapter())
@@ -344,7 +375,7 @@ public class ToolData {
     }
 
     public static TalentMaterial getTalentBook(String name) {
-        for (TalentMaterial talentBook : talentBooks) {
+        for (TalentMaterial talentBook : talentMaterials) {
             if (talentBook.name.equalsIgnoreCase(name)) {
                 return talentBook;
             }
@@ -362,7 +393,7 @@ public class ToolData {
     }
 
     public static WeeklyTalentMaterial getWeeklyTalentMaterial(String name) {
-        for (WeeklyTalentMaterial weeklyTalentMaterial : weeklyTalents) {
+        for (WeeklyTalentMaterial weeklyTalentMaterial : weeklyTalentMaterials) {
             if (weeklyTalentMaterial.name.equalsIgnoreCase(name)) {
                 return weeklyTalentMaterial;
             }
@@ -410,11 +441,11 @@ public class ToolData {
                         break;
                     case WEEKLY_BOSS_MATERIAL:
                         assert material instanceof WeeklyTalentMaterial;
-                        weeklyTalents.add((WeeklyTalentMaterial) material);
+                        weeklyTalentMaterials.add((WeeklyTalentMaterial) material);
                         break;
                     case TALENT_BOOK:
                         assert material instanceof TalentMaterial;
-                        talentBooks.add((TalentMaterial) material);
+                        talentMaterials.add((TalentMaterial) material);
                         break;
                     case WEAPON_MATERIAL:
                         assert material instanceof WeaponMaterial;
@@ -424,7 +455,8 @@ public class ToolData {
             }
         }
         for (String name : placeholderImageKeys) {
-            placeholderIcons.put(name, new ImageIcon("/Files/Images/Placeholders/" + name + ".png"));
+            placeholderIcons.put(name, new ImageIcon(
+                    Objects.requireNonNull(ToolData.class.getResource("/Files/Images/Placeholders/" + name + ".png"))));
         }
     }
 

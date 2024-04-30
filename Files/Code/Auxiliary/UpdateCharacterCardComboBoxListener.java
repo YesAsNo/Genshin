@@ -38,6 +38,7 @@ public class UpdateCharacterCardComboBoxListener implements ItemListener {
 
     @Override
     public void itemStateChanged(ItemEvent e) {
+        //TODO: Add dummy artifact set and dummy weapon.
         _saveButton.setEnabled(true);
         String item = ((JLabel) e.getItem()).getText();
         if (e.getStateChange() == ItemEvent.DESELECTED && !item.equals(EMPTY_WEAPON_SELECTOR) &&
@@ -51,12 +52,12 @@ public class UpdateCharacterCardComboBoxListener implements ItemListener {
                 updateFarmedItemMap(_changedData, _characterListing, false, getArtifact(item));
             }
         }
-        if (e.getStateChange() == ItemEvent.SELECTED) {
+        if (e.getStateChange() == ItemEvent.SELECTED && !item.equals(EMPTY_WEAPON_SELECTOR) &&
+                !item.equals(EMPTY_SET_SELECTOR)) {
             switch (_changedData) {
                 case WEAPON:
                     _characterListing.setWeapon(item);
-                    updateFarmedItemMap(_changedData, _characterListing, _characterListing.getWeaponStatus(),
-                            getWeapon(item));
+
                     return;
                 case NOTES:
                     _characterListing.setCharacterNotes(item);

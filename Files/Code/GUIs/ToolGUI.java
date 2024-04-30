@@ -8,9 +8,9 @@ import static Files.Code.Data.ToolData.getCharacter;
 import static Files.Code.Data.ToolData.getTalentBook;
 import static Files.Code.Data.ToolData.getWeapon;
 import static Files.Code.Data.ToolData.getWeeklyTalentMaterial;
-import static Files.Code.Data.ToolData.talentBooks;
+import static Files.Code.Data.ToolData.talentMaterials;
 import static Files.Code.Data.ToolData.weapons;
-import static Files.Code.Data.ToolData.weeklyTalents;
+import static Files.Code.Data.ToolData.weeklyTalentMaterials;
 import static Files.Code.GUIs.WeaponTabGUI.getUnassignedFarmedWeapons;
 
 import Files.Code.Auxiliary.ItemComparator;
@@ -322,10 +322,10 @@ public class ToolGUI extends JFrame {
     }
 
     private void initialiseFarmedArrays() {
-        for (TalentMaterial talentBook : talentBooks) {
+        for (TalentMaterial talentBook : talentMaterials) {
             farmedTalentBooks.put(talentBook, new TreeSet<>(new ItemComparator()));
         }
-        for (WeeklyTalentMaterial weeklyMat : weeklyTalents) {
+        for (WeeklyTalentMaterial weeklyMat : weeklyTalentMaterials) {
             farmedWeeklyTalentMaterials.put(weeklyMat, new TreeSet<>(new ItemComparator()));
         }
         for (Artifact artifactSet : artifacts) {

@@ -1,7 +1,9 @@
 package Files.Code.Auxiliary;
 
-import static Files.Code.Data.ToolData.getArtifactSetDescription;
+import static Files.Code.Data.ToolData.getArtifact;
 import static Files.Code.GUIs.ToolGUI.EMPTY_SET_SELECTOR;
+
+import Files.Code.Data.Artifact;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -32,7 +34,8 @@ public class UpdateTextAreaListener implements ActionListener {
         String item = ((JLabel) src.getSelectedItem()).getText();
         assert item != null;
         if (!item.equalsIgnoreCase(EMPTY_SET_SELECTOR)) {
-            _textArea.setText(getArtifactSetDescription(item));
+            Artifact artifact = getArtifact(item);
+            _textArea.setText(artifact.description_2piece + "\n\n" + artifact.description_4piece);
         } else {
             _textArea.setText("");
         }

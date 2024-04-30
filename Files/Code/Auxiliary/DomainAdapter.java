@@ -4,6 +4,7 @@ import Files.Code.Data.Artifact;
 import Files.Code.Data.Domain;
 import Files.Code.Data.FarmableItem;
 import Files.Code.Data.TalentMaterial;
+import Files.Code.Data.ToolData;
 import Files.Code.Data.WeaponMaterial;
 import Files.Code.Data.WeeklyTalentMaterial;
 import com.google.gson.TypeAdapter;
@@ -12,23 +13,27 @@ import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
-public class DomainAdapter extends TypeAdapter<List<Domain>> {
+/**
+ * This is a custom parser for domains.json.
+ */
+public class DomainAdapter extends TypeAdapter<Set<Domain>> {
 
     @Override
-    public void write(JsonWriter jsonWriter, List<Domain> domainAdapters) throws IOException {
+    public void write(JsonWriter jsonWriter, Set<Domain> domainAdapters) {
 
     }
 
     @Override
-    public List<Domain> read(JsonReader jsonReader) throws IOException {
+    public Set<Domain> read(JsonReader jsonReader) throws IOException {
         jsonReader.beginArray();
         String name = "";
         String type = "";
-        List<? extends FarmableItem> materials = new ArrayList<>();
+        Set<? extends FarmableItem> materials = new TreeSet<>(ToolData.comparator);
         boolean rotates = false;
-        List<Domain> domains = new ArrayList<>();
+        Set<Domain> domains = new TreeSet<>(ToolData.comparator);
         while (jsonReader.hasNext()) {
             jsonReader.beginObject();
             while (jsonReader.hasNext()) {
@@ -53,8 +58,8 @@ public class DomainAdapter extends TypeAdapter<List<Domain>> {
         return domains;
     }
 
-    public List<? extends FarmableItem> getMaterials(JsonReader jsonReader) throws IOException {
-        List<FarmableItem> materials = new ArrayList<>();
+    private Set<? extends FarmableItem> getMaterials(JsonReader jsonReader) throws IOException {
+        Set<FarmableItem> materials = new TreeSet<>(ToolData.comparator);
         jsonReader.beginArray();
         String name = "";
         String type = "";

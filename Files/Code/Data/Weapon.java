@@ -1,5 +1,8 @@
 package Files.Code.Data;
 
+/**
+ * This class represents all Weapons from the game Genshin Impact.
+ */
 public class Weapon extends Item {
     public final String rarity;
     public final String weaponType;

@@ -199,7 +199,7 @@ public class DomainCardGUI extends JFrame {
                     generateDomainItemLabel(weapon.name, weapon.icon, k, innerUnlistedPanel);
                     k++;
                 }
-            } else if (domain.isWeeklyTalentDomain() || domain.isTalentBookDomain()) {
+            } else if (domain.isWeeklyTalentMaterialDomain() || domain.isTalentMaterialDomain()) {
                 for (Item character : whoNeedsThisItem(domain, domainMat, true)) {
                     assert character instanceof Character;
                     generateDomainItemLabel(character.name, character.icon, i, innerListedPanel);

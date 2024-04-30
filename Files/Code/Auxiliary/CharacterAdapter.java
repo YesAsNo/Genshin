@@ -1,30 +1,31 @@
 package Files.Code.Auxiliary;
 
 import Files.Code.Data.Character;
+import Files.Code.Data.ToolData;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
-public class CharacterAdapter extends TypeAdapter<List<Character>> {
+public class CharacterAdapter extends TypeAdapter<Set<Character>> {
 
     @Override
-    public void write(JsonWriter jsonWriter, List<Character> characters) throws IOException {
+    public void write(JsonWriter jsonWriter, Set<Character> characters) throws IOException {
 
     }
 
     @Override
-    public List<Character> read(JsonReader jsonReader) throws IOException {
+    public Set<Character> read(JsonReader jsonReader) throws IOException {
         jsonReader.beginArray();
         String name = "";
         String element = "";
         String weaponType = "";
         String talentMaterial = "";
         String weeklyTalentMaterial = "";
-        List<Character> characters = new ArrayList<>();
+        Set<Character> characters = new TreeSet<>(ToolData.comparator);
         while (jsonReader.hasNext()) {
             jsonReader.beginObject();
             while (jsonReader.hasNext()) {

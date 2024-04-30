@@ -53,16 +53,15 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  * This class constructs the domain tab GUI, available from the Domains tab in the main application.
@@ -355,7 +354,7 @@ public class DomainTabGUI implements ActionListener {
     }
 
     private void parseFilter(DOMAIN_FILTER_OPTIONS filter, String dayFilter, boolean status) {
-        List<Domain> filteredDomains = new ArrayList<>();
+        Set<Domain> filteredDomains = new TreeSet<>(ToolData.comparator);
         domainsPanelOverview.removeAll();
         domainsPanelOverview.updateUI();
         int i = 0;
@@ -402,11 +401,11 @@ public class DomainTabGUI implements ActionListener {
     public static DOMAIN_THEME getDomainTheme(Domain domain) {
         if (domain.isArtifactDomain()) {
             return DOMAIN_THEME.ARTIFACT_DOMAIN_THEME;
-        } else if (domain.isTalentBookDomain()) {
+        } else if (domain.isTalentMaterialDomain()) {
             return DOMAIN_THEME.TALENT_BOOK_THEME;
         } else if (domain.isWeaponMaterialDomain()) {
             return DOMAIN_THEME.WEAPON_MATERIAL_THEME;
-        } else if (domain.isWeeklyTalentDomain()) {
+        } else if (domain.isWeeklyTalentMaterialDomain()) {
             return DOMAIN_THEME.WEEKLY_BOSS_DOMAIN_THEME;
         } else {
             throw new IllegalArgumentException("Unknown domain type");
@@ -564,7 +563,7 @@ public class DomainTabGUI implements ActionListener {
                 }
             }
             return possibleWeapons;
-        } else if (domain.isWeeklyTalentDomain()) {
+        } else if (domain.isWeeklyTalentMaterialDomain()) {
             Set<Character> possibleCharacters = new HashSet<>();
             for (FarmableItem weeklyTalentMaterial : domain.materials) {
                 assert weeklyTalentMaterial instanceof WeeklyTalentMaterial;
@@ -573,7 +572,7 @@ public class DomainTabGUI implements ActionListener {
                 }
             }
             return possibleCharacters;
-        } else if (domain.isTalentBookDomain()) {
+        } else if (domain.isTalentMaterialDomain()) {
             Set<Character> possibleCharacters = new HashSet<>();
             for (FarmableItem talentMaterial : domain.materials) {
                 assert talentMaterial instanceof TalentMaterial;
@@ -620,14 +619,14 @@ public class DomainTabGUI implements ActionListener {
             }
 
             return possibleWeapons;
-        } else if (domain.isWeeklyTalentDomain()) {
+        } else if (domain.isWeeklyTalentMaterialDomain()) {
             Set<Character> possibleCharacters = new HashSet<>();
             assert item instanceof WeeklyTalentMaterial;
             if (!farmedOnly || !farmedWeeklyTalentMaterials.get(item).isEmpty()) {
                 possibleCharacters.addAll(farmedWeeklyTalentMaterials.get(item));
             }
             return possibleCharacters;
-        } else if (domain.isTalentBookDomain()) {
+        } else if (domain.isTalentMaterialDomain()) {
             Set<Character> possibleCharacters = new HashSet<>();
             assert item instanceof TalentMaterial;
             if (!farmedOnly || !farmedTalentBooks.get(item).isEmpty()) {
