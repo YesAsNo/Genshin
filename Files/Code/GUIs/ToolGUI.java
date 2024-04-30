@@ -209,14 +209,24 @@ public class ToolGUI extends JFrame {
                 }
                 break;
             case FARMING_TALENT_MATERIALS:
-                //TODO: Add support for Weekly Talent Materials
-                assert item instanceof TalentMaterial;
-                if (status) {
-                    farmedTalentBooks.get(item).add(getCharacter(characterListing.getCharacterName()));
+                if (item instanceof TalentMaterial) {
+                    if (status) {
+                        farmedTalentBooks.get(item).add(getCharacter(characterListing.getCharacterName()));
+                    } else {
+                        farmedTalentBooks.get(item).remove(getCharacter(characterListing.getCharacterName()));
+                    }
+                    break;
+                } else if (item instanceof WeeklyTalentMaterial) {
+                    if (status) {
+                        farmedWeeklyTalentMaterials.get(item).add(getCharacter(characterListing.getCharacterName()));
+                    } else {
+                        farmedWeeklyTalentMaterials.get(item).remove(getCharacter(characterListing.getCharacterName()));
+                    }
+                    break;
                 } else {
-                    farmedTalentBooks.get(item).remove(getCharacter(characterListing.getCharacterName()));
+                    throw new IllegalArgumentException("This item " + item.name + " is of an illegal data type");
                 }
-                break;
+
             default:
                 throw new IllegalArgumentException("This datafield cannot be farmed " + dataField);
         }

@@ -38,7 +38,6 @@ public class UpdateCharacterCardComboBoxListener implements ItemListener {
 
     @Override
     public void itemStateChanged(ItemEvent e) {
-        //TODO: Add dummy artifact set and dummy weapon.
         _saveButton.setEnabled(true);
         String item = ((JLabel) e.getItem()).getText();
         if (e.getStateChange() == ItemEvent.DESELECTED && !item.equals(EMPTY_WEAPON_SELECTOR) &&
