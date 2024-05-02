@@ -1,9 +1,7 @@
 package Files.Code.GUIs;
 
+import static Files.Code.Data.ToolData.*;
 import static Files.Code.Data.ToolData.RESOURCE_TYPE.WEEKLY_BOSS_MATERIAL;
-import static Files.Code.Data.ToolData.changeFont;
-import static Files.Code.Data.ToolData.domains;
-import static Files.Code.Data.ToolData.getWeapon;
 import static Files.Code.GUIs.DomainTabGUI.DOMAIN_FILTER_OPTIONS.ALL_OPTIONS_BY_ENUM;
 import static Files.Code.GUIs.DomainTabGUI.DOMAIN_FILTER_OPTIONS.ALL_OPTIONS_BY_STRING;
 import static Files.Code.GUIs.DomainTabGUI.DOMAIN_FILTER_OPTIONS.NO_FILTER;
@@ -149,19 +147,19 @@ public class DomainTabGUI implements ActionListener {
         /**
          * Weapon material domain theme.
          */
-        WEAPON_MATERIAL_THEME(-10301, -13494016, -26768, "\uD83D\uDD2A"),
+        WEAPON_MATERIAL_THEME(-10301, -13494016, -26768, "♥"),
         /**
          * Talent book domain theme.
          */
-        TALENT_BOOK_THEME(-1068, -14541824, -10640, "\uD83D\uDCD4"),
+        TALENT_BOOK_THEME(-1068, -14541824, -10640, "♣"),
         /**
          * Weekly boss domain theme.
          */
-        WEEKLY_BOSS_DOMAIN_THEME(-11811, -13236722, -36698, "\uD83D\uDC09"),
+        WEEKLY_BOSS_DOMAIN_THEME(-11811, -13236722, -36698, "♠"),
         /**
          * Artifact domain theme.
          */
-        ARTIFACT_DOMAIN_THEME(-2756865, -16575201, -9382145, "\uD83D\uDC51");
+        ARTIFACT_DOMAIN_THEME(-2756865, -16575201, -9382145, "♦");
         /**
          * Panel background color for a theme.
          */
@@ -609,28 +607,57 @@ public class DomainTabGUI implements ActionListener {
 
             assert item instanceof WeaponMaterial;
 
-            Set<Weapon> possibleWeapons = new HashSet<>();
+            Set<Weapon> allPossibleWeapons = new TreeSet<>(comparator);
+            Set<Weapon> allListedWeapons = new TreeSet<>(comparator);
+
             for (String weaponName : ((WeaponMaterial) item).usedBy) {
                 Weapon weapon = getWeapon(weaponName);
-                if (!farmedOnly || !farmedWeapons.get(weapon).isEmpty() ||
-                        getUnassignedFarmedWeapons().contains(weapon)) {
-                    possibleWeapons.add(weapon);
+                if (!farmedWeapons.get(weapon).isEmpty() || getUnassignedFarmedWeapons().contains(weapon)){
+                    allListedWeapons.add(weapon);
                 }
             }
+            for (String weaponName : ((WeaponMaterial) item).usedBy) {
+                Weapon weapon = getWeapon(weaponName);
+                allPossibleWeapons.add(weapon);
+            }
 
-            return possibleWeapons;
+            if (farmedOnly) {
+                return allListedWeapons;
+            }
+            else {
+                allPossibleWeapons.removeAll(allListedWeapons);
+                return allPossibleWeapons;
+            }
+
         } else if (domain.isWeeklyTalentMaterialDomain()) {
             Set<Character> possibleCharacters = new HashSet<>();
             assert item instanceof WeeklyTalentMaterial;
-            if (!farmedOnly || !farmedWeeklyTalentMaterials.get(item).isEmpty()) {
+
+            if (farmedOnly) {
                 possibleCharacters.addAll(farmedWeeklyTalentMaterials.get(item));
+            }
+            else {
+                for (String characterName: ((WeeklyTalentMaterial) item).usedBy){
+                    Character character = getCharacter(characterName);
+                    if (!farmedWeeklyTalentMaterials.get(item).contains(character)) {
+                        possibleCharacters.add(getCharacter(characterName));
+                    }
+                }
             }
             return possibleCharacters;
         } else if (domain.isTalentMaterialDomain()) {
             Set<Character> possibleCharacters = new HashSet<>();
             assert item instanceof TalentMaterial;
-            if (!farmedOnly || !farmedTalentBooks.get(item).isEmpty()) {
+            if (farmedOnly) {
                 possibleCharacters.addAll(farmedTalentBooks.get(item));
+            }
+            else {
+                for (String characterName: ((TalentMaterial) item).usedBy){
+                    Character character = getCharacter(characterName);
+                    if (!farmedTalentBooks.get(item).contains(character)) {
+                        possibleCharacters.add(getCharacter(characterName));
+                    }
+                }
             }
             return possibleCharacters;
         } else if (domain.isArtifactDomain()) {
@@ -639,6 +666,7 @@ public class DomainTabGUI implements ActionListener {
             if (!farmedOnly || !farmedArtifacts.get(item).isEmpty()) {
                 possibleCharacters.addAll(farmedArtifacts.get(item));
             }
+
             return possibleCharacters;
         } else {
             throw new IllegalArgumentException();
@@ -653,8 +681,12 @@ public class DomainTabGUI implements ActionListener {
      * @return the text
      */
     public static String getAllCounterLabel(Domain domain) {
-        return "<html>" + "All" + " " + domain.type + " " + "that need it: " + "<u>" +
-                (whoNeedsThisDomain(domain, false).size()) + "</u>" + "</html>";
+        if (domain.isWeaponMaterialDomain()) {
+            //TODO fix this shit alien brain
+            for (FarmableItem material : domain.materials) {
+
+            }
+        }
 
     }
 

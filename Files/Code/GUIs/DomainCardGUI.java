@@ -202,11 +202,13 @@ public class DomainCardGUI extends JFrame {
             } else if (domain.isWeeklyTalentMaterialDomain() || domain.isTalentMaterialDomain()) {
                 for (Item character : whoNeedsThisItem(domain, domainMat, true)) {
                     assert character instanceof Character;
+                    System.out.println(character.name);
                     generateDomainItemLabel(character.name, character.icon, i, innerListedPanel);
                     i++;
                 }
                 for (Item character : whoNeedsThisItem(domain, domainMat, false)) {
                     assert character instanceof Character;
+                    System.out.println(character.name);
                     generateDomainItemLabel(character.name, character.icon, k, innerUnlistedPanel);
                     k++;
                 }
