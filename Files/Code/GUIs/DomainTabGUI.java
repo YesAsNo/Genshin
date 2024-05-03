@@ -1,7 +1,11 @@
 package Files.Code.GUIs;
 
-import static Files.Code.Data.ToolData.*;
 import static Files.Code.Data.ToolData.RESOURCE_TYPE.WEEKLY_BOSS_MATERIAL;
+import static Files.Code.Data.ToolData.changeFont;
+import static Files.Code.Data.ToolData.comparator;
+import static Files.Code.Data.ToolData.domains;
+import static Files.Code.Data.ToolData.getCharacter;
+import static Files.Code.Data.ToolData.getWeapon;
 import static Files.Code.GUIs.DomainTabGUI.DOMAIN_FILTER_OPTIONS.ALL_OPTIONS_BY_ENUM;
 import static Files.Code.GUIs.DomainTabGUI.DOMAIN_FILTER_OPTIONS.ALL_OPTIONS_BY_STRING;
 import static Files.Code.GUIs.DomainTabGUI.DOMAIN_FILTER_OPTIONS.NO_FILTER;
@@ -612,7 +616,7 @@ public class DomainTabGUI implements ActionListener {
 
             for (String weaponName : ((WeaponMaterial) item).usedBy) {
                 Weapon weapon = getWeapon(weaponName);
-                if (!farmedWeapons.get(weapon).isEmpty() || getUnassignedFarmedWeapons().contains(weapon)){
+                if (!farmedWeapons.get(weapon).isEmpty() || getUnassignedFarmedWeapons().contains(weapon)) {
                     allListedWeapons.add(weapon);
                 }
             }
@@ -623,8 +627,7 @@ public class DomainTabGUI implements ActionListener {
 
             if (farmedOnly) {
                 return allListedWeapons;
-            }
-            else {
+            } else {
                 allPossibleWeapons.removeAll(allListedWeapons);
                 return allPossibleWeapons;
             }
@@ -635,9 +638,8 @@ public class DomainTabGUI implements ActionListener {
 
             if (farmedOnly) {
                 possibleCharacters.addAll(farmedWeeklyTalentMaterials.get(item));
-            }
-            else {
-                for (String characterName: ((WeeklyTalentMaterial) item).usedBy){
+            } else {
+                for (String characterName : ((WeeklyTalentMaterial) item).usedBy) {
                     Character character = getCharacter(characterName);
                     if (!farmedWeeklyTalentMaterials.get(item).contains(character)) {
                         possibleCharacters.add(getCharacter(characterName));
@@ -650,9 +652,8 @@ public class DomainTabGUI implements ActionListener {
             assert item instanceof TalentMaterial;
             if (farmedOnly) {
                 possibleCharacters.addAll(farmedTalentBooks.get(item));
-            }
-            else {
-                for (String characterName: ((TalentMaterial) item).usedBy){
+            } else {
+                for (String characterName : ((TalentMaterial) item).usedBy) {
                     Character character = getCharacter(characterName);
                     if (!farmedTalentBooks.get(item).contains(character)) {
                         possibleCharacters.add(getCharacter(characterName));
@@ -661,15 +662,15 @@ public class DomainTabGUI implements ActionListener {
             }
             return possibleCharacters;
         } else if (domain.isArtifactDomain()) {
-            Set<Character> possibleCharacters = new HashSet<>();
             assert item instanceof Artifact;
-            if (!farmedOnly || !farmedArtifacts.get(item).isEmpty()) {
-                possibleCharacters.addAll(farmedArtifacts.get(item));
+            if (farmedOnly) {
+                return farmedArtifacts.get(item);
+            } else {
+                throw new IllegalArgumentException(
+                        "There is no point in listing all characters for an artifact domain, anyone can equip any set.");
             }
-
-            return possibleCharacters;
         } else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Unknown domain as parameter in whoNeedsThisDomain");
         }
     }
 
@@ -681,12 +682,15 @@ public class DomainTabGUI implements ActionListener {
      * @return the text
      */
     public static String getAllCounterLabel(Domain domain) {
-        if (domain.isWeaponMaterialDomain()) {
-            //TODO fix this shit alien brain
-            for (FarmableItem material : domain.materials) {
-
+        int counter = 0;
+        for (FarmableItem material : domain.materials) {
+            if (!domain.isArtifactDomain()) {
+                counter += whoNeedsThisItem(domain, material, false).size();
             }
+            counter += whoNeedsThisItem(domain, material, true).size();
         }
+        return "<html>" + "All" + " " + (domain.isWeaponMaterialDomain() ? "weapons" : "characters") + " " +
+                "that need it: " + "<u>" + counter + "</u>" + "</html>";
 
     }
 
@@ -698,8 +702,12 @@ public class DomainTabGUI implements ActionListener {
      * @return the text
      */
     public static String getListedCounterLabel(Domain domain) {
-        return "<html>" + "Listed" + " " + domain.type + " " + "that need it: " + "<u>" +
-                (whoNeedsThisDomain(domain, true).size()) + "</u>" + "</html>";
+        int counter = 0;
+        for (FarmableItem material : domain.materials) {
+            counter += whoNeedsThisItem(domain, material, true).size();
+        }
+        return "<html>" + "Listed" + " " + (domain.isWeaponMaterialDomain() ? "weapons" : "characters") + ":" + " " +
+                "<u>" + counter + "</u>" + "</html>";
     }
 
     /**

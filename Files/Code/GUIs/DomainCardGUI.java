@@ -202,13 +202,11 @@ public class DomainCardGUI extends JFrame {
             } else if (domain.isWeeklyTalentMaterialDomain() || domain.isTalentMaterialDomain()) {
                 for (Item character : whoNeedsThisItem(domain, domainMat, true)) {
                     assert character instanceof Character;
-                    System.out.println(character.name);
                     generateDomainItemLabel(character.name, character.icon, i, innerListedPanel);
                     i++;
                 }
                 for (Item character : whoNeedsThisItem(domain, domainMat, false)) {
                     assert character instanceof Character;
-                    System.out.println(character.name);
                     generateDomainItemLabel(character.name, character.icon, k, innerUnlistedPanel);
                     k++;
                 }
@@ -226,15 +224,17 @@ public class DomainCardGUI extends JFrame {
         JLabel label = new JLabel(getListedCounterLabel(domain));
         changeFont(label, ToolData.AVAILABLE_FONTS.REGULAR_FONT, 12);
         titlePanel.add(label, gbc);
+        if (!domain.isArtifactDomain()) {
+            gbc = new GridBagConstraints();
+            gbc.gridx = 0;
+            gbc.gridy = 2;
+            gbc.weightx = 1.0;
+            assert getDomainResourceType(domainTheme) != null;
+            JLabel label2 = new JLabel(getAllCounterLabel(domain));
+            changeFont(label2, ToolData.AVAILABLE_FONTS.REGULAR_FONT, 12);
+            titlePanel.add(label2, gbc);
+        }
 
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.weightx = 1.0;
-        assert getDomainResourceType(domainTheme) != null;
-        JLabel label2 = new JLabel(getAllCounterLabel(domain));
-        changeFont(label2, ToolData.AVAILABLE_FONTS.REGULAR_FONT, 12);
-        titlePanel.add(label2, gbc);
         return mainPanel;
     }
 
