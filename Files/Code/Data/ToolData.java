@@ -296,9 +296,6 @@ public class ToolData {
             case WEAPON_NAME: {
                 assert resource instanceof Weapon;
                 Weapon weapon = (Weapon) resource;
-                System.out.println(
-                        "/Files/Images/Weapons/" + weapon.weaponType + "/" + weapon.rarity + "/" + weapon.name +
-                                ".png");
                 return ToolData.class.getResource(
                         "/Files/Images/Weapons/" + weapon.weaponType + "/" + weapon.rarity + "/" + weapon.name +
                                 ".png");
