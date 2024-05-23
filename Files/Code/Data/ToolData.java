@@ -12,10 +12,6 @@ import com.google.gson.stream.JsonReader;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JProgressBar;
-import javax.swing.SwingWorker;
-import javax.swing.WindowConstants;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Image;
@@ -300,6 +296,9 @@ public class ToolData {
             case WEAPON_NAME: {
                 assert resource instanceof Weapon;
                 Weapon weapon = (Weapon) resource;
+                System.out.println(
+                        "/Files/Images/Weapons/" + weapon.weaponType + "/" + weapon.rarity + "/" + weapon.name +
+                                ".png");
                 return ToolData.class.getResource(
                         "/Files/Images/Weapons/" + weapon.weaponType + "/" + weapon.rarity + "/" + weapon.name +
                                 ".png");
@@ -479,21 +478,11 @@ public class ToolData {
         }
     }
 
-    private static class LoadingDataTask extends SwingWorker<Void, Void> {
-
-        @Override
-        protected Void doInBackground() throws Exception {
-            setProgress(0);
-            parseDataJsonFiles();
-            setProgress(25);
-            fetchIcons();
-            setProgress(50);
-            parseFonts();
-            setProgress(75);
-            provideMappings();
-            setProgress(100);
-            return null;
-        }
+    private static void parseData() throws Exception {
+        parseDataJsonFiles();
+        fetchIcons();
+        parseFonts();
+        provideMappings();
     }
 
     /**
@@ -503,22 +492,7 @@ public class ToolData {
      * @throws Exception thrown exception.
      */
     public static void main(String[] args) throws Exception {
-        final JProgressBar progressBar = new JProgressBar(0, 100);
-        JDialog loadingFrame = new JDialog();
-        loadingFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        loadingFrame.setContentPane(progressBar);
-        loadingFrame.pack();
-        loadingFrame.setVisible(true);
-
-        progressBar.setStringPainted(true);
-        LoadingDataTask task = new LoadingDataTask();
-
-        task.execute();
-        while (task.getState() != SwingWorker.StateValue.DONE) {
-            progressBar.setValue(task.getProgress());
-        }
-        task.get();
-        loadingFrame.setVisible(false);
+        parseData();
         new ToolGUI();
 
     }
