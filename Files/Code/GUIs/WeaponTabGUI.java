@@ -18,6 +18,7 @@ import Files.Code.Auxiliary.WeaponTabGUIListener;
 import Files.Code.Data.ToolData;
 import Files.Code.Data.Weapon;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -108,8 +109,9 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
         }
         try {
             JsonReader reader = new JsonReader(new FileReader(f));
-            Set<String> map = new TreeSet<>();
-            map.addAll(gson.fromJson(reader, map.getClass()));
+            TypeToken<Set<String>> token = new TypeToken<Set<String>>() {
+            };
+            Set<String> map = new TreeSet<>(gson.fromJson(reader, token));
 
             if (!map.isEmpty()) {
                 for (String weaponName : map) {
