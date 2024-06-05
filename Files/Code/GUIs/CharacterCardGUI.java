@@ -282,7 +282,6 @@ public class CharacterCardGUI extends JFrame {
         setIcon.setHorizontalAlignment(4);
         setIcon.setHorizontalTextPosition(4);
         if (savedArtifactSetName.isEmpty()) {
-            System.out.println("12134");
             setIcon.setIcon(getPlaceholderIcon("artifact"));
         } else {
             setIcon.setIcon(getArtifact(savedArtifactSetName).icon);

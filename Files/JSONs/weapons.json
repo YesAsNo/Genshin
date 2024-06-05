@@ -886,5 +886,11 @@
     "rarity": "4-Star",
     "weaponType": "Sword",
     "ascensionMaterial": "All Talisman of the Forest Dew"
+  },
+  {
+    "name": "Absolution",
+    "rarity": "5-Star",
+    "weaponType": "Sword",
+    "ascensionMaterial": "All Ancient Chord"
   }
 ]

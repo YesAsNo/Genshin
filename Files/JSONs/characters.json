@@ -82,4 +82,7 @@
   {"name":"Yelan","element":"Hydro","weaponType":"Bow","talentMaterial":"Prosperity","weeklyTalentMaterial":"Gilded Scale"},
   {"name":"Yoimiya","element":"Pyro","weaponType":"Bow","talentMaterial":"Transience","weeklyTalentMaterial":"Dragon Lord\u0027s Crown"},
   {"name":"Yun Jin","element":"Geo","weaponType":"Polearm","talentMaterial":"Diligence","weeklyTalentMaterial":"Ashen Heart"},
-  {"name":"Zhongli","element":"Geo","weaponType":"Polearm","talentMaterial":"Gold","weeklyTalentMaterial":"Tusk of Monoceros Caeli"}]
+  {"name":"Zhongli","element":"Geo","weaponType":"Polearm","talentMaterial":"Gold","weeklyTalentMaterial":"Tusk of Monoceros Caeli"},
+  {"name":"Clorinde","element":"Electro","weaponType":"Sword","talentMaterial":"Justice","weeklyTalentMaterial":"Everamber"},
+  {"name":"Sethos","element":"Electro","weaponType":"Bow","talentMaterial":"Praxis","weeklyTalentMaterial":"Daka\u0027s Bell"}
+]

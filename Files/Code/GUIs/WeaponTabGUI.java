@@ -14,10 +14,12 @@ import static Files.Code.GUIs.ToolGUI.isSomeoneFarmingForTheWeapon;
 
 import Files.Code.Auxiliary.ComboBoxRenderer;
 import Files.Code.Auxiliary.SearchBarListener;
+import Files.Code.Auxiliary.WeaponAdapter;
 import Files.Code.Auxiliary.WeaponTabGUIListener;
 import Files.Code.Data.ToolData;
 import Files.Code.Data.Weapon;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -102,20 +104,23 @@ public class WeaponTabGUI implements ItemListener, ActionListener {
     }
 
     private static void parseWeaponsMap() {
-        Gson gson = new Gson();
+        TypeToken<Set<Weapon>> token = new TypeToken<Set<Weapon>>() {
+        };
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        Gson gson = gsonBuilder.registerTypeAdapter(token.getType(), new WeaponAdapter()).create();
         File f = new File(SAVE_LOCATION + WEAPON_SAVE_FILE_NAME);
         if (!f.exists()) {
             return;
         }
         try {
             JsonReader reader = new JsonReader(new FileReader(f));
-            TypeToken<Set<String>> token = new TypeToken<Set<String>>() {
-            };
-            Set<String> map = new TreeSet<>(gson.fromJson(reader, token));
+
+            TreeSet<Weapon> map = new TreeSet<>(ToolData.comparator);
+            map.addAll(gson.fromJson(reader, token));
 
             if (!map.isEmpty()) {
-                for (String weaponName : map) {
-                    unassignedFarmedWeapons.add(getWeapon(weaponName));
+                for (Weapon weapon : map) {
+                    unassignedFarmedWeapons.add(getWeapon(weapon.name));
                 }
             }
         } catch (IOException ex) {
