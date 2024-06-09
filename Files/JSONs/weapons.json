@@ -892,5 +892,11 @@
     "rarity": "5-Star",
     "weaponType": "Sword",
     "ascensionMaterial": "All Ancient Chord"
+  },
+  {
+    "name": "Cloudforged",
+    "rarity": "4-Star",
+    "weaponType": "Bow",
+    "ascensionMaterial": "All Aerosiderite"
   }
 ]
